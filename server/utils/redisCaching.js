@@ -15,6 +15,7 @@ const redisCaching = (key, asyncMethod, timeInSec) => {
           }
           return resolve(response);
         }
+        
         resolve(JSON.parse(data));
       });
     });

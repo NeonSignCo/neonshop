@@ -1,37 +1,33 @@
 import Head from 'next/head'
-import { useState,useEffect } from 'react';
+import Axios from '../utils/Axios';
 
-export default function Home() {
-  const [loading, setLoading] = useState(true);
-  const [users, setUsers] = useState(null);
-  
-  useEffect(async () => {
-    try {
-      const res = await (await fetch('/api/users')).json(); 
-      setLoading(false);  
-      setUsers(res.users);
-    } catch (error) {
-      setLoading(false)
-    }
-    
-
-    return () => {}
-  }, [])
-
+export default function Home({users}) {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       <Head>
-        <title>Shopy</title>
+        <title>Boilerplate</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {loading && <div className="text-4xl">Loading...</div>}
-      {!loading && users && users.map(user => (
-        <div key={user._id}>
-          <p className="text-3xl"><span className="font-semibold">name:</span> {user.name}</p>
-          <p className="text-3xl"><span className="font-semibold">email:</span> {user.email}</p>
+      { users && users.map(user => (
+        <div key={user._id} className="bg-gray-200 p-2 rounded my-5 text-xl">
+          <p><span className="font-semibold">name:</span> {user.name}</p>
+          <p><span className="font-semibold">email:</span> {user.email}</p>
         </div>)
       )}
     </div>
   );
+}
+ 
+export const getServerSideProps = async () => {
+  try {
+    const users = (await Axios.get("users")).data.users;
+    return {
+      props: {
+        users: JSON.parse(JSON.stringify(users))
+      },     
+    };
+  } catch (error) {
+    return { props: { users: null } };
+  }
 }
