@@ -3,7 +3,7 @@ const next = require("next");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 const { connectDb } = require('./utils/utils');
-
+exports.redisClient = require("redis").createClient();
 // environmental variables
 dotenv.config({ path: `${__dirname}/../.env.local` });
 
@@ -16,7 +16,7 @@ const handle = app.getRequestHandler();
 app
   .prepare()
   .then(() => {
-    const server = express();  
+    const server = express();
 
     // body parser, cookie parser, urlencoding
     server.use(express.json());
@@ -31,31 +31,31 @@ app
 
     // handle api requests
     routes.forEach((route) =>
-      server.use(
-        `/api/${route}`,
-        require(`${__dirname}/routes/${route}`)
-      )
+      server.use(`/api/${route}`, require(`${__dirname}/routes/${route}`))
     );
 
     // 404 response for api
     server.all(/^\/api\//, (req, res) =>
-      res.status(404).json({ status: "Fail", errorMessage: "resource not found" })
+      res
+        .status(404)
+        .json({ status: "Fail", errorMessage: "resource not found" })
     );
 
     // handle nextJs requests
     server.get("*", (req, res) => handle(req, res));
 
     //   define port
-    const PORT = process.env.PORT || 3000;
+    const PORT = process.env.PORT || 5000;
 
     //  start server
     server.listen(PORT, (err) => {
       if (err) throw err;
-      console.log(`app running on PORT ${PORT}`);
+      console.log(`app running on PORT ${PORT}`); 
     });
-  })
+
+  }) 
   .catch((err) => {
     console.log("shutting down server on error");
     console.log(err);
-    process.exit(1);
+    process.exit(1); 
   });

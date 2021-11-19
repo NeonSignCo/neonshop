@@ -4,7 +4,7 @@ const Session = require('../models/session');
 const { initSession, isEmail } = require('../utils/utils');
 const AppError = require('../utils/AppError');
 const catchASync = require('../utils/catchASync');
-const session = require('../models/session');
+const redisCaching = require('../utils/redisCaching');
 
 
 // @route       POST /api/users/register 
@@ -142,3 +142,30 @@ exports.logOut = catchASync(async (req, res) => {
     message: 'logout successful'
   });
 })
+
+
+// @route       GET /api/users
+// @purpose     Get all users 
+// @access      Public 
+exports.getAllUsers = catchASync(async (req, res) => {
+
+  const { page = 1, limit = 10 } = req.query;
+
+  if (!page)
+    throw new AppError(400, "invalid page query. Page must me a number");
+  if (!limit)
+    throw new AppError(400, "invalid limit query. Limit must me a number");
+
+  const skip = limit * (page - 1);
+
+  // cache data for 1 hour 
+  const users = await redisCaching('userssssss', User.find().skip(skip).limit(limit), 3600);
+    return res.json({
+      status: "success",
+      message: "successfully retrieved all users data",
+      page,
+      limit,
+      users
+    });
+
+}) 
