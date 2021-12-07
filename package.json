@@ -3,7 +3,7 @@
   "scripts": {
     "dev": "rm -r .next & nodemon -w server server/server.js",
     "build": "next build",
-    "start": "next start"
+    "start": "node server/server.js"
   },
   "dependencies": {
     "@tailwindcss/aspect-ratio": "^0.3.0",
