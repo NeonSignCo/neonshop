@@ -4,7 +4,6 @@ const Session = require('../models/session');
 const { initSession, isEmail } = require('../utils/utils');
 const AppError = require('../utils/AppError');
 const catchASync = require('../utils/catchASync');
-const redisCaching = require('../utils/redisCaching');
 
 
 // @route       POST /api/users/register 
@@ -157,7 +156,7 @@ exports.getAllUsers = catchASync(async (req, res) => {
     throw new AppError(400, "invalid limit query. Limit must me a number");
 
   // cache data for 1 hour 
-  const users = await redisCaching('users', User.find().skip(skip).limit(limit), 3600);
+  const users = await User.find().skip(skip).limit(limit);
     
   return res.json({
       status: "success",

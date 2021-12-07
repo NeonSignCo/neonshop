@@ -3,7 +3,7 @@ const next = require("next");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 const { connectDb } = require('./utils/utils');
-const redis = require('redis');
+
 // environmental variables
 dotenv.config({ path: `${__dirname}/../.env.local` });
 
@@ -15,18 +15,13 @@ const handle = app.getRequestHandler();
 
 app
   .prepare()
-  .then(() => {
+  .then(() => { 
     const server = express();
 
     // body parser, cookie parser, urlencoding
     server.use(express.json());
     server.use(cookieParser());
     server.use(express.urlencoded({ extended: true, limit: "10kb" }));
-
-    
-  exports.redisClient = dev
-  ? redis.createClient()
-  : redis.createClient(process.env.PORT || 5000, process.env.WEBSITE);
 
     // connect db
     connectDb();
