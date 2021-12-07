@@ -93,12 +93,7 @@ export default function Home() {
             className="h-12 w-52 flex items-center justify-center bg-white uppercase text-black font-semibold mt-10"
           />
         </div>
-        <div>
-          <img
-          src="/img/neon-banner-4.png"
-        />
-       </div>
-        {/* <img src="/img/neon-banner-4.png" alt="" /> */}
+        <img src="/img/neon-banner-4.png" alt="" />
       </section>
       <section className="px-5 lg:px-20 py-20 bg-white">
         <h3 className="text-3xl uppercase font-semibold uppercase text-center mb-10">
@@ -226,17 +221,17 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10"
         >
           <CustomLink className="grid gap-3 text-center bg-white text-black pb-3">
-            <img src="/img/product-1.jpg" alt="product" />
+            <img src="/img/product-1.jpg" alt="product" className="w-full object-cover"/>
             <p className="text-xl px-5  font-bold uppercase">Juddchella - An Event By NeonShop</p>
             <p className="px-5">Move over Coachella, The Judd’s are in town. The only person we know that could pull off a housewarming party theme this extravagant is non-other than...</p>
           </CustomLink>
           <CustomLink className="grid gap-3 text-center bg-white text-black pb-3">
-            <img src="/img/product-3.jpg" alt="product" />
+            <img src="/img/product-3.jpg" alt="product" className="w-full object-cover"/>
             <p className="text-xl px-5  font-bold uppercase">Home office ideas to boost your productivity </p>
             <p className="px-5">‘Home Office Ideas’ would have to be one of the most searched for phrases in 2020. Thanks to Covid, our work environments have undergone a...</p>
           </CustomLink>
           <CustomLink className="grid gap-3 text-center bg-white text-black pb-3">
-            <img src="/img/product-4.jpg" alt="product" />
+            <img src="/img/product-4.jpg" alt="product" className="w-full object-cover"/>
             <p className="text-xl px-5  font-bold uppercase">retail design | first impressions count</p>
             <p className="px-5">Retail Design | First Impressions Count 11 mins read This one is for all you business owners out there. Everyone knows that first impressions count....</p>
           </CustomLink>

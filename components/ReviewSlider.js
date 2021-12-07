@@ -42,7 +42,7 @@ const ReviewSlider = ({ reviews = [1, 2, 3, 4, 5, 6] }) => {
             >
               <img
                 src={review.neon?.img || "/img/product-1.jpg"}
-                alt={review.neon?.name || "neon art"}
+                      alt={review.neon?.name || "neon art"}
               />
               <div className="text-center">
                 <FaQuoteLeft className="mx-auto my-3" />
