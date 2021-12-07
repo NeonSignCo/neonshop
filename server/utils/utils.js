@@ -38,7 +38,7 @@ const connectDb = async () => {
   } catch (error) {
     console.log('db connection failed');
     console.log(error);
-  }
+  } 
 }
 
 const rateLimiter = (
