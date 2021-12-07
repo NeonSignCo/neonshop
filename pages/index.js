@@ -1,14 +1,21 @@
 import Head from "next/head";
 import {
+  FaBrush,
   FaClock,
+  FaCogs,
+  FaDesktop,
+  FaFacebook,
   FaFileSignature,
+  FaHandHoldingHeart,
   FaHands,
-  FaInstalod,
+  FaInstagram,
   FaRibbon,
   FaShippingFast,
 } from "react-icons/fa";
 import CustomLink from "../components/CustomLink";
+import NewsLetterForm from "../components/NewsLetterForm";
 import ProductsSlider from "../components/ProductsSlider";
+import ReviewSlider from "../components/ReviewSlider";
 
 export default function Home() {
   return (
@@ -17,11 +24,11 @@ export default function Home() {
         <title>Neon Shop</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div
+      <section
         className="bg-gray-800 px-5 lg:px-20 py-32 lg:pt-48 grid gap-10 text-white backdrop-filter  backdrop-brightness-0"
         style={{
-          background: 
-            "linear-gradient(rgba(0, 0, 0,0.5), rgba(0, 0, 0,0.5)), url('./img/neon-banner.jpg')",
+          background:
+            "linear-gradient(rgba(0, 0, 0,0.5), rgba(0, 0, 0,0.5)), url('/img/neon-banner.jpg')",
         }}
       >
         <h2 className="text-2xl md:text-4xl lg:text-6xl">
@@ -38,9 +45,43 @@ export default function Home() {
             className="h-12 w-52 flex items-center justify-center bg-white text-black"
           />
         </div>
-      </div>
-      <div className="px-5 lg:px-20 py-20 flex flex-col md:flex-row items-center gap-10 bg-black text-white">
-        <div className="flex flex-col gap-5">
+      </section>
+      <section className="px-5 lg:px-20 py-20 bg-white text-black ">
+        <h3 className="text-3xl uppercase font-semibold uppercase mb-20 text-center">
+          our neon process
+        </h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 md:gap-16">
+          <div className="bg-black text-white p-4 grid gap-3 uppercase">
+            <FaDesktop className="text-3xl" />
+            <p className="text-2xl">design</p>
+            <p className="text">design and order your neon sign</p>
+          </div>
+          <div className="bg-black text-white p-4 grid gap-3 uppercase">
+            <FaBrush className="text-3xl" />
+            <p className="text-2xl">create</p>
+            <p className="text">
+              WE CREATE YOUR NEON SIGN USING PREMIUM MATERIAL
+            </p>
+          </div>
+          <div className="bg-black text-white p-4 grid gap-3 uppercase">
+            <FaShippingFast className="text-3xl" />
+            <p className="text-2xl">ship</p>
+            <p className="text">WE SHIP YOUR NEON CREATION TO YOUR HOUSE</p>
+          </div>
+          <div className="bg-black text-white p-4 grid gap-3 uppercase">
+            <FaHandHoldingHeart className="text-3xl" />
+            <p className="text-3xl">enjoy</p>
+            <p className="text">YOU BASK IN YOUR NEW NEON GLOW</p>
+          </div>
+        </div>
+      </section>
+      <section className="px-5 lg:px-20 py-20 flex flex-col md:flex-row items-center justify-between gap-10 bg-black text-white relative"
+         style={{
+          background:
+            "linear-gradient(rgba(0, 0, 0,0.94), rgba(0, 0, 0,0.94)), url('/img/neon-banner-3.jpg')",
+        }}
+      >
+        <div className="flex-1 flex grid gap-5">
           <h3 className="text-3xl uppercase font-semibold uppercase">
             DESIGN A CUSTOM LED NEON SIGN
           </h3>
@@ -54,27 +95,44 @@ export default function Home() {
         </div>
         <div>
           <img
-            src="//cdn.shopify.com/s/files/1/0361/0781/3004/files/Neon-Builder-Mockupv3_800x.png?v=1603862532"
-            alt=""
-          />
-        </div>
-      </div>
-      <div className="px-5 lg:px-20 py-20 bg-white">
+          src="/img/neon-banner-4.png"
+        />
+       </div>
+        {/* <img src="/img/neon-banner-4.png" alt="" /> */}
+      </section>
+      <section className="px-5 lg:px-20 py-20 bg-white">
         <h3 className="text-3xl uppercase font-semibold uppercase text-center mb-10">
           our best-selling products
         </h3>
-        <ProductsSlider products={
-          [
-            { name: 'product 1', img: './img/product-1.jpg', price: '299' },
-            { name: 'product 2', img: './img/product-2.jpg', price: '400', hot: true },
-            { name: 'product 3', img: './img/product-3.jpg', price: '459' },
-            { name: 'product 4', img: './img/product-4.jpg', price: '269' },
-            { name: 'product 5', img: './img/product-5.jpg', price: '129', hot: true },
-            { name: 'product 6', img: './img/product-6.jpg', price: '579' },
-          ]
-        } />
-      </div>
-      <div className="px-5 lg:px-20 py-20 bg-black">
+        <ProductsSlider
+          products={[
+            { name: "product 1", img: "/img/product-1.jpg", price: "299" },
+            {
+              name: "product 2",
+              img: "/img/product-2.jpg",
+              price: "400",
+              hot: true,
+            },
+            { name: "product 3", img: "/img/product-3.jpg", price: "459" },
+            { name: "product 4", img: "/img/product-4.jpg", price: "269" },
+            {
+              name: "product 5",
+              img: "/img/product-5.jpg",
+              price: "129",
+              hot: true,
+            },
+            { name: "product 6", img: "/img/product-6.jpg", price: "579" },
+          ]}
+        />
+      </section>
+      <section
+        className="px-5 lg:px-20 py-20 bg-black"
+        style={{
+          background:
+            "linear-gradient(rgba(0, 0, 0,0.9), rgba(0, 0, 0,0.9)), url('/img/neon-banner-2.jpg')",
+          backgroundAttachment: "fixed",
+        }}
+      >
         <h3 className="text-3xl uppercase font-semibold uppercase text-center mb-20 text-white">
           Why choose us?
         </h3>
@@ -107,7 +165,7 @@ export default function Home() {
             title="EASY INSTALLATION"
             text="They go up like a picture frame and plug in like a lamp! Every Sketch & Etch Neon comes with an installation kit and pre-drilled holes, ready to hang and enjoy right out of the box. Find out more about how to hang your Neon here."
           >
-            <FaInstalod className="text-green-500" />
+            <FaCogs className="text-green-500" />
           </Item>
           <Item
             title="HAND-MADE"
@@ -116,7 +174,144 @@ export default function Home() {
             <FaHands className="text-indigo-500" />
           </Item>
         </div>
-      </div>
+      </section>
+      <section className="px-5 lg:px-20 py-20 bg-white">
+        <h3 className="text-3xl uppercase font-semibold uppercase text-center mb-10">
+          what our clients say
+        </h3>
+        <ReviewSlider
+          reviews={[
+            { name: "suzy", img: "/img/client-1.jpg", text:"Thanks for our neon sign, it was the perfect backdrop for our event!", position: 'flowa liberal', neon: {img: '/img/product-1.jpg', name: 'neon art name'}},
+            {
+              name: "james",
+              img: "/img/client-2.jpg",
+              text: "Great communication! The neon signs we ordered are incredible and they were so lovely and amazing with helping us out"
+              ,
+              position: 'hactic arts',
+              neon: { img: '/img/product-2.jpg', name: 'neon art name' }
+            },
+            {
+              name: "leo",
+              img: "/img/client-3.jpg", text:"Sketch & Etch were SO easy to deal with, very attentive to ourvision and created the most stunning and...",
+              position: 'street skate corp',
+              neon: { img: '/img/product-3.jpg', name: 'neon art name' }
+            },
+            {
+              name: "mary", img: "/img/client-4.jpg", text: "Sketch and Etch have been so enjoyable to work with especially Tash. Their communication and attention to detail is amazing....", position: 'mariana cafe', neon: { img: '/img/product-4.jpg', name: 'neon art name' }
+            },
+            {
+              name: "stephan",
+              img: "/img/client-5.jpg",
+              text: "Sent them through our logo, before we knew it it was designed and on our doorstep. Really happy...it’s just given...",
+              position: 'Admire Artists', neon: { img: '/img/product-5.jpg', name: 'neon art name' }
+            },
+            {
+              name: "liana", img: "/img/client-6.jpg",
+              text: "They have their Neons down to a science! Even the way the item was packaged and shipped to the US...",
+              position: 'Snared Services',
+              neon: { img: '/img/product-6.jpg', name: 'neon art name' }
+            },
+          ]}
+        />
+      </section>
+      <section className="px-5 lg:px-20 py-20 bg-black text-white"
+        style={{
+          background:
+            "linear-gradient(rgba(0, 0, 0,0.94), rgba(0, 0, 0,0.94)), url('/img/neon-banner-3.jpg')",
+        }}
+      >
+        <h3 className="text-3xl  font-semibold uppercase text-center mb-10">
+          want some inspo? 
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10"
+        >
+          <CustomLink className="grid gap-3 text-center bg-white text-black pb-3">
+            <img src="/img/product-1.jpg" alt="product" />
+            <p className="text-xl px-5  font-bold uppercase">Juddchella - An Event By NeonShop</p>
+            <p className="px-5">Move over Coachella, The Judd’s are in town. The only person we know that could pull off a housewarming party theme this extravagant is non-other than...</p>
+          </CustomLink>
+          <CustomLink className="grid gap-3 text-center bg-white text-black pb-3">
+            <img src="/img/product-3.jpg" alt="product" />
+            <p className="text-xl px-5  font-bold uppercase">Home office ideas to boost your productivity </p>
+            <p className="px-5">‘Home Office Ideas’ would have to be one of the most searched for phrases in 2020. Thanks to Covid, our work environments have undergone a...</p>
+          </CustomLink>
+          <CustomLink className="grid gap-3 text-center bg-white text-black pb-3">
+            <img src="/img/product-4.jpg" alt="product" />
+            <p className="text-xl px-5  font-bold uppercase">retail design | first impressions count</p>
+            <p className="px-5">Retail Design | First Impressions Count 11 mins read This one is for all you business owners out there. Everyone knows that first impressions count....</p>
+          </CustomLink>
+        </div>
+        </section>
+      <section className="px-5 lg:px-20 py-20 bg-white">
+        <h3 className="text-3xl uppercase font-semibold uppercase text-center mb-20">
+          our story
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-20 ">
+          <div className="flex flex-col gap-4 justify-center">
+            <p className="font-semibold">
+              Meet Ash & Tash (Co-Founders of Sketch & Etch)
+            </p>
+            <p>
+              Sketch & Etch was co-founded in 2015 by two friends with one
+              vision - to light up people’s lives by creating lasting
+              impressions.
+            </p>
+            <p>
+              From humble beginnings in Geelong, Australia, Ash and Tash came to
+              meet hundreds of miles/kilometers away from where their own
+              individual stories began.
+            </p>
+            <p>
+              Ash originally owned a drone business, while Tash had her roots
+              grounded in photography. Thank the Neon stars, that in a
+              bitter-sweet twist of fate, Ash’s drone business literally crashed
+              and burned. And soon after from the embers, the Sketch & Etch
+              partnership was founded. The rest, as they say, is history.
+              <CustomLink className="font-semibold"> Read more.</CustomLink>
+            </p>
+          </div>
+          <div className="relative">
+             <img
+              src="/img/our-story.jpg"
+              alt="our neon store story"
+            />
+          </div>
+        </div>
+        <div className="flex flex-col sm:flex-row items-center justify-center mt-10 gap-10">
+          <CustomLink
+            text="shop now"
+            className="h-12 w-52 flex items-center justify-center bg-black text-white uppercase font-semibold transition hover:text-gray-200"
+          />
+          <CustomLink
+            text="chat to us"
+            className="h-12 w-52 flex items-center justify-center bg-white text-black border border-black uppercase font-semibold transition hover:bg-black hover:text-white"
+          />
+        </div>
+      </section>
+      <section className="px-5 lg:px-20 py-20 bg-black text-white flex flex-col gap-5 items-center"  style={{
+          background:
+            "linear-gradient(rgba(0, 0, 0,0.9), rgba(0, 0, 0,0.9)), url('/img/neon-banner-3.jpg')",
+        }}>
+        <h3 className="text-3xl font-semibold uppercase ">
+          get exclusive benefits!
+        </h3>
+        <p>
+          Become part of the <span className="font-semibold">NeonShop</span>{" "}
+          family. You will be first in the know about new products and exclusive
+          promotions. Enter your email below to join today!
+        </p>
+        <NewsLetterForm />
+      </section>
+      <section className=" pt-20 bg-white text-blackflex flex flex-col gap-10 items-center">
+        <h3 className="px-5 lg:px-20 text-3xl font-semibold uppercase ">
+          follow us on
+        </h3>
+        <div className="px-5 lg:px-20 flex items-center gap-3 text-4xl">
+          <CustomLink ><FaFacebook/></CustomLink>
+          <CustomLink className="relative"><FaInstagram/> <span className="text-sm absolute left-1 font-semibold">100k</span></CustomLink>
+        </div>
+        <InstaGallery/>
+      </section>
     </div>
   );
 }
@@ -132,3 +327,23 @@ const Item = ({ title, text, children }) => {
     </div>
   );
 };
+
+const InstaGallery = ({}) => {
+  const items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  return (
+    <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-0">
+      {items.map((item, i) => (
+        <CustomLink className="relative group" href={item.link || '/'} key={i}>
+          <img
+            src={item.img || `/img/product-${i + 1}.jpg`}
+            alt={item.alt || `product ${i + 1}`}
+            className="object-cover h-60"
+            />
+          <div  className="absolute inset-0  bg-black transition-all bg-opacity-50 opacity-0 group-hover:opacity-100 flex items-center justify-center">
+            <FaInstagram className="text-white text-4xl transition group-hover:scale-125"/>
+          </div>
+      </CustomLink>
+      ))}
+    </div>
+  )
+}
