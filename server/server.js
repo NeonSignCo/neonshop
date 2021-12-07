@@ -10,7 +10,7 @@ dotenv.config({ path: `${__dirname}/../.env.local` });
 const dev = process.env.NODE_ENV !== "production";
 
 const app = next({ dev });
-
+ 
 const handle = app.getRequestHandler();
 
 app
@@ -25,7 +25,7 @@ app
 
     // connect db
     connectDb();
-
+ 
     // api routes
     const routes = ["users"];
 

@@ -30,7 +30,7 @@ const connectDb = async () => {
     if (mongoose.connections[0].readyState) return;
 
     // new connection
-    await mongoose.connect(process.env.DB_URL, {
+    await mongoose.connect(dbUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
