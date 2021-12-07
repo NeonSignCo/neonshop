@@ -34,7 +34,7 @@ app
       server.use(`/api/${route}`, require(`${__dirname}/routes/${route}`))
     ); 
 
-    // 404 response for api
+    // 404 response for api 
     server.all(/^\/api\//, (req, res) =>
       res
         .status(404)
@@ -48,11 +48,18 @@ app
     const PORT = process.env.PORT || 5000;
 
     //  start server
-    server.listen(PORT, (err) => {
+    const runningServer =  server.listen(PORT, (err) => {
       if (err) throw err;
       console.log(`app running on PORT ${PORT}`); 
     });
 
+    server.on('error', err => {
+      console.log("shutting down server on error");
+      console.log(err);
+      runningServer.close();
+      process.exit(1);
+      
+    })
   }) 
   .catch((err) => {
     console.log("shutting down server on error");
