@@ -93,7 +93,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="h-[1px] bg-gray-900 my-4"></div>
-        <div className="flex flex-col md:flex-row justify-between items-center">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-5">
           <p>© {new Date().getFullYear()} NeonShop</p>
           <div className="flex items-center gap-1">
             <p>Currency</p>

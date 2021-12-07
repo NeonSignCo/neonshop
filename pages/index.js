@@ -25,13 +25,13 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <section
-        className="bg-gray-800 px-5 lg:px-20 py-32 lg:pt-48 grid gap-10 text-white backdrop-filter  backdrop-brightness-0"
+        className="bg-gray-800 px-5 lg:px-20 py-20 lg:pt-32 flex flex-col items-center md:items-start gap-10 text-white"
         style={{
           background:
             "linear-gradient(rgba(0, 0, 0,0.5), rgba(0, 0, 0,0.5)), url('/img/neon-banner.jpg')",
         }}
       >
-        <h2 className="text-2xl md:text-4xl lg:text-6xl">
+        <h2 className="text-2xl md:text-4xl lg:text-6xl text-center md:text-left">
           NEON SIGNS TO CELEBRATE, <br /> MOTIVATE & INSPIRE
         </h2>
         <p className="text-lg">Imagination is your only limit.</p>
@@ -75,13 +75,13 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="px-5 lg:px-20 py-10 flex flex-col md:flex-row items-center justify-between gap-10 bg-black text-white relative"
+      <section className="px-5 lg:px-20 py-10 flex flex-col lg:flex-row items-center justify-between gap-10 bg-black text-white relative text-center md:text-left"
          style={{
           background:
             "linear-gradient(rgba(0, 0, 0,0.94), rgba(0, 0, 0,0.94)), url('/img/neon-banner-3.jpg')",
         }}
       >
-        <div className="flex-1 flex grid gap-5">
+        <div className="flex-1 grid gap-5 justify-items-center md:justify-items-start">
           <h3 className="text-3xl uppercase font-semibold uppercase">
             DESIGN A CUSTOM LED NEON SIGN
           </h3>
@@ -218,7 +218,7 @@ export default function Home() {
         <h3 className="text-3xl  font-semibold uppercase text-center mb-10">
           want some inspo? 
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10"
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-20 md:gap-10"
         >
           <CustomLink className="grid gap-3 text-center bg-white text-black pb-3">
             <img src="/img/product-1.jpg" alt="product" className="w-full object-cover"/>
@@ -237,8 +237,8 @@ export default function Home() {
           </CustomLink>
         </div>
         </section>
-      <section className="px-5 lg:px-20 py-20 bg-white">
-        <h3 className="text-3xl uppercase font-semibold uppercase text-center mb-20">
+      <section className="px-5 lg:px-20 py-20 bg-white text-center md:text-left">
+        <h3 className="text-3xl uppercase font-semibold uppercase text-center mb-16">
           our story
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-20 ">
@@ -283,11 +283,11 @@ export default function Home() {
           />
         </div>
       </section>
-      <section className="px-5 lg:px-20 py-20 bg-black text-white flex flex-col gap-5 items-center"  style={{
+      <section className="px-5 lg:px-20 py-20 bg-black text-white flex flex-col gap-5 items-center text-center "  style={{
           background:
             "linear-gradient(rgba(0, 0, 0,0.9), rgba(0, 0, 0,0.9)), url('/img/neon-banner-3.jpg')",
         }}>
-        <h3 className="text-3xl font-semibold uppercase ">
+        <h3 className="text-3xl font-semibold uppercase">
           get exclusive benefits!
         </h3>
         <p>

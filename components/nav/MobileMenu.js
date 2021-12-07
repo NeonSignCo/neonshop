@@ -1,9 +1,10 @@
+import { motion } from "framer-motion";
 import CustomLink from "../CustomLink"
 import MobileDropDown from "./MobileDropDown"
 
 const MobileMenu = () => {
     return (
-      <div className="bg-gray-800 py-2 px-5 grid lg:hidden gap-3 text-lg absolute w-full uppercase">
+      <motion.div initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} className="bg-gray-800 py-2 px-5 grid lg:hidden gap-3 text-lg absolute w-full uppercase">
         <CustomLink text="design your neon" />
         <MobileDropDown
           title="shop neons"
@@ -54,7 +55,7 @@ const MobileMenu = () => {
         <CustomLink text="blog" />
         <CustomLink text="about" />
         <CustomLink text="contact" />
-      </div>
+      </motion.div>
     );
 }
 

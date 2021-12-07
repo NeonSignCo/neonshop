@@ -118,7 +118,9 @@ const Nav = () => {
             </button>
           </div>
         </div>
-        {state.showMobileMenu && <MobileMenu />}
+        <AnimatePresence>
+          {state.showMobileMenu && <MobileMenu />}
+        </AnimatePresence>
       </div>
     );
 }
