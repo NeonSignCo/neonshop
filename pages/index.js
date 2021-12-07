@@ -75,7 +75,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="px-5 lg:px-20 py-20 flex flex-col md:flex-row items-center justify-between gap-10 bg-black text-white relative"
+      <section className="px-5 lg:px-20 py-10 flex flex-col md:flex-row items-center justify-between gap-10 bg-black text-white relative"
          style={{
           background:
             "linear-gradient(rgba(0, 0, 0,0.94), rgba(0, 0, 0,0.94)), url('/img/neon-banner-3.jpg')",
