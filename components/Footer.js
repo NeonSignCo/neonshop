@@ -55,7 +55,6 @@ const Footer = () => {
               className="transition hover:underline"
               text="about us"
             />
-            <CustomLink className="transition hover:underline" text="blog" />
             <CustomLink className="transition hover:underline" text="careers" />
             <CustomLink
               className="transition hover:underline"

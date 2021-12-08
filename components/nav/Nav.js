@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { FaShoppingBag, FaUserCircle } from "react-icons/fa";
 import { useGlobalContext } from "../../context/GlobalContext";
 import CustomLink from "../CustomLink";
@@ -10,8 +10,9 @@ import { AnimatePresence } from "framer-motion";
 
 const Nav = () => {
   const [globalState] = useGlobalContext();
+  const searchRef = useRef();
+  const dropDownRef = useRef();
     const [state, setState] = useState({
-      expandSearchBar: false,
       showMobileMenu: false
     })
     return (
@@ -20,56 +21,61 @@ const Nav = () => {
           {globalState.showBanner && <Banner />}
         </AnimatePresence>
         <div className="py-4 px-5 lg:px-20 flex flex-wrap justify-center gap-3 xs:justify-between items-center">
-          <CustomLink text="NeonShop" className="font-semibold text-xl sm:text-2xl lg:text-3xl" />
+          <CustomLink
+            text="NeonShop"
+            className="font-semibold text-xl sm:text-2xl lg:text-3xl"
+          />
           <div className="hidden lg:flex items-center gap-7 capitalize text-lg">
             <CustomLink text="design your neon" />
-            <DropDown
-              title="shop neons"
-              items={[
-                {
-                  title: "explore",
-                  links: [
-                    { text: "build your own" },
-                    { text: "inspiration" },
-                    { text: "shop all" },
-                  ],
-                },
-                {
-                  title: "decoration",
-                  links: [
-                    { text: "aesthetic" },
-                    { text: "inspirational" },
-                    { text: "neon art" },
-                    { text: "neon letters" },
-                    { text: "neon lights" },
-                    { text: "quotes" },
-                    { text: "marvel comics" },
-                    { text: "retro" },
-                  ],
-                },
-                {
-                  title: "occasion",
-                  links: [
-                    { text: "christmas" },
-                    { text: "halloween" },
-                    { text: "faith" },
-                    { text: "party" },
-                    { text: "wedding" },
-                  ],
-                },
-                {
-                  title: "location",
-                  links: [
-                    { text: "bar signs" },
-                    { text: "gaming" },
-                    { text: "home" },
-                    { text: "kids home" },
-                    { text: "man cave" },
-                  ],
-                },
-              ]}
-            />
-            <CustomLink href="/blog" text="blog" />
+            <div ref={dropDownRef}>
+              <DropDown
+                containerRef={dropDownRef}
+                title="shop neons"
+                items={[
+                  {
+                    title: "explore",
+                    links: [
+                      { link: "/custom-neon-sign", text: "build your own" },
+                      { text: "inspiration" },
+                      { text: "shop all" },
+                    ],
+                  },
+                  {
+                    title: "decoration",
+                    links: [
+                      { text: "aesthetic" },
+                      { text: "inspirational" },
+                      { text: "neon art" },
+                      { text: "neon letters" },
+                      { text: "neon lights" },
+                      { text: "quotes" },
+                      { text: "marvel comics" },
+                      { text: "retro" },
+                    ],
+                  },
+                  {
+                    title: "occasion",
+                    links: [
+                      { text: "christmas" },
+                      { text: "halloween" },
+                      { text: "faith" },
+                      { text: "party" },
+                      { text: "wedding" },
+                    ],
+                  },
+                  {
+                    title: "location",
+                    links: [
+                      { text: "bar signs" },
+                      { text: "gaming" },
+                      { text: "home" },
+                      { text: "kids home" },
+                      { text: "man cave" },
+                    ],
+                  },
+                ]}
+              />
+            </div>
             <CustomLink href="/about" text="about" />
             <CustomLink href="/contact" text="contact" />
           </div>
@@ -80,15 +86,11 @@ const Nav = () => {
             <CustomLink>
               <FaShoppingBag />
             </CustomLink>
-            <SearchBar
-              toggleSearchBar={() =>
-                setState((state) => ({
-                  ...state,
-                  expandSearchBar: !state.expandSearchBar,
-                }))
-              }
-              expand={state.expandSearchBar}
-            />
+            <div ref={searchRef}>
+              <SearchBar
+                containerRef={searchRef}
+              />
+            </div>
             <button
               className="grid lg:hidden gap-1"
               onClick={() =>
@@ -119,7 +121,13 @@ const Nav = () => {
           </div>
         </div>
         <AnimatePresence>
-          {state.showMobileMenu && <MobileMenu closeMenu={() => setState(state => ({...state, showMobileMenu: false}))}/>}
+          {state.showMobileMenu && (
+            <MobileMenu
+              closeMenu={() =>
+                setState((state) => ({ ...state, showMobileMenu: false }))
+              }
+            />
+          )}
         </AnimatePresence>
       </div>
     );

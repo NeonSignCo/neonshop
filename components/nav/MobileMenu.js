@@ -59,7 +59,6 @@ const MobileMenu = ({closeMenu}) => {
               },
             ]}
           />
-          <CustomLink href="/blog" text="blog" onClick={closeMenu}/>
           <CustomLink href="/about" text="about" onClick={closeMenu}/>
           <CustomLink href="/contact" text="contact" onClick={closeMenu}/>
         </div>

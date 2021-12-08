@@ -1,14 +1,15 @@
 import { motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaCaretDown } from "react-icons/fa";
 import CustomLink from "../CustomLink";
 
-const DropDown = ({ title, items }) => {
+const DropDown = ({ title, items, containerRef }) => {
   const [expand, setExpand] = useState(false);
-    const ref = useRef();
     useEffect(() => {
-
-        const listener = e => {e.target !== ref.current && e.target.id !== 'dropDownBtn' && setExpand(false)};
+        // only close dropdown if clicked outside
+      const listener = e => {
+        e.target !== containerRef.current && !containerRef.current.contains(e.target) && setExpand(false)
+      };
         window.addEventListener('mousedown', listener);
         
         return () => window.removeEventListener('mousedown', listener);
@@ -20,9 +21,8 @@ const DropDown = ({ title, items }) => {
         className="flex gap-1 capitalize"
         onClick={() => setExpand((bool) => !bool)}
       >
-        <span ref={ref}>{title}</span>
+        <span>{title}</span>
         <FaCaretDown
-          id="dropDownBtn"
           className={`mt-[7px] text-sm transition-all transform ${
             expand ? "rotate-180" : "rotate-0"
           }`}
@@ -31,9 +31,14 @@ const DropDown = ({ title, items }) => {
       {expand && (
         <div className={`absolute w-full -bottom-3 transition-all`}>
           <motion.div
-            initial={{  padding: 0, opacity: 0 }}
-            animate={{ padding: '2rem', opacity: 1, transition: {duration: .2}}}
+            initial={{ padding: 0, opacity: 0 }}
+            animate={{
+              padding: "2rem",
+              opacity: 1,
+              transition: { duration: 0.2 },
+            }}
             className={`flex gap-20 absolute left-1/2 -translate-x-1/2 bg-gray-900 overflow-hidden`}
+            onClick={(e) => e.stopPropagation()}
           >
             {items.map((item, i) => (
               <div key={i} className="">
@@ -43,7 +48,9 @@ const DropDown = ({ title, items }) => {
                     <CustomLink
                       key={i}
                       text={link.text}
-                      className="text-base whitespace-nowrap transition hover:underline"
+                      href={link.link || "/"}
+                      className="text-base whitespace-nowrap transition hover:underline "
+                      onClick={() => setExpand(false)}
                     />
                   ))}
                 </div>
