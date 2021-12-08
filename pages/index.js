@@ -13,9 +13,11 @@ import {
   FaShippingFast,
 } from "react-icons/fa";
 import CustomLink from "../components/CustomLink";
+import InstaGallery from "../components/InstaGallery";
 import NewsLetterForm from "../components/NewsLetterForm";
 import ProductsSlider from "../components/ProductsSlider";
 import ReviewSlider from "../components/ReviewSlider";
+import NewsLetterSection from "../components/sections/NewsLetterSection";
 
 export default function Home() {
   return (
@@ -25,7 +27,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <section
-        className="bg-gray-800 px-5 lg:px-20 py-20 lg:pt-32 flex flex-col items-center md:items-start gap-10 text-white"
+        className="bg-gray-800 px-5 lg:px-20 py-20 sm:py-32 lg:pt-48 flex flex-col items-center md:items-start gap-10 text-white"
         style={{
           background:
             "linear-gradient(rgba(0, 0, 0,0.5), rgba(0, 0, 0,0.5)), url('/img/neon-banner.jpg')",
@@ -158,7 +160,7 @@ export default function Home() {
           </Item>
           <Item
             title="EASY INSTALLATION"
-            text="They go up like a picture frame and plug in like a lamp! Every Sketch & Etch Neon comes with an installation kit and pre-drilled holes, ready to hang and enjoy right out of the box. Find out more about how to hang your Neon here."
+            text="They go up like a picture frame and plug in like a lamp! Every NeonShop Neon comes with an installation kit and pre-drilled holes, ready to hang and enjoy right out of the box. Find out more about how to hang your Neon here."
           >
             <FaCogs className="text-green-500" />
           </Item>
@@ -187,12 +189,12 @@ export default function Home() {
             },
             {
               name: "leo",
-              img: "/img/client-3.jpg", text:"Sketch & Etch were SO easy to deal with, very attentive to ourvision and created the most stunning and...",
+              img: "/img/client-3.jpg", text:"NeonShop were SO easy to deal with, very attentive to ourvision and created the most stunning and...",
               position: 'street skate corp',
               neon: { img: '/img/product-3.jpg', name: 'neon art name' }
             },
             {
-              name: "mary", img: "/img/client-4.jpg", text: "Sketch and Etch have been so enjoyable to work with especially Tash. Their communication and attention to detail is amazing....", position: 'mariana cafe', neon: { img: '/img/product-4.jpg', name: 'neon art name' }
+              name: "mary", img: "/img/client-4.jpg", text: "NeonShop have been so enjoyable to work with especially Tash. Their communication and attention to detail is amazing....", position: 'mariana cafe', neon: { img: '/img/product-4.jpg', name: 'neon art name' }
             },
             {
               name: "stephan",
@@ -244,10 +246,10 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-20 ">
           <div className="flex flex-col gap-4 justify-center">
             <p className="font-semibold">
-              Meet Ash & Tash (Co-Founders of Sketch & Etch)
+              Meet Ash & Tash (Co-Founders of NeonShop)
             </p>
             <p>
-              Sketch & Etch was co-founded in 2015 by two friends with one
+              NeonShop was co-founded in 2015 by two friends with one
               vision - to light up people’s lives by creating lasting
               impressions.
             </p>
@@ -260,7 +262,7 @@ export default function Home() {
               Ash originally owned a drone business, while Tash had her roots
               grounded in photography. Thank the Neon stars, that in a
               bitter-sweet twist of fate, Ash’s drone business literally crashed
-              and burned. And soon after from the embers, the Sketch & Etch
+              and burned. And soon after from the embers, the NeonShop
               partnership was founded. The rest, as they say, is history.
               <CustomLink className="font-semibold"> Read more.</CustomLink>
             </p>
@@ -283,20 +285,7 @@ export default function Home() {
           />
         </div>
       </section>
-      <section className="px-5 lg:px-20 py-20 bg-black text-white flex flex-col gap-5 items-center text-center "  style={{
-          background:
-            "linear-gradient(rgba(0, 0, 0,0.9), rgba(0, 0, 0,0.9)), url('/img/neon-banner-3.jpg')",
-        }}>
-        <h3 className="text-3xl font-semibold uppercase">
-          get exclusive benefits!
-        </h3>
-        <p>
-          Become part of the <span className="font-semibold">NeonShop</span>{" "}
-          family. You will be first in the know about new products and exclusive
-          promotions. Enter your email below to join today!
-        </p>
-        <NewsLetterForm />
-      </section>
+      <NewsLetterSection/>
       <section className=" pt-20 bg-white text-blackflex flex flex-col gap-10 items-center">
         <h3 className="px-5 lg:px-20 text-3xl font-semibold uppercase ">
           follow us on
@@ -323,22 +312,3 @@ const Item = ({ title, text, children }) => {
   );
 };
 
-const InstaGallery = ({}) => {
-  const items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-  return (
-    <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-0">
-      {items.map((item, i) => (
-        <CustomLink className="relative group" href={item.link || '/'} key={i}>
-          <img
-            src={item.img || `/img/product-${i + 1}.jpg`}
-            alt={item.alt || `product ${i + 1}`}
-            className="object-cover h-60"
-            />
-          <div  className="absolute inset-0  bg-black transition-all bg-opacity-50 opacity-0 group-hover:opacity-100 flex items-center justify-center">
-            <FaInstagram className="text-white text-4xl transition group-hover:scale-125"/>
-          </div>
-      </CustomLink>
-      ))}
-    </div>
-  )
-}

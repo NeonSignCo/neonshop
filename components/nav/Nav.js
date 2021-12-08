@@ -19,8 +19,8 @@ const Nav = () => {
         <AnimatePresence>
           {globalState.showBanner && <Banner />}
         </AnimatePresence>
-        <div className="py-4 px-5 lg:px-20 flex justify-between items-center">
-          <CustomLink text="NeonShop" className="font-semibold text-3xl" />
+        <div className="py-4 px-5 lg:px-20 flex flex-wrap justify-center gap-3 xs:justify-between items-center">
+          <CustomLink text="NeonShop" className="font-semibold text-xl sm:text-2xl lg:text-3xl" />
           <div className="hidden lg:flex items-center gap-7 capitalize text-lg">
             <CustomLink text="design your neon" />
             <DropDown
@@ -69,9 +69,9 @@ const Nav = () => {
                 },
               ]}
             />
-            <CustomLink text="blog" />
-            <CustomLink text="about" />
-            <CustomLink text="contact" />
+            <CustomLink href="/blog" text="blog" />
+            <CustomLink href="/about" text="about" />
+            <CustomLink href="/contact" text="contact" />
           </div>
           <div className="flex items-center gap-4 capitalize text-xl md:text-2xl">
             <CustomLink>
@@ -119,7 +119,7 @@ const Nav = () => {
           </div>
         </div>
         <AnimatePresence>
-          {state.showMobileMenu && <MobileMenu />}
+          {state.showMobileMenu && <MobileMenu closeMenu={() => setState(state => ({...state, showMobileMenu: false}))}/>}
         </AnimatePresence>
       </div>
     );

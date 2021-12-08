@@ -14,6 +14,7 @@ const Footer = () => {
           <div className="grid gap-2 place-content-start">
             <h4 className="font-semibold uppercase mb-3">customer care</h4>
             <CustomLink
+              href="/shipping-returns"
               className="transition hover:underline"
               text="Shipping & returns"
             />
@@ -21,25 +22,25 @@ const Footer = () => {
               className="transition hover:underline uppercase"
               text="faq"
             />
-            <CustomLink className="transition hover:underline" text="contact" />
+            <CustomLink href="/contact" className="transition hover:underline" text="contact" />
             <CustomLink
+              href="/privacy-policy"
               className="transition hover:underline"
               text="privacy policy"
             />
             <CustomLink
+              href="/terms-conditions"
               className="transition hover:underline"
               text="terms & conditions"
             />
             <CustomLink
-              className="transition hover:underline"
-              text="terms of service"
-            />
-            <CustomLink
+              href="/refund-policy"
               className="transition hover:underline"
               text="refund policy"
             />
             <CustomLink className="transition hover:underline" text="sitemap" />
             <CustomLink
+              href="/e-privacy"
               className="transition hover:underline"
               text="e-privacy"
             />

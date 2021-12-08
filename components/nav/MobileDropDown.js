@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FaCaretDown } from "react-icons/fa";
 import CustomLink from "../CustomLink";
 
-const MobileDropDown = ({ title, items }) => {
+const MobileDropDown = ({ title, items, closeMenu }) => {
     const [expand, setExpand] = useState(false);
      return (
        <div className="">
@@ -21,7 +21,7 @@ const MobileDropDown = ({ title, items }) => {
                <h3 className="font-semibold mb-2">{item.title}</h3>
                <div className="grid gap-1 capitalize">
                  {item.links.map((item, i) => (
-                   <CustomLink key={i} text={item.text} />
+                   <CustomLink key={i} text={item.text} onClick={closeMenu}/>
                  ))}
                </div>
              </div>

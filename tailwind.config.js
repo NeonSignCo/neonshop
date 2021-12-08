@@ -7,10 +7,13 @@ module.exports = {
   ],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {
+    extend: { 
       colors: {
         accent: "#1e272e",
       },
+      screens: {
+        'xs': "300px"
+      }
     },
   },
   variants: {
