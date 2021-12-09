@@ -37,6 +37,10 @@ const DropDown = ({ title, items, containerRef }) => {
               opacity: 1,
               transition: { duration: 0.2 },
             }}
+            exit={{
+              padding: "0",
+              opacity: 0,
+            }}
             className={`flex gap-20 absolute left-1/2 -translate-x-1/2 bg-gray-900 overflow-hidden`}
             onClick={(e) => e.stopPropagation()}
           >

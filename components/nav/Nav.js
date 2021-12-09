@@ -23,7 +23,7 @@ const Nav = () => {
         <div className="py-4 px-5 lg:px-20 flex flex-wrap justify-center gap-3 xs:justify-between items-center">
           <CustomLink
             text="NeonShop"
-            className="font-semibold text-xl sm:text-2xl lg:text-3xl"
+            className="font-semibold text-2xl lg:text-3xl"
           />
           <div className="hidden lg:flex items-center gap-7 capitalize text-lg">
             <CustomLink text="design your neon" />

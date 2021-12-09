@@ -1,7 +1,9 @@
+import CustomNeonBuilder from "../components/CustmNeonBuilder/CustomNeonBuilder"
+
 const CustomNeonSign = () => {
     return (
         <div>
-            custom neon page
+            <CustomNeonBuilder/>
         </div>
     )
 }

@@ -3,8 +3,9 @@ import CurrencyConverter from "./CurrencyConverter";
 import CustomLink  from "./CustomLink"
 
 const Footer = () => {
+
     return (
-      <div className="px-5 lg:px-20 py-10 bg-black text-white">
+      <div className="px-5 lg:px-20 py-10 bg-black text-white ">
         <CustomLink
           className="transition hover:underline"
           className="text-4xl"
