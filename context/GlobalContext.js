@@ -7,9 +7,9 @@ export const useGlobalContext = () => useContext(Context);
 const GlobalContext = ({ children }) => {
     
     const [state, setState] = useState({
-        showBanner: false,
+        showBanner: false, 
         currency: USD, 
-        model: {show: true, type: '', data}
+        model: {show: true, type: '', data: {}}
     }) 
 
     useEffect(() => {

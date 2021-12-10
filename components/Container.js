@@ -18,7 +18,7 @@ const Container = ({ children }) => {
           <div className="max-w-screen-2xl mx-auto pt-[66px]">{children}</div>
         </div> 
         <AnimatePresence>
-          {state.modal.show && <ModalContainer/> }
+          {state.modal?.show && <ModalContainer/> }
         </AnimatePresence>        
         {route !== "/custom-neon-sign" && <Footer />}
       </div>
