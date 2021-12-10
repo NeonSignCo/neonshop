@@ -40,7 +40,7 @@ const Visuals = () => {
             <div className="ml-auto text-2xl md:text-5xl absolute top-5 right-5 ">
               {currencySign}
               <span className="italic">
-                {Number(state.data.price).toFixed(2)}
+                {Number(Object.values(state.data.price).reduce((a, b) => a+ b)).toFixed(2)}
               </span>
             </div>
             <div

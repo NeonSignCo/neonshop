@@ -10,7 +10,7 @@ export const BOXED = 'BOXED';
 const NeonBuilderContext = ({ children }) => {
   const [state, setState] = useState({
     data: {
-      text: "fff",
+      text: "",
       font: "MontserratRegular",
       color: "#F7F7F7",
       size: {
@@ -18,7 +18,7 @@ const NeonBuilderContext = ({ children }) => {
         width: { min: 10, max: 200, value: 50 },
       },
       backing: CUTTOLETTER,
-      price: 50.0,
+      price: {basic: 50, backing: 0},
       installLocation: "indoor",
       mountType: "wall",
       deliveryTime: "4-6 Weeks",

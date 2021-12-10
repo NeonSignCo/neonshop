@@ -239,7 +239,7 @@ const BackingBtn = ({ title, text, value, price = 0 }) => {
       onClick={() =>
         setState((state) => ({
           ...state,
-          data: { ...state.data, backing: value },
+          data: { ...state.data, backing: value, price:  {...state.data.price, backing: price}},
         }))
       }
     >
