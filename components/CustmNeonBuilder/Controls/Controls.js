@@ -195,16 +195,16 @@ const Controls = () => {
           <div className="lg:flex-1 grid gap-2">
             <button
               className="bg-gray-900 max-w-max mx-auto px-8 py-3 uppercase text-white text-xs flex justify-center items-center gap-2 "
-              onClick={() =>
-                setGlobalState((state) => ({
-                  ...state,
-                  modal: {
-                    show: true,
-                    type: CUSTOMNEONMODEL,
-                    data: state.data,
-                  },
-                }))
-              }
+              // onClick={() =>
+              //   setGlobalState((state) => ({
+              //     ...state,
+              //     modal: {
+              //       show: true,
+              //       type: CUSTOMNEONMODEL,
+              //       data: state.data,
+              //     },
+              //   }))
+              // }
             >
               <FaCartArrowDown className="text-xl" />
               <span>add to cart</span>
