@@ -8,7 +8,8 @@ const GlobalContext = ({ children }) => {
     
     const [state, setState] = useState({
         showBanner: false,
-        currency: USD 
+        currency: USD, 
+        model: {show: true, type: '', data}
     }) 
 
     useEffect(() => {

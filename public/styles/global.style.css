@@ -1,19 +1,80 @@
+/* smooth scroll */
 html {
     scroll-behavior: smooth;
 }
 
 
 
-.custom-img {
-  object-fit: contain;
-  width: 100% !important;
-  position: relative !important;
-  height: unset !important;
+/* font families */ 
+@font-face {
+  font-family: 'ArchitectsDaughter';
+  src: url('../fonts//ArchitectsDaughter-Regular.ttf')
 }
-
-.unset-img {
-  width: 100%;
+@font-face {
+  font-family: 'astroastroRegular';
+  src: url('../fonts//astro.ttf')
 }
-.unset-img > div {
-  position: unset !important;
+@font-face {
+  font-family: 'cookieastroRegular';
+  src: url('../fonts//Cookie-Regular.ttf')
+}
+@font-face {
+  font-family: 'corinthiaRegular';
+  src: url('../fonts//Corinthia-Regular.ttf')
+}
+@font-face {
+  font-family: 'fuzzyBubblesRegular';
+  src: url('../fonts//FuzzyBubbles-Regular.ttf')
+}
+@font-face {
+  font-family: 'greatVibesRegular';
+  src: url('../fonts//GreatVibes-Regular.ttf')
+}
+@font-face {
+  font-family: 'gwendolynRegular';
+  src: url('../fonts//Gwendolyn-Regular.ttf')
+}
+@font-face {
+  font-family: 'kaushanScriptRegular';
+  src: url('../fonts//KaushanScript-Regular.ttf')
+}
+@font-face {
+  font-family: 'lobsterTwoRegular';
+  src: url('../fonts//LobsterTwo-Regular.ttf')
+}
+@font-face {
+  font-family: 'luckiestGuyRegular';
+  src: url('../fonts//LuckiestGuy-Regular.ttf')
+}
+@font-face {
+  font-family: 'luxuriousScriptRegular';
+  src: url('../fonts//LuxuriousScript-Regular.ttf')
+}
+@font-face {
+  font-family: 'meowScriptRegular';
+  src: url('../fonts//MeowScript-Regular.ttf')
+}
+@font-face {
+  font-family: 'montserratRegular';
+  src: url('../fonts//Montserrat-Regular.ttf')
+}
+@font-face {
+  font-family: 'orbitronVariablesFontRegular';
+  src: url('../fonts//Orbitron-VariableFont_wght.ttf')
+}
+@font-face {
+  font-family: 'pacificoRegular';
+  src: url('../fonts//Pacifico-Regular.ttf')
+}
+@font-face {
+  font-family: 'permanentRegular';
+  src: url('../fonts//PermanentMarker-Regular.ttf')
+}
+@font-face {
+  font-family: 'sacramentoRegular';
+  src: url('../fonts//Sacramento-Regular.ttf')
+}
+@font-face {
+  font-family: 'sassyFrassRegular';
+  src: url('../fonts//SassyFrass-Regular.ttf')
 }
