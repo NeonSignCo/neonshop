@@ -19,9 +19,9 @@ const MobileMenu = ({closeMenu}) => {
               {
                 title: "explore",
                 links: [
-                  { text: "build your own" },
+                  {link: '/custom-neon-sign', text: "build your own" },
                   { text: "inspiration" },
-                  { text: "shop all" },
+                  {link: '/shop', text: "shop all" },
                 ],
               },
               {

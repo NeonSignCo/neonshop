@@ -21,7 +21,7 @@ const MobileDropDown = ({ title, items, closeMenu }) => {
                <h3 className="font-semibold mb-2">{item.title}</h3>
                <div className="grid gap-1 capitalize">
                  {item.links.map((item, i) => (
-                   <CustomLink key={i} text={item.text} onClick={closeMenu}/>
+                   <CustomLink href={item.link} key={i} text={item.text} onClick={closeMenu}/>
                  ))}
                </div>
              </div>
