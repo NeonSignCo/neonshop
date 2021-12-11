@@ -26,7 +26,7 @@ const Visuals = () => {
     <div
       className="col-span-3 lg:col-span-2 row-span-2 lg:row-span-6 flex text-white  relative overflow-hidden p-4"
       style={{
-        background: `linear-gradient(rgba(0, 0, 0,0.95), rgba(0, 0, 0,0.95)), url('/img/neon-banner${
+        background: `linear-gradient(rgba(0, 0, 0,0.9), rgba(0, 0, 0,0.9)), url('/img/neon-banner${
           state.data.text ? "-5" : ""
         }.jpg')`,
       }}
