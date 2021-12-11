@@ -240,15 +240,6 @@ const Controls = () => {
               price={97.07}
             />
           </div>
-          <div className="grid gap-2" id="install-location">
-            <h2 className="text-center capitalize text-lg p-2">
-              select your install location
-            </h2>
-            <div className="flex gap-2 uppercase">
-              <LocationBtn type="indoor" />
-              <LocationBtn type="outdoor" />
-            </div>
-          </div>
           <div className="grid gap-2" id="mount-type">
             <h2 className="text-center capitalize text-lg p-2">
               select how you want to mount your neon

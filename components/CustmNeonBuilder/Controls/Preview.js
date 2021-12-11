@@ -67,12 +67,6 @@ const Preview = () => {
                 {state.data.backing}
               </div>
               <div className="capitalize">
-                <span className="font-semibold text-lg">
-                  Install Location:{" "}
-                </span>{" "}
-                {state.data.installLocation}
-              </div>
-              <div className="capitalize">
                 <span className="font-semibold text-lg">Mount Type: </span>{" "}
                 {state.data.mountType}
               </div>

@@ -52,21 +52,15 @@ const Navigation = () => {
         target="backing"
       />
       <Item
-        title="Install location"
-        text={state.data.installLocation}
-        number="6"
-        target="install-location"
-      />
-      <Item
         title="Moun type"
         text={state.data.mountType}
-        number="7"
+        number="6"
         target="mount-type"
       />
       <Item
         title="Delivery time"
         text={state.data.deliveryTime}
-        number="8"
+        number="7"
         target="delivery-time"
       />
       <button className="flex justify-between items-center px-3 py-5 border-b capitalize font-semibold text-lg transition hover:bg-gray-200">
