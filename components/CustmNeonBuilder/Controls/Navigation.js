@@ -3,7 +3,7 @@ import { BsX } from "react-icons/bs";
 import { useNeonBuilderContext } from "../../../context/NeonBuilderContext";
 import { motion } from "framer-motion";
 import CustomLink from "../../CustomLink";
-import { colors } from "../../../utils/CustomNeonAssets";
+import { colors, icons } from "../../../utils/CustomNeonAssets";
 
 const Navigation = () => {
   const [state, setState] = useNeonBuilderContext();
@@ -37,30 +37,40 @@ const Navigation = () => {
         number="3"
         target="color"
       />
+      <Item
+        title="Neon Icon"
+        text={state.data.icon.name}
+        number="4"
+        target="icon"
+      />
 
       <Item
         title="Neon Size"
         text={`${state.data.height || 0} x ${state.data.width || 0} (inches)`}
-        number="4"
+        number="5"
         target="size"
       />
 
       <Item
         title="Neon backing"
-        text={state.data.backing === 'CUTTOLETTER' ? 'cut to letter': state.data.backing}
-        number="5"
+        text={
+          state.data.backing === "CUTTOLETTER"
+            ? "cut to letter"
+            : state.data.backing
+        }
+        number="6"
         target="backing"
       />
       <Item
         title="Moun type"
         text={state.data.mountType}
-        number="6"
+        number="7"
         target="mount-type"
       />
       <Item
         title="Delivery time"
         text={state.data.deliveryTime}
-        number="7"
+        number="8"
         target="delivery-time"
       />
       <button className="flex justify-between items-center px-3 py-5 border-b capitalize font-semibold text-lg transition hover:bg-gray-200">
