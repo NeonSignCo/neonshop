@@ -10,7 +10,7 @@ const GlobalContext = ({ children }) => {
         showBanner: false, 
         currency: USD,  
         currencySign: '$',
-        modal: {show: true, type: '', data: {}}
+        modal: {show: false, type: '', data: {}}  
     }) 
 
     useEffect(() => {

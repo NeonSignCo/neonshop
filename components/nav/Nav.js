@@ -15,6 +15,7 @@ const Nav = () => {
     const [state, setState] = useState({
       showMobileMenu: false
     })
+  
     return (
       <div className="bg-black text-white fixed top-0 w-full shadow z-20">
         <AnimatePresence>

@@ -12,9 +12,9 @@ const Container = ({ children }) => {
 
   
     return (
-      <>
+      <>  
         <div
-          className={`flex flex-col justify-between ${
+          className={`flex flex-col justify-between  ${
             state.modal.show ? "h-screen fixed " : "min-h-screen"
           }`}
         >
