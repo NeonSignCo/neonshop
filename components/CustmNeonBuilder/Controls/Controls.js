@@ -78,7 +78,8 @@ const Controls = () => {
               onChange={(e) =>
                 setState((state) => ({
                   ...state,
-                  data: { ...state.data, text: e.target.value },
+                  data: { ...state.data, text: e.target.value }, 
+                  error: {...state.error, text: ''}
                 }))
               }
             ></textarea>
@@ -155,7 +156,7 @@ const Controls = () => {
                   onClick={() =>
                     setState((state) => ({
                       ...state,
-                      data: { ...state.data, icon },
+                      data: { ...state.data, icon: state.data.icon.name === icon.name ? {link: '', name: ''}: icon},
                     }))
                   }
                 >
@@ -185,7 +186,8 @@ const Controls = () => {
                     if (e.target.value < 0) e.target.value = 0;
                     setState((state) => ({
                       ...state,
-                      data: { ...state.data, height: e.target.value },
+                      data: { ...state.data, height: e.target.value }, 
+                      error: {...state.error, size: ''}
                     }));
                   }}
                 />
@@ -202,6 +204,7 @@ const Controls = () => {
                     setState((state) => ({
                       ...state,
                       data: { ...state.data, width: e.target.value },
+                      error: { ...state.error, size: "" },
                     }));
                   }}
                 />

@@ -98,10 +98,10 @@ const Item = ({ title, text, number, target }) => {
         document.getElementById(target).scrollIntoView({ behavior: "smooth" });
       }}
     >
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 capitalize">
         <div className="text-xl font-light">{number}</div>
         <div className=" text-left">
-          <p className="font-semibold capitalize">{title}</p>
+          <p className="font-semibold">{title}</p>
           <p className="text-sm">{text}</p>
         </div>
       </div>

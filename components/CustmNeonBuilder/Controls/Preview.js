@@ -13,7 +13,7 @@ const Preview = () => {
         initial={{ x: "100%" }}
         animate={{ x: 0, transition: { duration: 0.2 } }}
         exit={{ x: "100%", transition: { duration: 0.2 } }}
-        className="absolute inset-0 bg-white flex flex-col "
+        className="absolute inset-0 bg-white flex flex-col"
       >
         <div className="p-2 border-b border-gray-200 ">
           <button
@@ -36,12 +36,12 @@ const Preview = () => {
             </h3>
             <p className="text-2xl">Details:</p>
             <div className="grid gap-2">
-              <div>
+              <div className="capitalize">
                 <span className="font-semibold text-lg">text: </span>{" "}
                 {state.data.text}
               </div>
               {state.data.icon.name && (
-                <div className="flex gap-2 items-center">
+                <div className="flex gap-2 items-center capitalize">
                   <span className="font-semibold text-lg">icon:</span>
                   <img
                     src={`/img/neon-logos/${state.data.icon.link}`}
@@ -50,39 +50,39 @@ const Preview = () => {
                   />
                 </div>
               )}
-              <div>
+              <div className="capitalize">
                 <span className="font-semibold text-lg">font: </span>{" "}
                 {state.data.font}
               </div>
-              <div>
+              <div className="capitalize">
                 <span className="font-semibold text-lg">color: </span>{" "}
                 {state.data.color}
               </div>
-              <div>
+              <div className="capitalize">
                 <span className="font-semibold text-lg">size: </span>{" "}
                 {state.data.height} x {state.data.width} (inches)
               </div>
-              <div>
+              <div className="capitalize">
                 <span className="font-semibold text-lg">backing: </span>{" "}
                 {state.data.backing}
               </div>
-              <div>
+              <div className="capitalize">
                 <span className="font-semibold text-lg">
                   Install Location:{" "}
                 </span>{" "}
                 {state.data.installLocation}
               </div>
-              <div>
+              <div className="capitalize">
                 <span className="font-semibold text-lg">Mount Type: </span>{" "}
                 {state.data.mountType}
               </div>
-              <div>
+              <div className="capitalize">
                 <span className="font-semibold text-lg">deliveryTime: </span>{" "}
                 {state.data.deliveryTime}
               </div>
             </div>
           </div>
-          <div className="border-t py-2 border-t text-center">
+          <div className="border-t border-gray-300 py-2  text-center">
             <button className="bg-black  text-white py-2 px-5 text-xl uppercase">
               add to cart
             </button>
