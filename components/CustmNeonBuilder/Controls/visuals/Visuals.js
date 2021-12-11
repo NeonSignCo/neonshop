@@ -49,7 +49,7 @@ const Visuals = () => {
           >
             <div
               ref={textRef}
-              className="text-5xl md:text-7xl lg:text-9xl transition-all filter brightness-[1.2] relative flex items-center"
+              className="text-5xl md:text-7xl lg:text-9xl transition-all filter brightness-[1.2] relative flex items-center justify-center "
               style={{
                 textShadow: `0 0 10px ${state.data.color}FF, 0 0 20px ${state.data.color}80,  0 0 40px ${state.data.color}54`,
                 color: state.data.color,

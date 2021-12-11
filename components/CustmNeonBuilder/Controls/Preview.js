@@ -34,7 +34,7 @@ const Preview = () => {
               {globalState.currencySign}
               <span className="italic">{Number(price).toFixed(2)}</span>
             </h3>
-            <p className="text-2xl">Details:</p>
+            <p className="text-2xl pb-1 border-b border-gray-3000">Details:</p>
             <div className="grid gap-2">
               <div className="capitalize">
                 <span className="font-semibold text-lg">text: </span>{" "}

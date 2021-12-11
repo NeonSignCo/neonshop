@@ -174,7 +174,7 @@ const Controls = () => {
               )}
               <span className="font-semibold"> (in inches)</span>{" "}
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-black">
+            <div className="grid grid-cols-2 gap-4 text-black">
               <flex className="flex items-center gap-2">
                 <p className="capitalize">height</p>
                 <input
