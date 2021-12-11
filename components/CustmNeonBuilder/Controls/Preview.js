@@ -2,6 +2,7 @@ import { motion } from "framer-motion"
 import { FaChevronLeft } from "react-icons/fa";
 import { useGlobalContext } from "../../../context/GlobalContext";
 import { useNeonBuilderContext } from "../../../context/NeonBuilderContext";
+import { colors } from "../../../utils/CustomNeonAssets";
 
 const Preview = () => { 
     const [state, setState] = useNeonBuilderContext(); 
@@ -55,8 +56,8 @@ const Preview = () => {
                 {state.data.font}
               </div>
               <div className="capitalize">
-                <span className="font-semibold text-lg">color: </span>{" "}
-                {state.data.color}
+                <span className="font-semibold text-lg">color: </span>{" "}   
+                {colors.find(color => color.hex === state.data.color)?.name} 
               </div>
               <div className="capitalize">
                 <span className="font-semibold text-lg">size: </span>{" "}
