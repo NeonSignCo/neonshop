@@ -55,8 +55,9 @@ const Preview = () => {
                 <span className="font-semibold text-lg">font: </span>{" "}
                 {state.data.font}
               </div>
-              <div className="capitalize">
-                <span className="font-semibold text-lg">color: </span>{" "}   
+              <div className="capitalize flex items-center gap-1">
+                <div className="font-semibold text-lg mr-1 ">color: </div>    
+                <div className="h-4 w-4 border border-gray-500" style={{backgroundColor: state.data.color}}></div>
                 {colors.find(color => color.hex === state.data.color)?.name} 
               </div>
               <div className="capitalize">
