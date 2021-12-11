@@ -103,22 +103,22 @@ export default function Home() {
         </h3>
         <ProductsSlider
           products={[
-            { name: "product 1", img: "/img/product-1.jpg", price: "299" },
+            { name: "product 1", img: "/img/product-images/product-1.jpg", price: "299" },
             {
               name: "product 2",
-              img: "/img/product-2.jpg",
+              img: "/img/product-images/product-2.jpg",
               price: "400",
               hot: true,
             },
-            { name: "product 3", img: "/img/product-3.jpg", price: "459" },
-            { name: "product 4", img: "/img/product-4.jpg", price: "269" },
+            { name: "product 3", img: "/img/product-images/product-3.jpg", price: "459" },
+            { name: "product 4", img: "/img/product-images/product-4.jpg", price: "269" },
             {
               name: "product 5",
-              img: "/img/product-5.jpg",
+              img: "/img/product-images/product-5.jpg",
               price: "129",
               hot: true,
             },
-            { name: "product 6", img: "/img/product-6.jpg", price: "579" },
+            { name: "product 6", img: "/img/product-images/product-6.jpg", price: "579" },
           ]}
         />
       </section>
@@ -176,40 +176,7 @@ export default function Home() {
         <h3 className="text-3xl uppercase font-semibold uppercase text-center mb-10">
           what our clients say
         </h3>
-        <ReviewSlider
-          reviews={[
-            { name: "suzy", img: "/img/client-1.jpg", text:"Thanks for our neon sign, it was the perfect backdrop for our event!", position: 'flowa liberal', neon: {img: '/img/product-1.jpg', name: 'neon art name'}},
-            {
-              name: "james",
-              img: "/img/client-2.jpg",
-              text: "Great communication! The neon signs we ordered are incredible and they were so lovely and amazing with helping us out"
-              ,
-              position: 'hactic arts',
-              neon: { img: '/img/product-2.jpg', name: 'neon art name' }
-            },
-            {
-              name: "leo",
-              img: "/img/client-3.jpg", text:"NeonShop were SO easy to deal with, very attentive to ourvision and created the most stunning and...",
-              position: 'street skate corp',
-              neon: { img: '/img/product-3.jpg', name: 'neon art name' }
-            },
-            {
-              name: "mary", img: "/img/client-4.jpg", text: "NeonShop have been so enjoyable to work with especially Tash. Their communication and attention to detail is amazing....", position: 'mariana cafe', neon: { img: '/img/product-4.jpg', name: 'neon art name' }
-            },
-            {
-              name: "stephan",
-              img: "/img/client-5.jpg",
-              text: "Sent them through our logo, before we knew it it was designed and on our doorstep. Really happy...it’s just given...",
-              position: 'Admire Artists', neon: { img: '/img/product-5.jpg', name: 'neon art name' }
-            },
-            {
-              name: "liana", img: "/img/client-6.jpg",
-              text: "They have their Neons down to a science! Even the way the item was packaged and shipped to the US...",
-              position: 'Snared Services',
-              neon: { img: '/img/product-6.jpg', name: 'neon art name' }
-            },
-          ]}
-        />
+        <ReviewSlider/>
       </section>
       <section className="px-5 lg:px-20 py-20 bg-black text-white"
         style={{
@@ -223,17 +190,17 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-20 md:gap-10"
         >
           <CustomLink className="grid gap-3 text-center bg-white text-black pb-3">
-            <img src="/img/product-1.jpg" alt="product" className="w-full object-cover"/>
+            <img src="/img/product-images/product-1.jpg" alt="product" className="w-full object-cover"/>
             <p className="text-xl px-5  font-bold uppercase">Juddchella - An Event By NeonShop</p>
             <p className="px-5">Move over Coachella, The Judd’s are in town. The only person we know that could pull off a housewarming party theme this extravagant is non-other than...</p>
           </CustomLink>
           <CustomLink className="grid gap-3 text-center bg-white text-black pb-3">
-            <img src="/img/product-3.jpg" alt="product" className="w-full object-cover"/>
+            <img src="/img/product-images/product-3.jpg" alt="product" className="w-full object-cover"/>
             <p className="text-xl px-5  font-bold uppercase">Home office ideas to boost your productivity </p>
             <p className="px-5">‘Home Office Ideas’ would have to be one of the most searched for phrases in 2020. Thanks to Covid, our work environments have undergone a...</p>
           </CustomLink>
           <CustomLink className="grid gap-3 text-center bg-white text-black pb-3">
-            <img src="/img/product-4.jpg" alt="product" className="w-full object-cover"/>
+            <img src="/img/product-images/product-4.jpg" alt="product" className="w-full object-cover"/>
             <p className="text-xl px-5  font-bold uppercase">retail design | first impressions count</p>
             <p className="px-5">Retail Design | First Impressions Count 11 mins read This one is for all you business owners out there. Everyone knows that first impressions count....</p>
           </CustomLink>

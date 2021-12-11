@@ -2,10 +2,10 @@ import { createContext, useContext, useState } from "react";
 
 const Context = createContext();
 export const useNeonBuilderContext = () => useContext(Context);
-export const CUTTOLETTER = 'CUTTOLETTER';
-export const RECTANGLE = 'RECTANGLE';
-export const STAND = 'STAND';
-export const BOXED = 'BOXED';
+export const CLEARACRYLIC = "clear acrylic";
+export const BLACKACRYLIC = "black acrylic";
+export const MIRRORACRYLIC = 'mirror acrylic';
+export const GOLDACRYLIC = 'gold acrylic';
 
 const NeonBuilderContext = ({ children }) => {
   const [state, setState] = useState({
@@ -13,17 +13,17 @@ const NeonBuilderContext = ({ children }) => {
       text: "",
       font: "MontserratRegular",
       color: "#F7F7F7",
-      size: {
-        heightScale: { min: 0.5, max: 2, value: 1 },
-        width: { min: 10, max: 200, value: 50 },
-      },
-      backing: CUTTOLETTER,
+      height: '', 
+      width: '',
+      backing: CLEARACRYLIC,
       price: {basic: 50, backing: 0},
       installLocation: "indoor",
       mountType: "wall",
-      deliveryTime: "4-6 Weeks",
+      deliveryTime: "4-6 Weeks", 
+      icon: {link: '', name: ''}
     },
-    controls: { showNavigation: false },
+    controls: { showNavigation: false, showPreview: false }, 
+    error: {size: '', text: ''}
   });
 
   return (

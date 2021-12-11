@@ -40,7 +40,7 @@ const Navigation = () => {
 
       <Item
         title="Neon Size"
-        text={`${state.data.size.height} x ${state.data.size.width}`}
+        text={`${state.data.height || 0} x ${state.data.width || 0} (inches)`}
         number="4"
         target="size"
       />

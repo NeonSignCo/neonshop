@@ -12,7 +12,7 @@ export const fonts = [
   { text: "luckiest", family: "LuckiestGuyRegular" },
   { text: "luxurious", family: "LuxuriousScriptRegular" },
   { text: "meow", family: "MeowScriptRegular" },
-  { text: "orbitron", family: "Orbitron-VariableFont_wght.ttf" },
+  { text: "orbitron", family: "orbitronVariablesFontRegular" },
   { text: "pacifico", family: "PacificoRegular" },
   { text: "marker", family: "PermanentMarkerRegular" },
   { text: "sacramento", family: "SacramentoRegular" },
@@ -93,4 +93,15 @@ export const colors = [
     name: "green",
     hex: "#00A551",
   },
+];
+
+
+export const icons = [
+  {link: "FB logo.png", name: "facebook icon"},
+  {link: "IG logo.png", name: "instagram icon"},
+  {link: "PT logo.png", name: "pinterest icon"},
+  {link: "SC logo.png", name: "snapchat icon"},
+  {link: "TT logo.png", name: "tiktok icon"},
+  {link: "TW logo.png", name: "twitter icon"},
+  {link: "YT logo.png", name: "youtube icon"},
 ];

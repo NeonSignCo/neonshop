@@ -8,7 +8,7 @@ const InstaGallery = ({}) => {
       {items.map((item, i) => (
         <CustomLink className="relative group" href={item.link || "/"} key={i}>
           <img
-            src={item.img || `/img/product-${i + 1}.jpg`}
+            src={item.img || `/img/product-images/product-${i + 1}.jpg`}
             alt={item.alt || `product ${i + 1}`}
             className="object-cover h-60"
           />

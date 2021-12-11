@@ -176,7 +176,7 @@ const Contact = () => {
             <input
               type="text"
               name="size"
-              value={data.size}
+              value={data.siz}
               onChange={inputChange}
               className="w-full p-3 pl-7 bg-transparent border-b outline-none transition focus:border-b-white"
               placeholder="Did you have a size in mind for your neon sign? (Enter approx. size in inches or cm)"

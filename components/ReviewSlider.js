@@ -3,7 +3,42 @@ import { motion } from "framer-motion";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import { FaCaretLeft, FaCaretRight, FaQuoteLeft, FaQuoteRight } from "react-icons/fa";
 
-const ReviewSlider = ({ reviews = [1, 2, 3, 4, 5, 6] }) => {
+
+
+const reviews = [
+            { name: "suzy", img: "/img/client-images/client-1.jpg", text:"Thanks for our neon sign, it was the perfect backdrop for our event!", position: 'flowa liberal', neon: {img: '/img/product-images/product-1.jpg', name: 'neon art name'}},
+            {
+              name: "james",
+              img: "/img/client-images/client-2.jpg",
+              text: "Great communication! The neon signs we ordered are incredible and they were so lovely and amazing with helping us out"
+              ,
+              position: 'hactic arts',
+              neon: { img: '/img/product-images/product-2.jpg', name: 'neon art name' }
+            },
+            {
+              name: "leo",
+              img: "/img/client-images/client-3.jpg", text:"NeonShop were SO easy to deal with, very attentive to ourvision and created the most stunning and...",
+              position: 'street skate corp',
+              neon: { img: '/img/product-images/product-3.jpg', name: 'neon art name' }
+            },
+            {
+              name: "mary", img: "/img/client-images/client-4.jpg", text: "NeonShop have been so enjoyable to work with especially Tash. Their communication and attention to detail is amazing....", position: 'mariana cafe', neon: { img: '/img/product-images/product-4.jpg', name: 'neon art name' }
+            },
+            {
+              name: "stephan",
+              img: "/img/client-images/client-5.jpg",
+              text: "Sent them through our logo, before we knew it it was designed and on our doorstep. Really happy...it’s just given...",
+              position: 'Admire Artists', neon: { img: '/img/product-images/product-5.jpg', name: 'neon art name' }
+            },
+            {
+              name: "liana", img: "/img/client-images/client-6.jpg",
+              text: "They have their Neons down to a science! Even the way the item was packaged and shipped to the US...",
+              position: 'Snared Services',
+              neon: { img: '/img/product-images/product-6.jpg', name: 'neon art name' }
+            },
+          ]
+
+const ReviewSlider = () => {
   const [review, setreview] = useState(0);
 
   const { width } = useWindowDimensions();
@@ -41,7 +76,7 @@ const ReviewSlider = ({ reviews = [1, 2, 3, 4, 5, 6] }) => {
               }}
             >
               <img
-                src={review.neon?.img || "/img/product-1.jpg"}
+                src={review.neon?.img || "/img/product-images/product-1.jpg"}
                       alt={review.neon?.name || "neon art"}
               />
               <div className="text-center">

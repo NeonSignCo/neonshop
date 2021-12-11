@@ -5,19 +5,28 @@ const Context = createContext();
 export const useGlobalContext = () => useContext(Context);
 
 const GlobalContext = ({ children }) => {
-    
+      
     const [state, setState] = useState({
         showBanner: false, 
-        currency: USD, 
-        model: {show: true, type: '', data: {}}
+        currency: USD,  
+        currencySign: '$',
+        modal: {show: true, type: '', data: {}}
     }) 
 
     useEffect(() => {
-        const currency = localStorage.currency;
+        const currency = localStorage.currency || USD; 
+        const currencySign = currency === USD
+          ? "$"
+          : globalState.currency === EURO
+          ? "€"
+          : globalState.currency === POUND
+          ? "£"
+          : "$";
         const showBanner = localStorage.showBanner;
         setState((state) => ({
           ...state,
-          currency: currency || USD,
+          currency,
+          currencySign,
           showBanner: !showBanner
             ? true
             : showBanner === "true"

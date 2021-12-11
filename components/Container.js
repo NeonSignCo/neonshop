@@ -12,16 +12,22 @@ const Container = ({ children }) => {
 
   
     return (
-      <div className="min-h-screen flex flex-col justify-between">
-        <Nav />
-        <div>
-          <div className="max-w-screen-2xl mx-auto pt-[66px]">{children}</div>
-        </div> 
+      <>
+        <div
+          className={`flex flex-col justify-between ${
+            state.modal.show ? "h-screen fixed " : "min-h-screen"
+          }`}
+        >
+          <Nav />
+          <div>
+            <div className="max-w-screen-2xl mx-auto pt-[66px]">{children}</div>
+          </div>
+          {route !== "/custom-neon-sign" && <Footer />}
+        </div>
         <AnimatePresence>
-          {state.modal?.show && <ModalContainer/> }
-        </AnimatePresence>        
-        {route !== "/custom-neon-sign" && <Footer />}
-      </div>
+          {state.modal?.show && <ModalContainer />}
+        </AnimatePresence>
+      </>
     );
 }
 
