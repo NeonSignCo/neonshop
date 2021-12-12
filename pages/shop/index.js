@@ -32,10 +32,10 @@ const Shop = () => {
               <form className="flex items-center ">
                 <input
                   type="text"
-                  className="p-1 border border-gray-300 h-full w-full"
+                  className="p-2 border border-gray-300 h-full w-full"
                   placeholder="Search Product"
                 />
-                <button className="bg-black p-2 text-white h-full">
+                <button className="bg-black py-2 px-4 text-white h-full">
                   <FaSearch />
                 </button>
               </form>
@@ -82,9 +82,9 @@ const Product = ({ i }) => {
   return (
     <CustomLink href={`/shop/category/product-${i}`} className="grid gap-1" key={i}>
       <img src={`/img/product-images/product-2.jpg`} alt="product" />
-      <h3 className="text-xl font-semibold uppercase">product {i}</h3>
-      <div className="flex gap-1">
-        <div className="flex items-center gap-1">
+      <h3 className="text-lg sm:text-xl font-semibold uppercase">product {i}</h3>
+      <div className="flex flex-col sm:flex-row gap-1">
+        <div className="flex flex items-center gap-1">
           {[1, 2, 3, 4, 5].map((i) => (
             <FaStar key={i} className={ i > rating ? 'text-gray-400': 'text-black'}/>
           ))}
