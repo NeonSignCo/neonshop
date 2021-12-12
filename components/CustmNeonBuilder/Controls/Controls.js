@@ -261,7 +261,7 @@ const Controls = () => {
               onChange={(e) =>
                 setState((state) => ({
                   ...state,
-                  data: { ...state.data, deliveryTime: e.target.vlaue },
+                  data: { ...state.data, deliveryTime: e.target.value },
                 }))
               }
             >

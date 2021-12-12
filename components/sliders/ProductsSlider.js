@@ -1,10 +1,30 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import useWindowDimensions from "../hooks/useWindowDimensions";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa";
-import ProductPreview from "./ProductPreview";
+import { FaDollarSign } from "react-icons/fa";
+import CustomLink from "../CustomLink";
 
-const ProductsSlider = ({products = [1, 2, 3, 4, 5, 6]}) => {
+const ProductsSlider = () => { 
+  const products = [
+            { name: "product 1", img: "/img/product-images/product-1.jpg", price: "299" },
+            {
+              name: "product 2",
+              img: "/img/product-images/product-2.jpg",
+              price: "400",
+              hot: true,
+            },
+            { name: "product 3", img: "/img/product-images/product-3.jpg", price: "459" },
+            { name: "product 4", img: "/img/product-images/product-4.jpg", price: "269" },
+            {
+              name: "product 5",
+              img: "/img/product-images/product-5.jpg",
+              price: "129",
+              hot: true,
+            },
+            { name: "product 6", img: "/img/product-images/product-6.jpg", price: "579" },
+  ]
+  
   const [review, setreview] = useState(0);
 
   const { width } = useWindowDimensions();
@@ -79,6 +99,39 @@ const Controls = ({ setreview, review, products, width }) => {
       >
         <FaCaretRight />
       </button>
+    </div>
+  );
+}; 
+
+
+
+const ProductPreview = ({
+  name = "yeet neon sign",
+  img = "/img/product-1.jpg",
+  price = 500,
+  text = "buy now",
+  link = "/",
+  hot = false,
+}) => {
+  return (
+    <div className="flex-1 flex flex-col items-center gap-5 text-black relative">
+      <CustomLink hre={link} className="relative h-60">
+        <img src={img} alt={name} className="object-cover h-full" />
+      </CustomLink>
+      <p className="uppercase">{name}</p>
+      <p className="flex items-center tracking-[3px]">
+        <FaDollarSign /> {Number(price).toFixed(2)}
+      </p>
+      <CustomLink
+        href={link}
+        text={text}
+        className="px-5 py-2 sm:px-10 sm:py-4 md:px-16 flex items-center justify-center bg-black text-white"
+      />
+      {hot && (
+        <div className="absolute bg-gray-800 py-[2px] px-3 text-white -top-3 -right-2 uppercase">
+          hot
+        </div>
+      )}
     </div>
   );
 };

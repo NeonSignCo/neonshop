@@ -14,11 +14,10 @@ import {
 } from "react-icons/fa";
 import CustomLink from "../components/CustomLink";
 import InstaGallery from "../components/InstaGallery";
-import NewsLetterForm from "../components/NewsLetterForm";
-import ProductsSlider from "../components/ProductsSlider";
-import ReviewSlider from "../components/ReviewSlider";
+import ProductsSlider from "../components/sliders/ProductsSlider";
+import ReviewSlider from "../components/sliders/ReviewSlider";
 import NewsLetterSection from "../components/sections/NewsLetterSection";
-
+ 
 export default function Home() {
   return (
     <div className="">
@@ -32,17 +31,19 @@ export default function Home() {
           background:
             "linear-gradient(rgba(0, 0, 0,0.5), rgba(0, 0, 0,0.5)), url('/img/neon-banner.jpg')",
         }}
-      >
+      >    
         <h2 className="text-2xl md:text-4xl lg:text-6xl text-center md:text-left">
           NEON SIGNS TO CELEBRATE, <br /> MOTIVATE & INSPIRE
         </h2>
         <p className="text-lg">Imagination is your only limit.</p>
         <div className="flex flex-col items-start md:flex-row gap-3 md:gap-10 uppercase whitespace-nowrap font-semibold">
-          <CustomLink
+          <CustomLink 
+            href="/shop"
             text="shop"
             className="h-12 w-52 flex items-center justify-center bg-black"
           />
-          <CustomLink
+          <CustomLink 
+            href="/custom-neon-sign"
             text="design your neon"
             className="h-12 w-52 flex items-center justify-center bg-white text-black"
           />
@@ -101,26 +102,7 @@ export default function Home() {
         <h3 className="text-3xl uppercase font-semibold uppercase text-center mb-10">
           our best-selling products
         </h3>
-        <ProductsSlider
-          products={[
-            { name: "product 1", img: "/img/product-images/product-1.jpg", price: "299" },
-            {
-              name: "product 2",
-              img: "/img/product-images/product-2.jpg",
-              price: "400",
-              hot: true,
-            },
-            { name: "product 3", img: "/img/product-images/product-3.jpg", price: "459" },
-            { name: "product 4", img: "/img/product-images/product-4.jpg", price: "269" },
-            {
-              name: "product 5",
-              img: "/img/product-images/product-5.jpg",
-              price: "129",
-              hot: true,
-            },
-            { name: "product 6", img: "/img/product-images/product-6.jpg", price: "579" },
-          ]}
-        />
+        <ProductsSlider/>
       </section>
       <section
         className="px-5 lg:px-20 py-20 bg-black"
@@ -242,7 +224,8 @@ export default function Home() {
           </div>
         </div>
         <div className="flex flex-col sm:flex-row items-center justify-center mt-10 gap-10">
-          <CustomLink
+          <CustomLink 
+            href="/shop"
             text="shop now"
             className="h-12 w-52 flex items-center justify-center bg-black text-white uppercase font-semibold transition hover:text-gray-200"
           />

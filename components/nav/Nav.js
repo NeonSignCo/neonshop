@@ -27,7 +27,7 @@ const Nav = () => {
             className="font-semibold text-2xl lg:text-3xl"
           />
           <div className="hidden lg:flex items-center gap-7 capitalize text-lg">
-            <CustomLink text="design your neon" />
+            <CustomLink href="/custom-neon-sign" text="design your neon" />
             <div ref={dropDownRef}>
               <DropDown
                 containerRef={dropDownRef}
@@ -38,7 +38,7 @@ const Nav = () => {
                     links: [
                       { link: "/custom-neon-sign", text: "build your own" },
                       { text: "inspiration" },
-                      { text: "shop all" },
+                      { link: '/shop', text: "shop all" },
                     ],
                   },
                   {

@@ -61,7 +61,7 @@ const Visuals = () => {
                 <img
                   src={`/img/neon-logos/${state.data.icon.link}`}
                   alt={state.data.icon.name}
-                  className="h-44 "
+                  className="h-24 md:h-44 "
                 />
               )}
               <span className='whitespace-nowrap'>{state.data.text}</span>

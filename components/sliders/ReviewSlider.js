@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import useWindowDimensions from "../hooks/useWindowDimensions";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
 import { FaCaretLeft, FaCaretRight, FaQuoteLeft, FaQuoteRight } from "react-icons/fa";
 
-
-
+ 
+ 
 const reviews = [
             { name: "suzy", img: "/img/client-images/client-1.jpg", text:"Thanks for our neon sign, it was the perfect backdrop for our event!", position: 'flowa liberal', neon: {img: '/img/product-images/product-1.jpg', name: 'neon art name'}},
             {

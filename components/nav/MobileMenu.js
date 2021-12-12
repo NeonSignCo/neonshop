@@ -11,7 +11,7 @@ const MobileMenu = ({closeMenu}) => {
         className="bg-gray-800 lg:hidden text-lg absolute w-full uppercase"
       >
         <div className="py-5 px-5 flex flex-col gap-3 overflow-auto h-[calc(100vh-60px)]">
-          <CustomLink text="design your neon" onClick={closeMenu}/>
+          <CustomLink href="/custom-neon-sign" text="design your neon" onClick={closeMenu}/>
           <MobileDropDown
             closeMenu={closeMenu}
             title="shop neons"

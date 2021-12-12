@@ -3,7 +3,7 @@ import Footer from "./Footer";
 import Nav from "./nav/Nav";
 import { useRouter } from "next/router";
 import { useGlobalContext } from "../context/GlobalContext";
-import ModalContainer from "./models/ModalContainer";
+import ModalContainer from "./modals/ModalContainer";
 import { AnimatePresence } from "framer-motion";
 
 const Container = ({ children }) => {
