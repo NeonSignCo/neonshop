@@ -7,20 +7,26 @@ import NewsLetterSection from "../../../components/sections/NewsLetterSection";
 import FollowSection from "../../../components/sections/FollowSection";
 import { AnimatePresence, motion } from "framer-motion";
 import CustomLink from "../../../components/CustomLink";
+import ContactForm from "../../../components/forms/ContactForm";
+import { useRouter } from "next/router";
 
 
-const Product = () => {
+const Product = () => { 
+  const productLink = useRouter().asPath;
     const [globalState] = useGlobalContext();
     const rating = 4
     const colors = ['white', 'red', 'purple', 'green', 'blue', 'yellow'];
-    const sizes = ['small', 'medium', 'large', 'custom']
+    const sizes = ['small', 'medium', 'large']
     const mountTypes = ['hanging', 'wall'];
-
+  
     const [selectedOptons, setSelectedOptions] = useState({
         color: '', 
         size: '', 
         mountType: ''
     })
+
+  const [showForm, setShowForm] = useState(false); 
+
 
     return (
       <div className=" pt-10">
@@ -181,13 +187,41 @@ const Product = () => {
                   </p>
                 </div>
               </QnA>
-            </div> 
+            </div>
             <button className="px-12 text-lg py-3 bg-black text-white uppercase max-w-max">
-                add to cart
+              add to cart
+            </button>
+            <button
+              className="p-2 border border-gray-500 max-w-max"
+              onClick={() => {
+                setShowForm((bool) => !bool);
+                !showForm &&
+                  document
+                    .getElementById("form-section")
+                    .scrollIntoView({ behavior: "smooth" });
+              }}
+            >
+              Need something more custom?
             </button>
           </div>
         </div>
-        <div className="mt-28">
+        <div className="">
+          <div className="pt-20" id="form-section">
+            {showForm && (
+              <div className="mb-16">
+                <h3 className="text-3xl text-center mb-5">
+                  Type your enquiry here
+                </h3>
+                <ContactForm
+                  productInfo={{
+                    name: "produc 1",
+                    link: productLink,
+                    image: "/img/product-images/product-2.jpg",
+                  }}
+                />
+              </div>
+            )}
+          </div>
           <NewsLetterSection />
           <FollowSection />
         </div>

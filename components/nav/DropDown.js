@@ -52,7 +52,7 @@ const DropDown = ({ title, items, containerRef }) => {
                     <CustomLink
                       key={i}
                       text={link.text}
-                      href={link.link || "/"}
+                      href={link.link || "/shop/category-1"}
                       className="text-base whitespace-nowrap transition hover:underline "
                       onClick={() => setExpand(false)}
                     />

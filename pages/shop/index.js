@@ -80,7 +80,7 @@ const Product = ({ i }) => {
   const rating = 4
 
   return (
-    <CustomLink href={`/shop/category/product-${i}`} className="grid gap-1" key={i}>
+    <CustomLink href={`/shop/category-1/product-${i}`} className="grid gap-1" key={i}>
       <img src={`/img/product-images/product-2.jpg`} alt="product" />
       <h3 className="text-lg sm:text-xl font-semibold uppercase">product {i}</h3>
       <div className="flex flex-col sm:flex-row gap-1">
