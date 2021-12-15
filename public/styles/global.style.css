@@ -78,3 +78,13 @@ html {
   font-family: 'sassyFrassRegular';
   src: url('../fonts//SassyFrass-Regular.ttf')
 }
+
+
+
+/* hide contorls for input type number */
+
+
+input[type=number].hide-controls::-webkit-outer-spin-button,
+      input[type=number].hide-controls::-webkit-inner-spin-button {
+        display: none;
+      }

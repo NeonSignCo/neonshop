@@ -9,7 +9,7 @@ import Banner from '../Banner';
 import { AnimatePresence } from "framer-motion";
 
 const Nav = () => {
-  const [globalState] = useGlobalContext();
+  const [globalState, setGlobalState] = useGlobalContext();
   const searchRef = useRef();
   const dropDownRef = useRef();
     const [state, setState] = useState({
@@ -17,7 +17,7 @@ const Nav = () => {
     })
   
     return (
-      <div className="bg-black text-white fixed top-0 w-full shadow z-20">
+      <div className="bg-black text-white sticky top-0 w-full shadow z-20">
         <AnimatePresence>
           {globalState.showBanner && <Banner />}
         </AnimatePresence>
@@ -38,7 +38,7 @@ const Nav = () => {
                     links: [
                       { link: "/custom-neon-sign", text: "build your own" },
                       { text: "inspiration" },
-                      { link: '/shop', text: "shop all" },
+                      { link: "/shop", text: "shop all" },
                     ],
                   },
                   {
@@ -84,13 +84,20 @@ const Nav = () => {
             <CustomLink>
               <FaUserCircle />
             </CustomLink>
-            <CustomLink>
-              <FaShoppingBag />
-            </CustomLink>
+            <button 
+              className="relative"
+              onClick={() =>
+                setGlobalState((state) => ({
+                  ...state,
+                  showCart: true,
+                }))
+              }
+            >
+              <FaShoppingBag /> 
+              <span className="absolute left-0 top-[13px] h-4 w-4 rounded-full bg-gray-800 flex items-center justify-center text-sm">{globalState.cart.items.length > 9 ? '9+': globalState.cart.items.length}</span>
+            </button>
             <div ref={searchRef}>
-              <SearchBar
-                containerRef={searchRef}
-              />
+              <SearchBar containerRef={searchRef} />
             </div>
             <button
               className="grid lg:hidden gap-1"

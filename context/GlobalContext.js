@@ -7,13 +7,21 @@ export const useGlobalContext = () => useContext(Context);
 const GlobalContext = ({ children }) => {
       
     const [state, setState] = useState({
-        showBanner: false, 
-        currency: USD,  
-        currencySign: '$',
-        modal: {show: false, type: '', data: {}}  
-    }) 
+      showBanner: false,
+      currency: USD,
+      currencySign: "$",
+      modal: { show: false, type: "", data: {} },
+      cart: {
+        subTotal: 0, 
+        items: [
+        ], 
+        discount: 0
+      }, 
+      showCart: false, 
+      user: null
+    }); 
 
-    useEffect(() => {
+    useEffect(() => { 
         const currency = localStorage.currency || USD; 
         const currencySign = currency === USD
           ? "$"
@@ -22,7 +30,8 @@ const GlobalContext = ({ children }) => {
           : globalState.currency === POUND
           ? "£"
           : "$";
-        const showBanner = localStorage.showBanner;
+        const showBanner = localStorage.getItem('showBanner');
+        const cart = localStorage.getItem('cart');
         setState((state) => ({
           ...state,
           currency,
@@ -31,8 +40,11 @@ const GlobalContext = ({ children }) => {
             ? true
             : showBanner === "true"
             ? true
-            : showBanner === "false" && false,
+            : showBanner === "false" && false, 
+            cart: cart ? JSON.parse(cart) : state.cart
         }));
+
+
     }, [])
 
     return (

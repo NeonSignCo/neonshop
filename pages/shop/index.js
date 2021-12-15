@@ -28,36 +28,50 @@ const Shop = () => {
             <div className=" mb-5">
               <BreadCrumb />
             </div>
-            <div className="flex flex-col md:flex-row justify-end gap-4 ">
+            <div className="flex flex-col gap-5">
+              <div className="flex flex-col gap-3 md:flex-row justify-between">
+                <div className="flex items-center gap-2">
+                  <p>Shop by category</p>
+                  <select className="capitalize p-1 border border-gray-300">
+                    <option value="aesthetic">aesthetic</option>
+                    <option value="inspirational">inspirational</option>
+                    <option value="neon-art">neon art</option>
+                    <option value="neon-letter">neon letter</option>
+                    <option value="quotes">quotes</option>
+                    <option value="party">party</option>
+                    <option value="faith">faith</option>
+                  </select>
+                </div>
+                <div className="flex items-center gap-1">
+                  <p>Sort by</p>
+                  <select className="capitalize p-1 border border-gray-300">
+                    <option value="featured">featured</option>
+                    <option value="low-to-high">price:low to high</option>
+                    <option value="high-to-low">price:high to low</option>
+                    <option value="a-z">A-Z</option>
+                    <option value="z-a">Z-A</option>
+                    <option value="oldest-to-newest">newest to oldest</option>
+                    <option value="newest-to-oldest">newest to oldest</option>
+                  </select>
+                </div>
+              </div>
               <form className="flex items-center ">
                 <input
                   type="text"
                   className="p-2 border border-gray-300 h-full w-full"
-                  placeholder="Search Product"
+                  placeholder="Search Product  "
                 />
-                <button className="bg-black py-2 px-4 text-white h-full">
+                <button className="bg-black py-3 px-4 text-white h-full">
                   <FaSearch />
                 </button>
               </form>
-              <div className="flex items-center gap-1">
-                <p>Sort by</p>
-                <select className="capitalize p-1 border border-gray-300">
-                  <option value="featured">featured</option>
-                  <option value="low-to-high">price:low to high</option>
-                  <option value="high-to-low">price:high to low</option>
-                  <option value="a-z">A-Z</option>
-                  <option value="z-a">Z-A</option>
-                  <option value="oldest-to-newest">newest to oldest</option>
-                  <option value="newest-to-oldest">newest to oldest</option>
-                </select>
-              </div>
             </div>
           </div>
-          <div className="px-5 lg:px-20 grid grid-cols-2 md:grid-cols-3  gap-x-7 gap-y-16 bg-white mt-4">
+          <div className="px-5 lg:px-20 grid grid-cols-2 md:grid-cols-3  gap-x-12 gap-y-16 bg-white mt-4">
             {products.map(
               (i) =>
                 i >= state.startIndex &&
-                i <= state.endIndex && <Product i={i} key={i}/>
+                i <= state.endIndex && <Product i={i} key={i} />
             )}
           </div>
           <ProductNavigation

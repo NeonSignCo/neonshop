@@ -1,5 +1,5 @@
 import { FaStar } from "react-icons/fa";
-import { BsPlus } from 'react-icons/bs'
+import { BsPlus, BsDash } from 'react-icons/bs'
 import BreadCrumb from "../../../components/BreadCrumb"
 import { useState } from 'react';
 import { useGlobalContext } from '../../../context/GlobalContext';
@@ -11,22 +11,101 @@ import ContactForm from "../../../components/forms/ContactForm";
 import { useRouter } from "next/router";
 
 
-const Product = () => { 
+const Product = ({product}) => { 
   const productLink = useRouter().asPath;
-    const [globalState] = useGlobalContext();
-    const rating = 4
-    const colors = ['white', 'red', 'purple', 'green', 'blue', 'yellow'];
-    const sizes = ['small', 'medium', 'large']
-    const mountTypes = ['hanging', 'wall'];
-  
-    const [selectedOptons, setSelectedOptions] = useState({
+    const [globalState, setGlobalState] = useGlobalContext();
+     
+    const [state, setState] = useState({
+        color: {name: '', hex: ''}, 
+        size: {name: '', shortHand: '', price: product.sizes[0].price}, 
+        quantity: 1,
+        mountType: '',   
+      errors: {
         color: '', 
         size: '', 
-        mountType: ''
+        mountType: '', 
+        quantity: ''
+        }
     })
-
   const [showForm, setShowForm] = useState(false); 
 
+  const addToCart = () => {
+    // check if all options are selected
+    if (
+      !state.color ||
+      !state.size.name ||
+      !state.mountType ||
+      !state.quantity
+    ) {
+      setState((state) => ({
+        ...state,
+        errors: {
+          color: !state.color.hex ? "Please select a color" : "",
+          size: !state.size.name ? "Please select a size" : "",
+          mountType: !state.mountType ? "Please select mount type" : "",
+          quantity: !state.quantity ? "Please select quantity" : "",
+        },
+      }));
+
+      // scroll to error point
+      const scrollTarget = document.getElementById(
+        !state.color.hex
+          ? "color"
+          : !state.size.name
+          ? "size"
+          : !state.mountType
+          ? "mount-type"
+          : !state.quantity && "quantity"
+      );
+      window.scrollTo(0, scrollTarget.offsetTop - 70);
+      return;
+    }
+
+    const cart = globalState.cart;
+    const productInfo = {
+      _id: product._id, 
+      productLink,
+      name: product.name,
+      image: product.image,
+      size: state.size,
+      color: state.color,
+      mountType: state.mountType,
+      quantity: Number(state.quantity),
+    };
+
+    // ignoring product quantity while calculating duplicate
+    const duplicateIndex = cart.items.findIndex(
+      (item) =>
+        item._id === productInfo._id &&
+        item.size.name === productInfo.size.name &&
+        item.color.hex === productInfo.color.hex &&
+        item.mountType === productInfo.mountType
+    );
+
+
+    if (duplicateIndex !== -1) {
+      // increase the quantity of the same variation
+      const increasedQuantity =
+        Number(cart.items[duplicateIndex].quantity) +
+        Number(productInfo.quantity);
+
+      // increase subtotal price accroding to new quantity
+      cart.subTotal +=
+        Number(cart.items[duplicateIndex].size.price) *
+        (increasedQuantity - Number(cart.items[duplicateIndex].quantity));
+      cart.items[duplicateIndex].quantity = increasedQuantity;
+    } else {
+      cart.items.push(productInfo);
+      cart.subTotal +=
+        Number(productInfo.size.price) * Number(productInfo.quantity);
+    }
+
+    // save to localStorage
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    // update state and show cart
+    setGlobalState((state) => ({ ...state, cart, showCart: true }));
+  }
 
     return (
       <div className=" pt-10">
@@ -35,90 +114,114 @@ const Product = () => {
         </div>
         <div className="px-5 lg:px-20 grid grid-cols-1 md:grid-cols-2 gap-7 ">
           <img
-            src={`/img/product-images/product-2.jpg`}
-            alt="product"
+            src={product.image}
+            alt={product.name || "product name"}
             className="w-full object-cover md:sticky top-16"
           />
           <div className="grid gap-5 place-content-start">
-            <h1 className="text-3xl font-semibold uppercase">Product name</h1>
+            <h1 className="text-3xl font-semibold uppercase">{product.name}</h1>
             <div className="flex items-center gap-1">
               <div className="flex gap-2">
                 {[1, 2, 3, 4, 5].map((i) => (
                   <FaStar
                     key={i}
-                    className={i > rating ? "text-gray-400" : ""}
+                    className={i > product.rating ? "text-gray-400" : ""}
                   />
                 ))}
               </div>
-              <span>| 10 reviews</span>
+              <span>| {product.reviewsCount || 0} reviews</span>
             </div>
             <p className="flex items-center font-semibold text-2xl text-gray-600">
               <span>{globalState.currencySign}</span>
-              <span>300</span>
+              <span>{state.size.price}</span>
             </p>
-            <p>
-              Shout your love from the rooftops with a custom neon sign from our
-              Wedding collection. Personalize the color to show off your style!
-            </p>
-            <div className="">
-              <h3 className="uppercase font-semibold mb-1">color</h3>
+            <p>{product.description}</p>
+            <div id="color">
+              <h3 className="uppercase font-semibold mb-1">
+                {!state.errors.color ? (
+                  "color"
+                ) : (
+                  <span className="text-red-500">{state.errors.color}</span>
+                )}
+              </h3>
               <div className="flex flex-wrap gap-5 items-center">
-                {colors.map((color, i) => (
+                {product.colors.map((color, i) => (
                   <button
                     key={i}
                     className={`grid gap-2 p-3 transition justify-items-center ${
-                      selectedOptons.color === color
+                      state.color.hex === color.hex
                         ? "bg-black text-white"
                         : "bg-gray-200 "
                     }`}
                     onClick={() =>
-                      setSelectedOptions((options) => ({ ...options, color }))
+                      setState((options) => ({
+                        ...options,
+                        color,
+                        errors: { ...state.errors, color: "" },
+                      }))
                     }
                   >
                     <div
                       className="h-9 w-9 rounded-full"
-                      style={{ backgroundColor: color }}
+                      style={{ backgroundColor: color.hex }}
                     ></div>
-                    <p className="capitalize">{color}</p>
+                    <p className="capitalize">{color.name}</p>
                   </button>
                 ))}
               </div>
             </div>
-            <div className="">
-              <h3 className="uppercase font-semibold mb-1">size</h3>
+            <div id="size">
+              <h3 className="uppercase font-semibold mb-1">
+                {!state.errors.size ? (
+                  "size"
+                ) : (
+                  <span className="text-red-500">{state.errors.size}</span>
+                )}
+              </h3>
               <div className="flex flex-wrap gap-5 items-center uppercase">
-                {sizes.map((size, i) => (
+                {product.sizes.map((size, i) => (
                   <button
                     key={i}
-                    className={` px-6 py-2 transition capitalize ${
-                      selectedOptons.size === size
+                    className={` px-6 py-2 transition uppercase ${
+                      state.size.name === size.name
                         ? "bg-black text-white"
                         : "bg-gray-200 "
                     }`}
                     onClick={() =>
-                      setSelectedOptions((options) => ({ ...options, size }))
+                      setState((options) => ({
+                        ...options,
+                        size,
+                        errors: { ...state.errors, size: "" },
+                      }))
                     }
                   >
-                    {size}
+                    {size.shortHand}
                   </button>
                 ))}
               </div>
             </div>
-            <div className="">
-              <h3 className="uppercase font-semibold mb-1">mount type</h3>
+            <div id="mount-type">
+              <h3 className="uppercase font-semibold mb-1">
+                {!state.errors.mountType ? (
+                  "mount type"
+                ) : (
+                  <span className="text-red-500">{state.errors.mountType}</span>
+                )}
+              </h3>
               <div className="flex flex-wrap gap-5 items-center uppercase">
-                {mountTypes.map((mountType, i) => (
+                {product.mountTypes.map((mountType, i) => (
                   <button
                     key={i}
                     className={` px-6 py-2 transition capitalize ${
-                      selectedOptons.mountType === mountType
+                      state.mountType === mountType
                         ? "bg-black text-white"
                         : "bg-gray-200 "
                     }`}
                     onClick={() =>
-                      setSelectedOptions((options) => ({
+                      setState((options) => ({
                         ...options,
                         mountType,
+                        errors: { ...state.errors, mountType: "" },
                       }))
                     }
                   >
@@ -127,15 +230,60 @@ const Product = () => {
                 ))}
               </div>
             </div>
+            <div id="quantity">
+              <h3 className="uppercase font-semibold mb-1">
+                {!state.errors.quantity ? (
+                  "quantity"
+                ) : (
+                  <span className="text-red-500">{state.errors.quantity}</span>
+                )}
+              </h3>
+              <div className="flex items-center gap-1">
+                <button
+                  className="h-8 w-8 flex items-center justify-center bg-gray-200 transition hover:bg-black hover:text-white text-2xl"
+                  disabled={state.quantity <= 1}
+                  onClick={() =>
+                    setState((state) => ({
+                      ...state,
+                      quantity: Number(state.quantity) - 1,
+                    }))
+                  }
+                >
+                  <BsDash />
+                </button>
+                <input
+                  type="number"
+                  min={1}
+                  value={state.quantity}
+                  onChange={(e) => {
+                    if (e.target.value < 0) e.target.value = 1;
+                    setState((state) => ({
+                      ...state,
+                      quantity: Number(e.target.value),
+                    }));
+                  }}
+                  className="h-8 w-8 border border-gray-300 text-black hide-controls text-lg text-center"
+                />
+                <button
+                  className="h-8 w-8 flex items-center justify-center bg-gray-200 transition hover:bg-black hover:text-white text-2xl"
+                  onClick={() =>
+                    setState((state) => ({
+                      ...state,
+                      quantity: Number(state.quantity) + 1,
+                    }))
+                  }
+                >
+                  <BsPlus />
+                </button>
+              </div>
+            </div>
             <div>
               <QnA title="shipping">
-                All our neons are crafted from scratch just for you. Standard
-                orders will normally take 2-4 weeks to be made and get from us
-                to you from proof approval date. Express orders normally take
-                10-15 days to be delivered to you from proof approval date.
+                {product.shippingDescription ||
+                  "All our neons are crafted from scratch just for you. Standardorders will normally take 2-4 weeks to be made and get from usto you from proof approval date. Express orders normally take10-15 days to be delivered to you from proof approval date."}
               </QnA>
               <QnA title="faq">
-                <div className="grid gap-3">
+                <div className="flex flex-col gap-4">
                   <p className="font-semibold ">Are they hard to install?</p>{" "}
                   <p>
                     Not at all! Sketch and Etch Neon signs come ready to hang,
@@ -188,9 +336,14 @@ const Product = () => {
                 </div>
               </QnA>
             </div>
-            <button className="px-12 text-lg py-3 bg-black text-white uppercase max-w-max">
+
+            <button
+              className="px-12 text-lg py-3 bg-black text-white uppercase max-w-max"
+              onClick={addToCart}
+            >
               add to cart
             </button>
+
             <button
               className="p-2 border border-gray-500 max-w-max"
               onClick={() => {
@@ -267,3 +420,44 @@ const QnA = ({ title, children }) => {
     );
 
 }
+
+
+
+export const getServerSideProps = ({params}) => {
+  // ["white", "red", "purple", "green", "blue", "yellow"]
+  const colors = [
+    { name: "white", hex: "#FFFFFF" },
+    { name: "red", hex: "#ff0000" },
+    { name: "purple", hex: "#800080" },
+    { name: "green", hex: "#008000" },  
+    { name: "blue", hex: "#0000ff" },
+    { name: "yellow", hex: "#ffff00" },
+  ];
+  const sizes = [
+    { name: "small", shortHand: 'sm', price: 300 },
+    { name: "medium", shortHand: 'md', price: 400 },
+    { name: "large", shortHand: 'lg', price: 500 },
+  ];
+  const mountTypes = ["hanging", "wall"]; 
+  const product = {
+    _id: params.product,
+    name: "product name",
+    description:
+      "Shout your love from the rooftops with a custom neon sign from our Wedding collection. Personalize the color to show off your style!",
+    image: "/img/product-images/product-2.jpg",
+    rating: 4,
+    reviewsCount: 20,
+    colors,
+    sizes,
+    mountTypes, 
+    shippingDescription:
+      "All our neons are crafted from scratch just for you. Standardorders will normally take 2-4 weeks to be made and get from usto you from proof approval date. Express orders normally take10-15 days to be delivered to you from proof approval date.",
+  };
+  
+  return {
+    props: {
+      product
+  }}
+}
+
+

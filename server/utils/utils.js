@@ -1,5 +1,4 @@
 const Session = require('../models/session');
-const mongoose = require('mongoose');
 const limiter = require('express-rate-limit');
 
 const initSession = async (userId) => {

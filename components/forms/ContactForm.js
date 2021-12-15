@@ -10,7 +10,7 @@ import {
   FaTextHeight,
   FaUserAlt,
 } from "react-icons/fa";
-import { countries } from "../../utils/countries";
+import countries from "../../utils/countries";
 
 const ContactForm = ({ productInfo}) => {
   const [data, setData] = useState({
@@ -110,9 +110,9 @@ const ContactForm = ({ productInfo}) => {
             <option value="" className="bg-gray-800">
               country
             </option>
-            {Object.keys(countries).map((key) => (
-              <option key={key} value={key} className="bg-gray-800">
-                {countries[key]}
+            {countries.map((item) => (
+              <option key={item.alpha2Code} value={item.country} className="bg-gray-800">
+                {item.country}
               </option>
             ))}
           </select>
