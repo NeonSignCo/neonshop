@@ -2,7 +2,7 @@ import { FaChevronLeft } from "react-icons/fa";
 import isEmail from "../../../utils/isEmail";
 import CustomLink from "../../CustomLink";
 import { PAYMENT_SECTION, useCheckoutContext } from '../../../context/CheckoutContext';
-import ShippingAddressForm from "../../forms/shippingAddressForm";
+import ShippingAddressForm from "../../forms/ShippingAddressForm";
 import { useEffect } from "react";
 
 
