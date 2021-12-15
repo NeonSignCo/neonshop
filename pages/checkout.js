@@ -155,14 +155,14 @@ const CartPreview = () => {
         <p className="capitalize">Shipping</p>
         <p className="uppercase">FREE</p>
       </div>
-      {globalState.cart.discount && (
+      {globalState.cart.discount ? (
         <div className="flex justify-between">
           <p className="capitalize">discount</p>
           <p className="uppercase font-semibold text-lg">
             -{globalState.cart.discount}
           </p>
         </div>
-      )}
+      ): ""}
       <div className="h-[2px] bg-black/10 my-5"></div>
       <div className="flex justify-between">
         <p className="capitalize">total</p>
