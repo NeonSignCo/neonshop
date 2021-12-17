@@ -51,7 +51,7 @@ const AdminHeader = () => {
                   className=""
                 >
                   <div className="absolute bg-white shadow border p-2 rounded">
-                    <button className="flex gap-2 items-center px-5 py-3 hover:bg-gray-200 whitespace-nowrap">
+                    <button className="flex gap-2 items-center px-5 py-3 bg-gray-100 hover:bg-gray-200 whitespace-nowrap">
                       <FaPowerOff /> 
                       <span>log out</span>
                     </button>

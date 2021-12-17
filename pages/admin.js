@@ -22,7 +22,7 @@ const Admin = ({orders, products}) => {
       sidebar: {
         expand: true, 
       }, 
-      activeSection: ADD_NEW_PRODUCT, 
+      activeSection: DASHBOARD, 
       orders, 
       products
     });
