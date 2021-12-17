@@ -24,11 +24,11 @@ const Container = ({ children }) => {
               : "min-h-screen"
           }`}
         >
-          {route !== "/checkout" && <Nav />}
+          {route !== "/checkout" && route !== '/admin' && <Nav />}
           <div>
             <div className="max-w-screen-2xl mx-auto">{children}</div>
           </div>
-          {route !== "/custom-neon-sign" && route !== '/checkout' && <Footer />}
+          {route !== "/custom-neon-sign" && route !== '/checkout' &&  route !== '/admin' && <Footer />}
         </div>
         <AnimatePresence>
           {state.modal?.show && <ModalContainer />}

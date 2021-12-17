@@ -421,10 +421,9 @@ const QnA = ({ title, children }) => {
 
 }
 
+ 
 
-
-export const getServerSideProps = ({params}) => {
-  // ["white", "red", "purple", "green", "blue", "yellow"]
+export const getStaticProps = ({params}) => {
   const colors = [
     { name: "white", hex: "#FFFFFF" },
     { name: "red", hex: "#ff0000" },
@@ -456,8 +455,17 @@ export const getServerSideProps = ({params}) => {
   
   return {
     props: {
-      product
+      product, 
+      revalidate: 60
   }}
 }
 
 
+export const getStaticPaths = () => {
+  
+  
+  return {
+    paths: [], 
+    fallback: 'blocking'
+  }
+}

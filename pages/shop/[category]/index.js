@@ -181,7 +181,7 @@ const ProductNavigation = ({ productsCount, state, setState }) => {
 
 export const getStaticProps = () => {
   return {
-    props: {},
+    props: {revalidate: 60},
   };
 };
 
@@ -199,6 +199,6 @@ export const getStaticPaths = () => {
     paths.push({ params: { category: categories[x] } });
   return {
     paths,
-    fallback: false,
+    fallback: 'blocking',
   };
 };
