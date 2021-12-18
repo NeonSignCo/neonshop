@@ -14,7 +14,7 @@ export const ADDRESS = "ADDRESS";
 
 const Admin = ({ orders }) => {
   const [state, setState] = useState({
-    activeSection: ADDRESS,
+    activeSection: MY_ORDERS,
     orders,
   });
 
