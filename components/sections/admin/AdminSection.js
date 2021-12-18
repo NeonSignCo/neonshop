@@ -1,7 +1,6 @@
 import dynamic from "next/dynamic";
 import { ADD_NEW_PRODUCT, CUSTOMERS, DASHBOARD, ORDERS, PRODUCTS, REVIEWS, useAdminContext } from "../../../pages/admin";
 import AdminHeader from "./AdminHeader"
-import AddNewProductSection from "./sections/AddNewProductSection";
 import Sidebar from "./Sidebar"
 
 
@@ -10,6 +9,7 @@ const OrderSection = dynamic(() => import('./sections/OrderSection'));
 const ProductSection = dynamic(() => import('./sections/ProductSection'));
 const CustomerSection = dynamic(() => import('./sections/CustomerSection'));
 const ReviewSection = dynamic(() => import('./sections/ReviewSection'));
+const AddNewProductSection = dynamic(() => import('./sections/AddNewProductSection'));
 
 const AdminSection = () => {
     const [state] = useAdminContext();

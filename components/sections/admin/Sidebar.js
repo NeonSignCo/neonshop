@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-import { FaBoxOpen, FaChevronDown, FaComments, FaDollarSign, FaEdit, FaRegEdit, FaUsers } from "react-icons/fa"
+import { FaArrowLeft, FaBoxOpen, FaChevronDown, FaComments, FaDollarSign, FaEdit, FaRegEdit, FaUsers } from "react-icons/fa"
 import { ADD_NEW_PRODUCT, CUSTOMERS, DASHBOARD, ORDERS, PRODUCTS, REVIEWS, useAdminContext } from "../../../pages/admin";
 
 const Sidebar = () => { 
@@ -24,7 +24,8 @@ const Desktop = () => {
             className={`flex gap-4 items-center p-2 transition hover:bg-gray-100 active:bg-gray-200 px-4 relative ${className}`}
             onClick={() =>
               setState((state) => ({ ...state, activeSection: section }))
-            }
+            } 
+            title={text}
           >
             <div className="text-gray-500">{children}</div>
             <p className="capitalize whitespace-nowrap">{text}</p>
@@ -39,7 +40,10 @@ const Desktop = () => {
     return (
       <div className="hidden md:block h-full">
         <motion.div
-          animate={{ width: state.sidebar.expand ? "auto" : 52 }}
+          animate={{
+            width: state.sidebar.expand ? "auto" : 52,
+            transition: { duration: 0.2 },
+          }}
           className="h-full flex flex-col text-lg bg-white overflow-hidden "
         >
           <Item text="dashboard" section={DASHBOARD}>
@@ -60,7 +64,7 @@ const Desktop = () => {
             <FaBoxOpen className="w-5" />
           </Item>
           <Item text="add new product" section={ADD_NEW_PRODUCT}>
-            <FaEdit  className="w-5" />
+            <FaEdit className="w-5" />
           </Item>
           <Item text="reviews" section={REVIEWS}>
             <FaComments className="w-5" />
@@ -77,10 +81,11 @@ const Mobile = () => {
   const Item = ({ text, children, section }) => {
     return (
       <button
-        className="flex gap-4 items-center p-2 transition hover:bg-gray-100 active:bg-gray-200 px-12 relative"
+        className="flex gap-4 items-center p-2 transition hover:bg-gray-100 active:bg-gray-200 px-4 relative"
         onClick={() =>
           setState((state) => ({ ...state, activeSection: section, sidebar: {...state.sidebar, expand: false} }))
-        }
+        } 
+        title={text}
       >
         <div className="text-gray-500">{children}</div>
         <p className="capitalize">{text}</p>
@@ -93,9 +98,23 @@ const Mobile = () => {
   return (
     <div className="md:hidden">
       <motion.div
-        animate={{ x: state.sidebar.expand ? 0 : "-100%", transition: {duration: .3}}}
+        animate={{
+          x: state.sidebar.expand ? 0 : "-100%",
+          transition: { duration: 0.3 },
+        }}
         className="h-full fixed top-0 flex flex-col text-lg bg-white overflow-hidden z-10"
       >
+        <button
+          className="ml-auto mr-2 h-10 w-10 transition bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center"
+          onClick={() =>
+            setState((state) => ({
+              ...state,
+              sidebar: { ...state.sidebar, expand: false },
+            }))
+          }
+        >
+          <FaArrowLeft />
+        </button>
         <Item text="dashboard" section={DASHBOARD}>
           <div className="h-5 w-5 grid grid-cols-2 gap-[2px]">
             <div className="bg-gray-500 row-span-6"></div>
@@ -113,6 +132,9 @@ const Mobile = () => {
         <Item text="products" section={PRODUCTS}>
           <FaBoxOpen className="w-5" />
         </Item>
+        <Item text="add new product" section={ADD_NEW_PRODUCT}>
+          <FaEdit className="w-5" />
+        </Item>
         <Item text="reviews" section={REVIEWS}>
           <FaComments className="w-5" />
         </Item>
@@ -121,9 +143,9 @@ const Mobile = () => {
         {state.sidebar.expand && (
           <motion.div
             className="fixed inset-0 bg-black"
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: .3 }} 
-            exit={{opacity: 0}}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.3 }}
+            exit={{ opacity: 0 }}
             onClick={() =>
               setState((state) => ({
                 ...state,

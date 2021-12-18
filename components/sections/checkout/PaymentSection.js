@@ -1,6 +1,6 @@
 import { FaChevronLeft } from "react-icons/fa";
 import { CREDIT_CART, INFO_SECTION, PAYPAL, useCheckoutContext } from "../../../context/CheckoutContext";
-import BillingAddressForm from "../../forms/BillingAddressForm";
+import BillingAddressForm from "../../forms/CheckoutBillingAddressForm";
 
 
 const PaymentSection = () => {

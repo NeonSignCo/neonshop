@@ -22,7 +22,7 @@ const Admin = ({orders, products}) => {
       sidebar: {
         expand: true, 
       }, 
-      activeSection: DASHBOARD, 
+      activeSection: ADD_NEW_PRODUCT, 
       orders, 
       products
     });
@@ -30,7 +30,7 @@ const Admin = ({orders, products}) => {
     return (
         <Context.Provider value={[state, setState]}>
             <Head>
-                <title>NeonShop | Admin</title> 
+                <title>Admin | NeonShop</title> 
             </Head>
             <AdminSection/>
         </Context.Provider>
