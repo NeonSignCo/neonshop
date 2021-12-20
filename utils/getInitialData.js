@@ -3,7 +3,7 @@ import Axios from "./Axios";
 
 const getInitialData = async (state, setState) => {
   let cart = state.cart;
-  let user = null;
+  let user = state.auth.user;
 
   try {
     // cart data
@@ -14,11 +14,11 @@ const getInitialData = async (state, setState) => {
 
 
 
-    if (state.auth.user === !NOT_LOGGED_IN_EVALUATED || !state.auth.user) { 
+    if (user === !NOT_LOGGED_IN_EVALUATED || !state.auth.user) { 
       const loggedInUser = (await Axios.get("/users/me")).data.user;
       if (loggedInUser) user = loggedInUser;
     } else {
-      user = state.auth.user;
+      user = user === NOT_LOGGED_IN_EVALUATED ? null : user;
     }
 
     setState((state) => ({
