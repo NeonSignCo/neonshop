@@ -1,15 +1,15 @@
-const bcrypt = require('bcryptjs');
-const User = require('../models/user');
-const Session = require('../models/session');
-const { initSession, isEmail } = require('../utils/utils');
-const AppError = require('../utils/AppError');
-const catchASync = require('../utils/catchASync');
-const { serialize } = require('cookie');
+import bcrypt from 'bcryptjs';
+import User from "../models/user";
+import Session from "../models/session";
+import {initSession, isEmail} from "../utils/utils";
+import AppError from '../utils/AppError';
+import catchASync from '../utils/catchASync';
+import { serialize } from 'cookie'
 
 // @route       POST /api/users/register 
 // @purpose     Register User
 // @access      public
-exports.register = catchASync(async (req, res) => {
+export const register = catchASync(async (req, res) => {
   const {
     email,
     password,
@@ -71,7 +71,7 @@ exports.register = catchASync(async (req, res) => {
 // @route       POST /api/users/login 
 // @purpose     Login User
 // @access      public
-exports.login = catchASync(async (req, res) => {
+export const login = catchASync(async (req, res) => {
   const { email, password } = req.body;
 
   if (!email) throw new AppError(400, 'email is required')
@@ -120,7 +120,7 @@ exports.login = catchASync(async (req, res) => {
 // @route       GET /api/users/me 
 // @purpose     Get logged in user   
 // @access      User
-exports.getMe = catchASync(async (req, res) => {
+export const getMe = catchASync(async (req, res) => {
   const userId = req.session?.userId;  
 
   if (!userId) throw new AppError(400, 'not logged in');
@@ -141,7 +141,7 @@ exports.getMe = catchASync(async (req, res) => {
 // @route       DELETE /api/users/delete-me 
 // @purpose     Delete user
 // @access      User
-exports.deleteMe = catchASync(async (req, res) => {
+export const deleteMe = catchASync(async (req, res) => {
   const { userId } = req.session;
   const { password } = req.body;
   if (typeof password !== "string") {
@@ -177,7 +177,7 @@ exports.deleteMe = catchASync(async (req, res) => {
 // @route       PUT /api/users/logout
 // @purpose     Logout user
 // @access      User
-exports.logOut = catchASync(async (req, res) => {
+export const logOut = catchASync(async (req, res) => {
   const userId = req.session?.userId;
 
   if (!userId) throw new AppError(400, "not logged in");
@@ -205,7 +205,7 @@ exports.logOut = catchASync(async (req, res) => {
 // @route       GET /api/users
 // @purpose     Get all users 
 // @access      Public 
-exports.getAllUsers =  catchASync(async (req, res) => {
+export const getAllUsers =  catchASync(async (req, res) => {
   const { page = 1, limit = 10 } = req.query;
   const skip = limit * (page - 1);
 

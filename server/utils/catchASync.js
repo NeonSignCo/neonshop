@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
-const catchASync = (fn) => (req, res, next) =>
-  fn(req, res, next).catch((err) => {
+const catchASync = (fn) => (req, res) =>
+  fn(req, res).catch((err) => {
     // log error message in development
     if (process.env.NODE_ENV !== 'production') console.log(err);
     
