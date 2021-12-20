@@ -3,7 +3,7 @@ import Axios from "./Axios";
 
 const getInitialData = async (state, setState) => {
   let cart = state.cart;
-  let user = state.auth.user;
+  let user = null;
 
   try {
     // cart data
@@ -12,10 +12,14 @@ const getInitialData = async (state, setState) => {
 
     // user data (NOT_LOGGED_IN_EVALUATED indicates that a user authentication has been already done on a page via getServerSideProps, so trying again to get user here is pointless)
 
-    if (user === !NOT_LOGGED_IN_EVALUATED || !state.auth.user) { 
+
+
+    if (state.auth.user === !NOT_LOGGED_IN_EVALUATED || !state.auth.user) { 
       const loggedInUser = (await Axios.get("/users/me")).data.user;
       if (loggedInUser) user = loggedInUser;
-    } 
+    } else {
+      user = state.auth.user;
+    }
 
     setState((state) => ({
       ...state,
