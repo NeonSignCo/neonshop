@@ -37,7 +37,7 @@ app
     routes.forEach((route) =>
       server.use(`/api/${route}`, require(`${__dirname}/routes/${route}`))
     );
-
+     server.use(`/api/v1/users`, require(`${__dirname}/routes/users`));
     // 404 response for api
     server.all(/^\/api\//, (req, res) =>
       res
