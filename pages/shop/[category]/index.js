@@ -118,7 +118,7 @@ const Product = ({ i }) => {
         </div>
         <span>| 10 Reviews</span>
       </div>
-      <p className="">{globalState.currencySign} 300</p>
+      <p className="">$ 300</p>
     </CustomLink>
   );
 };
@@ -181,7 +181,7 @@ const ProductNavigation = ({ productsCount, state, setState }) => {
 
 export const getStaticProps = () => {
   return {
-    props: {revalidate: 60},
+    props: { revalidate: 60 },
   };
 };
 
@@ -199,6 +199,6 @@ export const getStaticPaths = () => {
     paths.push({ params: { category: categories[x] } });
   return {
     paths,
-    fallback: 'blocking',
+    fallback: "blocking",
   };
 };

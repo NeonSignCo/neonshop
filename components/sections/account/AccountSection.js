@@ -29,7 +29,7 @@ const AccountSection = () => {
   return (
     <div className=" py-12 flex flex-col min-h-screen bg-[#f1f2f6]">
       <div className="px-5 lg:px-20">
-        <h1 className="text-3xl">My account</h1>
+        <h1 className="text-3xl capitalize">My account</h1>
         <MobileOptions />
       </div>
       <div className="flex-1 flex gap-10 mt-10 bg-white px-5 lg:px-20 py-10">
@@ -94,7 +94,9 @@ const DesktopSideBar = () => {
       <Item text="addresses" section={ADDRESS}>
         <FaHome className="text-2xl" />
       </Item>
-      <button className="flex items-center justify-between gap-16 ml-2 transition hover:bg-gray-200 p-3 capitalize whitespace-nowrap group">
+      <button className="flex items-center justify-between gap-16 ml-2 transition hover:bg-gray-200 p-3 capitalize whitespace-nowrap group"
+        
+      >
         <div className="flex items-center gap-2">
           <FaSignOutAlt className="text-2xl" />
           <span>log out</span>

@@ -1,5 +1,5 @@
 import { BsCurrencyDollar } from "react-icons/bs"
-import { FaBox, FaComments, FaDollarSign, FaShippingFast, FaShoppingBag, FaShoppingCart } from "react-icons/fa"
+import { FaBox, FaComments, FaDollarSign, FaShoppingCart } from "react-icons/fa"
 import { ORDERS, REVIEWS, PRODUCTS, useAdminContext } from '../../../../pages/admin';
 
 

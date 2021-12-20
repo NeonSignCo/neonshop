@@ -1,20 +1,25 @@
-import { useRef, useState } from "react";
-import { FaShoppingBag, FaUserCircle } from "react-icons/fa";
-import { useGlobalContext } from "../../context/GlobalContext";
+import { useEffect, useRef, useState } from "react";
+import { FaCaretUp, FaShoppingBag, FaSignInAlt, FaSignOutAlt, FaUser, FaUserCircle, FaUserPlus } from "react-icons/fa";
+import { ERROR, SUCCESS, useGlobalContext } from "../../context/GlobalContext";
 import CustomLink from "../CustomLink";
 import SearchBar from "../SearchBar";
 import DropDown from "./DropDown";
 import MobileMenu from "./MobileMenu";
 import Banner from '../Banner';
 import { AnimatePresence } from "framer-motion";
+import LoadingBtn, { Loader } from "../LoadingBtn";
+import {useRouter} from "next/router";
+import Axios from "../../utils/Axios";
 
 const Nav = () => {
   const [globalState, setGlobalState] = useGlobalContext();
   const searchRef = useRef();
-  const dropDownRef = useRef();
+  const dropDownRef = useRef(); 
+  const optionRef = useRef();
     const [state, setState] = useState({
       showMobileMenu: false
     })
+    
   
     return (
       <div className="bg-black text-white sticky top-0 w-full shadow z-20">
@@ -81,10 +86,10 @@ const Nav = () => {
             <CustomLink href="/contact" text="contact" />
           </div>
           <div className="flex items-center gap-4 capitalize text-xl md:text-2xl">
-            <CustomLink>
-              <FaUserCircle />
-            </CustomLink>
-            <button 
+            <div ref={optionRef}>
+              <AccountBtn containerRef={optionRef}/>
+            </div>
+            <button
               className="relative"
               onClick={() =>
                 setGlobalState((state) => ({
@@ -93,8 +98,12 @@ const Nav = () => {
                 }))
               }
             >
-              <FaShoppingBag /> 
-              <span className="absolute left-0 top-[13px] h-4 w-4 rounded-full bg-gray-800 flex items-center justify-center text-sm">{globalState.cart.items.length > 9 ? '9+': globalState.cart.items.length}</span>
+              <FaShoppingBag />
+              <span className="absolute left-0 top-[13px] h-4 w-4 rounded-full bg-gray-800 flex items-center justify-center text-sm">
+                {globalState.cart.items.length > 9
+                  ? "9+"
+                  : globalState.cart.items.length}
+              </span>
             </button>
             <div ref={searchRef}>
               <SearchBar containerRef={searchRef} />
@@ -145,3 +154,98 @@ export default Nav
 
 
 
+const AccountBtn = ({containerRef}) => {
+  const Router = useRouter();
+  const [globalState, setGlobalState] = useGlobalContext();
+  const [expand, setExpand] = useState(false);
+
+  useEffect(() => {
+    // only close dropdown if clicked outside
+    const listener = (e) => {
+      e.target !== containerRef.current &&
+        !containerRef.current.contains(e.target) &&
+        setExpand(false);
+    };
+    window.addEventListener("mousedown", listener);
+
+    return () => window.removeEventListener("mousedown", listener);
+  }, []);
+
+  const logout = async () => {
+    try {
+      await Axios.put("/users/logout");
+      
+      // update state
+      setGlobalState((state) => ({
+        ...state,
+        auth: { ...state.auth, loading: false, user: null }, 
+        alert: {...state.alert, show: true, text: 'logged out', type: SUCCESS}
+      }));
+      setExpand(false)
+
+      // go to login page
+      Router.push('/login')
+    } catch (error) {
+      setGlobalState((state) => ({
+        ...state,
+        alert: {
+          ...state.alert,
+          show: true,
+          type: ERROR,
+          text:
+            error.response?.data?.errorMessage ||
+            error.message ||
+            "Network Error",
+        },
+      }));
+    }
+  };
+
+  return (
+    <div className="relative">
+      <button onClick={() => setExpand((bool) => !bool)}>
+        <FaUserCircle />
+      </button>
+      {expand && (
+        <div className="absolute top-[58px] p-4 bg-black text-white capitalize text-base rounded border border-gray-800">
+          <FaCaretUp className="absolute -top-4 left-1 text-2xl text-black " />
+          {globalState.auth?.loading ? <Loader/>: globalState.auth?.user ? (
+            <div className="grid">
+              <CustomLink
+                href="/account"
+                className="p-2 transition hover:bg-gray-800 flex gap-2 items-center justify-center"
+                onClick={() => setExpand(false)}
+              >
+                <FaUser />
+                <span>account</span>
+              </CustomLink>
+              <LoadingBtn loading={globalState.auth.loading} className="flex items-center gap-2 p-2 transition hover:bg-gray-800" onClick={logout}>
+                <FaSignOutAlt />
+                <span>Logout</span>
+              </LoadingBtn>
+            </div>
+          ) : (
+            <div className="grid">
+              <CustomLink
+                href="/login"
+                className="flex items-center gap-2 p-2 transition hover:bg-gray-800"
+                onClick={() => setExpand(false)}
+              >
+                <FaSignInAlt />
+                <span>Login</span>
+              </CustomLink>
+              <CustomLink
+                href="/sign-up"
+                className="flex items-center gap-2 p-2 transition hover:bg-gray-800 whitespace-nowrap"
+                onClick={() => setExpand(false)}
+              >
+                <FaUserPlus />
+                <span>Sign up</span>
+              </CustomLink>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}

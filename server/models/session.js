@@ -8,15 +8,6 @@ const SessionSchema = new mongoose.Schema({
     unique: true,
     required: true,
   },
-  csrfToken: {
-    type: String,
-    unique: true,
-    required: true,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
@@ -26,9 +17,11 @@ const SessionSchema = new mongoose.Schema({
     enum: ['valid', 'expired'],
     default: 'valid',
   },
-});
+}, {timestamps: true});
 
-SessionSchema.plugin(uniqueValidator);
+SessionSchema.plugin(uniqueValidator, {
+  message: "token with same {PATH} already exists",
+});
 
 SessionSchema.statics.generateToken = function() {
   return new Promise((resolve, reject) => {
@@ -45,8 +38,8 @@ SessionSchema.statics.generateToken = function() {
 
 
 SessionSchema.statics.expireAllTokensForUser = function(userId) {
-  return this.deleteMany({ userId });
+  return this.deleteOne({userId})
 };
 
 
-module.exports = mongoose.model('Session', SessionSchema);
+module.exports = mongoose.models.Session || mongoose.model('Session', SessionSchema);

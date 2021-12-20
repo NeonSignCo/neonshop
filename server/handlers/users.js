@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
-const User = require('../models/user');
-const Session = require('../models/session');
+const User = require('../models/User');
+const Session = require('../models/Session');
 const { initSession, isEmail } = require('../utils/utils');
 const AppError = require('../utils/AppError');
 const catchASync = require('../utils/catchASync');
@@ -10,39 +10,43 @@ const catchASync = require('../utils/catchASync');
 // @purpose     Register User
 // @access      public
 exports.register = catchASync(async (req, res) => {
-  const { email, password, confirmPassword, name, photo } = req.body;
+  const { email, password, confirmPassword, firstName, lastName, userName, photo } = req.body;
   
-  if (!email || !password || !confirmPassword) throw new AppError(400, 'Please provide email, password and confirmPassword fields');
-
-   if (!isEmail(email)) {
-     throw new AppError(400, "Email must be a valid email address.");
-   }
+  // check required fields
+  if (!email) throw new AppError(400, 'email is required');
+    if (!isEmail(email)) {
+      throw new AppError(400, "Email must be a valid email address.");
+    }
+  if (!password) throw new AppError(400, 'password is required');
+  if (!confirmPassword) throw new AppError(400, 'confirmPassword is required');
+  if (!firstName) throw new AppError(400, 'firstName is required');
+  if (!lastName) throw new AppError(400, 'lastName is required');
+  if (!userName) throw new AppError(400, 'userName is required');
   
-  if (typeof password !== "string") {
-     throw new AppError(400, "Password must be a string.");
+ 
+  
+  if (password.length < 6) {
+     throw new AppError(400, "Password must be atleast 6 characters long.");
   }
   
   if (password !== confirmPassword) throw new AppError(400, 'passwords do not match');
 
-   const user = new User({ email, password, name, photo });
-   const persistedUser = await user.save();
-   const userId = persistedUser._id;
+  const user = await User.create({ firstName, lastName, userName, email, password, photo });
 
-   const session = await initSession(userId);
+   const session = await initSession(user._id);
 
    res
      .cookie("token", session.token, {
        httpOnly: true,
        sameSite: true,
-       maxAge: 1209600000, //14 days
+       maxAge: process.env.AUTH_COOKIE_MAX_AGE_MS,
        secure: process.env.NODE_ENV === "production",
      })
      .status(201)
      .json({
        status: "success",
        message: "Successfully registered new user",
-       csrfToken: session.csrfToken,
-       user: persistedUser
+       user
      });
 } )
 
@@ -78,27 +82,33 @@ exports.login = catchASync(async (req, res) => {
     .cookie("token", session.token, {
       httpOnly: true,
       sameSite: true,
-      maxAge: 1209600000, // 14 days
+      maxAge: process.env.AUTH_COOKIE_MAX_AGE_MS,
       secure: process.env.NODE_ENV === "production",
     })
     .json({
       status: "success",
       message: "login successful",
-      csrfToken: session.csrfToken,
       user,
-    })
+    });
 })
 
 // @route       GET /api/users/me 
-// @purpose     Get User Data
+// @purpose     Get logged in user (will not return any error if no user)
 // @access      User
 exports.getMe = catchASync(async (req, res) => {
-  const { userId } = req.session;
-  const user = await User.findById({ _id: userId }, { email: 1, _id: 0 });
+  const userId = req.session?.userId; 
+  let user = null;
+  if (userId) {
+    user = await User.findById(
+      { _id: userId },
+      { password: 0, _id: 0 }
+    ); 
+  }
 
+ 
   res.json({
     status: "success",
-    message: "Successfully authenticated user",
+    message: "will get user object if authenticated, otherwise null",
     user,
   });
 })
@@ -128,11 +138,14 @@ exports.deleteMe = catchASync(async (req, res) => {
   });
 })
 
-// @route       PUT /api/users/delete-me 
+// @route       PUT /api/users/logout
 // @purpose     Logout user
 // @access      User
 exports.logOut = catchASync(async (req, res) => {
-  const { session: {userId} } = req;
+  const userId = req.session?.userId; 
+
+  if (!userId) throw new AppError(400, 'not logged in');
+  
   await Session.expireAllTokensForUser(userId)
   res.clearCookie("token");
 

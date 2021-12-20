@@ -12,12 +12,10 @@ const connectDb = async () => {
     }
 
     // check for existing connection in development
-    if (process.env.NODE_ENV === "development") {
-      if (mongoose.connections[0].readyState) {
-        console.log("using existing db connection");
-        return;
-      }
-    }
+   if (mongoose.connections[0].readyState) {
+     console.log("using existing db connection");
+     return;
+   } 
 
     // new connection
     await mongoose.connect(dbUrl, {

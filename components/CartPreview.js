@@ -208,7 +208,7 @@ const CartItem = ({ item }) => {
               </button>
             </div>
             <p className="font-semibold">
-              {globalState.currencySign}
+              $
               {item.size.price * item.quantity}
             </p>
           </div>

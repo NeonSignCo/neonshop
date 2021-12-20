@@ -1,10 +1,9 @@
-const Session = require('../models/session');
+const Session = require('../models/Session');
 const limiter = require('express-rate-limit');
 
 const initSession = async (userId) => {
   const token = await Session.generateToken();
-  const csrfToken = await Session.generateToken();
-  const session = await Session.findOneAndUpdate({userId}, {$set: { token, csrfToken}}, {new: true, upsert: true});
+  const session = await Session.findOneAndUpdate({userId}, {$set: { token}}, {new: true, upsert: true});
   return session;
 };
 
@@ -18,9 +17,9 @@ const isEmail = (email) => {
 
 
 const rateLimiter = (
-  windowMs = 1000 * 60 * 60,
+  windowMs = 1000 * 60 ,
   max = 10,
-  message = "Too many requests. Please try again in an hour"
+  message = "Too many requests. Please try again in one minute"
 ) => limiter({ windowMs, max, message });
 
 

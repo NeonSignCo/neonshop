@@ -27,7 +27,7 @@ const Cart = () => {
                   <div className="flex justify-between">
                     <p className="capitalize text-lg">subtotal</p>
                     <p className="text-xl ">
-                      {globalState.currencySign}
+                      $
                       {globalState.cart.subTotal}
                     </p>
                   </div>
@@ -38,7 +38,7 @@ const Cart = () => {
                   <div className="flex justify-between">
                     <p className="capitalize text-lg ">total</p>
                     <p className="text-xl uppercase">
-                      {globalState.currencySign}
+                      $
                       {globalState.cart.subTotal}
                     </p>
                                 </div> 
@@ -180,7 +180,7 @@ const CartItem = ({ item }) => {
             </button>
           </div>
           <p className="font-semibold">
-            {globalState.currencySign}
+            $
             {item.size.price * item.quantity}
           </p>
               </div> 

@@ -1,122 +1,131 @@
 import { useState } from "react";
-import { FaChevronLeft, FaChevronRight, FaSearch, FaStar, FaStarAndCrescent, FaStarHalfAlt } from "react-icons/fa";
+import {
+  FaChevronLeft,
+  FaChevronRight,
+  FaSearch,
+  FaStar,
+  FaStarAndCrescent,
+  FaStarHalfAlt,
+} from "react-icons/fa";
 import BreadCrumb from "../../components/BreadCrumb";
 import CustomLink from "../../components/CustomLink";
-import FollowSection from "../../components/sections/FollowSection"
-import NewsLetterSection from "../../components/sections/NewsLetterSection"
-import { useGlobalContext  } from '../../context/GlobalContext'
+import FollowSection from "../../components/sections/FollowSection";
+import NewsLetterSection from "../../components/sections/NewsLetterSection";
+import { useGlobalContext } from "../../context/GlobalContext";
 
-
-const Shop = () => { 
-  const productsCount = 100; 
-  const products = []; 
-  for (let x = 1; x <= productsCount; x++) products.push(x); 
-
+const Shop = () => {
+  const productsCount = 100;
+  const products = [];
+  for (let x = 1; x <= productsCount; x++) products.push(x);
 
   const [state, setState] = useState({
     startIndex: 1,
-    endIndex: 30, 
-    productPerPage: 30
+    endIndex: 30,
+    productPerPage: 30,
   });
-    return (
-      <div>
-        <div className=" py-10 bg-gray-100">
-          <div className="px-5 lg:px-20">
-            <h1 className="text-3xl lg:text-4xl max-w-max mx-auto uppercase">
-              Products
-            </h1>
-            <div className=" mb-5">
-              <BreadCrumb />
-            </div>
-            <div className="flex flex-col gap-5">
-              <div className="flex flex-col gap-3 md:flex-row justify-between">
-                <div className="flex items-center gap-2">
-                  <p>Shop by category</p>
-                  <select className="capitalize p-1 border border-gray-300">
-                    <option value="aesthetic">aesthetic</option>
-                    <option value="inspirational">inspirational</option>
-                    <option value="neon-art">neon art</option>
-                    <option value="neon-letter">neon letter</option>
-                    <option value="quotes">quotes</option>
-                    <option value="party">party</option>
-                    <option value="faith">faith</option>
-                  </select>
-                </div>
-                <div className="flex items-center gap-1">
-                  <p>Sort by</p>
-                  <select className="capitalize p-1 border border-gray-300">
-                    <option value="featured">featured</option>
-                    <option value="low-to-high">price:low to high</option>
-                    <option value="high-to-low">price:high to low</option>
-                    <option value="a-z">A-Z</option>
-                    <option value="z-a">Z-A</option>
-                    <option value="oldest-to-newest">newest to oldest</option>
-                    <option value="newest-to-oldest">newest to oldest</option>
-                  </select>
-                </div>
+  return (
+    <div>
+      <div className=" py-10 bg-gray-100">
+        <div className="px-5 lg:px-20">
+          <h1 className="text-3xl lg:text-4xl max-w-max mx-auto uppercase">
+            Products
+          </h1>
+          <div className=" mb-5">
+            <BreadCrumb />
+          </div>
+          <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-3 md:flex-row justify-between">
+              <div className="flex items-center gap-2">
+                <p>Shop by category</p>
+                <select className="capitalize p-1 border border-gray-300">
+                  <option value="aesthetic">aesthetic</option>
+                  <option value="inspirational">inspirational</option>
+                  <option value="neon-art">neon art</option>
+                  <option value="neon-letter">neon letter</option>
+                  <option value="quotes">quotes</option>
+                  <option value="party">party</option>
+                  <option value="faith">faith</option>
+                </select>
               </div>
-              <form className="flex items-center ">
-                <input
-                  type="text"
-                  className="p-2 border border-gray-300 h-full w-full"
-                  placeholder="Search Product  "
-                />
-                <button className="bg-black py-3 px-4 text-white h-full">
-                  <FaSearch />
-                </button>
-              </form>
+              <div className="flex items-center gap-1">
+                <p>Sort by</p>
+                <select className="capitalize p-1 border border-gray-300">
+                  <option value="featured">featured</option>
+                  <option value="low-to-high">price:low to high</option>
+                  <option value="high-to-low">price:high to low</option>
+                  <option value="a-z">A-Z</option>
+                  <option value="z-a">Z-A</option>
+                  <option value="oldest-to-newest">newest to oldest</option>
+                  <option value="newest-to-oldest">newest to oldest</option>
+                </select>
+              </div>
             </div>
+            <form className="flex items-center ">
+              <input
+                type="text"
+                className="p-2 border border-gray-300 h-full w-full"
+                placeholder="Search Product  "
+              />
+              <button className="bg-black py-3 px-4 text-white h-full">
+                <FaSearch />
+              </button>
+            </form>
           </div>
-          <div className="px-5 lg:px-20 grid grid-cols-2 md:grid-cols-3  gap-x-12 gap-y-16 bg-white mt-4">
-            {products.map(
-              (i) =>
-                i >= state.startIndex &&
-                i <= state.endIndex && <Product i={i} key={i} />
-            )}
-          </div>
-          <ProductNavigation
-            productsCount={productsCount}
-            state={state}
-            setState={setState}
-          />
         </div>
-        <NewsLetterSection />
-        <FollowSection />
+        <div className="px-5 lg:px-20 grid grid-cols-2 md:grid-cols-3  gap-x-12 gap-y-16 bg-white mt-4">
+          {products.map(
+            (i) =>
+              i >= state.startIndex &&
+              i <= state.endIndex && <Product i={i} key={i} />
+          )}
+        </div>
+        <ProductNavigation
+          productsCount={productsCount}
+          state={state}
+          setState={setState}
+        />
       </div>
-    );
-}
+      <NewsLetterSection />
+      <FollowSection />
+    </div>
+  );
+};
 
-export default Shop
-
+export default Shop;
 
 const Product = ({ i }) => {
   const [globalState] = useGlobalContext();
-  const rating = 4
+  const rating = 4;
 
   return (
-    <CustomLink href={`/shop/category-1/product-${i}`} className="grid gap-1" key={i}>
+    <CustomLink
+      href={`/shop/category-1/product-${i}`}
+      className="grid gap-1"
+      key={i}
+    >
       <img src={`/img/product-images/product-2.jpg`} alt="product" />
-      <h3 className="text-lg sm:text-xl font-semibold uppercase">product {i}</h3>
+      <h3 className="text-lg sm:text-xl font-semibold uppercase">
+        product {i}
+      </h3>
       <div className="flex flex-col sm:flex-row gap-1">
         <div className="flex flex items-center gap-1">
           {[1, 2, 3, 4, 5].map((i) => (
-            <FaStar key={i} className={ i > rating ? 'text-gray-400': 'text-black'}/>
+            <FaStar
+              key={i}
+              className={i > rating ? "text-gray-400" : "text-black"}
+            />
           ))}
         </div>
         <span>| 10 Reviews</span>
       </div>
-      <p className="">
-        {globalState.currencySign} 300
-      </p>
+      <p className="">$ 300</p>
     </CustomLink>
   );
-}
+};
 
-
-
-const ProductNavigation = ({productsCount, state, setState}) => {
+const ProductNavigation = ({ productsCount, state, setState }) => {
   const btnCount = Math.ceil(productsCount / state.productPerPage);
-  const btns = []; 
+  const btns = [];
   for (let x = 1; x <= btnCount; x++) btns.push(x);
 
   return (
@@ -129,7 +138,7 @@ const ProductNavigation = ({productsCount, state, setState}) => {
             ...state,
             startIndex: state.startIndex - state.productPerPage,
             endIndex: state.endIndex - state.productPerPage,
-          })); 
+          }));
           window.scroll({ top: 0 });
         }}
       >
@@ -138,14 +147,14 @@ const ProductNavigation = ({productsCount, state, setState}) => {
       {btns.map((i) => (
         <button
           key={i}
-          className="border border-black h-10 w-10 flex items-center justify-center bg-white transition hover:bg-black hover:text-white disabled:bg-black disabled:text-white disabled:cursor-text" 
+          className="border border-black h-10 w-10 flex items-center justify-center bg-white transition hover:bg-black hover:text-white disabled:bg-black disabled:text-white disabled:cursor-text"
           disabled={state.endIndex === i * state.productPerPage}
           onClick={() => {
             setState((state) => ({
               ...state,
               startIndex: (i - 1) * state.productPerPage + 1,
-              endIndex: i * state.productPerPage ,
-            })); 
+              endIndex: i * state.productPerPage,
+            }));
             window.scroll({ top: 0 });
           }}
         >
@@ -160,7 +169,7 @@ const ProductNavigation = ({productsCount, state, setState}) => {
             ...state,
             startIndex: state.endIndex + 1,
             endIndex: state.endIndex + state.productPerPage,
-          })); 
+          }));
           window.scroll({ top: 0 });
         }}
       >
@@ -168,4 +177,4 @@ const ProductNavigation = ({productsCount, state, setState}) => {
       </button>
     </div>
   );
-}
+};

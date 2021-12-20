@@ -1,5 +1,4 @@
 import { FaCcMastercard, FaCcPaypal, FaCcVisa, FaEnvelopeOpenText, FaMapMarkedAlt } from "react-icons/fa";
-import CurrencyConverter from "./CurrencyConverter";
 import CustomLink  from "./CustomLink"
 
 const Footer = () => {
@@ -96,10 +95,6 @@ const Footer = () => {
         <div className="h-[1px] bg-gray-900 my-4"></div>
         <div className="flex flex-col md:flex-row justify-between items-center gap-5">
           <p>© {new Date().getFullYear()} NeonShop</p>
-          <div className="flex items-center gap-1">
-            <p>Currency</p>
-            <CurrencyConverter />
-          </div> 
           <div className="flex gap-2 text-6xl">
                     <FaCcVisa />
                     <FaCcMastercard />

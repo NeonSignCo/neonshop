@@ -7,6 +7,7 @@ import ModalContainer from "./modals/ModalContainer";
 import { AnimatePresence } from "framer-motion";
 import CartPreview from "./CartPreview";
 import Backdrop from "./Backdrop";
+import Alert from "./Alert";
 
 const Container = ({ children }) => {
     const route = useRouter().route;
@@ -29,7 +30,11 @@ const Container = ({ children }) => {
             <div className="max-w-screen-2xl mx-auto">{children}</div>
           </div>
           {route !== "/custom-neon-sign" && route !== '/checkout' &&  route !== '/admin' && <Footer />}
-        </div>
+        </div> 
+        { <AnimatePresence>
+          {state.alert.show && <Alert/> }
+        </AnimatePresence> } 
+        
         <AnimatePresence>
           {state.modal?.show && <ModalContainer />}
         </AnimatePresence>

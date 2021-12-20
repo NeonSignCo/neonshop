@@ -1,46 +1,51 @@
 const mongoose = require('mongoose');
-const uniqueValidator = require('mongoose-unique-validator');
 const bcrypt = require('bcryptjs');
+const uniqueValidator = require('mongoose-unique-validator');
 
 const UserSchema = new mongoose.Schema({
-  name: {
+  firstName: {
     type: String,
-    required: [true, 'name is required']
+    required: [true, "firstName is required"],
   },
-  photo: {
-    title: {
-      type: String,
-      required: [true, 'title is required']
-    },
-    alt: {
-      type: String,
-      required: [true, 'alt is required']
-    },
-    src: {
-      type: String,
-      required: [true, 'src is required']
-    },
-    type: Object,
-    required: false
+  lastName: {
+    type: String,
+    required: [true, "lastName is required"],
   },
+  userName: {
+    type: String,
+    required: [true, "userName is required"],
+  },
+  photo: String,
   email: {
     type: String,
-    required: [true, 'email is required'],
+    required: [true, "email is required"],
     minlength: 1,
-    trim: true,
+    trim: true, 
+    index: true,
     unique: true,
   },
   password: {
     type: String,
-    required: true,
     validate: {
-      validator: val => String(val).length >= 8 && String(val).length <= 16,
-      message: "password must be 8 to 16 characters long"
-    }
-  },
-});
+      validator: (val) => String(val).length >= 6 && String(val).length <= 16,
+      message: "password must be 6 to 16 characters long", 
+      
+    }, 
+    required: [true, "password is required"]
+  }, 
+  role: {
+    type: String, 
+    enum: {
+      values: ['ADMIN', 'USER'], 
+      default: 'USER',
+      message: "role must be one of 'ADMIN', 'USER'"
+    },
+  }
+}, { timestamps: true});
 
-UserSchema.plugin(uniqueValidator, {message: "user with same {PATH} already exists"});
+UserSchema.plugin(uniqueValidator, {
+  message: "User with same {{PATH}} already exists",
+});
 
 UserSchema.pre('save', function(next) {
   let user = this;
@@ -53,12 +58,12 @@ UserSchema.pre('save', function(next) {
     .genSalt(12)
     .then((salt) => {
       return bcrypt.hash(user.password, salt);
-    })
+    }) 
     .then((hash) => {
       user.password = hash;
       next();
     })
     .catch((err) => next(err));
-});
+}); 
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.models.User || mongoose.model('User', UserSchema);

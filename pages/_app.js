@@ -6,7 +6,7 @@ import GlobalContext from '../context/GlobalContext'
 function MyApp ({ Component, pageProps }) {
   
   return (
-    <GlobalContext>
+    <GlobalContext props={pageProps}>
       <Container>
         <Component {...pageProps} />
       </Container>
