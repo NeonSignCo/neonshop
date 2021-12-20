@@ -1,6 +1,7 @@
 import Session from "../server/models/Session";
 import User from "../server/models/User";
 
+
 const getLoggedInUser = async (req) => {
     try {
         const { token } = req.cookies;
