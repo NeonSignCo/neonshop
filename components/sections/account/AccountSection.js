@@ -7,6 +7,7 @@ import {
   FaSignOutAlt,
   FaUser,
 } from "react-icons/fa";
+import { ERROR, SUCCESS, useGlobalContext } from "../../../context/GlobalContext";
 import {
   MY_ORDERS,
   ACCOUNT_DETAILS,
@@ -14,6 +15,8 @@ import {
   ADDRESS,
   useACcountContext,
 } from "../../../pages/account";
+import Axios from "../../../utils/Axios";
+import { useRouter } from 'next/router'
 
 const MyOrdersSection = dynamic(() => import("./sections/MyOrdersSection"));
 const AccountDetailsSection = dynamic(() =>
@@ -26,14 +29,53 @@ const AddressSection = dynamic(() => import("./sections/AddressSection"));
 
 const AccountSection = () => {
   const [state] = useACcountContext();
+  const Router = useRouter();
+  const [, setGlobalState] = useGlobalContext();
+
+  const logout = async () => {
+    try {
+      await Axios.put("/users/logout");
+
+      // update state
+      setGlobalState((state) => ({
+        ...state,
+        auth: { ...state.auth, loading: false, user: null },
+        alert: {
+          ...state.alert,
+          show: true,
+          text: "logged out",
+          type: SUCCESS, 
+          timeout: 3000
+        },
+      }));
+
+      // go to login page
+      Router.push("/login");
+    } catch (error) {
+      setGlobalState((state) => ({
+        ...state,
+        alert: {
+          ...state.alert,
+          show: true,
+          type: ERROR, 
+          timeout: 5000,
+          text:
+            error.response?.data?.errorMessage ||
+            error.message ||
+            "Network Error",
+        },
+      }));
+    }
+  };
+
   return (
     <div className=" py-12 flex flex-col min-h-screen bg-[#f1f2f6]">
       <div className="px-5 lg:px-20">
         <h1 className="text-3xl capitalize">My account</h1>
-        <MobileOptions />
+        <MobileOptions logout={logout}/>
       </div>
       <div className="flex-1 flex gap-10 mt-10 bg-white px-5 lg:px-20 py-10">
-        <DesktopSideBar />
+        <DesktopSideBar logout={logout}/>
         {state.activeSection === MY_ORDERS ? (
           <MyOrdersSection />
         ) : state.activeSection === ACCOUNT_DETAILS ? (
@@ -50,9 +92,13 @@ const AccountSection = () => {
 
 export default AccountSection;
 
-const DesktopSideBar = () => {
-  const [state, setState] = useACcountContext();
+const DesktopSideBar = ({logout}) => {
+  
+  const [state, setState] = useACcountContext(); 
+  
+  
   const Item = ({ text, children, section }) => {
+
     return (
       <button
         className={`flex items-center justify-between gap-16 ml-2 transition p-3 capitalize whitespace-nowrap group ${
@@ -95,7 +141,7 @@ const DesktopSideBar = () => {
         <FaHome className="text-2xl" />
       </Item>
       <button className="flex items-center justify-between gap-16 ml-2 transition hover:bg-gray-200 p-3 capitalize whitespace-nowrap group"
-        
+        onClick={logout}
       >
         <div className="flex items-center gap-2">
           <FaSignOutAlt className="text-2xl" />
@@ -107,9 +153,9 @@ const DesktopSideBar = () => {
   );
 };
 
-const MobileOptions = () => {
+const MobileOptions = ({logout}) => {
   const [state, setState] = useACcountContext();
-  const Item = ({ text, children, section }) => {
+  const Item = ({ text, section }) => {
     return (
       <button
         className={`transition capitalize whitespace-nowrap ${
@@ -131,6 +177,13 @@ const MobileOptions = () => {
       <Item text="persnal data" section={ACCOUNT_DETAILS}></Item>
       <Item text="change password" section={CHANGE_PASSWORD}></Item>
       <Item text="addresses" section={ADDRESS}></Item>
+      <button
+        className="flex items-center gap-2 py-1 px-3 border border-gray-500 transition hover:bg-gray-800 hover:text-white"
+        onClick={logout}
+      >
+        <FaSignOutAlt />
+        <span>Logout</span>
+      </button>
     </div>
   );
 };

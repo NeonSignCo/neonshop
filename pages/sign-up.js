@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import CustomLink from "../components/CustomLink";
 import LoadingBtn from "../components/LoadingBtn";
-import { useGlobalContext } from "../context/GlobalContext";
+import { ERROR, SUCCESS, useGlobalContext } from "../context/GlobalContext";
 import Axios from "../utils/Axios";
 
 const SignUp = () => { 
@@ -35,18 +35,22 @@ const SignUp = () => {
         setGlobalState((state) => ({
           ...state,
           auth: { ...state.auth, user: res.data.user },
-          alert: { ...state.alert, show: true, text: res.data.message },
+          alert: { ...state.alert, show: true, text: res.data.message, type: SUCCESS, timeout: 3000 },
         }));
         setLoading(false); 
         Router.push('/account')
     } catch (error) {
       setLoading(false);
-      setState((state) => ({
+      const text =
+        error.response?.status === 429
+          ? error.response.data
+          : error.response.data?.errorMessage ||
+            error.message ||
+            "Network Error";
+
+      setGlobalState((state) => ({
         ...state,
-        error:
-          error.response.data?.errorMessage ||
-              error.message ||
-              "Network Error",
+        alert: { ...state.alert, show: true, text, type: ERROR, timeout: 5000 },
       }));
     }
   };
@@ -57,9 +61,9 @@ const SignUp = () => {
         <title>Sign up | NeonShop</title>
       </Head>
       <h1 className="text-3xl lg:text-5xl text-center capitalize">sign up</h1>
-      <div className="max-w-max mx-auto flex flex-col items-center">
+      <div className="flex flex-col items-center">
         <form
-          className="mt-10 p-4 rounded border border-gray-300 md:w-[600px] mx-auto grid gap-5 transition"
+          className="mt-10 p-4 rounded border border-gray-300 w-full md:w-[600px] mx-auto grid gap-5 transition"
           onSubmit={signUp}
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">

@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import CustomLink from "../components/CustomLink"
 import LoadingBtn from "../components/LoadingBtn";
-import { useGlobalContext } from "../context/GlobalContext";
+import { ERROR, SUCCESS, useGlobalContext } from "../context/GlobalContext";
 import Axios from "../utils/Axios";
 
 const Login = () => {
@@ -27,22 +27,21 @@ const Login = () => {
              setGlobalState((state) => ({
                ...state,
                auth: {...state.auth, user: res.data.user},
-               alert: { ...state.alert, show: true, text: res.data.message },
+               alert: { ...state.alert, show: true, text: res.data.message, type: SUCCESS, timeout: 3000 },
              }));
             setLoading(false);
             Router.push('/account');
         } catch (error) {
             console.log(error.response)
-            setLoading(false)
-            setState((state) => ({
-              ...state,
-              error:
-                error.response?.status === 429
-                  ? error.response.data
-                  : error.response.data?.errorMessage ||
-                    error.message ||
-                    "Network Error",
-            }));
+          setLoading(false)
+          
+          const text = error.response?.status === 429
+            ? error.response.data
+            : error.response.data?.errorMessage ||
+            error.message ||
+            "Network Error";
+            
+          setGlobalState(state => ({...state, alert: {...state.alert, show: true, text, type: ERROR, timeout: 5000}}))
         }
     }
 
@@ -52,12 +51,12 @@ const Login = () => {
           <title>Login | NeonShop</title>
         </Head>
         <h1 className="text-3xl lg:text-5xl text-center capitalize">login</h1>
-        <div className="max-w-max mx-auto flex flex-col items-center">
+        <div className="flex flex-col items-center">
           <form
-            className="mt-10 p-4 rounded border border-gray-300 sm:w-[300px] mx-auto grid gap-5 transition"
+            className="mt-10 p-4 rounded border border-gray-300 w-full sm:w-[500px] grid gap-5 transition"
             onSubmit={login}
           >
-            <div className="grid gap-2">
+            <div className="grid gap-3">
               <label htmlFor="email" className="capitalize font-semibold">
                 email
               </label>
@@ -68,12 +67,12 @@ const Login = () => {
                 placeholder="Email"
                 value={state.email}
                 onChange={inputChange}
-                className="p-1 rounded-sm border border-gray-300"
+                className="p-2 rounded-sm border border-gray-300"
                 required
               />
             </div>
-            <div className="grid gap-2">
-              <label htmlFor="email" className="capitalize font-semibold">
+            <div className="grid gap-3">
+              <label htmlFor="password" className="capitalize font-semibold">
                 password
               </label>
               <input
@@ -83,14 +82,16 @@ const Login = () => {
                 placeholder="Password"
                 value={state.password}
                 onChange={inputChange}
-                className="p-1 rounded-sm border border-gray-300"
+                className="p-2 rounded-sm border border-gray-300"
                 required
               />
             </div>
-            {state.error && <p className="text-red-500 text-center">{state.error}</p>}
+            {state.error && (
+              <p className="text-red-500 text-center">{state.error}</p>
+            )}
             <LoadingBtn
               loading={loading}
-              className="p-1 bg-gray-800 text-white max-w-max px-3 capitalize"
+              className="p-1.5 px-3 bg-gray-800 text-white max-w-max px-3 capitalize"
             >
               login
             </LoadingBtn>

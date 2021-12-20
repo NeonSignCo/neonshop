@@ -179,7 +179,7 @@ const AccountBtn = ({containerRef}) => {
       setGlobalState((state) => ({
         ...state,
         auth: { ...state.auth, loading: false, user: null }, 
-        alert: {...state.alert, show: true, text: 'logged out', type: SUCCESS}
+        alert: {...state.alert, show: true, text: 'logged out', type: SUCCESS, timeout: 3000}
       }));
       setExpand(false)
 
@@ -191,7 +191,8 @@ const AccountBtn = ({containerRef}) => {
         alert: {
           ...state.alert,
           show: true,
-          type: ERROR,
+          type: ERROR, 
+          timeout: 5000,
           text:
             error.response?.data?.errorMessage ||
             error.message ||
@@ -219,10 +220,10 @@ const AccountBtn = ({containerRef}) => {
                 <FaUser />
                 <span>account</span>
               </CustomLink>
-              <LoadingBtn loading={globalState.auth.loading} className="flex items-center gap-2 p-2 transition hover:bg-gray-800" onClick={logout}>
+              <button className="flex items-center gap-2 p-2 transition hover:bg-gray-800" onClick={logout}>
                 <FaSignOutAlt />
                 <span>Logout</span>
-              </LoadingBtn>
+              </button>
             </div>
           ) : (
             <div className="grid">
