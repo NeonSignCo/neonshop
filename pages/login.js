@@ -32,7 +32,6 @@ const Login = () => {
             setLoading(false);
             Router.push('/account');
         } catch (error) {
-            console.log(error.response)
           setLoading(false)
           
           const text = error.response?.status === 429

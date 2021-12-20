@@ -39,7 +39,7 @@ exports.register = catchASync(async (req, res) => {
      .cookie("token", session.token, {
        httpOnly: true,
        sameSite: true,
-       maxAge: process.env.AUTH_COOKIE_MAX_AGE_MS,
+       maxAge: process.env.AUTH_COOKIE_MAX_AGE_MS || 1209600000,
        secure: process.env.NODE_ENV === "production",
      })
      .status(201)
@@ -82,7 +82,7 @@ exports.login = catchASync(async (req, res) => {
     .cookie("token", session.token, {
       httpOnly: true,
       sameSite: true,
-      maxAge: process.env.AUTH_COOKIE_MAX_AGE_MS,
+      maxAge: process.env.AUTH_COOKIE_MAX_AGE_MS || 1209600000,
       secure: process.env.NODE_ENV === "production",
     })
     .json({
