@@ -1,5 +1,4 @@
 const Session = require('../models/session');
-const limiter = require('express-rate-limit');
 
 const initSession = async (userId) => {
   const token = await Session.generateToken();
@@ -16,13 +15,7 @@ const isEmail = (email) => {
 };
 
 
-const rateLimiter = (
-  windowMs = 1000 * 60 ,
-  max = 10,
-  message = "Too many requests. Please try again in one minute"
-) => limiter({ windowMs, max, message });
 
 
 
-
-module.exports = { initSession, isEmail, rateLimiter };
+module.exports = { initSession, isEmail };
