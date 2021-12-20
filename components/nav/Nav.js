@@ -236,7 +236,7 @@ const AccountBtn = ({containerRef}) => {
                 <span>Login</span>
               </CustomLink>
               <CustomLink
-                href="/sign-up"
+                href="/signup"
                 className="flex items-center gap-2 p-2 transition hover:bg-gray-800 whitespace-nowrap"
                 onClick={() => setExpand(false)}
               >

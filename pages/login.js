@@ -101,7 +101,7 @@ const Login = () => {
           <p className="mt-5">
             Don't have an account ?{" "}
             <CustomLink
-              href="/sign-up"
+              href="/signup"
               text="Sign up"
               className="font-semibold"
             />{" "}
