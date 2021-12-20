@@ -46,7 +46,7 @@ app
     );
 
     // handle nextJs requests
-    // server.get("*", (req, res) => handle(req, res));
+    server.get("*", (req, res) => handle(req, res));
 
     //   define port
     const PORT = process.env.PORT || 5000;
