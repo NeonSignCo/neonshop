@@ -3,8 +3,9 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import CustomLink from "../components/CustomLink";
 import LoadingBtn from "../components/LoadingBtn";
-import { ERROR, SUCCESS, useGlobalContext } from "../context/GlobalContext";
+import { ERROR, NOT_LOGGED_IN_EVALUATED, SUCCESS, useGlobalContext } from "../context/GlobalContext";
 import Axios from "../utils/Axios";
+import getLoggedInUser from "../utils/getLoggedInUser";
 
 const SignUp = () => { 
     const Router = useRouter();
@@ -228,3 +229,33 @@ const SignUp = () => {
 };
 
 export default SignUp;
+
+
+export const getServerSideProps = async ({ req }) => {
+  let user = NOT_LOGGED_IN_EVALUATED;
+  try {
+    const loggedInUser = await getLoggedInUser(req);
+    user = loggedInUser || NOT_LOGGED_IN_EVALUATED;
+
+    if (user !== NOT_LOGGED_IN_EVALUATED) {
+      return {
+        redirect: {
+          destination: "/account",
+          permanent: false,
+        },
+      };
+    }
+
+    return {
+      props: {
+        user,
+      },
+    };
+  } catch (error) {
+    return {
+      props: {
+        user,
+      },
+    };
+  }
+};

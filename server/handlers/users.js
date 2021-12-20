@@ -4,7 +4,7 @@ const Session = require('../models/session');
 const { initSession, isEmail } = require('../utils/utils');
 const AppError = require('../utils/AppError');
 const catchASync = require('../utils/catchASync');
-
+const { serialize } = require('cookie');
 
 // @route       POST /api/users/register 
 // @purpose     Register User
@@ -79,13 +79,18 @@ exports.login = catchASync(async (req, res) => {
   // remove sensitive data 
   user.password = undefined;
   res
-    .cookie("token", session.token, {
-      httpOnly: true,
-      sameSite: true,
-      maxAge: process.env.AUTH_COOKIE_MAX_AGE_MS || 1209600000,
-      secure: process.env.NODE_ENV === "production",
-    })
-    .json({
+    .setHeader(
+      "Set-Cookie",
+      serialize("token", String(session.token), {
+        maxAge: process.env.AUTH_COOKIE_MAX_AGE_IN_SECONDS || 1209600, 
+        sameSite: true, 
+        httpOnly: true, 
+        secure: process.env.NODE_ENV === 'production', 
+        path: '/'
+      }), 
+  )
+    
+    return res.json({
       status: "success",
       message: "login successful",
       user,
@@ -93,22 +98,22 @@ exports.login = catchASync(async (req, res) => {
 })
 
 // @route       GET /api/users/me 
-// @purpose     Get logged in user (will not return any error if no user)
+// @purpose     Get logged in user   
 // @access      User
 exports.getMe = catchASync(async (req, res) => {
-  const userId = req.session?.userId; 
-  let user = null;
-  if (userId) {
-    user = await User.findById(
+  const userId = req.session?.userId;  
+
+  if (!userId) throw new AppError(400, 'not logged in');
+  const user = await User.findById(
       { _id: userId },
       { password: 0, _id: 0 }
     ); 
-  }
 
+  if(!user) throw new AppError('not logged in')
  
   res.json({
     status: "success",
-    message: "will get user object if authenticated, otherwise null",
+    message: "successfully authenticated user",
     user,
   });
 })
@@ -130,7 +135,18 @@ exports.deleteMe = catchASync(async (req, res) => {
   }
 
   await Session.expireAllTokensForUser(userId);
-  res.clearCookie("token");
+
+  // remove auth cookie
+   res.setHeader(
+     "Set-Cookie",
+     serialize("token", '', {
+       maxAge: -1,
+       sameSite: true,
+       httpOnly: true,
+       secure: process.env.NODE_ENV === "production",
+       path: "/",
+     })
+   );
   await User.findByIdAndDelete({ _id: userId });
   res.json({
     status: "Success",
@@ -142,16 +158,26 @@ exports.deleteMe = catchASync(async (req, res) => {
 // @purpose     Logout user
 // @access      User
 exports.logOut = catchASync(async (req, res) => {
-  const userId = req.session?.userId; 
+  const userId = req.session?.userId;
 
-  if (!userId) throw new AppError(400, 'not logged in');
-  
-  await Session.expireAllTokensForUser(userId)
-  res.clearCookie("token");
+  if (!userId) throw new AppError(400, "not logged in");
+
+  await Session.expireAllTokensForUser(userId);
+  // remove auth cookie
+  res.setHeader(
+    "Set-Cookie",
+    serialize("token", "", {
+      maxAge: -1,
+      sameSite: true,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+    })
+  );
 
   res.json({
     status: "success",
-    message: 'logout successful'
+    message: "logout successful",
   });
 })
 
@@ -159,7 +185,7 @@ exports.logOut = catchASync(async (req, res) => {
 // @route       GET /api/users
 // @purpose     Get all users 
 // @access      Public 
-exports.getAllUsers = catchASync(async (req, res) => {
+exports.getAllUsers =  catchASync(async (req, res) => {
   const { page = 1, limit = 10 } = req.query;
   const skip = limit * (page - 1);
 

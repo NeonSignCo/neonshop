@@ -447,7 +447,7 @@ export const getStaticProps = ({ params }) => {
   return {
     props: {
       product,
-      revalidate: 60,
+      revalidate: 10
     },
   };
 };

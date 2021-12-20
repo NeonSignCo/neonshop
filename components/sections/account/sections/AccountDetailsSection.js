@@ -103,7 +103,6 @@ const AccountDetailsSection = () => {
               profile pic
             </label>
             <input type="file" accept="image/*" name="photo" id="photo" /> 
-            <div className="bg-blue-500 h-[150px] w-[150px] rounded-full"></div>
           </div>
           <button className="py-2 px-4 bg-gray-800 text-white font-semibold max-w-max capitalize">
             update{" "}

@@ -181,7 +181,7 @@ const ProductNavigation = ({ productsCount, state, setState }) => {
 
 export const getStaticProps = () => {
   return {
-    props: { revalidate: 60 },
+    props: { revalidate: 10 },
   };
 };
 

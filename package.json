@@ -1,18 +1,16 @@
 {
   "private": true,
   "scripts": {
-    "dev": "rm -r .next & nodemon -w server server/server.js",
+    "dev": "next dev",
     "build": "next build",
-    "start": "NODE_ENV=production node server/server.js"
+    "start": "next start"
   },
   "dependencies": {
     "@tailwindcss/aspect-ratio": "^0.3.0",
     "axios": "^0.24.0",
     "bcryptjs": "^2.4.3",
+    "cookie": "^0.4.1",
     "cookie-parser": "^1.4.5",
-    "dotenv": "^10.0.0",
-    "express": "^4.17.1",
-    "express-rate-limit": "^5.5.1",
     "framer-motion": "^5.4.1",
     "mongoose": "^6.0.12",
     "mongoose-unique-validator": "^3.0.0",

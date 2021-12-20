@@ -41,7 +41,7 @@ export default Admin
 
 
 
-export const getStaticProps = () => {
+export const getServerSideProps = () => {
   
   const orders = []; 
   const products = [];
