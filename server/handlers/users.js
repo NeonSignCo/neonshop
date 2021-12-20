@@ -10,44 +10,62 @@ const { serialize } = require('cookie');
 // @purpose     Register User
 // @access      public
 exports.register = catchASync(async (req, res) => {
-  const { email, password, confirmPassword, firstName, lastName, userName, photo } = req.body;
-  
+  const {
+    email,
+    password,
+    confirmPassword,
+    firstName,
+    lastName,
+    userName,
+    photo,
+  } = req.body;
+
   // check required fields
-  if (!email) throw new AppError(400, 'email is required');
-    if (!isEmail(email)) {
-      throw new AppError(400, "Email must be a valid email address.");
-    }
-  if (!password) throw new AppError(400, 'password is required');
-  if (!confirmPassword) throw new AppError(400, 'confirmPassword is required');
-  if (!firstName) throw new AppError(400, 'firstName is required');
-  if (!lastName) throw new AppError(400, 'lastName is required');
-  if (!userName) throw new AppError(400, 'userName is required');
-  
- 
-  
-  if (password.length < 6) {
-     throw new AppError(400, "Password must be atleast 6 characters long.");
+  if (!email) throw new AppError(400, "email is required");
+  if (!isEmail(email)) {
+    throw new AppError(400, "Email must be a valid email address.");
   }
-  
-  if (password !== confirmPassword) throw new AppError(400, 'passwords do not match');
+  if (!password) throw new AppError(400, "password is required");
+  if (!confirmPassword) throw new AppError(400, "confirmPassword is required");
+  if (!firstName) throw new AppError(400, "firstName is required");
+  if (!lastName) throw new AppError(400, "lastName is required");
+  if (!userName) throw new AppError(400, "userName is required");
 
-  const user = await User.create({ firstName, lastName, userName, email, password, photo });
+  if (password.length < 6) {
+    throw new AppError(400, "Password must be atleast 6 characters long.");
+  }
 
-   const session = await initSession(user._id);
+  if (password !== confirmPassword)
+    throw new AppError(400, "passwords do not match");
 
-   res
-     .cookie("token", session.token, {
-       httpOnly: true,
-       sameSite: true,
-       maxAge: process.env.AUTH_COOKIE_MAX_AGE_MS || 1209600000,
-       secure: process.env.NODE_ENV === "production",
-     })
-     .status(201)
-     .json({
-       status: "success",
-       message: "Successfully registered new user",
-       user
-     });
+  const user = await User.create({
+    firstName,
+    lastName,
+    userName,
+    email,
+    password,
+    photo,
+  });
+
+  const session = await initSession(user._id);
+
+  // auth token
+  res.setHeader(
+    "Set-Cookie",
+    serialize("token", String(session.token), {
+      maxAge: process.env.AUTH_COOKIE_MAX_AGE_IN_SECONDS || 1209600,
+      sameSite: true,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+    })
+  );
+
+  return res.status(201).json({
+    status: "success",
+    message: "Successfully registered new user",
+    user,
+  });
 } )
 
 // @route       POST /api/users/login 
@@ -78,6 +96,8 @@ exports.login = catchASync(async (req, res) => {
 
   // remove sensitive data 
   user.password = undefined;
+
+  // auth token
   res
     .setHeader(
       "Set-Cookie",
