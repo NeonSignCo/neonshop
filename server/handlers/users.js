@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
-const User = require('../models/User');
-const Session = require('../models/Session');
+const User = require('../models/user');
+const Session = require('../models/session');
 const { initSession, isEmail } = require('../utils/utils');
 const AppError = require('../utils/AppError');
 const catchASync = require('../utils/catchASync');

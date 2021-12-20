@@ -1,5 +1,5 @@
-import Session from "../server/models/Session";
-import User from "../server/models/User";
+import Session from "../server/models/session";
+import User from "../server/models/user";
 
 
 const getLoggedInUser = async (req) => {
