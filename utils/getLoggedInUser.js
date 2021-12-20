@@ -1,9 +1,11 @@
 import Session from "../server/models/session";
 import User from "../server/models/user";
-
+import connectDb from '../server/connectDb';
 
 const getLoggedInUser = async (req) => {
     try {
+
+        await connectDb();
         const { token } = req.cookies;
         if (!token) return null;
         
