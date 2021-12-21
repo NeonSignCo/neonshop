@@ -1,3 +1,5 @@
+import CustomLink from "../../../CustomLink";
+
 const ChangePasswordSection = () => {
 
      
@@ -61,7 +63,8 @@ const ChangePasswordSection = () => {
           <button className="py-2 px-4 bg-gray-800 text-white font-semibold max-w-max capitalize">
            save changes
           </button>
-        </form>
+        </form> 
+        <p className="mt-5">Forgot password ? <CustomLink className="capitalize font-semibold" href="/forgot-password" text="reset password"/> </p>
       </div>
     );
 }

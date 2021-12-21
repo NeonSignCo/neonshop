@@ -7,7 +7,11 @@ import {
   FaSignOutAlt,
   FaUser,
 } from "react-icons/fa";
-import { ERROR, SUCCESS, useGlobalContext } from "../../../context/GlobalContext";
+import {
+  ERROR,
+  SUCCESS,
+  useGlobalContext,
+} from "../../../context/GlobalContext";
 import {
   MY_ORDERS,
   ACCOUNT_DETAILS,
@@ -16,9 +20,9 @@ import {
   useACcountContext,
 } from "../../../pages/account";
 import Axios from "../../../utils/Axios";
-import { useRouter } from 'next/router'
+import { useRouter } from "next/router";
 
-const MyOrdersSection = dynamic(() => import("./sections/MyOrdersSection"));
+const MyOrdersSection = dynamic(() => import("./sections/MyOrdersSection")); 
 const AccountDetailsSection = dynamic(() =>
   import("./sections/AccountDetailsSection")
 );
@@ -44,8 +48,8 @@ const AccountSection = () => {
           ...state.alert,
           show: true,
           text: "logged out",
-          type: SUCCESS, 
-          timeout: 3000
+          type: SUCCESS,
+          timeout: 3000,
         },
       }));
 
@@ -57,12 +61,10 @@ const AccountSection = () => {
         alert: {
           ...state.alert,
           show: true,
-          type: ERROR, 
+          type: ERROR,
           timeout: 5000,
           text:
-            error.response?.data?.errorMessage ||
-            error.message ||
-            "Network Error",
+            error.response?.data?.message || error.message || "Network Error",
         },
       }));
     }
@@ -72,10 +74,10 @@ const AccountSection = () => {
     <div className=" py-12 flex flex-col min-h-screen bg-[#f1f2f6]">
       <div className="px-5 lg:px-20">
         <h1 className="text-3xl capitalize">My account</h1>
-        <MobileOptions logout={logout}/>
+        <MobileOptions logout={logout} />
       </div>
       <div className="flex-1 flex gap-10 mt-10 bg-white px-5 lg:px-20 py-10">
-        <DesktopSideBar logout={logout}/>
+        <DesktopSideBar logout={logout} />
         {state.activeSection === MY_ORDERS ? (
           <MyOrdersSection />
         ) : state.activeSection === ACCOUNT_DETAILS ? (
@@ -92,13 +94,10 @@ const AccountSection = () => {
 
 export default AccountSection;
 
-const DesktopSideBar = ({logout}) => {
-  
-  const [state, setState] = useACcountContext(); 
-  
-  
-  const Item = ({ text, children, section }) => {
+const DesktopSideBar = ({ logout }) => {
+  const [state, setState] = useACcountContext();
 
+  const Item = ({ text, children, section }) => {
     return (
       <button
         className={`flex items-center justify-between gap-16 ml-2 transition p-3 capitalize whitespace-nowrap group ${
@@ -140,7 +139,8 @@ const DesktopSideBar = ({logout}) => {
       <Item text="addresses" section={ADDRESS}>
         <FaHome className="text-2xl" />
       </Item>
-      <button className="flex items-center justify-between gap-16 ml-2 transition hover:bg-gray-200 p-3 capitalize whitespace-nowrap group"
+      <button
+        className="flex items-center justify-between gap-16 ml-2 transition hover:bg-gray-200 p-3 capitalize whitespace-nowrap group"
         onClick={logout}
       >
         <div className="flex items-center gap-2">
@@ -153,7 +153,7 @@ const DesktopSideBar = ({logout}) => {
   );
 };
 
-const MobileOptions = ({logout}) => {
+const MobileOptions = ({ logout }) => {
   const [state, setState] = useACcountContext();
   const Item = ({ text, section }) => {
     return (

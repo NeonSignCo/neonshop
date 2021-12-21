@@ -3,9 +3,6 @@ import nodemailer from 'nodemailer';
 const sendMail = ({ from, to, subject, text, html }) => new Promise(async (resolve, reject) => {
   try {
 
-    // let testAccount = await nodemailer.createTestAccount();
-
-
     let transporter = nodemailer.createTransport({
       host: process.env.MAIL_SMTP_HOST,
       port: process.env.MAIL_SMTP_PORT,

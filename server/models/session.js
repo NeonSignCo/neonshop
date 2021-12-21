@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
-const uniqueValidator = require('mongoose-unique-validator');
-const crypto = require('crypto');
+import mongoose from 'mongoose';
+import uniqueValidator from 'mongoose-unique-validator'
+import crypto from 'crypto';
 
 const SessionSchema = new mongoose.Schema({
   token: {
@@ -10,7 +10,8 @@ const SessionSchema = new mongoose.Schema({
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
+    required: true, 
+    ref: 'user'
   },
   status: {
     type: String,
@@ -23,23 +24,14 @@ SessionSchema.plugin(uniqueValidator, {
   message: "token with same {PATH} already exists",
 });
 
-SessionSchema.statics.generateToken = function() {
-  return new Promise((resolve, reject) => {
-    crypto.randomBytes(16, (err, buf) => {
-      if (err) {
-        reject(err);
-      }
-      const token = buf.toString('hex');
-      resolve(token);
-    });
-  });
-};
 
-
-
-SessionSchema.statics.expireAllTokensForUser = function(userId) {
-  return this.deleteOne({userId})
-};
-
+SessionSchema.statics.genToken = () => new Promise(async (resolve, reject) => {
+  try {
+    const token = crypto.randomBytes(32).toString("hex");
+    resolve(token);
+  } catch (error) {
+    reject(error.message)
+  }
+})
 
 module.exports = mongoose.models.Session || mongoose.model('Session', SessionSchema);

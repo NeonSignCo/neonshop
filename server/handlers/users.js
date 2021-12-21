@@ -1,10 +1,11 @@
 import bcrypt from 'bcryptjs';
 import User from "../models/user";
-import Session from "../models/session";
-import {initSession, isEmail} from "../utils/utils";
+import initSession from "../utils/initSession";
 import AppError from '../utils/AppError';
 import catchASync from '../utils/catchASync';
 import { serialize } from 'cookie'
+import isEmail from '../../utils/isEmail';
+import Token from '../models/token';
 
 // @route       POST /api/users/register 
 // @purpose     Register User
@@ -31,22 +32,22 @@ export const register = catchASync(async (req, res) => {
   if (!lastName) throw new AppError(400, "lastName is required");
   if (!userName) throw new AppError(400, "userName is required");
 
-  if (password.length < 6) {
-    throw new AppError(400, "Password must be atleast 6 characters long.");
+  if (password.length < 6 || password.length > 16) {
+    throw new AppError(400, "Password must be 6 to 16 characters long");
   }
 
   if (password !== confirmPassword)
     throw new AppError(400, "passwords do not match");
-
+  const encryptedPassword = await User.encryptPassword(password);
   const user = await User.create({
     firstName,
     lastName,
     userName,
     email,
-    password,
+    password: encryptedPassword,
     photo,
   });
-
+ 
   const session = await initSession(user._id);
 
   // auth token
@@ -154,7 +155,7 @@ export const deleteMe = catchASync(async (req, res) => {
     throw new AppError(400, "incorrect password");
   }
 
-  await Session.expireAllTokensForUser(userId);
+  await req.session.delete();
 
   // remove auth cookie
    res.setHeader(
@@ -182,7 +183,7 @@ export const logOut = catchASync(async (req, res) => {
 
   if (!userId) throw new AppError(400, "not logged in");
 
-  await Session.expireAllTokensForUser(userId);
+  await req.session.delete();
   // remove auth cookie
   res.setHeader(
     "Set-Cookie",
@@ -226,3 +227,52 @@ export const getAllUsers =  catchASync(async (req, res) => {
     });
 
 }) 
+
+
+
+// @route       POST /api/users/reset-password
+// @purpose     reset password
+// @access      token
+export const resetPassword = catchASync(async (req, res) => {
+  const { password, confirmPassword, token } = req.body;
+
+  if (!password) throw new AppError(400, "password is required");
+  if (password.length < 6 || password.length > 16)
+    throw new AppError(400, "password must be between 6 to 16 characters long");
+
+  if (!confirmPassword) throw new AppError(400, "confirmPassword is required");
+  if (password !== confirmPassword)
+    throw new AppError(400, "passwords do not match");
+
+  const existingToken = await Token.findOne({ token });
+
+  if (!existingToken) throw new AppError(400, "Invalid token");
+
+  const encryptedPassword = await User.encryptPassword(password);
+
+  await User.findOneAndUpdate(
+    { _id: existingToken.userId },
+    { $set: { password: encryptedPassword } },
+    { new: true }
+  );
+
+  // delete the token
+  await existingToken.delete();
+
+  // logout user by deleting token
+  res.setHeader(
+    "Set-Cookie",
+    serialize("token", '', {
+      maxAge: -1,
+      sameSite: true,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+    })
+  );
+
+  return res.json({
+    status: "success",
+    message: "password updated",
+  });
+})

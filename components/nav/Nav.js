@@ -1,160 +1,163 @@
 import { useEffect, useRef, useState } from "react";
-import { FaCaretUp, FaShoppingBag, FaSignInAlt, FaSignOutAlt, FaUser, FaUserCircle, FaUserPlus } from "react-icons/fa";
+import {
+  FaCaretUp,
+  FaShoppingBag,
+  FaSignInAlt,
+  FaSignOutAlt,
+  FaUser,
+  FaUserCircle,
+  FaUserPlus,
+} from "react-icons/fa";
 import { ERROR, SUCCESS, useGlobalContext } from "../../context/GlobalContext";
 import CustomLink from "../CustomLink";
 import SearchBar from "../SearchBar";
 import DropDown from "./DropDown";
 import MobileMenu from "./MobileMenu";
-import Banner from '../Banner';
+import Banner from "../Banner";
 import { AnimatePresence } from "framer-motion";
 import LoadingBtn, { Loader } from "../LoadingBtn";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 import Axios from "../../utils/Axios";
 
 const Nav = () => {
   const [globalState, setGlobalState] = useGlobalContext();
   const searchRef = useRef();
-  const dropDownRef = useRef(); 
+  const dropDownRef = useRef();
   const optionRef = useRef();
-    const [state, setState] = useState({
-      showMobileMenu: false
-    })
-    
-  
-    return (
-      <div className="bg-black text-white sticky top-0 w-full shadow z-20">
-        <AnimatePresence>
-          {globalState.showBanner && <Banner />}
-        </AnimatePresence>
-        <div className="py-4 px-5 lg:px-20 flex flex-wrap justify-center gap-3 xs:justify-between items-center">
-          <CustomLink
-            text="NeonShop"
-            className="font-semibold text-2xl lg:text-3xl"
-          />
-          <div className="hidden lg:flex items-center gap-7 capitalize text-lg">
-            <CustomLink href="/custom-neon-sign" text="design your neon" />
-            <div ref={dropDownRef}>
-              <DropDown
-                containerRef={dropDownRef}
-                title="shop neons"
-                items={[
-                  {
-                    title: "explore",
-                    links: [
-                      { link: "/custom-neon-sign", text: "build your own" },
-                      { text: "inspiration" },
-                      { link: "/shop", text: "shop all" },
-                    ],
-                  },
-                  {
-                    title: "decoration",
-                    links: [
-                      { text: "aesthetic" },
-                      { text: "inspirational" },
-                      { text: "neon art" },
-                      { text: "neon letters" },
-                      { text: "neon lights" },
-                      { text: "quotes" },
-                      { text: "marvel comics" },
-                      { text: "retro" },
-                    ],
-                  },
-                  {
-                    title: "occasion",
-                    links: [
-                      { text: "christmas" },
-                      { text: "halloween" },
-                      { text: "faith" },
-                      { text: "party" },
-                      { text: "wedding" },
-                    ],
-                  },
-                  {
-                    title: "location",
-                    links: [
-                      { text: "bar signs" },
-                      { text: "gaming" },
-                      { text: "home" },
-                      { text: "kids home" },
-                      { text: "man cave" },
-                    ],
-                  },
-                ]}
-              />
-            </div>
-            <CustomLink href="/about" text="about" />
-            <CustomLink href="/contact" text="contact" />
-          </div>
-          <div className="flex items-center gap-4 capitalize text-xl md:text-2xl">
-            <div ref={optionRef}>
-              <AccountBtn containerRef={optionRef}/>
-            </div>
-            <button
-              className="relative"
-              onClick={() =>
-                setGlobalState((state) => ({
-                  ...state,
-                  showCart: true,
-                }))
-              }
-            >
-              <FaShoppingBag />
-              <span className="absolute left-0 top-[13px] h-4 w-4 rounded-full bg-gray-800 flex items-center justify-center text-sm">
-                {globalState.cart.items.length > 9
-                  ? "9+"
-                  : globalState.cart.items.length}
-              </span>
-            </button>
-            <div ref={searchRef}>
-              <SearchBar containerRef={searchRef} />
-            </div>
-            <button
-              className="grid lg:hidden gap-1"
-              onClick={() =>
-                setState((state) => ({
-                  ...state,
-                  showMobileMenu: !state.showMobileMenu,
-                }))
-              }
-            >
-              <div
-                className={`bg-white h-[2px] w-5 transition ${
-                  state.showMobileMenu
-                    ? "translate-y-[5.5px] rotate-45"
-                    : "rotate-0"
-                }`}
-              ></div>
-              <div
-                className={`bg-white h-[2px] w-5 transition ${
-                  state.showMobileMenu ? "hidden" : "block"
-                }`}
-              ></div>
-              <div
-                className={`bg-white h-[2px] w-5 transition ${
-                  state.showMobileMenu ? "rotate-[-45deg]" : "rotate-0"
-                }`}
-              ></div>
-            </button>
-          </div>
-        </div>
-        <AnimatePresence>
-          {state.showMobileMenu && (
-            <MobileMenu
-              closeMenu={() =>
-                setState((state) => ({ ...state, showMobileMenu: false }))
-              }
+  const [state, setState] = useState({
+    showMobileMenu: false,
+  });
+
+  return (
+    <div className="bg-black text-white sticky top-0 w-full shadow z-20">
+      <AnimatePresence>{globalState.showBanner && <Banner />}</AnimatePresence>
+      <div className="py-4 px-5 lg:px-20 flex flex-wrap justify-center gap-3 xs:justify-between items-center">
+        <CustomLink
+          text="NeonShop"
+          className="font-semibold text-2xl lg:text-3xl"
+        />
+        <div className="hidden lg:flex items-center gap-7 capitalize text-lg">
+          <CustomLink href="/custom-neon-sign" text="design your neon" />
+          <div ref={dropDownRef}>
+            <DropDown
+              containerRef={dropDownRef}
+              title="shop neons"
+              items={[
+                {
+                  title: "explore",
+                  links: [
+                    { link: "/custom-neon-sign", text: "build your own" },
+                    { text: "inspiration" },
+                    { link: "/shop", text: "shop all" },
+                  ],
+                },
+                {
+                  title: "decoration",
+                  links: [
+                    { text: "aesthetic" },
+                    { text: "inspirational" },
+                    { text: "neon art" },
+                    { text: "neon letters" },
+                    { text: "neon lights" },
+                    { text: "quotes" },
+                    { text: "marvel comics" },
+                    { text: "retro" },
+                  ],
+                },
+                {
+                  title: "occasion",
+                  links: [
+                    { text: "christmas" },
+                    { text: "halloween" },
+                    { text: "faith" },
+                    { text: "party" },
+                    { text: "wedding" },
+                  ],
+                },
+                {
+                  title: "location",
+                  links: [
+                    { text: "bar signs" },
+                    { text: "gaming" },
+                    { text: "home" },
+                    { text: "kids home" },
+                    { text: "man cave" },
+                  ],
+                },
+              ]}
             />
-          )}
-        </AnimatePresence>
+          </div>
+          <CustomLink href="/about" text="about" />
+          <CustomLink href="/contact" text="contact" />
+        </div>
+        <div className="flex items-center gap-4 capitalize text-xl md:text-2xl">
+          <div ref={optionRef}>
+            <AccountBtn containerRef={optionRef} />
+          </div>
+          <button
+            className="relative"
+            onClick={() =>
+              setGlobalState((state) => ({
+                ...state,
+                showCart: true,
+              }))
+            }
+          >
+            <FaShoppingBag />
+            <span className="absolute left-0 top-[13px] h-4 w-4 rounded-full bg-gray-800 flex items-center justify-center text-sm">
+              {globalState.cart.items.length > 9
+                ? "9+"
+                : globalState.cart.items.length}
+            </span>
+          </button>
+          <div ref={searchRef}>
+            <SearchBar containerRef={searchRef} />
+          </div>
+          <button
+            className="grid lg:hidden gap-1"
+            onClick={() =>
+              setState((state) => ({
+                ...state,
+                showMobileMenu: !state.showMobileMenu,
+              }))
+            }
+          >
+            <div
+              className={`bg-white h-[2px] w-5 transition ${
+                state.showMobileMenu
+                  ? "translate-y-[5.5px] rotate-45"
+                  : "rotate-0"
+              }`}
+            ></div>
+            <div
+              className={`bg-white h-[2px] w-5 transition ${
+                state.showMobileMenu ? "hidden" : "block"
+              }`}
+            ></div>
+            <div
+              className={`bg-white h-[2px] w-5 transition ${
+                state.showMobileMenu ? "rotate-[-45deg]" : "rotate-0"
+              }`}
+            ></div>
+          </button>
+        </div>
       </div>
-    );
-}
+      <AnimatePresence>
+        {state.showMobileMenu && (
+          <MobileMenu
+            closeMenu={() =>
+              setState((state) => ({ ...state, showMobileMenu: false }))
+            }
+          />
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
 
-export default Nav
+export default Nav;
 
-
-
-const AccountBtn = ({containerRef}) => {
+const AccountBtn = ({ containerRef }) => {
   const Router = useRouter();
   const [globalState, setGlobalState] = useGlobalContext();
   const [expand, setExpand] = useState(false);
@@ -174,29 +177,33 @@ const AccountBtn = ({containerRef}) => {
   const logout = async () => {
     try {
       await Axios.put("/users/logout");
-      
+
       // update state
       setGlobalState((state) => ({
         ...state,
-        auth: { ...state.auth, loading: false, user: null }, 
-        alert: {...state.alert, show: true, text: 'logged out', type: SUCCESS, timeout: 3000}
+        auth: { ...state.auth, loading: false, user: null },
+        alert: {
+          ...state.alert,
+          show: true,
+          text: "logged out",
+          type: SUCCESS,
+          timeout: 3000,
+        },
       }));
-      setExpand(false)
+      setExpand(false);
 
       // go to login page
-      Router.push('/login')
+      Router.push("/login");
     } catch (error) {
       setGlobalState((state) => ({
         ...state,
         alert: {
           ...state.alert,
           show: true,
-          type: ERROR, 
+          type: ERROR,
           timeout: 5000,
           text:
-            error.response?.data?.errorMessage ||
-            error.message ||
-            "Network Error",
+            error.response?.data?.message || error.message || "Network Error",
         },
       }));
     }
@@ -210,7 +217,9 @@ const AccountBtn = ({containerRef}) => {
       {expand && (
         <div className="absolute top-[58px] p-4 bg-black text-white capitalize text-base rounded border border-gray-800">
           <FaCaretUp className="absolute -top-4 left-1 text-2xl text-black " />
-          {globalState.auth?.loading ? <Loader/>: globalState.auth?.user ? (
+          {globalState.auth?.loading ? (
+            <Loader />
+          ) : globalState.auth?.user ? (
             <div className="grid">
               <CustomLink
                 href="/account"
@@ -220,7 +229,10 @@ const AccountBtn = ({containerRef}) => {
                 <FaUser />
                 <span>account</span>
               </CustomLink>
-              <button className="flex items-center gap-2 p-2 transition hover:bg-gray-800" onClick={logout}>
+              <button
+                className="flex items-center gap-2 p-2 transition hover:bg-gray-800"
+                onClick={logout}
+              >
                 <FaSignOutAlt />
                 <span>Logout</span>
               </button>
@@ -249,4 +261,4 @@ const AccountBtn = ({containerRef}) => {
       )}
     </div>
   );
-}
+};

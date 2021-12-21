@@ -26,11 +26,6 @@ const UserSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    validate: {
-      validator: (val) => String(val).length >= 6 && String(val).length <= 16,
-      message: "password must be 6 to 16 characters long", 
-      
-    }, 
     required: [true, "password is required"]
   }, 
   role: {
@@ -44,26 +39,17 @@ const UserSchema = new mongoose.Schema({
 }, { timestamps: true});
 
 UserSchema.plugin(uniqueValidator, {
-  message: "User with same {{PATH}} already exists",
+  message: "User with same {PATH} already exists",
 });
 
-UserSchema.pre('save', function(next) {
-  let user = this;
-
-  if (!user.isModified('password')) {
-    return next();
+UserSchema.statics.encryptPassword = (password) => new Promise(async(resolve, reject) => {
+  try {
+    const salt = await bcrypt.genSalt(12); 
+    const hash = await bcrypt.hash(password, salt); 
+    resolve(hash)
+  } catch (error) {
+    reject(error.message);
   }
-
-  bcrypt
-    .genSalt(12)
-    .then((salt) => {
-      return bcrypt.hash(user.password, salt);
-    }) 
-    .then((hash) => {
-      user.password = hash;
-      next();
-    })
-    .catch((err) => next(err));
-}); 
+})
 
 module.exports = mongoose.models.User || mongoose.model('User', UserSchema);

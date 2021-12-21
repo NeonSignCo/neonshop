@@ -3,14 +3,19 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import CustomLink from "../components/CustomLink";
 import LoadingBtn from "../components/LoadingBtn";
-import { ERROR, NOT_LOGGED_IN_EVALUATED, SUCCESS, useGlobalContext } from "../context/GlobalContext";
+import {
+  ERROR,
+  NOT_LOGGED_IN_EVALUATED,
+  SUCCESS,
+  useGlobalContext,
+} from "../context/GlobalContext";
 import Axios from "../utils/Axios";
 import getLoggedInUser from "../utils/getLoggedInUser";
 
-const SignUp = () => { 
-    const Router = useRouter();
-  const [loading, setLoading] = useState(false);  
-    const [, setGlobalState] = useGlobalContext();
+const SignUp = () => {
+  const Router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [, setGlobalState] = useGlobalContext();
   const [state, setState] = useState({
     firstName: "",
     lastName: "",
@@ -26,28 +31,36 @@ const SignUp = () => {
 
   const signUp = async (e) => {
     try {
-        e.preventDefault();
-        
-        // see if passwords match 
-        if (state.password !== state.confirmPassword) return setState(state => ({ ...state, error: 'Passwords do not match.' }));
+      e.preventDefault();
+
+      // see if passwords match
+      if (state.password !== state.confirmPassword)
+        return setState((state) => ({
+          ...state,
+          error: "Passwords do not match.",
+        }));
 
       setLoading(true);
       const res = await Axios.post("/users/register", state);
-        setGlobalState((state) => ({
-          ...state,
-          auth: { ...state.auth, user: res.data.user },
-          alert: { ...state.alert, show: true, text: res.data.message, type: SUCCESS, timeout: 3000 },
-        }));
-        setLoading(false); 
-        Router.push('/account')
+      setGlobalState((state) => ({
+        ...state,
+        auth: { ...state.auth, user: res.data.user },
+        alert: {
+          ...state.alert,
+          show: true,
+          text: res.data.message,
+          type: SUCCESS,
+          timeout: 3000,
+        },
+      }));
+      setLoading(false);
+      Router.push("/account");
     } catch (error) {
       setLoading(false);
       const text =
         error.response?.status === 429
           ? error.response.data
-          : error.response.data?.errorMessage ||
-            error.message ||
-            "Network Error";
+          : error.response.data?.message || error.message || "Network Error";
 
       setGlobalState((state) => ({
         ...state,
@@ -230,7 +243,6 @@ const SignUp = () => {
 
 export default SignUp;
 
-
 export const getServerSideProps = async ({ req }) => {
   let user = NOT_LOGGED_IN_EVALUATED;
   try {
@@ -253,8 +265,9 @@ export const getServerSideProps = async ({ req }) => {
     };
   } catch (error) {
     return {
-      props: {
-        user,
+      redirect: {
+        destination: "/login",
+        permanent: false,
       },
     };
   }

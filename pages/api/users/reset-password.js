@@ -1,6 +1,6 @@
 import dbConnect from "../../../server/connectDb";
-import { getMe } from "../../../server/handlers/users";
-import { authenticate } from "../../../server/middleware/authenticate";
+import { resetPassword } from "../../../server/handlers/users";
+
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -8,9 +8,8 @@ export default async function handler(req, res) {
   await dbConnect();
 
   switch (method) {
-    case "GET":
-      await authenticate(req, res);
-      return getMe(req, res);
+    case "POST":
+      return resetPassword(req, res);
     default:
       res.status(404).json({ status: "fail", message: "resource not found" });
       break;
