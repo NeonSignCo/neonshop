@@ -17,7 +17,7 @@ const Container = ({ children }) => {
     return (
       <>
         <div
-          className={`flex flex-col justify-between  ${
+          className={`flex flex-col justify-between overflow-hidden ${
             state.modal.show
               ? "w-screen h-screen fixed"
               : state.showCart

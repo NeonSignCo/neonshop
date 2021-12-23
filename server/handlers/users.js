@@ -45,7 +45,8 @@ export const register = catchASync(async (req, res) => {
     userName,
     email,
     password: encryptedPassword,
-    photo,
+    photo, 
+    role: 'USER'
   });
  
   const session = await initSession(user._id);
@@ -130,7 +131,7 @@ export const getMe = catchASync(async (req, res) => {
       { password: 0, _id: 0 }
     ); 
 
-  if(!user) throw new AppError('not logged in')
+  if(!user) throw new AppError(400, 'not logged in')
  
   res.json({
     status: "success",
@@ -215,14 +216,15 @@ export const getAllUsers =  catchASync(async (req, res) => {
   if (!limit)
     throw new AppError(400, "invalid limit query. Limit must me a number");
 
-  // cache data for 1 hour 
+
   const users = await User.find().skip(skip).limit(limit);
     
   return res.json({
       status: "success",
       message: "successfully retrieved all users data",
       page,
-      limit,
+    limit, 
+      results: users.length,
       users
     });
 

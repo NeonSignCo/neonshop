@@ -10,7 +10,7 @@ const Alert = () => {
     const [state, setState] = useGlobalContext(); 
 
     useEffect(() => {
-       const timer =  setTimeout(() => setState(state => ({ ...state, alert: { ...state.alert, show: false } })), state.alert.timeout || 5000)
+       const timer =  setTimeout(() => setState(state => ({ ...state, alert: { ...state.alert, show: false, timeout: 5000 } })), state.alert.timeout || 5000)
         
 
         return () => clearTimeout(timer);

@@ -110,11 +110,11 @@ const Product = ({ product }) => {
       <div className="px-5 lg:px-20 mb-4">
         <BreadCrumb />
       </div>
-      <div className="px-5 lg:px-20 grid grid-cols-1 md:grid-cols-2 gap-7 ">
+      <div className="px-5 lg:px-20 grid grid-cols-1 md:grid-cols-2 gap-7">
         <img
           src={product.image}
           alt={product.name || "product name"}
-          className="w-full object-cover md:sticky top-16"
+          className="w-full object-cover  md:sticky top-16"
         />
         <div className="grid gap-5 place-content-start">
           <h1 className="text-3xl font-semibold uppercase">{product.name}</h1>

@@ -34,4 +34,6 @@ SessionSchema.statics.genToken = () => new Promise(async (resolve, reject) => {
   }
 })
 
-module.exports = mongoose.models.Session || mongoose.model('Session', SessionSchema);
+const Session = mongoose.models.Session || mongoose.model('Session', SessionSchema);
+
+export default Session;

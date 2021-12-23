@@ -25,4 +25,7 @@ TokenSchema.statics.genToken = () =>
     }
   });
 
-module.exports = mongoose.models.Token || mongoose.model("Token", TokenSchema);
+const Token = mongoose.models.Token || mongoose.model("Token", TokenSchema);
+
+
+export default Token;

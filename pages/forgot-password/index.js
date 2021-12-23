@@ -7,18 +7,19 @@ const ForgotPassword = () => {
   const [, setGlobalState] = useGlobalContext();
   const [state, setState] = useState({
     loading: false,
-    email: "",
+    email: "", 
+    successMessage: ''
   });
 
   const resetPassword = async (e) => {
     try {
       e.preventDefault();
       
-      setState((state) => ({ ...state, loading: true }));
+      setState((state) => ({ ...state, loading: true, successMessage: '' }));
 
       const res = await Axios.post("mail/forgot-password", {email: state.email});
 
-      setState((state) => ({ ...state, loading: false, email: ''}));
+      setState((state) => ({ ...state, loading: false, email: '', successMessage: 'Check your email to get password reset link'}));
       setGlobalState((state) => ({
         ...state,
         alert: {
@@ -30,7 +31,6 @@ const ForgotPassword = () => {
         },
       }));
     } catch (error) { 
-      console.log(error)
       const text =
         error.response?.status === 429
           ? error.response.data
@@ -68,9 +68,9 @@ const ForgotPassword = () => {
             }
             className="p-2 bg-gray-200"
             required
-          />
-        </div>
-
+          /> 
+        </div>  
+          {state.successMessage && <p className="text-green-500">{state.successMessage}</p> }
         <LoadingBtn
           loading={state.loading}
           className="py-2 px-4 bg-gray-800 text-white font-semibold max-w-max capitalize"

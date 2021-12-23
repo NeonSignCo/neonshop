@@ -5,13 +5,17 @@ import MobileDropDown from "./MobileDropDown"
 const MobileMenu = ({closeMenu}) => {
     return (
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="bg-gray-800 lg:hidden text-lg absolute w-full uppercase"
+        initial={{ x: "100%" }}
+        animate={{ x: 0, transition: { duration: 0.2 } }}
+        exit={{ x: "100%", transition: { duration: 0.2 } }}
+        className="bg-gray-900 lg:hidden text-lg absolute w-full uppercase"
       >
         <div className="py-5 px-5 flex flex-col gap-3 overflow-auto h-[calc(100vh-60px)]">
-          <CustomLink href="/custom-neon-sign" text="design your neon" onClick={closeMenu}/>
+          <CustomLink
+            href="/custom-neon-sign"
+            text="design your neon"
+            onClick={closeMenu}
+          />
           <MobileDropDown
             closeMenu={closeMenu}
             title="shop neons"
@@ -19,9 +23,9 @@ const MobileMenu = ({closeMenu}) => {
               {
                 title: "explore",
                 links: [
-                  {link: '/custom-neon-sign', text: "build your own" },
+                  { link: "/custom-neon-sign", text: "build your own" },
                   { text: "inspiration" },
-                  {link: '/shop', text: "shop all" },
+                  { link: "/shop", text: "shop all" },
                 ],
               },
               {
@@ -59,8 +63,8 @@ const MobileMenu = ({closeMenu}) => {
               },
             ]}
           />
-          <CustomLink href="/about" text="about" onClick={closeMenu}/>
-          <CustomLink href="/contact" text="contact" onClick={closeMenu}/>
+          <CustomLink href="/about" text="about" onClick={closeMenu} />
+          <CustomLink href="/contact" text="contact" onClick={closeMenu} />
         </div>
       </motion.div>
     );
