@@ -12,6 +12,11 @@ const catchASync = (fn) => (req, res) =>
         message: Object.values(err.errors)[0].message,
       });
 
+    if(err && err.code === 11000) return res.status(400).json({
+        status: "Fail",
+        message: 'document with same name already exists',
+      });
+    
     const code = err.code || 500;
     const status =
       code === 400

@@ -252,11 +252,13 @@ export const resetPassword = catchASync(async (req, res) => {
 
   const encryptedPassword = await User.encryptPassword(password);
 
-  await User.findOneAndUpdate(
+  const existingUsder = await User.findOneAndUpdate(
     { _id: existingToken.userId },
     { $set: { password: encryptedPassword } },
     { new: true }
   );
+
+  if (!existingUser) throw new AppError(404, "user not found");  
 
   // delete the token
   await existingToken.delete();

@@ -2,7 +2,7 @@
 import Category from "../models/category";
 import AppError from "../utils/AppError";
 import catchASync from "../utils/catchASync";
-
+import mongoose from 'mongoose';
 
 // @route       POST /api/categories
 // @purpose     Add product cateogry
@@ -22,7 +22,8 @@ export const addCategory = catchASync(async (req, res) => {
 
     return res.json({
     status: "success",
-    category: newCategory
+      category: newCategory, 
+    message: 'category added'
   });
 });
 
@@ -53,3 +54,44 @@ export const getAllCategories =  catchASync(async (req, res) => {
     });
 
 }) 
+
+
+// @route       PATCH /api/categories/:id
+// @purpose     Update category
+// @access      Admin
+export const updateCategory = catchASync(async (req, res) => {
+  const { name, description} = req.body; 
+  const id = req.query?.id; 
+
+  if (!mongoose.Types.ObjectId.isValid(id)) throw new AppError(400, 'not a valid id');
+
+  const category = await Category.findByIdAndUpdate(id, { $set: { name, description } }, { new: true, runValidators: true });
+
+  if (category === null) throw new AppError(404, "no such category");
+  
+  return res.json({
+    status: "success",
+    message: "category updated successfully",
+    category,
+  });
+});
+ 
+// @route       DELETE /api/categories/:id
+// @purpose     Delete category
+// @access      Admin
+export const deleteCategory = catchASync(async (req, res) => {
+
+  const id = req.query?.id; 
+  if (!mongoose.Types.ObjectId.isValid(id)) throw new AppError(400, 'not a valid id');
+
+  const category = await Category.findByIdAndDelete(id);
+
+  if (category === null) throw new AppError(404, "no such category");
+  
+  return res.json({
+    status: "success",
+    message: "category deleted",
+    category,
+  });
+});
+ 

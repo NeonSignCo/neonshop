@@ -3,7 +3,8 @@ import { FaPencilAlt, FaTrash } from 'react-icons/fa';
 import { useAdminContext } from '../../../../pages/admin'
 import Axios from '../../../../utils/Axios';
 import LoadingBtn from '../../../LoadingBtn';
-import { SUCCESS, useGlobalContext } from '../../../../context/GlobalContext';
+import { ERROR, SUCCESS, useGlobalContext } from '../../../../context/GlobalContext';
+import uploadimage from '../../../../utils/uploadImage';
 
 const AddNewProductSection = () => {
   const [, setGlobalState] = useGlobalContext()
@@ -41,22 +42,30 @@ const AddNewProductSection = () => {
                  })); 
 
           setLoading(true)
-          const data = new FormData(); 
-          data.append('name', state.name); 
-          data.append('description', state.description); 
-          data.append('category', state.category); 
-          data.append('image', state.image); 
-          const sizes = JSON.parse(JSON.stringify(state.sizes));
-          sizes.forEach((_, i) => delete sizes[i].key)
-          data.append('sizes', JSON.stringify(sizes)); 
-              
+          
+          
+
+          // save image to cloudinary
+          const imgData = await uploadimage(state.image); 
+
+          // save product data
+          const data = {
+            name: state.name,
+            description: state.description,
+            category: state.category,
+            sizes: state.sizes, 
+            image: imgData.secure_url
+          };
           const res = await Axios.post('products', data); 
+
+
             setLoading(false);
             setAdminState((state) => ({
               ...state,
               products: [res.data.product,...adminState.products],
             }));
-          setGlobalState(state => ({ ...state, alert: { ...state.alert, show: true, text: res.data.message, type: SUCCESS, timeout: 3000 } }));
+          setGlobalState(state => ({ ...state, alert: { ...state.alert, show: true, text: res.data.message, type: SUCCESS, timeout: 3000 } })); 
+
         } catch (error) { 
           setLoading(false);
             setGlobalState((state) => ({
@@ -65,13 +74,14 @@ const AddNewProductSection = () => {
                 ...state.alert,
                 show: true, 
                 text: error.response?.data?.message || error.message || 'Network Error',
-                type: SUCCESS,
+                type: ERROR,
                 timeout: 3000,
               },
             }));
         }
     }
 
+  
   const inputChange = (e) => setState(state => ({ ...state, [e.target.name]: e.target.value }));
   
   const addSize = () => {
@@ -112,7 +122,7 @@ const AddNewProductSection = () => {
       <div className="py-5 pr-2 md:p-10 w-full">
         <form
           onSubmit={addProduct}
-          className="grid gap-5 p-2 border bg-white w-full mx-auto md:max-w-[700px]"
+          className="grid gap-5 p-2 border bg-white w-full"
         >
           <div className="grid gap-2">
             <label htmlFor="name" className="capitalize font-semibold">
@@ -154,7 +164,7 @@ const AddNewProductSection = () => {
               name="image"
               accept="image/*"
               onChange={(e) =>
-                setState((state) => ({ ...state, image: e.target.files[0] }))
+               setState(state => ({...state, image: e.target.files[0]}))
               }
               required
             />

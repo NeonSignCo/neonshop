@@ -2,7 +2,6 @@ import Product from "../models/product";
 import AppError from "../utils/AppError";
 import catchASync from "../utils/catchASync";
 import mongoose from 'mongoose';
-import formidable from 'formidable-serverless';
 import fs from 'fs';
 
 // @route       GET /api/products
@@ -47,32 +46,39 @@ export const getAllProducts = catchASync(async (req, res) => {
 // @purpose     Upload product
 // @access      Admin
 export const uploadProduct = catchASync(async (req, res) => {
-  const uploadDir = "public/img/products";
 
-  if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
-  const maxFileSize = 5; //mb
+  const { name, sizes, description, category, image } = req.body; 
 
-  const form = new formidable.IncomingForm({
-    maxFields: 6,
-    maxFilesSize: maxFileSize * 1024 * 1024,
-    uploadDir,
-    keepExtensions : true
-  }); 
+  if (!name) throw new AppError(400, 'name is required'); 
+  if (!sizes) throw new AppError(400, 'sizes is required'); 
+  if (!description) throw new AppError(400, ' description is required'); 
+  if (!category) throw new AppError(400, 'category is required'); 
 
-  form.parse(req, async (error, fields, files) => {
-    if (error) {
-      console.log(error); 
-      return res.status(400).json({ status: 'fail', message: error.message }); 
-    }
-    fields.image = files.image.path.replace('public', '');
-    if (fields.sizes) fields.sizes = JSON.parse(fields.sizes);
-
-    const product = await Product.create(fields);
-
+  const product = await Product.create({ name, sizes, description, category, image }); 
+   
     return res.json({
       status: 'success', 
       message: "product uploaded successfully", 
       product
     })
   })
-}) 
+ 
+
+// @route       PATCH /api/products/:id
+// @purpose     Upload product
+// @access      Admin
+export const updateProduct = catchASync(async (req, res) => {
+  const { name, sizes, description, category, image } = req.body; 
+  const id = req.query?.id; 
+
+  if (!mongoose.Types.ObjectId.isValid(id)) throw new AppError(400, 'not a valid id');
+
+  const product = await Product.findByIdAndUpdate(id, { $set: { name, sizes, description, category, image } }, { new: true, runValidators: true });
+
+  return res.json({
+    status: "success",
+    message: "product updated successfully",
+    product,
+  });
+});
+ 

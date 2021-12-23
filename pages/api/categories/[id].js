@@ -1,5 +1,5 @@
 import dbConnect from "../../../server/connectDb";
-import { getAllProducts, uploadProduct } from "../../../server/handlers/products";
+import { updateCategory, deleteCategory} from "../../../server/handlers/category";
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -7,12 +7,12 @@ export default async function handler(req, res) {
   await dbConnect();
 
   switch (method) {
-    case "GET":
-          return getAllProducts(req, res);    
-      case "POST":  
-          return uploadProduct(req, res);
+    case "PATCH":
+      return updateCategory(req, res);
+    case "DELETE":
+      return deleteCategory(req, res);
     default:
       res.status(404).json({ status: "fail", message: "resource not found" });
-      break; 
+      break;
   }
 }

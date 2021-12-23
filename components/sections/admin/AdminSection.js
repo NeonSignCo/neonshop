@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { ADD_NEW_PRODUCT, CUSTOMERS, DASHBOARD, ORDERS, PRODUCTS, REVIEWS, useAdminContext } from "../../../pages/admin";
+import { ADD_NEW_PRODUCT, CATEGORIES, CUSTOMERS, DASHBOARD, ORDERS, PRODUCTS, REVIEWS, useAdminContext } from "../../../pages/admin";
 import AdminHeader from "./AdminHeader"
 import Sidebar from "./Sidebar"
 
@@ -10,7 +10,7 @@ const ProductSection = dynamic(() => import('./sections/ProductSection'));
 const CustomerSection = dynamic(() => import('./sections/CustomerSection'));
 const ReviewSection = dynamic(() => import('./sections/ReviewSection'));
 const AddNewProductSection = dynamic(() => import('./sections/AddNewProductSection'));
-
+const CategorySection = dynamic(() => import('./sections/CategorySection'));
 const AdminSection = () => {
     const [state] = useAdminContext();
     return (
@@ -27,9 +27,11 @@ const AdminSection = () => {
           ) : state.activeSection === CUSTOMERS ? (
             <CustomerSection />
           ) : state.activeSection === ADD_NEW_PRODUCT ? (
-            <AddNewProductSection/>
+            <AddNewProductSection />
+          ) : state.activeSection === REVIEWS ? (
+            <ReviewSection />
           ) : (
-            state.activeSection === REVIEWS && <ReviewSection />
+            state.activeSection === CATEGORIES && <CategorySection />
           )}
         </div>
       </div>

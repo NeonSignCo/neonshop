@@ -1,7 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
-import { FaArrowLeft, FaBoxOpen, FaChevronDown, FaComments, FaDollarSign, FaEdit, FaRegEdit, FaUsers } from "react-icons/fa"
-import { ADD_NEW_PRODUCT, CUSTOMERS, DASHBOARD, ORDERS, PRODUCTS, REVIEWS, useAdminContext } from "../../../pages/admin";
+import { FaArrowLeft, FaBoxOpen, FaComments, FaDollarSign, FaEdit, FaFolderOpen, FaUsers } from "react-icons/fa"
+import { ADD_NEW_PRODUCT, CATEGORIES, CUSTOMERS, DASHBOARD, ORDERS, PRODUCTS, REVIEWS, useAdminContext } from "../../../pages/admin";
 
 const Sidebar = () => { 
     return (
@@ -65,6 +64,9 @@ const Desktop = () => {
           </Item>
           <Item text="add new product" section={ADD_NEW_PRODUCT}>
             <FaEdit className="w-5" />
+          </Item>
+          <Item text="categories" section={CATEGORIES}>
+            <FaFolderOpen className="w-5" />
           </Item>
           <Item text="reviews" section={REVIEWS}>
             <FaComments className="w-5" />
@@ -134,6 +136,9 @@ const Mobile = () => {
         </Item>
         <Item text="add new product" section={ADD_NEW_PRODUCT}>
           <FaEdit className="w-5" />
+        </Item>
+        <Item text="categories" section={CATEGORIES}>
+          <FaFolderOpen className="w-5" />
         </Item>
         <Item text="reviews" section={REVIEWS}>
           <FaComments className="w-5" />

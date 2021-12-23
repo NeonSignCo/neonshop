@@ -16,7 +16,7 @@ export const CUSTOMERS = 'CUSTOMERS';
 export const PRODUCTS = 'PRODUCTS';  
 export const ADD_NEW_PRODUCT = 'ADD_NEW_PRODUCT';
 export const REVIEWS = 'REVIEWS';
-
+export const CATEGORIES = 'CATEGORIES';
 
 const Admin = ({orders, products, categories}) => {
     
@@ -24,7 +24,7 @@ const Admin = ({orders, products, categories}) => {
       sidebar: {
         expand: true, 
       }, 
-      activeSection: ADD_NEW_PRODUCT, 
+      activeSection: CATEGORIES, 
       orders, 
       products, 
       categories
