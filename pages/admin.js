@@ -24,7 +24,7 @@ const Admin = ({orders, products, categories}) => {
       sidebar: {
         expand: true, 
       }, 
-      activeSection: CATEGORIES, 
+      activeSection: ADD_NEW_PRODUCT, 
       orders, 
       products, 
       categories

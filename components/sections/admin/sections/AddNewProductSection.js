@@ -45,9 +45,9 @@ const AddNewProductSection = () => {
           
           
 
-          // save image to cloudinary
-          const imgData = await uploadimage(state.image); 
-
+          // save image to cloudinary in neonshop/img/products directory
+          const imgData = await uploadimage(state.image, 'neonshop-img-products'); 
+ 
           // save product data
           const data = {
             name: state.name,
@@ -66,7 +66,8 @@ const AddNewProductSection = () => {
             }));
           setGlobalState(state => ({ ...state, alert: { ...state.alert, show: true, text: res.data.message, type: SUCCESS, timeout: 3000 } })); 
 
-        } catch (error) { 
+        } catch (error) {  
+          console.log(error)
           setLoading(false);
             setGlobalState((state) => ({
               ...state,
