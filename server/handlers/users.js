@@ -16,7 +16,7 @@ import ShippingAddress from '../models/shippingAddress';
 // @route       POST /api/users/register 
 // @purpose     Register User
 // @access      public
-export const register = catchASync(async (req, res) => {
+export const register = catchASync(async (req, res, next) => {
   const {
     email,
     password,
