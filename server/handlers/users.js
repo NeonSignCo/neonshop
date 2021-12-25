@@ -131,7 +131,7 @@ export const deleteMe = catchASync(async (req, res) => {
   const { user } = req.user;
   const { password } = req.body;
 
-  if (!user) throw new AppError(401, "not logged in");
+  if (!user) throw new AppError(401, "not logged in 1");
   if (typeof password !== "string") {
     throw new AppError(400, "invalid password");
   }
@@ -158,7 +158,7 @@ export const deleteMe = catchASync(async (req, res) => {
 // @access      User
 export const logOut = catchASync(async (req, res) => {
 
-  if (!req.user) throw new AppError(401, "not logged in");
+  if (!req.user) throw new AppError(401, "not logged in 2");
 
   // remove auth cookie
   removeToken(res, 'token');
