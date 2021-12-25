@@ -78,7 +78,7 @@ export const login = catchASync(async (req, res) => {
   if (!email) throw new AppError(400, "email is required");
   if (!isEmail(email)) throw new AppError(400, "not a valid email address");
   if (!password) throw new AppError(400, "password is required");
-
+  
   if (typeof password !== "string")
     throw new AppError(400, "password must be a string");
 
@@ -90,7 +90,7 @@ export const login = catchASync(async (req, res) => {
     ]);
 
   if (!user) throw new AppError(404, "User not found");
-
+    
   const passwordValidated = await bcrypt.compare(password, user.password);
   if (!passwordValidated) {
     throw new AppError(400, "Incorrect password");
