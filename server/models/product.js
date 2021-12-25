@@ -20,6 +20,33 @@ const SizeSchema = new mongoose.Schema({
   },
 });
 
+const ImageSchema = new mongoose.Schema({
+  url: {
+    type: String,
+    validate: {
+      validator: (val) => typeof val === "string",
+      message: "url must be stirng",
+    },
+    required: [true, "url is required"],
+  },
+  version: {
+    type: Number,
+    validate: {
+      validator: (val) => typeof val === "number",
+      message: "version must be number",
+    },
+    required: [true, "version is required"],
+  },
+  public_id: {
+    type: String,
+    validate: {
+      validator: (val) => typeof val === "string",
+      message: "public_id must be stirng",
+    },
+    required: [true, "public_id is required"],
+  },
+});
+
 const ProductSchema = new mongoose.Schema(
   {
     name: {
@@ -32,11 +59,9 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       required: [true, "description is required"],
     },
-    image: {
-      type: String,
-    },
+    image: ImageSchema,
     category: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: mongoose.Schema.ObjectId,
       required: [true, "product category is required"],
       ref: "category",
     },

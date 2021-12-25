@@ -9,12 +9,12 @@ import BreadCrumb from "../../components/BreadCrumb";
 import CustomLink from "../../components/CustomLink";
 import FollowSection from "../../components/sections/FollowSection";
 import NewsLetterSection from "../../components/sections/NewsLetterSection";
-import connectDb from "../../server/connectDb";
 import Category from "../../server/models/category";
 import Product from '../../server/models/product';
 import Axios from "../../utils/Axios";
 import { ERROR, useGlobalContext } from '../../context/GlobalContext';
 import LoadingBtn from "../../components/LoadingBtn";
+import connectDb from "../../server/utils/connectDb";
 
 // variables 
 const LTH = 'LTH'; 
@@ -192,7 +192,7 @@ const ProductItem = ({ product }) => {
       href={`/shop/category-1/${product.slug}`}
       className="grid gap-1"
     >
-      <img src={product.image} alt={product.name} />
+      <img src={product.image.url} alt={product.name} />
       <h3 className="text-lg sm:text-xl font-semibold uppercase">
         {product.name}
       </h3>
@@ -278,23 +278,25 @@ const ProductNavigation = ({ productsCount, state, setState }) => {
 
 export const getStaticProps = async () => {
   try {
-    await connectDb(); 
-    const categories = await Category.find(); 
-    const products = await Product.find().sort({createdAt: -1}).limit(productsPerPage); 
-    const numOfProducts = await Product.countDocuments();
+    await connectDb();  
+    const categories = await Category.find().lean(); 
+    const products = await Product.find().sort({createdAt: -1}).limit(productsPerPage).lean(); 
+    const numOfProducts = await Product.countDocuments().lean();
 
     return {
       props: {
         categories: JSON.parse(JSON.stringify(categories)),
         products: JSON.parse(JSON.stringify(products)), 
         numOfProducts
-      },
-      // revalidate: 60
+      },    
+      revalidate: 10
     };
   } catch (error) {
-    return {
-      props: {},
-      // revalidate: 60,
-    };
+     return {
+       props: {
+         error: { code: 500, message: "this is the error" },
+       },
+       revalidate: 10,
+     };
   }
 }

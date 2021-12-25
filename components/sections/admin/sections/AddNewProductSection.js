@@ -4,18 +4,19 @@ import { useAdminContext } from '../../../../pages/admin'
 import Axios from '../../../../utils/Axios';
 import LoadingBtn from '../../../LoadingBtn';
 import { ERROR, SUCCESS, useGlobalContext } from '../../../../context/GlobalContext';
-import uploadimage from '../../../../utils/uploadImage';
+import uid from 'uniqid';
 
-const AddNewProductSection = () => {
+const AddNewProductSection = ({product, className, edit= false, close}) => {
   const [, setGlobalState] = useGlobalContext()
   const [adminState, setAdminState] = useAdminContext();
   const [loading, setLoading] = useState(false);
     const [state, setState] = useState({
-      name: "",
+      name: product?.name || "",
       image: "",
-      description: "",
-      category: "", 
-      sizes: [],
+      previewImage: product?.image?.url || '',
+      description: product?.description || "",
+      category: product?.category || "", 
+      sizes: product?.sizes || [],
       size: {
         info: "",
         price: "",
@@ -29,7 +30,7 @@ const AddNewProductSection = () => {
       }
     });
 
-    const addProduct = async (e) => {
+    const addOrUpdateProduct = async (e) => {
         try {
           e.preventDefault();
                if (state.sizes.length === 0)
@@ -42,32 +43,55 @@ const AddNewProductSection = () => {
                  })); 
 
           setLoading(true)
-          
-          
-
-          // save image to cloudinary in neonshop/img/products directory
-          const imgData = await uploadimage(state.image, 'neonshop-img-products'); 
- 
-          // save product data
+          const sizes = JSON.parse(JSON.stringify(state.sizes)); 
+          for (let key in sizes) delete sizes[key]._id; 
           const data = {
             name: state.name,
             description: state.description,
             category: state.category,
-            sizes: state.sizes, 
-            image: imgData.secure_url
+            sizes: JSON.stringify(sizes),
+            image: state.image, 
+
           };
-          const res = await Axios.post('products', data); 
+          const formData = new FormData();
+          for (let key in data) formData.append(key, data[key]);
+
+          let res;
+          if (edit) {
+            res =  await Axios.patch(`products/${product._id}`, formData)
+          } else {
+            res = await Axios.post("products", formData); 
+          }
 
 
             setLoading(false);
             setAdminState((state) => ({
               ...state,
-              products: [res.data.product,...adminState.products],
+              products: edit
+                ? adminState.products.map((item) =>
+                    item._id === product._id ? res.data.product : item
+                  )
+                : [res.data.product, ...adminState.products],
             }));
+          
           setGlobalState(state => ({ ...state, alert: { ...state.alert, show: true, text: res.data.message, type: SUCCESS, timeout: 3000 } })); 
-
+         
+          // clear form
+          setState((state) => ({
+            ...state,
+            name: '', 
+            image: '', 
+            previewImage: "", 
+            description: '', 
+            category: '',
+            sizes: [],
+            
+            
+          }));
+         
+          // close this component after task completed when in edit mode
+          if (edit) close();
         } catch (error) {  
-          console.log(error)
           setLoading(false);
             setGlobalState((state) => ({
               ...state,
@@ -105,10 +129,7 @@ const AddNewProductSection = () => {
       sizes: [
         ...state.sizes,
         {
-          key:
-            state.sizes.length === 0
-              ? 0
-              : state.sizes[state.sizes.length - 1].key + 1,
+          _id: uid(),
           info: state.size.info,
           price: state.size.price,
         },
@@ -120,9 +141,9 @@ const AddNewProductSection = () => {
 
 
     return (
-      <div className="py-5 pr-2 md:p-10 w-full">
+      <div className={`py-5 pr-2 md:p-10 w-full ${className}`}>
         <form
-          onSubmit={addProduct}
+          onSubmit={addOrUpdateProduct}
           className="grid gap-5 p-2 border bg-white w-full"
         >
           <div className="grid gap-2">
@@ -155,21 +176,52 @@ const AddNewProductSection = () => {
               required
             ></textarea>
           </div>
-          <div className="grid gap-2">
-            <label htmlFor="image" className="capitalize font-semibold">
-              image
-            </label>
-            <input
-              type="file"
-              id="image"
-              name="image"
-              accept="image/*"
-              onChange={(e) =>
-               setState(state => ({...state, image: e.target.files[0]}))
-              }
-              required
-            />
-          </div>
+          {edit && product?.image?.url ? (
+            <div className="grid gap-2">
+              <p className="capitalize font-semibold">image</p>
+              <div className="flex gap-2 items-end">
+                <img
+                  src={state.previewImage}
+                  alt={product?.name}
+                  className="h-20"
+                />
+                <label htmlFor='image' className="bg-gray-800 text-white p-2 capitalize">
+                  change
+                </label>
+                <input
+                  type="file"
+                  id="image"
+                  name="image"
+                  accept="image/*" 
+                  className='h-0 w-0' 
+                  onChange={(e) =>
+                    setState((state) => ({
+                      ...state,
+                      image: e.target.files[0], 
+                      previewImage: URL.createObjectURL(e.target.files[0]), 
+
+                    }))
+                  }
+                />
+              </div>
+            </div>
+          ) : (
+            <div className="grid gap-2">
+              <label htmlFor="image" className="capitalize font-semibold">
+                image
+              </label>
+              <input
+                type="file"
+                id="image"
+                name="image"
+                accept="image/*"
+                onChange={(e) =>
+                  setState((state) => ({ ...state, image: e.target.files[0] }))
+                }
+                required
+              />
+            </div>
+          )}
           <div className="grid gap-2">
             <label htmlFor="name" className="capitalize font-semibold">
               category
@@ -271,17 +323,27 @@ const AddNewProductSection = () => {
             {state.sizes.length > 0 && (
               <div className="grid gap-2 border p-2 border-gray-300">
                 {state.sizes.map((size) => (
-                  <SizeItem key={size.key} size={size} setState={setState} />
+                  <SizeItem key={size._id} size={size} setState={setState} />
                 ))}
               </div>
             )}
           </div>
-          <LoadingBtn
-            loading={loading}
-            className="py-2 px-5 bg-gray-800 text-white max-w-max capitalize"
-          >
-            add product
-          </LoadingBtn>
+          <div className="flex gap-3">
+            <LoadingBtn
+              loading={loading}
+              className="py-2 px-5 bg-gray-800 text-white max-w-max capitalize"
+            >
+              {edit ? "update product" : "add product"}
+            </LoadingBtn>
+            {edit && (
+              <button
+                className="py-2 px-5 border border-gray-800 transition hover:bg-gray-800 hover:text-white max-w-max capitalize"
+                onClick={close}
+              >
+                cancel
+              </button>
+            )}
+          </div>
         </form>
       </div>
     );
@@ -314,8 +376,8 @@ const SizeItem = ({size, setState}) => {
       setState((state) => ({
         ...state, 
         sizes: state.sizes.map((item) =>
-          item.key === size.key
-            ? { key: size.key, info: data.newInfo, price: data.newPrice }
+          item._id === size._id
+            ? { ...size, info: data.newInfo, price: data.newPrice }
             : item
         ),
       }));
@@ -383,7 +445,7 @@ const SizeItem = ({size, setState}) => {
           onClick={() =>
             setState((state) => ({
               ...state,
-              sizes: state.sizes.filter((item) => item.key !== size.key),
+              sizes: state.sizes.filter((item) => item._id !== size._id),
             }))
           }
           title="Delete"

@@ -1,7 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  FaChevronLeft,
-  FaChevronRight,
   FaSearch,
   FaStar,
 } from "react-icons/fa";
@@ -9,18 +7,55 @@ import BreadCrumb from "../../../components/BreadCrumb";
 import CustomLink from "../../../components/CustomLink";
 import FollowSection from "../../../components/sections/FollowSection";
 import NewsLetterSection from "../../../components/sections/NewsLetterSection";
-import { useGlobalContext } from "../../../context/GlobalContext";
+import connectDb from "../../../server/utils/connectDb";
+import Category from '../../../server/models/category'; 
+import Product from '../../../server/models/product'; 
+import { ERROR, useGlobalContext } from "../../../context/GlobalContext";
+import LoadingBtn from "../../../components/LoadingBtn";
+import Axios from "../../../utils/Axios";
 
-const Category = () => {
+
+// variables 
+const LTH = 'LTH'; 
+const HTL = 'HTL'; 
+const ATZ = 'ATZ'; 
+const ZTA = 'ZAT'
+const NTO = 'NTO';
+const OTN = 'OTN';
+
+const CategoryPage = ({category, products}) => {
   const productsCount = 100;
-  const products = [];
-  for (let x = 1; x <= productsCount; x++) products.push(x);
 
   const [state, setState] = useState({
-    startIndex: 1,
-    endIndex: 30,
-    productPerPage: 30,
+    category: '', 
+    sort: NTO,
+    searchText: '',
+    products, 
+    category
   });
+
+
+  const sortItems = (e) => {
+    const val = e.target.value;
+    setState((state) => ({
+      ...state,
+      sort: val,
+      products: state.products.sort((a, b) =>
+        val === OTN
+          ? new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          : val === NTO
+          ? new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          : val === HTL
+          ? b.sizes[0].price - a.sizes[0].price
+          : val === LTH
+          ? a.sizes[0].price - b.sizes[0].price
+          : val === ATZ
+          ? a.name.localeCompare(b.name)
+          : b.name.localeCompare(a.name)
+      ),
+    }));
+  };
+
   return (
     <div>
       <div
@@ -31,14 +66,9 @@ const Category = () => {
         }}
       >
         <h3 className="text-3xl md:text-5xl font-semibold uppercase">
-          category name
+          {category.name}
         </h3>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium
-          dolor ducimus similique tempora quas quia voluptates eveniet minima
-          nemo, consequatur ut inventore amet quidem ipsam assumenda
-          perspiciatis incidunt? Tempora, perferendis?
-        </p>
+        <p>{category.description}</p>
       </div>
       <div className=" py-10 bg-gray-100">
         <div className="px-5 lg:px-20">
@@ -49,41 +79,26 @@ const Category = () => {
             <div className="flex flex-col gap-3 md:flex-row justify-between">
               <div className="flex items-center gap-1">
                 <p>Sort by</p>
-                <select className="capitalize p-1 border border-gray-300">
-                  <option value="featured">featured</option>
-                  <option value="low-to-high">price:low to high</option>
-                  <option value="high-to-low">price:high to low</option>
-                  <option value="a-z">A-Z</option>
-                  <option value="z-a">Z-A</option>
-                  <option value="oldest-to-newest">newest to oldest</option>
-                  <option value="newest-to-oldest">newest to oldest</option>
+                <select
+                  className="capitalize p-1 border border-gray-300"
+                  value={state.sort}
+                  onChange={(e) => sortItems(e)}
+                >
+                  <option value={LTH}>price: low to high</option>
+                  <option value={HTL}>price: high to low</option>
+                  <option value={ATZ}>A-Z</option>
+                  <option value={ZTA}>Z-A</option>
+                  <option value={OTN}>oldenst to newest</option>
+                  <option value={NTO}>newest to oldest</option>
                 </select>
               </div>
             </div>
-            <form className="flex items-center ">
-              <input
-                type="text"
-                className="p-2 border border-gray-300 h-full w-full"
-                placeholder="Search Product  "
-              />
-              <button className="bg-black py-3 px-4 text-white h-full">
-                <FaSearch />
-              </button>
-            </form>
+            <ProductSearch state={state} setState={setState}/>
           </div>
         </div>
         <div className="px-5 lg:px-20 grid grid-cols-2 md:grid-cols-3  gap-x-12 gap-y-16 bg-white mt-4">
-          {products.map(
-            (i) =>
-              i >= state.startIndex &&
-              i <= state.endIndex && <Product i={i} key={i} />
-          )}
+          {state.products.map( product => <ProductItem key={product._id} product={product}/>)}
         </div>
-        <ProductNavigation
-          productsCount={productsCount}
-          state={state}
-          setState={setState}
-        />
       </div>
       <NewsLetterSection />
       <FollowSection />
@@ -91,114 +106,146 @@ const Category = () => {
   );
 };
 
-export default Category;
+export default CategoryPage;
 
-const Product = ({ i }) => {
-  const [globalState] = useGlobalContext();
-  const rating = 4;
-
+const ProductItem = ({ product }) => {
   return (
     <CustomLink
-      href={`/shop/category/product-${i}`}
+      href={`/shop/category-1/${product.slug}`}
       className="grid gap-1"
-      key={i}
     >
-      <img src={`/img/product-images/product-2.jpg`} alt="product" />
+      <img src={product.image.url} alt={product.name} />
       <h3 className="text-lg sm:text-xl font-semibold uppercase">
-        product {i}
+        {product.name}
       </h3>
-      <div className="flex flex-col sm:flex-row gap-1">
-        <div className="flex flex items-center gap-1">
-          {[1, 2, 3, 4, 5].map((i) => (
-            <FaStar
-              key={i}
-              className={i > rating ? "text-gray-400" : "text-black"}
-            />
-          ))}
+      {product.reviews?.length > 0 && (
+        <div className="flex flex-col sm:flex-row  gap-1">
+          <div className="flex flex items-center gap-1">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <FaStar
+                key={i}
+                className={i > i ? "text-gray-400" : "text-black"}
+              />
+            ))}
+          </div>
+          <div>| 10 Reviews</div>
         </div>
-        <span>| 10 Reviews</span>
-      </div>
-      <p className="">$ 300</p>
+      )}
+      <p className="">{product.sizes[0].price}</p>
     </CustomLink>
   );
 };
 
-const ProductNavigation = ({ productsCount, state, setState }) => {
-  const btnCount = Math.ceil(productsCount / state.productPerPage);
-  const btns = [];
-  for (let x = 1; x <= btnCount; x++) btns.push(x);
+
+
+
+const ProductSearch = ({ state, setState }) => {
+  const [, setGlobalState] = useGlobalContext();
+  const [loading, setLoading] = useState(false);
+  const [typed, setTyped] = useState(false);
+  const search = async () => {
+    try {
+      if (!typed) return;
+      setLoading(true);
+      const res = await Axios.get(
+        `products?name=${state.searchText}&&category=${state.category._id}`
+      );
+      
+      setState((state) => ({ ...state, products: res.data.products }));
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      setGlobalState((state) => ({
+        ...state,
+        alert: {
+          show: true,
+          type: ERROR,
+          text:
+            error.response?.data?.message || error.message || "Network Error",
+        },
+      }));
+    }
+  };
+
+  useEffect(() => {
+    const debounce = setTimeout(search, 1000);
+    return () => clearTimeout(debounce);
+  }, [state.searchText]);
 
   return (
-    <div className="flex justify-center gap-1 flex-wrap mt-10">
-      <button
-        className="bg-black h-10 w-10 flex items-center justify-center text-white disabled:bg-gray-500 disabled:cursor-text"
-        disabled={state.startIndex === 1}
-        onClick={() => {
-          setState((state) => ({
-            ...state,
-            startIndex: state.startIndex - state.productPerPage,
-            endIndex: state.endIndex - state.productPerPage,
-          }));
-          window.scroll({ top: 0 });
+    <form className="flex items-center ">
+      <input
+        type="text"
+        className="p-2 border border-gray-300 h-full w-full"
+        placeholder="Search Product  "
+        vaue={state.searchText}
+        onChange={(e) => {
+          setState((state) => ({ ...state, searchText: e.target.value }));
+          setTyped(true);
         }}
+        required
+      />
+      <LoadingBtn
+        loading={loading}
+        className="bg-black py-3 px-4 text-white h-full"
       >
-        <FaChevronLeft />
-      </button>
-      {btns.map((i) => (
-        <button
-          key={i}
-          className="border border-black h-10 w-10 flex items-center justify-center bg-white transition hover:bg-black hover:text-white disabled:bg-black disabled:text-white disabled:cursor-text"
-          disabled={state.endIndex === i * state.productPerPage}
-          onClick={() => {
-            setState((state) => ({
-              ...state,
-              startIndex: (i - 1) * state.productPerPage + 1,
-              endIndex: i * state.productPerPage,
-            }));
-            window.scroll({ top: 0 });
-          }}
-        >
-          {i}
-        </button>
-      ))}
-      <button
-        className="bg-black h-10 w-10 flex items-center justify-center text-white disabled:bg-gray-500 disabled:cursor-text"
-        disabled={state.endIndex >= productsCount}
-        onClick={() => {
-          setState((state) => ({
-            ...state,
-            startIndex: state.endIndex + 1,
-            endIndex: state.endIndex + state.productPerPage,
-          }));
-          window.scroll({ top: 0 });
-        }}
-      >
-        <FaChevronRight />
-      </button>
-    </div>
+        {!loading && <FaSearch />}
+      </LoadingBtn>
+    </form>
   );
 };
 
-export const getStaticProps = () => {
-  return {
-    props: { revalidate: 10 },
-  };
+
+
+
+
+export const getStaticProps = async ({ params }) => { 
+  try {
+    await connectDb();
+    const category = await Category.findOne({ slug: params.category }).lean(); 
+
+    if (!category) return {
+      notFound: true
+    }
+
+    const products = await Product.find({ category: category._id}).lean(); 
+    return {
+      props: {
+        category: JSON.parse(JSON.stringify(category)),
+        products: JSON.parse(JSON.stringify(products)),
+      },
+      revalidate: 10,
+    };
+  } catch (error) { 
+    console.log(error)
+    return {
+      props: {
+        error: { code: 500, message: "server error" },
+      },
+      revalidate: 10,
+    };
+  }
 };
 
-export const getStaticPaths = () => {
-  const categories = [
-    "category-1",
-    "category-2",
-    "category-3",
-    "category-4",
-    "category-5",
-  ];
 
-  const paths = [];
-  for (let x = 0; x < categories.length; x++)
-    paths.push({ params: { category: categories[x] } });
-  return {
-    paths,
-    fallback: "blocking",
-  };
+
+
+
+export const getStaticPaths = async () => {
+  try {
+    const paths = [];
+    await connectDb();
+    const categories = await Category.find().select('slug -_id').lean();
+    categories.forEach((item) => paths.push({ params: { category: item.slug } }));
+  
+    return {
+      paths,
+      fallback: 'blocking', 
+    };
+  } catch (error) {
+    return {
+      paths: [], 
+      fallback: false
+    }; 
+  }
 };

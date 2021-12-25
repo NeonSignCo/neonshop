@@ -26,7 +26,8 @@ export const forgotPassword = catchASync(async (req, res) => {
 
     const newToken = await Token.findOneAndUpdate(
       { userId: existingUser._id },
-      { $set: {userId: existingUser._id, token } }, {new: true, upsert: true}
+      { $set: { userId: existingUser._id, token, expires: Date.now() + 1000 * 60 * 60 * 24 } }, // 1 day limit
+      { new: true, upsert: true }
     );
    
   const text = `Hello ${existingUser.firstName}, visit this link to reset your password: ${req.headers.origin}/forgot-password/${newToken.token}`;

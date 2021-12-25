@@ -33,15 +33,15 @@ const Item = ({ text,value, children, showIcon, section }) => {
   const [, setState] = useAdminContext();
   return (
     <button
-      className="flex justify-between border bg-white rounded overflow-hidden border"
+      className="flex justify-between text-white bg-gray-800 rounded overflow-hidden border"
       onClick={() => setState(state => ({ ...state, activeSection: section }))}  
       title="title"
     > 
-        <div className="p-5 bg-gray-200 text-gray-500 flex items-center justify-center text-2xl md:text-3xl h-full">
+        <div className="p-5 bg-gray-600 text-gray-50 flex items-center justify-center text-2xl md:text-3xl h-full">
           {children}
         </div>
         <div className="flex flex-col justify-center items-end h-full p-2">
-          <p className="capitalize text-lg md:text-xl text-gray-500">{text}</p>
+          <p className="capitalize text-lg md:text-xl text-gray-400 ">{text}</p>
           <div className="flex items-center text-lg md:text-2xl">
             {showIcon && <BsCurrencyDollar />}
             <span>{value}</span>

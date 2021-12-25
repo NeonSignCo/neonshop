@@ -10,7 +10,7 @@ function MyApp ({ Component, pageProps }) {
       <Container>
         <Component {...pageProps} />
       </Container>
-    </GlobalContext>
+    </GlobalContext> 
   );
 }
 

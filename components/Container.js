@@ -27,7 +27,7 @@ const Container = ({ children }) => {
         >
           {route !== "/checkout" && route !== '/admin' && <Nav />}
           <div>
-            <div className="max-w-screen-2xl mx-auto">{children}</div>
+            <div className="max-w-screen-2xl mx-auto">{state.error ? <div className="py-40 text-red-500 text-4xl text-center">{state.error.message}</div> : children}</div>
           </div>
           {route !== "/custom-neon-sign" && route !== '/checkout' &&  route !== '/admin' && <Footer />}
         </div> 

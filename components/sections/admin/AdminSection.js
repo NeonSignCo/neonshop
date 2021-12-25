@@ -6,7 +6,7 @@ import Sidebar from "./Sidebar"
 
 const DashboardSection = dynamic(() => import('./sections/DashboardSection'));
 const OrderSection = dynamic(() => import('./sections/OrderSection'));
-const ProductSection = dynamic(() => import('./sections/ProductSection'));
+const ProductSection = dynamic(() => import('./sections/ProductsSection/ProductSection'));
 const CustomerSection = dynamic(() => import('./sections/CustomerSection'));
 const ReviewSection = dynamic(() => import('./sections/ReviewSection'));
 const AddNewProductSection = dynamic(() => import('./sections/AddNewProductSection'));

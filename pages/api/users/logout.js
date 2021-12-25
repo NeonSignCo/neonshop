@@ -1,18 +1,9 @@
-import dbConnect from "../../../server/connectDb";
+import handle from "../../../server/handlers/handle";
 import { logOut } from "../../../server/handlers/users";
-import { authenticate } from "../../../server/middleware/authenticate";
+import authenticate from "../../../server/middleware/authenticate";
 
-export default async function handler(req, res) {
-  const { method } = req;
 
-  await dbConnect();
+const handler = handle.use(authenticate).put(logOut); 
 
-  switch (method) {
-    case "PUT":
-      await authenticate(req, res);
-      return logOut(req, res);
-    default:
-      res.status(404).json({ status: "fail", message: "resource not found" });
-      break;
-  }
-}
+
+export default handler;

@@ -1,8 +1,9 @@
 import Head from "next/head";
 import { createContext, useContext, useState } from "react"
 import AdminSection from "../components/sections/admin/AdminSection";
-import connectDb from '../server/connectDb';
 import Category from '../server/models/category'
+import Product from "../server/models/product";
+import connectDb from "../server/utils/connectDb";
 
 const Context = createContext(); 
 
@@ -24,7 +25,7 @@ const Admin = ({orders, products, categories}) => {
       sidebar: {
         expand: true, 
       }, 
-      activeSection: ADD_NEW_PRODUCT, 
+      activeSection: PRODUCTS, 
       orders, 
       products, 
       categories
@@ -45,21 +46,16 @@ export default Admin
 
 
 export const getServerSideProps = async () => {
+  let orders = [] 
+  let categories = []; 
+  let products = [];
   try {
-    const orders = [];
-    const products = [];
 
     await connectDb();
-    const categories = await Category.find();
+    categories = await Category.find(); 
+    products = await Product.find()
     for (let x = 1; x <= 50; x++) {
       const randNumber = Math.random();
-      products.push({
-        _id: Math.round(Math.random() * 100000000),
-        name: `product ${x}`,
-        photo: `/img/product-images/product-2.jpg`,
-        price: 400,
-        description: "this is the product description",
-      });
       orders.push({
         _id: Math.round(Math.random() * 100000),
         date: Date.now(),
@@ -81,14 +77,16 @@ export const getServerSideProps = async () => {
     return {
       props: {
         orders,
-        products,
-        categories: JSON.parse(JSON.stringify(categories)),
+        products: JSON.parse(JSON.stringify(products)),
+        categories: JSON.parse(JSON.stringify(categories))
       },
     };
   } catch (error) {
     return {
       props: {
-        
+        orders,
+        categories, 
+        products
       }
     }
   }

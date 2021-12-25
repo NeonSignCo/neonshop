@@ -1,18 +1,27 @@
-import Axios from "./Axios";
+import {v2 as cloudinary} from 'cloudinary';
+import streamifier from 'streamifier';
 
-const uploadImage = (file, preset) => new Promise(async (resolve, reject) => {
+const uploadImage = ({buffer, width = 500, crop = 'scale', format = 'webp', folder= 'neonshop/img'}) => new Promise(async (resolve, reject) => {
     try {
-        const data = new FormData();    
-        data.append("file", file); 
-        data.append(
-          "upload_preset",
-         preset
-        );
-      const res = await Axios.post(
-        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUD_NAME}/image/upload`,
-        data
-        );
-        return resolve(res.data);
+      cloudinary.config({
+        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+        api_key: process.env.CLOUDINARY_API_KEY,
+        api_secret: process.env.CLOUDINARY_API_SECRET,
+      });  
+
+      const stream = cloudinary.uploader.upload_stream(
+        { folder, width, crop, format },
+        (err, result) => {
+          if (result) {
+            resolve(result);
+          } else {
+            reject(err);
+          }
+        }
+      );
+
+      // buffer to readable stream
+      streamifier.createReadStream(buffer).pipe(stream);
     } catch (error) { 
       return reject(error)
     }

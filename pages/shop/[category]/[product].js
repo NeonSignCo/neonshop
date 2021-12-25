@@ -9,14 +9,26 @@ import { AnimatePresence, motion } from "framer-motion";
 import CustomLink from "../../../components/CustomLink";
 import ContactForm from "../../../components/forms/ContactForm";
 import { useRouter } from "next/router";
+import connectDb from "../../../server/utils/connectDb";
+import Product from "../../../server/models/product";
+import Category from "../../../server/models/category";
 
-const Product = ({ product }) => {
-  const productLink = useRouter().asPath;
+
+// variations
+const colors = [
+  { name: "red", hex: "#ff0000" },
+  { name: "green", hex: "#008000" },
+  { name: "blue", hex: "#0000ff" },
+];
+const mountTypes = ['WALL', 'HANGING']
+
+const ProductPage = ({ product }) => {
+  const Router = useRouter();
+  const productLink = Router.asPath;
   const [globalState, setGlobalState] = useGlobalContext();
-
   const [state, setState] = useState({
-    color: { name: "", hex: "" },
-    size: { name: "", shortHand: "", price: product.sizes[0].price },
+    color: { name: '', hex: '' },
+    size: { info: '', price: '' },
     quantity: 1,
     mountType: "",
     errors: {
@@ -32,7 +44,7 @@ const Product = ({ product }) => {
     // check if all options are selected
     if (
       !state.color ||
-      !state.size.name ||
+      !state.size.info ||
       !state.mountType ||
       !state.quantity
     ) {
@@ -112,11 +124,11 @@ const Product = ({ product }) => {
       </div>
       <div className="px-5 lg:px-20 grid grid-cols-1 md:grid-cols-2 gap-7">
         <img
-          src={product.image}
+          src={product.image.url}
           alt={product.name || "product name"}
           className="w-full object-cover  md:sticky top-16"
         />
-        <div className="grid gap-5 place-content-start">
+        <div className="grid gap-5 place-content-star">
           <h1 className="text-3xl font-semibold uppercase">{product.name}</h1>
           <div className="flex items-center gap-1">
             <div className="flex gap-2">
@@ -130,8 +142,8 @@ const Product = ({ product }) => {
             <span>| {product.reviewsCount || 0} reviews</span>
           </div>
           <p className="flex items-center font-semibold text-2xl text-gray-600">
-            <span>$</span>
-            <span>{state.size.price}</span>
+            <span>$</span> 
+            <span>{state.size.price || product.sizes[0].price}</span>
           </p>
           <p>{product.description}</p>
           <div id="color">
@@ -143,7 +155,7 @@ const Product = ({ product }) => {
               )}
             </h3>
             <div className="flex flex-wrap gap-5 items-center">
-              {product.colors.map((color, i) => (
+              {colors.map((color, i) => (
                 <button
                   key={i}
                   className={`grid gap-2 p-3 transition justify-items-center ${
@@ -180,11 +192,7 @@ const Product = ({ product }) => {
               {product.sizes.map((size, i) => (
                 <button
                   key={i}
-                  className={` px-6 py-2 transition uppercase ${
-                    state.size.name === size.name
-                      ? "bg-black text-white"
-                      : "bg-gray-200 "
-                  }`}
+                  className={` px-6 py-2 transition uppercase ${state.size.info === size.info ? 'bg-black text-white': 'bg-gray-200'}`}
                   onClick={() =>
                     setState((options) => ({
                       ...options,
@@ -193,7 +201,7 @@ const Product = ({ product }) => {
                     }))
                   }
                 >
-                  {size.shortHand}
+                  {size.info}
                 </button>
               ))}
             </div>
@@ -207,7 +215,7 @@ const Product = ({ product }) => {
               )}
             </h3>
             <div className="flex flex-wrap gap-5 items-center uppercase">
-              {product.mountTypes.map((mountType, i) => (
+              {mountTypes.map((mountType, i) => (
                 <button
                   key={i}
                   className={` px-6 py-2 transition capitalize ${
@@ -275,7 +283,7 @@ const Product = ({ product }) => {
               </button>
             </div>
           </div>
-          <div>
+          <div className="">
             <QnA title="shipping">
               {product.shippingDescription ||
                 "All our neons are crafted from scratch just for you. Standardorders will normally take 2-4 weeks to be made and get from usto you from proof approval date. Express orders normally take10-15 days to be delivered to you from proof approval date."}
@@ -379,13 +387,13 @@ const Product = ({ product }) => {
   );
 };
 
-export default Product;
+export default ProductPage;
 
 const QnA = ({ title, children }) => {
   const [expand, setExpand] = useState(false);
 
   return (
-    <div className="">
+    <div className=" w-full">
       <button
         className="w-full border-t border-b py-2 border-gray-400 flex items-center justify-between"
         onClick={() => setExpand((bool) => !bool)}
@@ -414,48 +422,54 @@ const QnA = ({ title, children }) => {
   );
 };
 
-export const getStaticProps = ({ params }) => {
-  const colors = [
-    { name: "white", hex: "#FFFFFF" },
-    { name: "red", hex: "#ff0000" },
-    { name: "purple", hex: "#800080" },
-    { name: "green", hex: "#008000" },
-    { name: "blue", hex: "#0000ff" },
-    { name: "yellow", hex: "#ffff00" },
-  ];
-  const sizes = [
-    { name: "small", shortHand: "sm", price: 300 },
-    { name: "medium", shortHand: "md", price: 400 },
-    { name: "large", shortHand: "lg", price: 500 },
-  ];
-  const mountTypes = ["hanging", "wall"];
-  const product = {
-    _id: params.product,
-    name: "product name",
-    description:
-      "Shout your love from the rooftops with a custom neon sign from our Wedding collection. Personalize the color to show off your style!",
-    image: "/img/product-images/product-2.jpg",
-    rating: 4,
-    reviewsCount: 20,
-    colors,
-    sizes,
-    mountTypes,
-    shippingDescription:
-      "All our neons are crafted from scratch just for you. Standardorders will normally take 2-4 weeks to be made and get from usto you from proof approval date. Express orders normally take10-15 days to be delivered to you from proof approval date.",
-  };
+export const getStaticProps = async ({ params }) => {
+  try {
+    await connectDb();
+    const product = await Product.findOne({ slug: params.product }).lean();
 
-  return {
-    props: {
-      product,
-      revalidate: 10
-    },
-  };
+    if (!product)
+      return {
+        notFound: true,
+      };
+    return {
+      props: {
+        product: JSON.parse(JSON.stringify(product)),
+      },
+      revalidate: 10,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      props: {
+        error: { code: 500, message: "server error" },
+      },
+      revalidate: 10,
+    };
+  }
 };
 
-export const getStaticPaths = () => {
-  return {
-    paths: [],
-    fallback: "blocking",
-  };
+
+
+export const getStaticPaths = async () => {
+  try { 
+   
+    const paths = []; 
+    await connectDb(); 
+    const products = await Product.find().populate({ path: 'category', model: Category , select: 'slug -_id'}).select('slug -_id').lean();
+     
+    products.forEach((item) =>
+      paths.push({ params: { product: item.slug, category: item.category.slug } })
+    );
+
+    return {  
+      paths,
+      fallback: 'blocking',
+    };
+  } catch (error) {
+    console.log(error)
+    return {
+      paths: [],
+      fallback: false,
+    };
+  }
 };
-       

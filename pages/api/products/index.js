@@ -1,18 +1,29 @@
-import dbConnect from "../../../server/connectDb";
 import { getAllProducts, uploadProduct } from "../../../server/handlers/products";
+import handle from "../../../server/handlers/handle";
+import multer from 'multer';
+import { deleteAllProducts } from "../../../server/handlers/products";
+import Product from "../../../server/models/product";
 
-export default async function handler(req, res) {
-  const { method } = req;
 
-  await dbConnect();
+ 
+const handler = handle
+  .get(getAllProducts)
+  .post(
+    multer({
+      storage: multer.memoryStorage(),
+      limits: { fileSize: 10 * 1024 * 1024 },
+    }).single("image"),
+    uploadProduct
+  )
+  .delete(deleteAllProducts);
 
-  switch (method) {
-    case "GET":
-          return getAllProducts(req, res);    
-      case "POST":  
-          return uploadProduct(req, res);
-    default:
-      res.status(404).json({ status: "fail", message: "resource not found" });
-      break; 
-  }
-}
+
+export default handler;
+
+
+
+export const config = {
+  api: {
+    bodyParser: false
+  },
+};

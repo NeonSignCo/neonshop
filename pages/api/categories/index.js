@@ -1,21 +1,13 @@
-import dbConnect from "../../../server/connectDb";
 import {
   addCategory,
   getAllCategories,
 } from "../../../server/handlers/category";
+import handle from "../../../server/handlers/handle";
+import authenticate from "../../../server/middleware/authenticate";
+import restrictTo from "../../../server/middleware/restrictTo";
 
-export default async function handler(req, res) {
-  const { method } = req;
+const handler = handle
+  .get(getAllCategories)
+  .post(authenticate, restrictTo("ADMIN"), addCategory);
 
-  await dbConnect();
-
-  switch (method) {
-      case "GET":
-          return getAllCategories(req, res);
-    case "POST":
-      return addCategory(req, res);
-    default:
-      res.status(404).json({ status: "fail", message: "resource not found" });
-      break;
-  }
-}
+export default handler;

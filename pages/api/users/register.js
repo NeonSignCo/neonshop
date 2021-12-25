@@ -1,16 +1,7 @@
-import dbConnect from "../../../server/connectDb";
+import handle from "../../../server/handlers/handle";
 import { register } from "../../../server/handlers/users";
 
-export default async function handler(req, res) {
-  const { method } = req;
 
-  await dbConnect();
+const handler = handle.post(register);
 
-  switch (method) {
-    case "POST":
-      return register(req, res);
-    default:
-      res.status(404).json({ status: "fail", message: "resource not found" });
-      break;
-  }
-}
+export default handler;

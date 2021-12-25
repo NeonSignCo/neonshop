@@ -10,7 +10,6 @@ export const ERROR = "ERROR";
 export const NOT_LOGGED_IN_EVALUATED = "NOT_LOGGED_IN_EVALUATED";
 const GlobalContext = ({ children, props }) => {
   const user = props.user || null;
-
   const [state, setState] = useState({
     showBanner: true,
     modal: { show: false, type: "", data: {} },
@@ -21,7 +20,8 @@ const GlobalContext = ({ children, props }) => {
     },
     showCart: false,
     auth: { loading: user ? false : true, user },
-    alert: { show: false, type: SUCCESS, text: "", timeout: 5000 },
+    alert: { show: false, type: SUCCESS, text: "", timeout: 5000 }, 
+    error: props.error
   });
 
   // fetch initial data

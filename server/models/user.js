@@ -2,6 +2,33 @@ import mongoose from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
 import bcrypt from 'bcryptjs';
 
+const ImageSchema = new mongoose.Schema({
+  url: {
+    type: String,
+    validate: {
+      validator: (val) => typeof val === "string",
+      message: "url must be stirng",
+    },
+    required: [true, "url is required"],
+  },
+  version: {
+    type: Number,
+    validate: {
+      validator: (val) => typeof val === "number",
+      message: "version must be number",
+    },
+    required: [true, "version is required"],
+  },
+  public_id: {
+    type: String,
+    validate: {
+      validator: (val) => typeof val === "string",
+      message: "public_id must be stirng",
+    },
+    required: [true, "public_id is required"],
+  },
+});
+
 const UserSchema = new mongoose.Schema(
   {
     firstName: {
@@ -16,7 +43,7 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: [true, "userName is required"],
     },
-    photo: String,
+    image: ImageSchema,
     email: {
       type: String,
       required: [true, "email is required"],
@@ -27,8 +54,10 @@ const UserSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: [true, "password is required"],
+      required: [true, "password is required"], 
+      select: false
     },
+    passwordChangedAt: Number, 
     role: {
       type: String,
       enum: {
@@ -42,10 +71,31 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+
+UserSchema.set("toObject", { virtuals: true });
+UserSchema.set("toJSON", { virtuals: true });
+
+// virtual fields 
+UserSchema.virtual('shippingAddress', {
+  ref: 'shippingAddress', 
+  foreignField: 'userId', 
+  localField: '_id'
+})
+
+UserSchema.virtual("billingAddress", {
+  ref: "billingAddress",
+  foreignField: "userId",
+  localField: "_id",
+});
+
+
+
+// plugins
 UserSchema.plugin(uniqueValidator, {
   message: "User with same {PATH} already exists",
 });
 
+// static methods
 UserSchema.statics.encryptPassword = (password) =>
   new Promise(async (resolve, reject) => {
     try {
@@ -53,9 +103,19 @@ UserSchema.statics.encryptPassword = (password) =>
       const hash = await bcrypt.hash(password, salt);
       resolve(hash);
     } catch (error) {
-      reject(error.message);
+      reject(error);
     }
   });
+
+  UserSchema.statics.verifyPassword = (password, hash) =>
+    new Promise(async (resolve, reject) => {
+      try {
+        const verifiedPassword = await bcrypt.compare(password, hash)
+        resolve(verifiedPassword);
+      } catch (error) {
+        reject(error);
+      }
+    });
 
 const User = mongoose.models.User || mongoose.model("User", UserSchema); 
 

@@ -1,12 +1,13 @@
 import Token from '../server/models/token';
-import connectDb from '../server/connectDb';
+import connectDb from '../server/utils/connectDb';
+
     
 const getToken = async (token) => {
     try {  
         await connectDb();
         const existingToken = await Token.findOne({ token }); 
         if (!existingToken) return null;
-        return JSON.parse(JSON.stringify(existingToken));
+        return existingToken
        
     } catch (error) {
         console.log(error)

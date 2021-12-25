@@ -1,4 +1,4 @@
-const LoadingBtn = ({ type, children, className, onClick, loading }) => {
+const LoadingBtn = ({ type, children, className, onClick, loading, borderColor }) => {
     
     return (
       <button
@@ -7,7 +7,7 @@ const LoadingBtn = ({ type, children, className, onClick, loading }) => {
         className={`flex items-center justify-center gap-2 transition ${className}`}
       >
         {children}
-        {loading && <Loader/>}
+        {loading && <Loader borderColor={borderColor}/>}
       </button>
     );
 }
@@ -15,6 +15,8 @@ const LoadingBtn = ({ type, children, className, onClick, loading }) => {
 export default LoadingBtn
 
 
-export const Loader = () => (
-  <div className="h-4 w-4 border-[2px] border-b-transparent rounded-full  border-white animate-spin "></div>
+export const Loader = ({borderColor}) => (
+  <div
+    className={`h-4 w-4 border-[2px] border-b-transparent rounded-full animate-spin ${borderColor|| 'border-white'}`}
+  ></div>
 );

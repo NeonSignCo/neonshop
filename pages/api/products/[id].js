@@ -1,18 +1,24 @@
-import dbConnect from "../../../server/connectDb";
+import handle from "../../../server/handlers/handle";
 import {
+    deleteProduct,
     updateProduct
 } from "../../../server/handlers/products";
+import multer from 'multer';
 
-export default async function handler(req, res) {
-  const { method } = req;
+const handler = handle.patch(
+  multer({
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 10 * 1024 * 1024 }, 
+  }).single("image"),
+  updateProduct
+)
+.delete(deleteProduct);
 
-  await dbConnect();
+export default handler;
 
-  switch (method) {
-    case "PATCH":
-      return updateProduct(req, res);
-    default:
-      res.status(404).json({ status: "fail", message: "resource not found" });
-      break;
-  }
-}
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};

@@ -1,43 +1,51 @@
 import { useState } from "react";
 import { FaExclamationCircle } from "react-icons/fa";
+import { SUCCESS, useGlobalContext } from "../../../../context/GlobalContext";
+import Axios from "../../../../utils/Axios";
+import catchASync from "../../../../utils/catchASync";
 import countries from "../../../../utils/countries";
+import LoadingBtn from "../../../LoadingBtn";
 
 // variables 
 const SHIPPING = 'SHIPPING'; 
 const BILLING = 'BILLING';
+const ADD = 'ADD'; 
+const EDIT = 'EDIT';
 
 const AddressSection = () => {
+  const [globalState] = useGlobalContext();    
+ 
 
-    const [state, setState] = useState({
-      editAddress: "",
-      SHIPPING: {
-        country: "",
-        firstName: "",
-        lastName: "",
-        company: "",
-        city: "",
-        addressLine1: "",
-        addressLine2: "",
-        stateOrProvince: "",
-        zip: "",
-        phone: "",
-      },
-      BILLING: {
-        country: "",
-        firstName: "",
-        lastName: "",
-        company: "",
-        city: "",
-        addressLine1: "",
-        addressLine2: "",
-        stateOrProvince: "",
-        zip: "",
-        phone: "",
-        allowNewsLetterSignUp: true,
-        allowTextMessageOffers: false,
-      },
-    });
-
+  const [state, setState] = useState({
+    editAddress: "",
+    SHIPPING: globalState.auth?.user?.shippingAddress?.[0] || {
+      country: "",
+      firstName: "",
+      lastName: "",
+      company: "",
+      city: "",
+      addressLine1: "",
+      addressLine2: "",
+      stateOrProvince: "",
+      zip: "",
+      phone: "",
+    },
+    BILLING: globalState.auth?.user?.billingAddress?.[0] || {
+      country: "",
+      firstName: "",
+      lastName: "",
+      company: "",
+      city: "",
+      addressLine1: "",
+      addressLine2: "",
+      stateOrProvince: "",
+      zip: "",
+      phone: "",
+      allowNewsLetterSignUp: true,
+      allowTextMessageOffers: false,
+    },
+  });
+  
     return (
       <div className="bg-white w-full">
         <h2 className="text-xl font-semibold capitalize">addresses</h2>
@@ -58,7 +66,9 @@ const AddressSection = () => {
 export default AddressSection
 
 
-const Section = ({type, state, setState}) => {
+const Section = ({ type, state, setState }) => {
+  
+
     return (
       <div className="flex flex-col gap-5">
         <p className="capitalize font-semibold">
@@ -66,7 +76,7 @@ const Section = ({type, state, setState}) => {
           {type.toLowerCase()} address
         </p>
         {state.editAddress === type ? (
-          <AddressForm type={type} state={state} setState={setState} />
+          <AddressForm type={type} state={state} setState={setState}/>
         ) : (
           <div className="p-2 border border-gray-300">
             <div className="text-gray-500 italic">
@@ -104,21 +114,81 @@ const Section = ({type, state, setState}) => {
 
 
 const AddressForm = ({type, state, setState}) => {
+ 
+  const [globalState, setGlobalState] = useGlobalContext();
+  
+  const [loading, setLoading] = useState(false);
 
-  const inputChange = e => setState(state => ({ ...state, [type]: { ...state[type], [e.target.name]: e.target.value } }));
+  const inputChange = (e) =>
+    setState((state) => ({
+      ...state,
+      [type]: { ...state[type], [e.target.name]: e.target.value },
+    }));
+ 
+  const mode =
+    type === SHIPPING
+      ? globalState.auth?.user?.shippingAddress?.[0]
+        ? EDIT
+        : ADD
+      : globalState.auth?.user?.billingAddress?.[0]
+      ? EDIT
+      : ADD;  
 
-  const updateAddress = (e) => {
-    try {
-      e.preventDefault(); 
-      setState(state => ({ ...state, editAddress: '' })); 
-      window.scrollTo(0, 0);
-    } catch (error) {
-      console.log(error)
-    }
-  }
+ const addOrUpdateAddress = (e) =>
+   catchASync(
+     async () => {
+       e.preventDefault();
 
+       setLoading(true);
+       const res =
+         mode === ADD
+           ? await Axios.post(
+               `users/${
+                 state.editAddress === SHIPPING
+                   ? "shipping-address"
+                   : "billing-address"
+               }`, state[type]
+             )
+           : mode === EDIT &&
+             await Axios.patch(
+               `users/${
+                 state.editAddress === SHIPPING
+                   ? "shipping-address"
+                   : "billing-address"
+               }`, state[type]
+             );
+        console.log(res.data)
+       setLoading(false);
+       setState((state) => ({
+         ...state, 
+         editAddress: '',
+         shippingAddress:
+           state.editAddress === SHIPPING
+             ? res.data.shippingAddress
+             : state.shippingAddress,
+         billingAddress:
+           state.editAddress === BILLING
+             ? res.data.billingAddress
+             : state.billingAddress,
+       })); 
+       window.scroll({ top: 0 });
+       
+       setGlobalState((state) => ({
+         ...state,
+         alert: {
+           ...state.alert,
+           show: true,
+           type: SUCCESS,
+           text: res.data.message,
+           timeout: 3000,
+         },
+       }));
+     },
+     setGlobalState,
+     () => setLoading(false)
+   );
     return (
-      <form className="grid gap-3" onSubmit={updateAddress}>
+      <form className="grid gap-3" onSubmit={addOrUpdateAddress}>
         <div className="grid gap-1">
           <label className="font-semibold" htmlFor="country">
             country *
@@ -293,19 +363,25 @@ const AddressForm = ({type, state, setState}) => {
           />
         </div>
         <div className="flex gap-5">
-          <button className="py-2 px-4 bg-gray-800 text-white capitalize max-w-max">
-            save address
-          </button>
+          <LoadingBtn
+            loading={loading}
+            className="py-2 px-4 bg-gray-800 text-white capitalize max-w-max"
+          >
+            {mode === ADD ? 'save address': 'update address'}
+          </LoadingBtn>
           <button
             type="button"
             className="py-2 px-4 border border-gray-300 transition hover:bg-gray-800 hover:text-white capitalize max-w-max"
             onClick={() => {
-              setState((state) => ({ ...state, editAddress: "" })); 
-              window.scrollTo(0, 0);
+              setState((state) => ({
+                ...state,
+                editAddress: "",
+              }));
+              window.scroll({ top: 0 });
             }}
           >
             cancel
-          </button>      
+          </button>
         </div>
       </form>
     );

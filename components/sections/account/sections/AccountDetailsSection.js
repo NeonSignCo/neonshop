@@ -1,8 +1,12 @@
 import { useState } from "react";
-import { useGlobalContext } from "../../../../context/GlobalContext";
+import { SUCCESS, useGlobalContext } from "../../../../context/GlobalContext";
+import catchAsync from '../../../../utils/catchASync';
+import LoadingBtn from "../../../LoadingBtn";
+import Axios from '../../../../utils/Axios';
 
 const AccountDetailsSection = () => {
-  const [globalState] = useGlobalContext();
+  const [globalState, setGlobalState] = useGlobalContext();
+  const [loading, setLoading] = useState(false);
   const user = globalState.auth.user;
 
   const [state, setState] = useState({
@@ -10,20 +14,37 @@ const AccountDetailsSection = () => {
     lastName: user?.lastName || "",
     userName: user?.userName || "",
     email: user?.email || "",
-    photo: user?.photo || "",
+    image: "", 
+    previewImage: user?.image?.url || ""
   });
 
 
-    const updateDetails = (e) => {
-        try {
-            e.preventDefault();
-        } catch (error) {
-            console.log(error)
-        }
-    }
+  const updateDetails = (e) => catchAsync(async () => {
+    e.preventDefault(); 
+    setLoading(true)
+
+    const data = new FormData(); 
+    for (let key in state) data.append(key, state[key]); 
+    
+    const res = await Axios.patch(`users/${user._id}`, data); 
+    
+    setLoading(false); 
+    setGlobalState((state) => ({
+      ...state,
+      alert: {
+        ...state.alert,
+        show: true,
+        type: SUCCESS,
+        text: res.data.message,
+        timeout: 3000,
+      },
+      auth: { ...state.auth, loading: false, user: res.data.user },
+    }));
+
+    }, setGlobalState, () => setLoading(false))
     
   const inputChange = (e) =>
-    setData((data) => ({
+    setState((data) => ({
       ...data,
       [e.target.name]: e.target.value,
     }));
@@ -99,14 +120,38 @@ const AccountDetailsSection = () => {
             />
           </div>
           <div className="grid gap-2">
-            <label htmlFor="photo" className="capitalize font-semibold">
+            <label htmlFor="image" className="capitalize font-semibold">
               profile pic
             </label>
-            <input type="file" accept="image/*" name="photo" id="photo" /> 
+            <div className="flex gap-2 items-end">
+              {state.previewImage && (
+                <img
+                  src={state.previewImage}
+                  alt={user?.firstName}
+                  className="h-16 w-16 object-cover rounded-full"
+                />
+              )}
+              <input
+                type="file"
+                accept="image/*"
+                name="image"
+                id="image"
+                onChange={(e) => {
+                  setState((state) => ({
+                    ...state,
+                    previewImage: URL.createObjectURL(e.target.files[0]),
+                    image: e.target.files[0],
+                  }));
+                }}
+              />
+            </div>
           </div>
-          <button className="py-2 px-4 bg-gray-800 text-white font-semibold max-w-max capitalize">
+          <LoadingBtn
+            loading={loading}
+            className="py-2 px-4 bg-gray-800 text-white font-semibold max-w-max capitalize"
+          >
             update{" "}
-          </button>
+          </LoadingBtn>
         </form>
       </div>
     );

@@ -1,18 +1,7 @@
-import dbConnect from "../../../server/connectDb";
-import { deleteMe } from "../../../server/handlers/users";
+import handle from "../../../server/handlers/handle";
 import { authenticate } from "../../../server/middleware/authenticate";
 
-export default async function handler(req, res) {
-  const { method } = req;
 
-  await dbConnect();
+const handler = handle.post(authenticate)
 
-  switch (method) {
-    case "POST":
-      await authenticate(req, res);
-      return deleteMe(req, res);
-    default:
-      res.status(404).json({ status: "fail", message: "resource not found" });
-      break;
-  }
-}
+export default handler;

@@ -1,7 +1,4 @@
-import { FaFacebook, FaInstagram } from "react-icons/fa";
 import CustomLink from "../components/CustomLink";
-import InstaGallery from "../components/InstaGallery";
-import NewsLetterForm from "../components/NewsLetterForm";
 import FollowSection from "../components/sections/FollowSection";
 import NewsLetterSection from "../components/sections/NewsLetterSection";
 

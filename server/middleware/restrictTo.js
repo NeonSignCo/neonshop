@@ -1,32 +1,13 @@
-import Session from "../models/session";
+import AppError from "../utils/AppError";
+import catchASync from "../utils/catchASync";
 
-const restrictTo = async (req, res) => {
-  try {
-    const { token } = req.cookies;
+const restrictTo = (...roles) => catchASync(async (req, res, next) => {
+  if (!req.user) throw new AppError(401, 'not authorized'); 
 
-    if (!token) return;
+  if (!roles.includes(req.user.role)) throw new AppError(401, 'not authorized');
 
-    if (typeof token !== "string") return;
-    const session = await Session.findOne({ token, status: "valid" });
- 
-    if (!session) {   
-      // remove auth cookie
-      res.setHeader(
-        "Set-Cookie",
-        serialize("token", "", {
-          maxAge: -1,
-          sameSite: true,
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          path: "/",
-        })
-      );
-      return;
-    }
-    req.session = session;
-  } catch (error) {
-    return;
-  }
-};
+  // proceed if authenticated 
+  return next();
+})
 
 export default restrictTo;

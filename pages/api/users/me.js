@@ -1,18 +1,11 @@
-import dbConnect from "../../../server/connectDb";
-import { getMe } from "../../../server/handlers/users";
-import authenticate from "../../../server/middleware/authenticate";
+import {
+  getMe
+} from "../../../server/handlers/users";
+import authenticate from '../../../server/middleware/authenticate';
+import handle from "../../../server/handlers/handle";
 
-export default async function handler(req, res) {
-  const { method } = req;
+const handler = handle
+  .use(authenticate)
+  .get(getMe);
 
-  await dbConnect();
-
-  switch (method) {
-    case "GET":
-      await authenticate(req, res);
-      return getMe(req, res);
-    default:
-      res.status(404).json({ status: "fail", message: "resource not found" });
-      break;
-  }
-}
+export default handler;

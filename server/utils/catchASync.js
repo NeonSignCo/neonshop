@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 
-const catchASync = (fn) => (req, res) =>
-  fn(req, res).catch((err) => {
+const catchASync = (fn) => (req, res, next) =>
+  fn(req, res, next).catch((err) => {
     // log error message in development
-    if (process.env.NODE_ENV !== "production") console.log(err.stack);
+    if (process.env.NODE_ENV !== "production") console.log(err, err.stack);
 
     // handle mongoose validation error
     if (err instanceof mongoose.Error)

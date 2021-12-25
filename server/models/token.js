@@ -6,12 +6,16 @@ const Schema = mongoose.Schema;
 const TokenSchema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
-    required: true,
+    required: [true, 'userId is required'],
     ref: "user",
   },
   token: {
     type: String,
     required: true,
+  }, 
+  expires: {
+    type: Number, 
+    required: true
   }
 }, { timestamps: true });
 
