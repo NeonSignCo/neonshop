@@ -11,7 +11,7 @@ const authenticate = catchASync(async (req, res, next) => {
   
   // check token
   if (!token) throw new AppError(400, "not logged in 3");
-  if (typeof token !== "string") throw new AppError(400, "not logged in 4");
+  if (typeof token !== "string") throw new AppError(400, "not logged in");
 
   // verify token 
   let verifiedToken = null;
@@ -19,12 +19,12 @@ const authenticate = catchASync(async (req, res, next) => {
     verifiedToken = jwt.verify(token, process.env.JWT_SECRET); 
   } catch (error) {
      removeToken(res, "token");
-    throw new AppError(400, "not logged in 5");
+    throw new AppError(400, "not logged in");
   }
   
   if (!verifiedToken || !verifiedToken.userId) {
      removeToken(res, "token"); 
-    throw new AppError(400, "not logged in 6");
+    throw new AppError(400, "not logged in");
   };
 
 
@@ -37,7 +37,7 @@ const authenticate = catchASync(async (req, res, next) => {
     ]);
   if (!user) {
     removeToken(res, 'token'); 
-    throw new AppError(400, "not logged in 7");
+    throw new AppError(400, "not logged in");
   }
   
   if (user.passwordChangedAt > verifiedToken.iat * 1000) {
