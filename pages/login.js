@@ -33,7 +33,7 @@ const Login = () => {
         email: state.email,
         password: state.password,
       });
-
+  
       setGlobalState((state) => ({
         ...state,
         auth: { ...state.auth, user: res.data.user },
