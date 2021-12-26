@@ -1,3 +1,5 @@
+import mongoose from 'mongoose';
+
 const SizeSchema = new mongoose.Schema({
   info: {
     type: String,

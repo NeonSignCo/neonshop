@@ -55,6 +55,8 @@ export const deleteCart = catchASync(async (req, res) => {
 
   const cart = await Cart.findOneAndDelete({ userId: req.user._id });
 
+  if(!cart) throw new AppError(404, 'cart not found')
+
   return res.json({
     status: "success",
     message: "cart deleted", 
