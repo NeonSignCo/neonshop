@@ -59,17 +59,8 @@ export const getServerSideProps = async ({req}) => {
     await connectDb();
     const loggedInUser = await getLoggedInUser(req);
     user = loggedInUser || NOT_LOGGED_IN_EVALUATED;
-
-     if (user === NOT_LOGGED_IN_EVALUATED) {
-       return {
-         redirect: {
-           destination: "/login",
-           permanent: false,
-         },
-       };
-    }
     
-    if (user.role !== 'ADMIN') {
+    if (user === NOT_LOGGED_IN_EVALUATED || user.role !== 'ADMIN') {
       return {
         notFound: true
       }

@@ -7,6 +7,7 @@ import {
   FaUser,
   FaUserCircle,
   FaUserPlus,
+  FaUserShield,
 } from "react-icons/fa";
 import { ERROR, SUCCESS, useGlobalContext } from "../../context/GlobalContext";
 import CustomLink from "../CustomLink";
@@ -221,6 +222,16 @@ const AccountBtn = ({ containerRef }) => {
             <Loader />
           ) : globalState.auth?.user ? (
             <div className="grid">
+              {globalState.auth?.user?.role === "ADMIN" && (
+                <CustomLink
+                  href="/admin"
+                  className="p-2 transition hover:bg-gray-800 flex gap-2 items-center justify-center"
+                  onClick={() => setExpand(false)}
+                >
+                  <FaUserShield />
+                  <span>admin</span>
+                </CustomLink>
+              )}
               <CustomLink
                 href="/account"
                 className="p-2 transition hover:bg-gray-800 flex gap-2 items-center justify-center"
