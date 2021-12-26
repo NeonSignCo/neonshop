@@ -5,7 +5,7 @@ import {
 
 import nc from "next-connect";
 import multer from "multer";
-import connectDb from "../utils/connectDb";
+import connectDb from "../../../server/utils/connectDb";
 
 const handler = nc({
   onError: (err, req, res, next) => {
