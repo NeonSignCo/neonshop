@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const colorSchema = new mongoose.Schema(
+const ColorSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -14,7 +14,4 @@ const colorSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const color =
-  mongoose.models.color || mongoose.model("color", colorSchema);
-
-export default color;
+export default ColorSchema;

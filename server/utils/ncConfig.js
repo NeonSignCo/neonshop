@@ -1,9 +1,6 @@
-
-import nc from "next-connect";
 import multer from 'multer';
-import connectDb from "../utils/connectDb";
 
-const handle = nc({
+const ncConfig = {
   onError: (err, req, res, next) => {
     console.error(err.stack);
 
@@ -23,10 +20,8 @@ const handle = nc({
     res.status(404).json({
       status: "fail",
       message: "Resource not found",
-    }); 
+    });
   },
-}).use(async (req, res, next) => { await connectDb(); next()});
+};
 
-export default handle;
- 
-
+export default ncConfig;

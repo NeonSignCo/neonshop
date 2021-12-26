@@ -11,7 +11,7 @@ import uploadImage from '../utils/uploadImage';
 import cloudinary from 'cloudinary';
 import BillingAddress from '../models/billingAddress';
 import ShippingAddress from '../models/shippingAddress';
-import sendMail from '../../utils/sendMail';
+import sendMail from '../utils/sendMail';
 
 
 // @route       POST /api/users/register 

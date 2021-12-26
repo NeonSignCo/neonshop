@@ -33,7 +33,7 @@ export const addCategory = catchASync(async (req, res) => {
 // @purpose     Get all categories 
 // @access      Public 
 export const getAllCategories =  catchASync(async (req, res) => {
-  const { page = 1, limit = 10 } = req.query;
+  const { page = 1, limit = 99999 } = req.query;
   const skip = limit * (page - 1);
 
   if (!page)

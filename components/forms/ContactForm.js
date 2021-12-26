@@ -10,10 +10,15 @@ import {
   FaTextHeight,
   FaUserAlt,
 } from "react-icons/fa";
+import { SUCCESS, useGlobalContext } from "../../context/GlobalContext";
+import Axios from "../../utils/Axios";
+import catchASync from "../../utils/catchASync";
 import countries from "../../utils/countries";
+import LoadingBtn from "../LoadingBtn";
 
-const ContactForm = ({ productInfo}) => {
-  const [data, setData] = useState({
+const ContactForm = ({ productInfo }) => {
+
+  const initialData = {
     firstName: "",
     lastName: "",
     email: "",
@@ -22,21 +27,59 @@ const ContactForm = ({ productInfo}) => {
     enquiryType: "",
     expectedDeliveryTime: "",
     size: "",
-    comment: "",
-    image: "",
+    message: "",
     heardFrom: "",
     joinNewsLetter: true,
-    productInfo
-  });
-
-  const sendMail = (e) => {
-    try {
-      e.preventDefault();
-      console.log(data);
-    } catch (error) {
-      console.log(error);
-    }
+    productInfo,
   };
+
+  const [, setState] = useGlobalContext();
+  const [loading, setLoading] = useState(false);
+
+  const [data, setData] = useState(initialData);
+
+  const sendMail = (e) => catchASync(async () => {
+    e.preventDefault();
+    setLoading(true); 
+    let text = '';
+    let html = '';
+
+    // generate email text and html
+    for (let key in data) {
+      if (key === "productInfo" && productInfo?.name) {
+        text += `Product Name: ${data[key].name} \nProduct Image: ${data[key].image} \nProduct link: ${data[key].link}`;
+        html += `<p style="color:black"><span style="font-weight: bold">Product Name:</span> ${data[key].name}</p>
+                 <p style="color:black"><span style="font-weight: bold">Product Image:</span> <img src=${data[key].image} style="width: 300px; object-fit: cover;"/></p>
+                 <p style="color:black"><span style="font-weight: bold">Product Link:</span> <a href=${data[key].link}>Link</a></p>`;
+      } else {
+        text += key === "productInfo" ? "" : `${key}: ${data[key]}\n`;
+        html += `<p><span style="font-weight: bold">${key}:</span> ${data[key]}</p>`;
+      }
+    }
+
+    const mailData = {
+      from: data.email,
+      to: data.email,
+      subject: data.enquiryType,
+      text, 
+      html
+    };
+
+    const res = await Axios.post("mail", mailData);
+    setLoading(false);
+    setData(initialData)
+    setState((state) => ({
+      ...state,
+      alert: {
+        ...state.alert,
+        show: true,
+        text: res.data.message,
+        type: SUCCESS,
+        timeout: 5000,
+      },
+    }));
+  }, setState, () => setLoading(false)) 
+  
 
   const inputChange = (e) =>
     setData((data) => ({
@@ -110,8 +153,8 @@ const ContactForm = ({ productInfo}) => {
             <option value="" className="bg-gray-800">
               country
             </option>
-            {countries.map((item) => (
-              <option key={item.alpha2Code} value={item.country} className="bg-gray-800">
+            {countries.map((item, i) => (
+              <option key={i} value={item.country} className="bg-gray-800">
                 {item.country}
               </option>
             ))}
@@ -228,22 +271,11 @@ const ContactForm = ({ productInfo}) => {
           </select>
           <FaEarlybirds className="absolute top-4" />
         </div>
-        <div className="md:col-span-2 flex flex-col sm:flex-row items-center gap-2">
-          <input
-            type="file"
-            accept="image/*"
-            name="image"
-            id="image"
-            onChange={inputChange}
-            className="w-full sm:w-auto"
-          />
-          <label htmlFor="image">Upload your logo/inspirational images</label>
-        </div>
         <div className="md:col-span-2 relative">
           <textarea
             rows="3"
-            name="comment"
-            value={data.comment}
+            name="message"
+            value={data.message}
             onChange={inputChange}
             className="w-full p-3 pl-7 bg-transparent border-b outline-none transition focus:border-b-white"
             placeholder="Your comments / query"
@@ -265,7 +297,7 @@ const ContactForm = ({ productInfo}) => {
             you!
           </label>
         </div>
-        <button className="uppercase p-2 bg-gray-800">submit</button>
+        <LoadingBtn loading={loading} className="uppercase p-2 bg-gray-800">submit</LoadingBtn>
       </div>
     </form>
   );

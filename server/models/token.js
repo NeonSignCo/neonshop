@@ -25,7 +25,7 @@ TokenSchema.statics.genToken = () =>
       const token = crypto.randomBytes(32).toString("hex");
       resolve(token);
     } catch (error) {
-      reject(error.message);
+      reject(error);
     }
   });
 

@@ -1,51 +1,7 @@
 import mongoose from 'mongoose';
+import ImageSchema from '../schemas/ImageSchema';
+import SizeSchema from '../schemas/sizeSchema';
 
-
-const SizeSchema = new mongoose.Schema({
-  info: {
-    type: String,
-    validate: {
-      validator: (val) => typeof val === "string",
-      message: "info must be stirng",
-    },
-    required: [true, "info is required for size"],
-  },
-  price: {
-    type: Number,
-    validate: {
-      validator: (val) => typeof val === "number",
-      message: "price must be number",
-    },
-    required: [true, "price is required for size"],
-  },
-});
-
-const ImageSchema = new mongoose.Schema({
-  url: {
-    type: String,
-    validate: {
-      validator: (val) => typeof val === "string",
-      message: "url must be stirng",
-    },
-    required: [true, "url is required"],
-  },
-  version: {
-    type: Number,
-    validate: {
-      validator: (val) => typeof val === "number",
-      message: "version must be number",
-    },
-    required: [true, "version is required"],
-  },
-  public_id: {
-    type: String,
-    validate: {
-      validator: (val) => typeof val === "string",
-      message: "public_id must be stirng",
-    },
-    required: [true, "public_id is required"],
-  },
-});
 
 const ProductSchema = new mongoose.Schema(
   {

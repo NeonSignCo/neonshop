@@ -26,7 +26,7 @@ const Container = () => {
   const [state, setState] = useCheckoutContext();
   const [globalState] = useGlobalContext();
   const [showMobileSummary, setshowMobileSummary] = useState(false);
-
+  
   return (
     <div>
       {globalState.cart?.items?.length > 0 ? (

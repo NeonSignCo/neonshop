@@ -25,7 +25,7 @@ const sendMail = ({ from, to, subject, text, html }) => new Promise(async (resol
     
     resolve(info);
   } catch (error) {
-    reject(error.message)
+    reject(error)
   }
 })
 

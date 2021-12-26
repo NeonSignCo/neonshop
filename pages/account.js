@@ -15,7 +15,7 @@ export const ACCOUNT_DETAILS = "ACCOUNT_DETAILS";
 export const CHANGE_PASSWORD = "CHANGE_PASSWORD";
 export const ADDRESS = "ADDRESS";
 
-const Account = ({ orders, user }) => {
+const Account = ({ orders }) => {
   const [state, setState] = useState({
     activeSection: ACCOUNT_DETAILS,
     orders,

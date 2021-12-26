@@ -8,7 +8,6 @@ import FollowSection from "../../../components/sections/FollowSection";
 import { AnimatePresence, motion } from "framer-motion";
 import CustomLink from "../../../components/CustomLink";
 import ContactForm from "../../../components/forms/ContactForm";
-import { useRouter } from "next/router";
 import connectDb from "../../../server/utils/connectDb";
 import Product from "../../../server/models/product";
 import Category from "../../../server/models/category";
@@ -23,12 +22,10 @@ const colors = [
 const mountTypes = ['WALL', 'HANGING']
 
 const ProductPage = ({ product }) => {
-  const Router = useRouter();
-  const productLink = Router.asPath;
   const [globalState, setGlobalState] = useGlobalContext();
   const [state, setState] = useState({
-    color: { name: '', hex: '' },
-    size: { info: '', price: '' },
+    color: '',
+    size: '',
     quantity: 1,
     mountType: "",
     errors: {
@@ -52,7 +49,7 @@ const ProductPage = ({ product }) => {
         ...state,
         errors: {
           color: !state.color.hex ? "Please select a color" : "",
-          size: !state.size.name ? "Please select a size" : "",
+          size: !state.size.info ? "Please select a size" : "",
           mountType: !state.mountType ? "Please select mount type" : "",
           quantity: !state.quantity ? "Please select quantity" : "",
         },
@@ -75,7 +72,7 @@ const ProductPage = ({ product }) => {
     const cart = globalState.cart;
     const productInfo = {
       _id: product._id,
-      productLink,
+      productLink: window.location.href,
       name: product.name,
       image: product.image,
       size: state.size,
@@ -142,7 +139,7 @@ const ProductPage = ({ product }) => {
             <span>| {product.reviewsCount || 0} reviews</span>
           </div>
           <p className="flex items-center font-semibold text-2xl text-gray-600">
-            <span>$</span> 
+            <span>$</span>
             <span>{state.size.price || product.sizes[0].price}</span>
           </p>
           <p>{product.description}</p>
@@ -192,7 +189,11 @@ const ProductPage = ({ product }) => {
               {product.sizes.map((size, i) => (
                 <button
                   key={i}
-                  className={` px-6 py-2 transition uppercase ${state.size.info === size.info ? 'bg-black text-white': 'bg-gray-200'}`}
+                  className={` px-6 py-2 transition uppercase ${
+                    state.size.info === size.info
+                      ? "bg-black text-white"
+                      : "bg-gray-200"
+                  }`}
                   onClick={() =>
                     setState((options) => ({
                       ...options,
@@ -373,8 +374,8 @@ const ProductPage = ({ product }) => {
               <ContactForm
                 productInfo={{
                   name: "produc 1",
-                  link: productLink,
-                  image: "/img/product-images/product-2.jpg",
+                  link: window.location.href,
+                  image: product.image.url,
                 }}
               />
             </div>

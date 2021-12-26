@@ -27,7 +27,6 @@ const GlobalContext = ({ children, props }) => {
   // fetch initial data
   useEffect(async () => {
     await getInitialData(state, setState);
-
     return () => {};
   }, []);
 

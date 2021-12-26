@@ -83,7 +83,7 @@ export const getServerSideProps = async ({req}) => {
       props: {
         error: {
           code: 500, 
-          message: 'server error. Please try again or contact developer'
+          message: 'server error. Please try again later'
         }
       }
     }

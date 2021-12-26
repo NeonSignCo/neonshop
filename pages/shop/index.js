@@ -186,10 +186,9 @@ const ProductSearch = ({state, setState }) => {
 
 
 const ProductItem = ({ product }) => {
-
   return (
     <CustomLink
-      href={`/shop/category-1/${product.slug}`}
+      href={`/shop/${product.category.slug}/${product.slug}`}
       className="grid gap-1"
     >
       <img src={product.image.url} alt={product.name} />
@@ -280,7 +279,7 @@ export const getStaticProps = async () => {
   try {
     await connectDb();  
     const categories = await Category.find().lean(); 
-    const products = await Product.find().sort({createdAt: -1}).limit(productsPerPage).lean(); 
+    const products = await Product.find().populate({ path: 'category', model: Category, select: 'slug -_id'}).sort({createdAt: -1}).limit(productsPerPage).lean(); 
     const numOfProducts = await Product.countDocuments().lean();
 
     return {

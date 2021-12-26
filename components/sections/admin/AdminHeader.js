@@ -4,7 +4,7 @@ import CustomLink from "../../CustomLink"
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { FaPowerOff } from 'react-icons/fa';
-import { useGlobalContext } from "../../../context/GlobalContext";
+import { SUCCESS, useGlobalContext } from "../../../context/GlobalContext";
 import catchASync from "../../../utils/catchASync";
 import Axios from "../../../utils/Axios";
 import { useRouter } from "next/router";
@@ -13,7 +13,7 @@ const AdminHeader = () => {
   const [globalState, setGlobalState] = useGlobalContext(); 
   const [state, setState] = useAdminContext();
   const [expand, setExpand] = useState();
-
+  const [loading, setLoading] = useState(false);
 
   const logOut = () => catchASync(async () => {
     await Axios.put('users/logout'); 
@@ -21,6 +21,20 @@ const AdminHeader = () => {
     useRouter().push('/login');
   }, setGlobalState)
 
+
+  const refreshData = () => catchASync(async () => {
+
+    setLoading(true); 
+    const products = (await Axios.get('products')).data.products;
+
+    const categories = (await Axios.get('categories')).data.categories; 
+
+    setLoading(false); 
+
+    setState(state => ({ ...state, products, categories }));
+
+    setGlobalState(state => ({...state, alert: {...state.alert, show: true, text: 'updated', type: SUCCESS, timeout: 1000}}))
+   }, setGlobalState, () => setLoading(false));
   
     return (
       <div className="pl-2 pr-4 py-2 flex justify-between items-center bg-gray-800 text-white ">
@@ -39,8 +53,10 @@ const AdminHeader = () => {
         </button>
         <CustomLink text="NeonShop" className="text-3xl hidden  sm:block" />
         <div className="flex items-center gap-3">
-          <button className="transition active:bg-gray-700 h-10 w-10 rounded-full flex items-center justify-center">
-            <BsArrowClockwise className="text-2xl" />
+          <button className="transition active:bg-gray-700 h-10 w-10 rounded-full flex items-center justify-center"
+            onClick={refreshData}
+          >
+            <BsArrowClockwise className={`text-2xl ${loading ? 'animate-spin': ""}`} />
           </button>
           <div className="relative">
             <button
@@ -52,7 +68,7 @@ const AdminHeader = () => {
                 alt="admin"
                 className="w-8 h-8 rounded-full object-cover"
               />
-              <p className="capitalize">{globalState.auth?.user?.name}</p>
+              <p className="capitalize">{globalState.auth?.user?.userName}</p>
             </button>
             <AnimatePresence>
               {expand && (
