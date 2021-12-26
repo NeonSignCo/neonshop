@@ -1,6 +1,34 @@
-import { login } from "../../../server/handlers/users";
-import handle from "../../../server/handlers/handle";
+import nc from "next-connect";
+import multer from "multer";
+import connectDb from "../../../server/utils/connectDb";
+import { login } from '../../../server/handlers/users'
 
-const handler = handle.post(login);
+const handle = nc({
+  onError: (err, req, res, next) => {
+    console.error(err.stack);
 
-export default handler;
+    if (err instanceof multer.MulterError) {
+      return res.status(400).json({
+        status: "fail",
+        message: err.message,
+      });
+    }
+
+    return res.status(500).json({
+      status: "fail",
+      message: "Server error",
+    });
+  },
+  onNoMatch: (req, res, next) => {
+    res.status(404).json({
+      status: "fail",
+      message: "Resource not found",
+    });
+  },
+}).use(async (req, res, next) => {
+  await connectDb();
+  next();
+})
+.post(login);
+
+export default handle;
