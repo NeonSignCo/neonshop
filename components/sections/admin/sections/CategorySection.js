@@ -23,7 +23,8 @@ const CategorySection = () => {
         e.preventDefault();
         setLoading(true);
         const res = await Axios.post('categories', { name: state.name, description: state.description }); 
-        setLoading(false)
+      setLoading(false) 
+      setState(state => ({...state, name: '', description: ''}))
         setAdminState(state => ({ ...state, categories: [res.data.category, ...adminState.categories] }));
       setGlobalState((state) => ({
         ...state,

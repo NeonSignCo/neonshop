@@ -10,7 +10,7 @@ const authenticate = catchASync(async (req, res, next) => {
   const { token } = req.cookies;
   
   // check token
-  if (!token) throw new AppError(400, "not logged in 3");
+  if (!token) throw new AppError(400, "not logged in");
   if (typeof token !== "string") throw new AppError(400, "not logged in");
 
   // verify token 
