@@ -39,6 +39,15 @@ export const getServerSideProps = async ({ req }) => {
     const loggedInUser = await getLoggedInUser(req);
     user = loggedInUser || NOT_LOGGED_IN_EVALUATED;
 
+     if (user === NOT_LOGGED_IN_EVALUATED) {
+       return {
+         redirect: {
+           destination: "/login",
+           permanent: false,
+         },
+       };
+     }
+
     const orders = [];
     for (let x = 1; x <= 3; x++) {
       const randNumber = Math.random();
@@ -52,34 +61,18 @@ export const getServerSideProps = async ({ req }) => {
       });
     }
     
-    if (user === NOT_LOGGED_IN_EVALUATED) {
-      return {
-        redirect: {
-          destination: "/login",
-          permanent: false,
-        },
-      }
-    }
+   
 
     return {
       props: {
         orders,
-        user,
+        user, 
       }
     };
   } catch (error) {
-     if (user === NOT_LOGGED_IN_EVALUATED) {
-       return {
-         redirect: {
-           destination: "/login",
-           permanent: false,
-         },
-       };
-     }
-
     return {
       props: {
-        user,
+        error: { code: 500, message: "server error" },
       },
     };
   }

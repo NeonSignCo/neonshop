@@ -17,7 +17,7 @@ const ForgotPassword = () => {
       
       setState((state) => ({ ...state, loading: true, successMessage: '' }));
 
-      const res = await Axios.post("mail/forgot-password", {email: state.email});
+      const res = await Axios.post("users/forgot-password", {email: state.email});
 
       setState((state) => ({ ...state, loading: false, email: '', successMessage: 'Check your email to get password reset link'}));
       setGlobalState((state) => ({

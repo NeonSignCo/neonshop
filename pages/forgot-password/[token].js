@@ -41,8 +41,8 @@ const ResetPassword = ({ token, errorMessage }) => {
         },
       }));
         
-        // redirect to login page
-        Router.replace('/login')
+        // redirect to account page
+        Router.replace('/account')
     } catch (error) {
       console.log(error);
       const text =

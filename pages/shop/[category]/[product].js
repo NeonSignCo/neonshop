@@ -425,11 +425,18 @@ const QnA = ({ title, children }) => {
 export const getStaticProps = async ({ params }) => {
   try {
     await connectDb();
-    const product = await Product.findOne({ slug: params.product }).lean();
+    const category = await Category.findOne({slug: params.category}).lean(); 
+
+    if (!category) return {
+      notFound: true, 
+      revalidate: 10
+    }
+    const product = await Product.findOne({ slug: params.product, category: category._id }).lean();
 
     if (!product)
       return {
         notFound: true,
+        revalidate: 10,
       };
     return {
       props: {

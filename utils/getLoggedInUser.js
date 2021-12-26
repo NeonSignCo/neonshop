@@ -12,11 +12,11 @@ const getLoggedInUser = async (req) => {
         // check token
         if (!token) return null;
         if (typeof token !== "string") return null;
-
+  
         // verify token 
-        const verifiedToken = jwt.verify(token, process.env.JWT_SECRET);
+      const verifiedToken = jwt.verify(token, process.env.JWT_SECRET);
         if (!verifiedToken || !verifiedToken.userId) return null;
-        
+          
         // check user
         const user = await User.findById(verifiedToken.userId)
           .populate([
@@ -31,7 +31,7 @@ const getLoggedInUser = async (req) => {
         
         return JSON.parse(JSON.stringify(user));
     } catch (error) {
-        return null;
+        return null;  
     }
 }
 

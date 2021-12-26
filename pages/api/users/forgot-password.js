@@ -2,9 +2,8 @@ import nc from "next-connect";
 import multer from "multer";
 import dbConnection from "../../../server/middleware/dbConnection";
 import {
-  getAllUsers, updateMe,
+  forgotPassword
 } from "../../../server/handlers/users";
-import authenticate from "../../../server/middleware/authenticate";
 
 const handler = nc({
   onError: (err, req, res, next) => {
@@ -30,21 +29,6 @@ const handler = nc({
   },
 })
   .use(dbConnection)
-  .get(getAllUsers)
-  .patch(
-    authenticate,
-    multer({
-      storage: multer.memoryStorage(),
-      limits: { fileSize: 10 * 1024 * 1024 },
-    }).single("image"),
-    updateMe
-  );
+  .post(forgotPassword)
 
-export default handler; 
-
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+export default handler;

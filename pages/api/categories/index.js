@@ -5,7 +5,7 @@ import authenticate from "../../../server/middleware/authenticate";
 import restrictto from '../../../server/middleware/restrictTo';
 import nc from "next-connect";
 import multer from "multer";
-import connectDb from '../../../server/utils/connectDb';
+import dbConnection from "../../../server/middleware/dbConnection";
 
 
 const handler = nc({
@@ -31,10 +31,7 @@ const handler = nc({
     });
   },
 })
-  .use(async (req, res, next) => {
-    await connectDb();
-    next(); 
-  })
+  .use(dbConnection)
   .post(authenticate, restrictto('ADMIN'),addCategory)
 
 export default handler;

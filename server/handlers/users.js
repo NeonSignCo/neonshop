@@ -7,11 +7,12 @@ import Token from '../models/token';
 import removeToken from '../utils/removeToken';
 import setToken from '../utils/setToken';
 import jwt from 'jsonwebtoken';
-import uploadImage from '../../utils/uploadImage';
+import uploadImage from '../utils/uploadImage';
 import cloudinary from 'cloudinary';
-import mongoose from 'mongoose';
 import BillingAddress from '../models/billingAddress';
 import ShippingAddress from '../models/shippingAddress';
+import sendMail from '../../utils/sendMail';
+
 
 // @route       POST /api/users/register 
 // @purpose     Register User
@@ -100,7 +101,7 @@ export const login = catchASync(async (req, res) => {
   user.password = undefined;
 
   // sign jwt token
-  const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
+  const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {expiresIn: '14d'});
 
   // auth token
   setToken(res, "token", token);
@@ -128,10 +129,13 @@ export const getMe = catchASync(async (req, res) => {
 // @purpose     Delete user
 // @access      User
 export const deleteMe = catchASync(async (req, res) => {
-  const { user } = req.user;
+  const user = req.user;
   const { password } = req.body;
 
   if (!user) throw new AppError(401, "not logged in ");
+  
+  if(!password) throw new AppError(400, 'password is required')
+ 
   if (typeof password !== "string") {
     throw new AppError(400, "invalid password");
   }
@@ -144,8 +148,27 @@ export const deleteMe = catchASync(async (req, res) => {
   // remove auth cookie
   removeToken(res, "token"); 
 
+  if (user.image?.public_id) {
+     cloudinary.config({
+       cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+       api_key: process.env.CLOUDINARY_API_KEY,
+       api_secret: process.env.CLOUDINARY_API_SECRET,
+     });  
+     await cloudinary.v2.uploader.destroy(user.image.public_id);
+   }
+
   // delete user
-  await User.delete();
+  await user.delete();
+
+  // remove auth token 
+  removeToken(res, 'token');
+
+  //  remove all token in database 
+  await Token.deleteMany({ userId: user._id });
+
+  //  delete associating shipping and billing addresses 
+  await ShippingAddress.deleteMany({userId: user._id})
+  await BillingAddress.deleteMany({userId: user._id})
 
   res.json({
     status: "Success",
@@ -239,8 +262,11 @@ export const resetPassword = catchASync(async (req, res) => {
   // delete the token
   await existingToken.delete();
 
-  // logout user by deleting token
- removeToken(res, 'token')
+  // new auth token
+  const jwtToken = jwt.sign({ userId: existingUser._id }, process.env.JWT_SECRET, {
+    expiresIn: "14d",
+  });
+  setToken(res, 'token', jwtToken);
 
   return res.json({
     status: "success",
@@ -299,25 +325,25 @@ export const changePassword = catchASync(async (req, res) => {
   });
 });
 
-// @route       PATCH /api/users/:id
+// @route       PATCH /api/users
 // @purpose     User updates him/her self
 // @access      User 
 export const updateMe = catchASync(async (req, res) => {
   const { firstName, lastName, userName, email } = req.body;
   let image;
-  const id = req.query?.id;
+  const user = req.user; 
 
-  if (!mongoose.Types.ObjectId.isValid(id))
-    throw new AppError(400, "not a valid id");
-
-  // check if user exists
-  const user = await User.findById(id);
-  if (!user) throw new AppError(404, "user not found");
+  if (!user) throw new AppError(400, 'not authorized');
 
   // update image if provided
   if (req.file) {
     // delete previous image if exists
     if (user.image?.public_id) {
+      cloudinary.config({
+        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+        api_key: process.env.CLOUDINARY_API_KEY,
+        api_secret: process.env.CLOUDINARY_API_SECRET,
+      });
       await cloudinary.v2.uploader.destroy(user.image.public_id);
     }
     const img = await uploadImage({
@@ -333,7 +359,7 @@ export const updateMe = catchASync(async (req, res) => {
   }
 
   const updatedUser = await User.findByIdAndUpdate(
-    id,
+    user._id,
     { $set: { firstName, lastName, userName, email, image } },
     { new: true, runValidators: true }
   );
@@ -353,7 +379,7 @@ export const updateMe = catchASync(async (req, res) => {
 // @route       POST /api/users/shipping-address
 // @purpose     Add shipping address
 // @access      User 
-export const addbillingAddress = catchASync(async (req, res) => {
+export const addShippingAddress = catchASync(async (req, res) => {
   const user = req.user; 
   if (!user) throw new AppError(401, 'not authorized');
 
@@ -379,23 +405,23 @@ export const addbillingAddress = catchASync(async (req, res) => {
   check(zip, 'zip');
   
   // check if already has a billingAddress 
-  const existingBillingAddress = await billingAddress.findOne({ userId: user._id }).select('_id').lean(); 
+  const existingShippingAddress = await ShippingAddress.findOne({ userId: user._id }).select('_id').lean(); 
 
-  if (existingBillingAddress) throw new AppError(401, 'user already has a shipping address');
+  if (existingShippingAddress) throw new AppError(401, 'user already has a shipping address');
 
-  const billingAddress = await billingAddress.create({country, firstName, lastName, company, city, addressLine1, addressLine2, stateOrProvince, zip, phone, userId: user._id});
+  const shippingAddress = await ShippingAddress.create({country, firstName, lastName, company, city, addressLine1, addressLine2, stateOrProvince, zip, phone, userId: user._id});
   
    return res.json({
      status: "success",
      message: "shipping address added",
-     billingAddress
+     shippingAddress
    });
 })
 
 // @route       PATCH /api/users/shipping-address
 // @purpose     Edit shipping address
 // @access      User 
-export const updatebillingAddress = catchASync(async (req, res) => {
+export const updateShippingAddress = catchASync(async (req, res) => {
   const user = req.user; 
   if (!user) throw new AppError(401, 'not authorized');
 
@@ -410,7 +436,7 @@ export const updatebillingAddress = catchASync(async (req, res) => {
     zip,
     phone } = req.body;
 
-  const billingAddress = await billingAddress.findOneAndUpdate(
+  const shippingAddress = await ShippingAddress.findOneAndUpdate(
     { userId: user._id },
     {
       $set: {
@@ -432,7 +458,7 @@ export const updatebillingAddress = catchASync(async (req, res) => {
    return res.json({
      status: "success",
      message: "shipping address updated",
-     billingAddress
+     shippingAddress
    });
 })
 
@@ -546,3 +572,42 @@ export const updateBillingAddress = catchASync(async (req, res) => {
     billingAddress,
   });
 });
+
+
+// @route       POST /api/users/forgot-password
+// @purpose     send forgot password link
+// @access      Public
+
+export const forgotPassword = catchASync(async (req, res) => {
+    const email = req.body.email;
+
+    if (!email) throw new AppError(400, 'email is required'); 
+
+     if (!isEmail(email)) throw new AppError(400, "not a valid email address"); 
+
+    const existingUser = await User.findOne({ email }).select('firstName'); 
+
+    if(!existingUser) throw new AppError(400, "user not found"); 
+
+  const token = await Token.genToken(); 
+
+    const newToken = await Token.findOneAndUpdate(
+      { userId: existingUser._id },
+      { $set: { userId: existingUser._id, token, expires: Date.now() + 1000 * 60 * 60 * 24 } }, // 1 day limit
+      { new: true, upsert: true }
+    );
+   
+  const text = `Hello ${existingUser.firstName}, visit this link to reset your password: ${req.headers.origin}/forgot-password/${newToken.token}`;
+
+    await sendMail({ from: '"NeonShop " <neonshop@support.com>', to: email, subject: 'Password Reset', text });
+
+    return res.json({
+    status: "success",
+        message: "check your email to get password reset link", 
+  });
+});
+
+
+
+
+

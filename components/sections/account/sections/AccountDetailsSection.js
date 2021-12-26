@@ -26,9 +26,10 @@ const AccountDetailsSection = () => {
     const data = new FormData(); 
     for (let key in state) data.append(key, state[key]); 
     
-    const res = await Axios.patch(`users/${user._id}`, data); 
+    const res = await Axios.patch('users', data); 
     
     setLoading(false); 
+    setState(state => ({...state, image: ''}))
     setGlobalState((state) => ({
       ...state,
       alert: {

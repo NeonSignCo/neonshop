@@ -2,7 +2,7 @@ import Product from "../models/product";
 import AppError from "../utils/AppError";
 import catchASync from "../utils/catchASync";
 import mongoose from 'mongoose';
-import uploadImage from "../../utils/uploadImage";
+import uploadImage from "../utils/uploadImage";
 import {v2 as cloudinary} from 'cloudinary';
 
 // @route       GET /api/products
@@ -100,6 +100,11 @@ export const updateProduct = catchASync(async (req, res) => {
   if (req.file) {
     // delete previous image if exists
     if (product.image?.public_id) {
+      cloudinary.config({
+        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+        api_key: process.env.CLOUDINARY_API_KEY,
+        api_secret: process.env.CLOUDINARY_API_SECRET,
+      });
       await cloudinary.v2.uploader.destroy(product.image.public_id);
     }
     const img = await uploadImage({
@@ -141,6 +146,11 @@ export const deleteProduct = catchASync(async (req, res) => {
   
   // delete product image is exist
   if (product.image?.public_id) {
+    cloudinary.config({
+      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+      api_key: process.env.CLOUDINARY_API_KEY,
+      api_secret: process.env.CLOUDINARY_API_SECRET,
+    });
       await cloudinary.v2.uploader.destroy(product.image.public_id);
     }
 

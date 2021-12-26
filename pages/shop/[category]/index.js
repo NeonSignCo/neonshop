@@ -205,7 +205,8 @@ export const getStaticProps = async ({ params }) => {
     const category = await Category.findOne({ slug: params.category }).lean(); 
 
     if (!category) return {
-      notFound: true
+      notFound: true, 
+      revalidate: 10
     }
 
     const products = await Product.find({ category: category._id}).lean(); 

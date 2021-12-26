@@ -5,7 +5,7 @@ import {
 
 import nc from "next-connect";
 import multer from "multer";
-import connectDb from "../../../server/utils/connectDb";
+import dbConnection from "../../../server/middleware/dbConnection";
 
 const handler = nc({
   onError: (err, req, res, next) => {
@@ -29,10 +29,7 @@ const handler = nc({
       message: "Resource not found",
     });
   },
-}).use(async (req, res, next) => {
-  await connectDb();
-  next();
-})
+}).use(dbConnection)
   .patch(updateCategory)
   .delete(deleteCategory);
 

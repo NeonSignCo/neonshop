@@ -1,9 +1,9 @@
 import nc from "next-connect";
 import multer from "multer";
-import connectDb from "../../../server/utils/connectDb";
-import { login } from '../../../server/handlers/users'
+import dbConnection from "../../../server/middleware/dbConnection";
+import {login} from "../../../server/handlers/users";
 
-const handle = nc({
+const handler = nc({
   onError: (err, req, res, next) => {
     console.error(err.stack);
 
@@ -25,10 +25,8 @@ const handle = nc({
       message: "Resource not found",
     });
   },
-}).use(async (req, res, next) => {
-  await connectDb();
-  next();
 })
-.post(login);
+  .use(dbConnection)
+  .post(login)
 
-export default handle;
+export default handler;
