@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import ColorSchema from "../schemas/ColorSchema";
-import SizeSchema from "../schemas/sizeSchema";
+import SizeSchema from "../schemas/SizeSchema";
 
 const CartSchema = new mongoose.Schema(
   {

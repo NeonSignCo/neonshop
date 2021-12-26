@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import ImageSchema from '../schemas/ImageSchema';
-import SizeSchema from '../schemas/sizeSchema';
+import SizeSchema from '../schemas/SizeSchema';
 
 
 const ProductSchema = new mongoose.Schema(
