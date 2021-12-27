@@ -11,8 +11,9 @@ import connectDb from "../../../server/utils/connectDb";
 import Category from '../../../server/models/category'; 
 import Product from '../../../server/models/product'; 
 import { ERROR, useGlobalContext } from "../../../context/GlobalContext";
-import LoadingBtn from "../../../components/LoadingBtn";
+import LoadingBtn, { Loader } from "../../../components/LoadingBtn";
 import Axios from "../../../utils/Axios";
+import { useRouter } from "next/router";
 
 
 // variables 
@@ -55,6 +56,13 @@ const CategoryPage = ({category, products}) => {
       ),
     }));
   };
+
+
+  if(useRouter().isFallback) return (
+    <div className="h-screen grid place-content-center">
+      <Loader borderColor="border-black"/>
+    </div>
+  );
 
   return (
     <div>
@@ -218,7 +226,6 @@ export const getStaticProps = async ({ params }) => {
       revalidate: 10,
     };
   } catch (error) { 
-    console.log(error)
     return {
       props: {
         error: { code: 500, message: "server error" },

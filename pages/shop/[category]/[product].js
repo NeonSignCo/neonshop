@@ -116,7 +116,12 @@ const ProductPage = ({ product }) => {
     setGlobalState((state) => ({ ...state, cart, showCart: true }));
   };
 
-  if(useRouter().isFallback) return <Loader/>
+   if (useRouter().isFallback)
+     return (
+       <div className="h-screen grid place-content-center">
+         <Loader borderColor="border-black" />
+       </div>
+     );
 
   return (
     <div className=" pt-10">
@@ -450,7 +455,6 @@ export const getStaticProps = async ({ params }) => {
       revalidate: 10,
     };
   } catch (error) {
-    console.log(error);
     return {
       props: {
         error: { code: 500, message: "server error" },
