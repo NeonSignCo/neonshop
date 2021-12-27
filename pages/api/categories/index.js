@@ -4,7 +4,6 @@ import {
 import authenticate from "../../../server/middleware/authenticate";
 import restrictto from '../../../server/middleware/restrictTo';
 import nc from "next-connect";
-import multer from "multer";
 import dbConnection from "../../../server/middleware/dbConnection";
 import ncConfig from "../../../server/utils/ncConfig";
 

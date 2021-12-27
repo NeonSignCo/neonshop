@@ -11,6 +11,8 @@ import ContactForm from "../../../components/forms/ContactForm";
 import connectDb from "../../../server/utils/connectDb";
 import Product from "../../../server/models/product";
 import Category from "../../../server/models/category";
+import { Loader } from "../../../components/LoadingBtn";
+import { useRouter } from "next/router";
 
 
 // variations
@@ -114,16 +116,18 @@ const ProductPage = ({ product }) => {
     setGlobalState((state) => ({ ...state, cart, showCart: true }));
   };
 
+  if(useRouter().isFallback) return <Loader/>
+
   return (
     <div className=" pt-10">
       <div className="px-5 lg:px-20 mb-4">
         <BreadCrumb />
       </div>
-      <div className="px-5 lg:px-20 grid grid-cols-1 md:grid-cols-2 gap-7">
+      <div className="px-5 lg:px-20 grid grid-cols-1 md:grid-cols-2 place-items-start gap-7">
         <img
           src={product.image.url}
           alt={product.name || "product name"}
-          className="w-full object-cover  md:sticky top-16"
+          className="w-full  md:sticky top-12"
         />
         <div className="grid gap-5 place-content-star">
           <h1 className="text-3xl font-semibold uppercase">{product.name}</h1>
@@ -471,10 +475,9 @@ export const getStaticPaths = async () => {
 
     return {  
       paths,
-      fallback: 'blocking',
+      fallback: true,
     };
   } catch (error) {
-    console.log(error)
     return {
       paths: [],
       fallback: false,

@@ -7,7 +7,13 @@ import catchASync from "../utils/catchASync";
 // @access      user
 export const addCart = catchASync(async (req, res) => {
 
-  const cart = await Cart.create(req.body);
+  const { items } = req.body; 
+
+  if (!items) throw new AppError(400, 'items is required');
+
+  await Cart.validate()
+
+  const cart = await Cart.create({items, userId: req.user._id});
 
   return res.json({
     status: "success",

@@ -37,10 +37,21 @@ const CartSchema = new mongoose.Schema(
           required: [true],
         },
       },
-    ],
+        ], 
+        subTotal: Number, 
+        discount: Number, 
+        total: Number
   },
   { timestamps: true }
 );
+
+
+CartSchema.pre('save', function (doc, next) {
+    return console.log('pre save running', doc);
+})
+
+
+
 
 const Cart = mongoose.models.Cart || mongoose.model("Cart", CartSchema);
 
