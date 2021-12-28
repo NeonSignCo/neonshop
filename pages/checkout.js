@@ -159,7 +159,7 @@ const CartPreview = () => {
       <div className="h-[2px] bg-black/10 my-5"></div>
       <div className="flex justify-between">
         <p className="capitalize">subtotal</p>
-        <p>${globalState.cartData.cart.subTotal}</p>
+        <p>${globalState.cartData.cart?.subTotal}</p>
       </div>
       <div className="flex justify-between">
         <p className="capitalize">Shipping</p>
@@ -169,7 +169,7 @@ const CartPreview = () => {
         <div className="flex justify-between">
           <p className="capitalize">discount</p>
           <p className="uppercase font-semibold text-lg">
-            -{globalState.cart.discount}
+            -{globalState.cart?.discount}
           </p>
         </div>
       ) : (
@@ -190,7 +190,6 @@ const CartPreview = () => {
 };
 
 const CartItem = ({ item }) => {
-  const [globalState] = useGlobalContext();
   const size = item.product.sizes.find(size => size._id === item.selectedSize);
   return (
     <div className="flex items-center gap-3 py-2">
@@ -212,13 +211,13 @@ const CartItem = ({ item }) => {
           <span className="font-semibold">color:</span>{" "}
           <span className="uppercase">{item.selectedColor.name}</span> |{" "}
           <span className="font-semibold">size:</span>{" "}
-          <span className="uppercase">{size.info}</span> |{" "}
+          <span className="uppercase">{size?.info}</span> |{" "}
           <span className="font-semibold">mount:</span>{" "}
           <span className="uppercase">{item.selectedMountType}</span>
         </p>
       </div>
       <div className="flex h-full items-center justify-center">
-        <span className="text-">${item.count* size.price}</span>
+        <span className="text-">${item.count* size?.price}</span>
       </div>
     </div>
   );
