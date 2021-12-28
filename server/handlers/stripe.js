@@ -4,9 +4,9 @@ import AppError from '../utils/AppError';
 import catchASync from "../utils/catchASync";
 import mongoose from 'mongoose';
 import Product from '../models/product';
-import countries from '../../utils/countries';
 import allowedCountries from '../../utils/allowedCountries';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+import { buffer } from "micro";
 
 // @route       POST /api/stripe/checkout-session
 // @purpose     Init a checkout session
@@ -101,10 +101,10 @@ export const webhookCheckout = catchASync(async (req, res) => {
      try {
        // (1) get the signature from req.headers
        const signature = req.headers["stripe-signature"];
-
+        const buf = await buffer(req);
        // (2) get access to the checkout session success event
        stripeEvent = stripe.webhooks.constructEvent(
-         req.body,
+         buf,
          signature,
          process.env.STRIPE_WEBHOOK_SECRET
        );
