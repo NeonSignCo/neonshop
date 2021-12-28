@@ -13,7 +13,7 @@ const ncConfig = {
 
     return res.status(500).json({
       status: "fail",
-      message: "Server error",
+      message: err.message,
     });
   },
   onNoMatch: (req, res, next) => {
