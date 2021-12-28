@@ -14,11 +14,7 @@ import Footer from "../components/Footer";
 import getLoggedInUser from "../utils/getLoggedInUser";
 import Cart from "../server/models/cart";
 import Product from "../server/models/product";
-// import { loadStripe } from "@stripe/stripe-js";
 import connectDb from "../server/utils/connectDb";
-// const stripePromise = loadStripe(
-//   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-// );
 
 const Checkout = () => {
   return (
@@ -37,7 +33,7 @@ const Container = () => {
   
   return (
     <div>
-      {globalState.cartData.cart?.items?.length > 0 ? (
+      {/* {globalState.cartData.cart?.items?.length > 0 ? (
         <div className="flex flex-col lg:flex-row">
           <div className="flex-1">
             <div
@@ -108,7 +104,7 @@ const Container = () => {
         </div>
       ) : (
         <CartEmptySection />
-      )}
+      )} */}
     </div>
   );
 };
