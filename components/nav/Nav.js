@@ -16,7 +16,6 @@ import DropDown from "./DropDown";
 import MobileMenu from "./MobileMenu";
 import Banner from "../Banner";
 import { AnimatePresence } from "framer-motion";
-import LoadingBtn, { Loader } from "../LoadingBtn";
 import { useRouter } from "next/router";
 import Axios from "../../utils/Axios";
 
@@ -28,7 +27,7 @@ const Nav = () => {
   const [state, setState] = useState({
     showMobileMenu: false,
   });
-
+  
   return (
     <div className="bg-black text-white sticky top-0 w-full shadow z-20 ">
       <AnimatePresence>{globalState.showBanner && <Banner />}</AnimatePresence>
@@ -43,49 +42,6 @@ const Nav = () => {
             <DropDown
               containerRef={dropDownRef}
               title="shop neons"
-              items={[
-                {
-                  title: "explore",
-                  links: [
-                    { link: "/custom-neon-sign", text: "build your own" },
-                    { text: "inspiration" },
-                    { link: "/shop", text: "shop all" },
-                  ],
-                },
-                {
-                  title: "decoration",
-                  links: [
-                    { text: "aesthetic" },
-                    { text: "inspirational" },
-                    { text: "neon art" },
-                    { text: "neon letters" },
-                    { text: "neon lights" },
-                    { text: "quotes" },
-                    { text: "marvel comics" },
-                    { text: "retro" },
-                  ],
-                },
-                {
-                  title: "occasion",
-                  links: [
-                    { text: "christmas" },
-                    { text: "halloween" },
-                    { text: "faith" },
-                    { text: "party" },
-                    { text: "wedding" },
-                  ],
-                },
-                {
-                  title: "location",
-                  links: [
-                    { text: "bar signs" },
-                    { text: "gaming" },
-                    { text: "home" },
-                    { text: "kids home" },
-                    { text: "man cave" },
-                  ],
-                },
-              ]}
             />
           </div>
           <CustomLink href="/about" text="about" />
@@ -100,15 +56,15 @@ const Nav = () => {
             onClick={() =>
               setGlobalState((state) => ({
                 ...state,
-                showCart: true,
+               cartData: {...state.cartData, show: true}
               }))
             }
           >
             <FaShoppingBag />
             <span className="absolute left-0 top-[13px] h-4 w-4 rounded-full bg-gray-800 flex items-center justify-center text-sm">
-              {globalState.cart.items.length > 9
+              {globalState.cartData.cart?.items.length > 9
                 ? "9+"
-                : globalState.cart.items.length}
+                : globalState.cartData.cart?.items.length || 0}
             </span>
           </button>
           <div ref={searchRef}>

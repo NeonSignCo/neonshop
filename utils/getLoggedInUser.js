@@ -5,7 +5,7 @@ import ShippingAddress from "../server/models/shippingAddress";
 import BillingAddress from "../server/models/billingAddress";
 
 const getLoggedInUser = async (req) => {
-    try {               
+    try {
         await connectDb() 
         const { token } = req.cookies;
        
@@ -21,15 +21,15 @@ const getLoggedInUser = async (req) => {
         const user = await User.findById(verifiedToken.userId)
           .populate([
             { path: "shippingAddress", model: ShippingAddress },
-            { path: "billingAddress", model: BillingAddress },
+            { path: "billingAddress", model: BillingAddress }
           ])
-            .lean();
+          .lean();
 
         if (!user) return null;
   
         if (user.passwordChangedAt > verifiedToken.iat * 1000) return null;
         
-        return JSON.parse(JSON.stringify(user));
+      return user;
     } catch (error) {
         return null;  
     }

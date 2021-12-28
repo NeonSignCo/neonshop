@@ -25,7 +25,6 @@ const NTO = 'NTO';
 const OTN = 'OTN';
 
 const CategoryPage = ({category, products}) => {
-  const productsCount = 100;
 
   const [state, setState] = useState({
     category: '', 
@@ -117,12 +116,20 @@ const CategoryPage = ({category, products}) => {
 export default CategoryPage;
 
 const ProductItem = ({ product }) => {
+
   return (
     <CustomLink
-      href={`/shop/category-1/${product.slug}`}
+      href={`/shop/${useRouter().query.category}/${product.slug}`}
       className="grid gap-1"
     >
-      <img src={product.image.url} alt={product.name} />
+      <div className="relative">
+        {product.salePercentage > 0 && (
+          <div className="absolute bg-red-500 py-1 px-2 rounded text-white text-sm">
+            -{product.salePercentage}%
+          </div>
+        )}
+        <img src={product.image.url} alt={product.name} />
+      </div>
       <h3 className="text-lg sm:text-xl font-semibold uppercase">
         {product.name}
       </h3>

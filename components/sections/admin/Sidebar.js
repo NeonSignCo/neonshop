@@ -60,9 +60,6 @@ const Desktop = () => {
           <Item text="orders" section={ORDERS}>
             <FaDollarSign className="w-5" />
           </Item>
-          <Item text="customers" section={CUSTOMERS}>
-            <FaUsers className="w-5" />
-          </Item>
           <Item text="products" section={PRODUCTS}>
             <FaBoxOpen className="w-5" />
           </Item>
@@ -71,9 +68,6 @@ const Desktop = () => {
           </Item>
           <Item text="categories" section={CATEGORIES}>
             <FaFolderOpen className="w-5" />
-          </Item>
-          <Item text="reviews" section={REVIEWS}>
-            <FaComments className="w-5" />
           </Item>
         </motion.div>
       </div>

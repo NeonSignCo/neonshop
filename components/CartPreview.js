@@ -2,24 +2,27 @@ import { motion } from "framer-motion"
 import { useEffect } from "react";
 import { FaChevronRight, FaMinus, FaPlane, FaPlus } from "react-icons/fa"
 import { useGlobalContext } from "../context/GlobalContext";
+import Axios from "../utils/Axios";
+import catchASync from "../utils/catchASync";
 import CustomLink from "./CustomLink";
+import LoadingBtn from "./LoadingBtn";
 
 const CartPreview = () => {
     const [globalState, setGlobalState] = useGlobalContext();
-
+  
+  
     // close preview on escape key
     useEffect(() => {
         const listener = (e) => e.key === 'Escape' &&
           setGlobalState((state) => ({
             ...state,
-            showCart: false
+           cartData: {...state.cartData, show: false}
           }));
         document.addEventListener('keydown', listener);
         return () => document.removeEventListener('keydown', listener);
     }, [])
 
-    
-
+  
     return (
       <motion.div
         initial={{ opacity: 0, x: "100%" }}
@@ -33,7 +36,7 @@ const CartPreview = () => {
             onClick={() =>
               setGlobalState((state) => ({
                 ...state,
-                showCart: false,
+                cartData: { ...state.cartData, show: false },
               }))
             }
           >
@@ -44,34 +47,36 @@ const CartPreview = () => {
             <FaChevronRight />
           </button>
           <div className="flex-1 h-full overflow-hidden ">
-            {globalState.cart.items?.length > 0 ? (
+            {globalState.cartData.cart?.items?.length > 0 ? (
               <div className="flex flex-col h-full">
                 <div className="overflow-auto p-2 bg-gray-200 text-black flex flex-col gap-4">
-                  {globalState.cart.items?.map((item, i) => (
+                  {globalState.cartData.cart?.items?.map((item, i) => (
                     <CartItem item={item} key={i} />
                   ))}
                 </div>
                 <div className="flex-1 p-3 pt-5 flex flex-col gap-3 ">
                   <div className="flex flex-wrap justify-between">
                     <p className="font-semibold uppercase">subtotal</p>
-                    <p className="font-semibold">{globalState.cart.subTotal}</p>
+                    <p className="font-semibold">
+                      {globalState.cartData.cart?.subTotal}
+                    </p>
                   </div>
                   <div className="flex flex-wrap justify-between">
                     <p className="font-semibold uppercase">shipping</p>
                     <p className="font-semibold uppercase">free</p>
                   </div>
-                  <CustomLink
-                    href="/checkout"
-                    className="w-full bg-black p-2 uppercase text-white text-center"
+                  <LoadingBtn
+                    loading={globalState.cartData.loading}
+                    className="w-full bg-black text-white uppercase font-semibold text-center transition"
                     onClick={() =>
                       setGlobalState((state) => ({
                         ...state,
-                        showCart: false,
+                        cartData: { ...state.cartData, show: false },
                       }))
                     }
                   >
-                    checkout
-                  </CustomLink>
+                    <CustomLink href="/checkout" className="p-2 w-full">checkout</CustomLink>
+                  </LoadingBtn>
                   <CustomLink
                     href="/cart"
                     className="w-full bg-white p-2 uppercase border border-gray-400 font-semibold text-center transition hover:bg-black hover:text-white"
@@ -119,97 +124,83 @@ export default CartPreview
 
 const CartItem = ({ item }) => {
     const [globalState, setGlobalState] = useGlobalContext();
-
-  const changeQuantity = (plus = true) => {
-      
-
-      setGlobalState((state) => {
-
-        let cart
-       
-        // remove item from cart if quantity becomes less than 1
-        if (!plus && item.quantity === 1) { 
-          const deleteIndex = state.cart.items.findIndex(
-            (cartItem) =>
-              cartItem._id === item._id &&
-              cartItem.color.hex === item.color.hex &&
-              cartItem.mountType === item.mountType &&
-              cartItem.size.name === item.size.name
-          );
-          cart = {
-            ...state.cart,
-            subTotal: Number(state.cart.subTotal) - Number(item.size.price),
-          }; 
-          cart.items.splice(deleteIndex, 1);
-        } else {
-          // increase or decrease quantity
-          cart = {
-            ...state.cart,
-            items: state.cart.items.map((cartItem) =>
-              cartItem._id === item._id &&
-              cartItem.color.hex === item.color.hex &&
-              cartItem.mountType === item.mountType &&
-              cartItem.size.name === item.size.name
-                ? {
-                    ...cartItem,
-                    quantity: plus
-                      ? Number(cartItem.quantity) + 1
-                      : Number(cartItem.quantity) - 1,
-                  }
-                : cartItem
-            ),
-            subTotal: plus
-              ? Number(state.cart.subTotal) + Number(item.size.price)
-              : Number(state.cart.subTotal) - Number(item.size.price),
-          };
-        }
-
-       
-
-        // save to localStorage
-        localStorage.setItem("cart", JSON.stringify(cart));
-
-        // update state
-        return {
+      const size = item.product.sizes.find(
+        (size) => size._id === item.selectedSize
+      );
+  
+  const updateCart = ({plus = true}) =>
+    catchASync(
+      async () => {
+        setGlobalState((state) => ({
           ...state,
-          cart,
-        };
-      });
-    };
+          cartData: { ...state.cartData, loading: true },
+        }));
+        const items = globalState.cartData.cart.items.map(cartItem => {
+          const sameVariation =
+            cartItem._id === item._id &&
+            cartItem.product._id === item.product._id &&
+            cartItem.selectedColor.hex === item.selectedColor.hex &&
+            cartItem.selectedMountType === item.selectedMountType &&
+            cartItem.size === item.size;
+          
+          if (sameVariation) {
+            cartItem.count = plus ? cartItem.count + 1 : cartItem.count - 1;
+          }
+          return cartItem;
+        } )
+        const res = await Axios.post("cart", {items});
+
+        setGlobalState((state) => ({
+          ...state,
+          cartData: {
+            ...state.cartData,
+            loading: false,
+            cart: res.data.cart,
+          },
+        }));
+      },
+      setGlobalState,
+      () =>
+        setGlobalState((state) => ({
+          ...state,
+          cartData: { ...state.cartData, loading: false },
+        }))
+    );
+
 
     return (
       <div className="flex items-center gap-2 bg-white p-2">
         <img
-          src="/img/product-images/product-3.jpg"
+          src={item.product.image.url}
           alt="product"
           className="h-20 w-20 object-cover"
         />
         <div className="flex flex-col justify-between flex-1">
           <h3 className="font-semibold capitalize">{item.name}</h3>
           <p className="capitalize text-sm">
-            color: <span className="uppercase">{item.color.name}</span> | size:{" "}
-            <span className="uppercase">{item.size.shortHand}</span> | mount:{" "}
-            <span className="uppercase">{item.mountType}</span>
+            color: <span className="uppercase">{item.selectedColor.name}</span> | size:{" "}
+            <span className="uppercase">{size?.info}</span> | mount:{" "}
+            <span className="uppercase">{item.selectedMountType}</span>
           </p>
           <div className="flex flex-wrap justify-between items-center">
             <div className="flex items-center gap-2">
               <button
                 className="h-5 w-5 flex items-center justify-center bg-gray-300 transition hover:bg-black hover:text-white text-[10px]"
-                onClick={() => changeQuantity(false)}
+                onClick={() => updateCart({plus: false})}
               >
                 <FaMinus />
               </button>
-              <p>{item.quantity}</p>
+              <p>{item.count}</p>
               <button
                 className="h-5 w-5 flex items-center justify-center bg-gray-300 transition hover:bg-black hover:text-white text-[10px]"
-                onClick={changeQuantity}
+                onClick={updateCart}
               >
                 <FaPlus />
               </button>
             </div>
             <p className="font-semibold">
               $
-              {item.size.price * item.quantity}
+              {size.price * item.count}
             </p>
           </div>
         </div>

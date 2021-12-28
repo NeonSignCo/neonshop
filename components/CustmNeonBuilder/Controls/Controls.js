@@ -192,7 +192,7 @@ const Controls = () => {
                   }}
                 />
               </div>
-              <flex className="flex items-center gap-2">
+              <div className="flex items-center gap-2">
                 <p className="capitalize">width</p>
                 <input
                   type="number"
@@ -208,7 +208,7 @@ const Controls = () => {
                     }));
                   }}
                 />
-              </flex>
+              </div>
             </div>
           </div>
           <div className="grid gap-2 " id="backing">

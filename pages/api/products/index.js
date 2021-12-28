@@ -16,10 +16,17 @@ const handler = nc(ncConfig)
     multer({
       storage: multer.memoryStorage(),
       limits: { fileSize: 10 * 1024 * 1024 },
-    }).single("image"), 
+    }).single("image"),
     uploadProduct
-)
+  )
   .get(getAllProducts)
+  .post(
+    multer({
+      storage: multer.memoryStorage(),
+      limits: { fileSize: 10 * 1024 * 1024 },
+    }).single("image"),
+    uploadProduct
+  )
   .delete(deleteAllProducts);
 
 export default handler;

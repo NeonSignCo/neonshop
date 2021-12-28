@@ -4,11 +4,11 @@ const ColorSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, "name is required"],
+      required: [true, "color name is required"],
     },
     hex: {
       type: String,
-      required: [true, "hex is required"],
+      required: [true, "color hex is required"],
     },
   },
   { timestamps: true }

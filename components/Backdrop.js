@@ -9,8 +9,8 @@ const Backdrop = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: .7, transition: { duration: .3 } }}
             exit={{ opacity: 0, transition: { duration: .3 } }}
-            className="fixed inset-0 bg-black"
-            onClick={() => setState(state => ({ ...state, showCart: false }))}
+            className="fixed inset-0 bg-black z-10"
+            onClick={() => setState(state => ({ ...state, cartData: {...state.cartData, show: false} }))}
       ></motion.div>
     );
 }

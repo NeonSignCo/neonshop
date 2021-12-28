@@ -7,8 +7,6 @@ import Sidebar from "./Sidebar"
 const DashboardSection = dynamic(() => import('./sections/DashboardSection'));
 const OrderSection = dynamic(() => import('./sections/OrderSection'));
 const ProductSection = dynamic(() => import('./sections/ProductsSection/ProductSection'));
-const CustomerSection = dynamic(() => import('./sections/CustomerSection'));
-const ReviewSection = dynamic(() => import('./sections/ReviewSection'));
 const AddNewProductSection = dynamic(() => import('./sections/AddNewProductSection'));
 const CategorySection = dynamic(() => import('./sections/CategorySection'));
 const AdminSection = () => {
@@ -24,12 +22,8 @@ const AdminSection = () => {
             <OrderSection />
           ) : state.activeSection === PRODUCTS ? (
             <ProductSection />
-          ) : state.activeSection === CUSTOMERS ? (
-            <CustomerSection />
           ) : state.activeSection === ADD_NEW_PRODUCT ? (
             <AddNewProductSection />
-          ) : state.activeSection === REVIEWS ? (
-            <ReviewSection />
           ) : (
             state.activeSection === CATEGORIES && <CategorySection />
           )}

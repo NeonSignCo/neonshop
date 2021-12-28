@@ -130,7 +130,7 @@ const TableItem = ({ product, state, setState }) => {
 
 
   const deleteProduct = () => catchASync(async () => {
-    const yes = prompt('delete this product ? type yes to continue', 'no'); 
+    const yes = confirm('delete this product ?'); 
     if (!yes) return;
     setLoading(true);
     await Axios.delete(`products/${product._id}`);

@@ -3,7 +3,8 @@ import AppError from "../utils/AppError";
 import catchASync from "../utils/catchASync";
 import mongoose from 'mongoose';
 import uploadImage from "../utils/uploadImage";
-import {v2 as cloudinary} from 'cloudinary';
+import cloudinary from 'cloudinary';
+import slugify from "../../utils/slugify";
 
 // @route       GET /api/products
 // @purpose     Get all products
@@ -49,7 +50,7 @@ export const getAllProducts = catchASync(async (req, res) => {
 // @purpose     Upload product
 // @access      Admin
 export const uploadProduct = catchASync(async (req, res) => {
-  const { name, sizes, description, category } = req.body;
+  const { name, sizes, description, category, salePercentage } = req.body;
   if (!req.file) throw new AppError(400, "image is required");
   if (!name) throw new AppError(400, "name is required");
   if (!sizes) throw new AppError(400, "sizes is required");
@@ -58,15 +59,21 @@ export const uploadProduct = catchASync(async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(category))
     throw new AppError(400, "catgegory is not valid");
 
-  const product = await Product.create({ name, sizes: JSON.parse(sizes), description, category });
+  
+  // create slug 
+  const slug = slugify(name);
 
-  // cloudinary
+  // create product
+  const product = await Product.create({ name, slug, sizes: JSON.parse(sizes), description, category, salePercentage });
+
+  // save image to cloudinary
   const img = await uploadImage({
     buffer: req.file.buffer,
     width: 500,
     folder: "neonshop/img/products",
   });
-  
+
+  // update product image
   product.image = {version: img.version, public_id: img.public_id, url: img.secure_url }
 
   await product.save(); 
@@ -84,9 +91,10 @@ export const uploadProduct = catchASync(async (req, res) => {
 // @purpose     Update product
 // @access      Admin
 export const updateProduct = catchASync(async (req, res) => {
-  const { name, description, category } = req.body;
+  const { name, description, category, salePercentage = 0 } = req.body;
   let image;
   let sizes = req.body.sizes;
+  let slug;
   const id = req.query?.id;
 
   if (!mongoose.Types.ObjectId.isValid(id)) throw new AppError(400, 'not a valid id');
@@ -123,7 +131,12 @@ export const updateProduct = catchASync(async (req, res) => {
     sizes = JSON.parse(sizes); 
   };
 
-  const updatedProduct = await Product.findByIdAndUpdate(id, { $set: { name, description, sizes, category, image } }, {new: true, runValidators: true});
+  // update slug if name is provided 
+  if (name) {
+    slug = slugify(name);
+  }
+
+  const updatedProduct = await Product.findByIdAndUpdate(id, { $set: { name, slug, description, sizes, category, image, salePercentage } }, {new: true, runValidators: true});
 
   return res.json({
     status: "success",

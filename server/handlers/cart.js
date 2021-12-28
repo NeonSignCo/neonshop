@@ -1,49 +1,39 @@
 import Cart from "../models/cart";
+import Product from "../models/product";
 import AppError from "../utils/AppError";
 import catchASync from "../utils/catchASync";
 
 // @route       POST /api/cart
-// @purpose     Add cart
+// @purpose     Add or update cart
 // @access      user
-export const addCart = catchASync(async (req, res) => {
+export const addOrUpdateCart = catchASync(async (req, res) => {
+  if (!req.body.items) throw new AppError(400, "items is required");
 
-  const { items } = req.body; 
+  const data = { items: req.body.items, userId: req.user._id };
 
-  if (!items) throw new AppError(400, 'items is required');
+  await Cart.validate(data);
 
-  await Cart.validate()
+  const calculatedCart = await Cart.calcPrice(data);
 
-  const cart = await Cart.create({items, userId: req.user._id});
+  const cart = await Cart.findOneAndUpdate({ userId: data.userId }, calculatedCart, {
+    new: true,
+    upsert: true,
+    runValidators: true, 
+  }).populate({ path: "items.product", model: Product });
 
   return res.json({
     status: "success",
-    cart
+    message: 'cart updated',
+    cart,
   });
 });
 
-// @route       PATCH /api/cart
-// @purpose     Update cart
-// @access      user
-export const updateCart = catchASync(async (req, res) => {
-  
-  const cart = await Cart.findOneAndUpdate({ userId: req.user._id }, { $set: req.body }, { new: true, runValidators: true });
-
-  if (!cart) throw new AppError(404, 'no cart found');
-
-  return res.json({
-    status: "success",
-    message: "cart updated",
-    cart
-  });
-});
 // @route       GET /api/cart
 // @purpose     Get cart
 // @access      user
 export const getCart = catchASync(async (req, res) => {
 
-  const cart = await Cart.findOne({ userId: req.user._id });
-
-  if (!cart) throw new AppError(404, 'cart  not found');
+  const cart = await Cart.findOne({ userId: req.user._id }).populate({path: 'items.product', model: Product});
 
   return res.json({
     status: "success",

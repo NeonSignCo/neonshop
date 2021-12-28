@@ -7,10 +7,14 @@ const ProductSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, "name is required"], 
-      unique: true
+      required: [true, "name is required"],
+      unique: true,
     },
-    slug: String,
+    slug: {
+      type: String,
+      required: [true, "slug is required"],
+      unique: true,
+    },
     description: {
       type: String,
       required: [true, "description is required"],
@@ -21,27 +25,11 @@ const ProductSchema = new mongoose.Schema(
       required: [true, "product category is required"],
       ref: "category",
     },
-    sizes: [SizeSchema],
+    sizes: [SizeSchema], 
+    salePercentage: Number
   },
   { timestamps: true }
 );
-
-ProductSchema.pre("save", function (next) {
-  this.slug = slugify(this.name);
-  next();
-}); 
-
-// function to slugify a name
-function slugify(text) {
-  return text
-    .toString()
-    .toLowerCase()
-    .replace(/\s+/g, "-") // Replace spaces with -
-    .replace(/[^\w\-]+/g, "") // Remove all non-word chars
-    .replace(/\-\-+/g, "-") // Replace multiple - with single -
-    .replace(/^-+/, "") // Trim - from start of text
-    .replace(/-+$/, ""); // Trim - from end of text
-}
 
 const Product = mongoose.models.Product || mongoose.model("Product", ProductSchema);
 

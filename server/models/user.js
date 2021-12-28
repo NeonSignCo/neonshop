@@ -62,7 +62,11 @@ UserSchema.virtual("billingAddress", {
   localField: "_id",
 });
 
-
+UserSchema.virtual("cart", {
+  ref: "cart",
+  foreignField: "userId",
+  localField: "_id",
+});
 
 // plugins
 UserSchema.plugin(uniqueValidator, {

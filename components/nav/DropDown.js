@@ -1,10 +1,29 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { FaCaretDown } from "react-icons/fa";
+import { useGlobalContext } from "../../context/GlobalContext";
 import CustomLink from "../CustomLink";
+import { Loader } from "../LoadingBtn";
 
-const DropDown = ({ title, items, containerRef }) => {
+const DropDown = ({ title, containerRef }) => {
   const [expand, setExpand] = useState(false);
+  const [globalState] = useGlobalContext();
+  const items = [
+    {
+      title: "explore",
+      links: [
+        { link: "/custom-neon-sign", text: "build your own" },
+        { link: "/shop", text: "shop all" },
+      ],
+    },
+    {
+      title: "categories",
+      links: globalState.categoryData.categories?.map(item => ({link: `shop/${item.slug}`, text: item.name}))
+    },
+  ];
+
+
+
     useEffect(() => {
         // only close dropdown if clicked outside
       const listener = e => {
@@ -40,7 +59,7 @@ const DropDown = ({ title, items, containerRef }) => {
             className={`flex gap-20 absolute left-1/2 -translate-x-1/2 bg-gray-900 overflow-hidden`}
             onClick={(e) => e.stopPropagation()}
           >
-            {items.map((item, i) => (
+            {globalState.categoryData.loading  ? <Loader/>: items.map((item, i) => (
               <div key={i} className="">
                 <h3 className="font-semibold mb-3 uppercase">{item.title}</h3>
                 <div className="grid gap-1">

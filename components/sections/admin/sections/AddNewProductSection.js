@@ -17,6 +17,7 @@ const AddNewProductSection = ({product, className, edit= false, close}) => {
       description: product?.description || "",
       category: product?.category || "", 
       sizes: product?.sizes || [],
+      salePercentage: product?.salePercentage || 0,
       size: {
         info: "",
         price: "",
@@ -51,6 +52,7 @@ const AddNewProductSection = ({product, className, edit= false, close}) => {
             category: state.category,
             sizes: JSON.stringify(sizes),
             image: state.image, 
+            salePercentage: state.salePercentage
 
           };
           const formData = new FormData();
@@ -185,21 +187,23 @@ const AddNewProductSection = ({product, className, edit= false, close}) => {
                   alt={product?.name}
                   className="h-20"
                 />
-                <label htmlFor='image' className="bg-gray-800 text-white p-2 capitalize">
+                <label
+                  htmlFor="image"
+                  className="bg-gray-800 text-white p-2 capitalize"
+                >
                   change
                 </label>
                 <input
                   type="file"
                   id="image"
                   name="image"
-                  accept="image/*" 
-                  className='h-0 w-0' 
+                  accept="image/*"
+                  className="h-0 w-0"
                   onChange={(e) =>
                     setState((state) => ({
                       ...state,
-                      image: e.target.files[0], 
-                      previewImage: URL.createObjectURL(e.target.files[0]), 
-
+                      image: e.target.files[0],
+                      previewImage: URL.createObjectURL(e.target.files[0]),
                     }))
                   }
                 />
@@ -223,7 +227,7 @@ const AddNewProductSection = ({product, className, edit= false, close}) => {
             </div>
           )}
           <div className="grid gap-2">
-            <label htmlFor="name" className="capitalize font-semibold">
+            <label htmlFor="category" className="capitalize font-semibold">
               category
             </label>
             <select
@@ -244,6 +248,22 @@ const AddNewProductSection = ({product, className, edit= false, close}) => {
                   </option>
                 ))}
             </select>
+          </div>
+          <div className="grid gap-2">
+            <label htmlFor="salePercentage" className="capitalize font-semibold">
+              sale percentage (optional) 
+            </label>
+            <input
+              type="number"
+              name="salePercentage"
+              id="salePercentage"
+              min={0}
+              max={100}
+              value={state.salePercentage}
+              onChange={inputChange}
+              className="p-2 bg-gray-200 w-20"
+              placeholder="x%"
+            />
           </div>
           <div className="grid gap-2">
             <p className="capitalize font-semibold">add size</p>

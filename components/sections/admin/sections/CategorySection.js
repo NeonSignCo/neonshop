@@ -171,6 +171,8 @@ const CategoryItem = ({ item }) => {
     const deleteItem = async (e) => {
       try {
         e.preventDefault();
+        const yes = confirm("delete this category ?");
+        if (!yes) return;
         await Axios.delete(`categories/${item._id}`, {
           name: state.name,
           description: state.description,

@@ -29,6 +29,8 @@ export default async function connectDb () {
   if (!cached.promise) {
     const opts = {
       bufferCommands: false,
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
     };
 
     cached.promise = mongoose.connect(DB_URL, opts).then((mongoose) => {

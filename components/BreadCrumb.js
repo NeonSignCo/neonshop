@@ -2,8 +2,8 @@ import { useRouter } from "next/router"
 import CustomLink from "./CustomLink";
 
 const BreadCrumb = () => { 
-    const routes = useRouter().asPath.split("/");
-
+    const routes = useRouter().asPath.split('?').shift().split("/");
+    
     return (
       <div className="flex gap-2 items-center capitalize flex-wrap font-semibold max-w-max text-sm ">
         <CustomLink text="home" />

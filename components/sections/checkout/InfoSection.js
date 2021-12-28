@@ -8,6 +8,7 @@ import { useEffect } from "react";
 
 const InfoSection = () => {
   const [state, setState] = useCheckoutContext();
+ 
 
   useEffect(() => {
     if (!state.activeElement) return;
@@ -53,10 +54,6 @@ const InfoSection = () => {
         <div className="flex flex-col gap-3">
           <div className="flex flex-col md:flex-row md:justify-between">
             <h2 className="font-semibold capitalize">Contact Information</h2>
-            <p>
-              Already have an account?{" "}
-              <CustomLink className="font-semibold" text="Log in" />
-            </p>
           </div>
           <div className="flex flex-col gap-1">
             <label htmlFor="email">

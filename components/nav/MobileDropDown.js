@@ -1,9 +1,29 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { FaCaretDown } from "react-icons/fa";
+import { useGlobalContext } from "../../context/GlobalContext";
 import CustomLink from "../CustomLink";
+import { Loader } from "../LoadingBtn";
 
-const MobileDropDown = ({ title, items, closeMenu }) => {
+const MobileDropDown = ({ title, closeMenu }) => {
+  const [globalState] = useGlobalContext();
+  const items = [
+    {
+      title: "explore",
+      links: [
+        { link: "/custom-neon-sign", text: "build your own" },
+        { text: "inspiration" },
+        { link: "/shop", text: "shop all" },
+      ],
+    },
+    {
+      title: "categories",
+      links: globalState.categoryData.categories?.map((item) => ({
+        link: `shop/${item.slug}`,
+        text: item.name,
+      })),
+    },
+  ];
     const [expand, setExpand] = useState(false);
      return (
        <div className="">
@@ -28,7 +48,7 @@ const MobileDropDown = ({ title, items, closeMenu }) => {
                exit={{ opacity: 0, height: 0, transition: { duration: 0.3 } }}
              >
                <div className="grid gap-4 overflow-hidden pt-4">
-                 {items.map((item, i) => (
+                 {globalState.cartData.loading ? <Loader/>: items.map((item, i) => (
                    <div key={i} className="">
                      <h3 className="font-semibold">{item.title}</h3>
                      <div className="grid gap-2 capitalize">

@@ -11,6 +11,13 @@ import CheckoutContext, {
 import { useGlobalContext } from "../context/GlobalContext";
 import Nav from "../components/nav/Nav";
 import Footer from "../components/Footer";
+import getLoggedInUser from "../utils/getLoggedInUser";
+import Cart from "../server/models/cart";
+import Product from "../server/models/product";
+import { loadStripe } from "@stripe/stripe-js";
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+);
 
 const Checkout = () => {
   return (
@@ -29,7 +36,7 @@ const Container = () => {
   
   return (
     <div>
-      {globalState.cart?.items?.length > 0 ? (
+      {globalState.cartData.cart?.items?.length > 0 ? (
         <div className="flex flex-col lg:flex-row">
           <div className="flex-1">
             <div
@@ -133,7 +140,7 @@ const CartPreview = () => {
   return (
     <div>
       <div className="grid gap-2">
-        {globalState.cart?.items?.map((item, i) => (
+        {globalState.cartData.cart?.items?.map((item, i) => (
           <CartItem key={i} item={item} />
         ))}
       </div>
@@ -151,13 +158,13 @@ const CartPreview = () => {
       <div className="h-[2px] bg-black/10 my-5"></div>
       <div className="flex justify-between">
         <p className="capitalize">subtotal</p>
-        <p>${globalState.cart.subTotal}</p>
+        <p>${globalState.cartData.cart.subTotal}</p>
       </div>
       <div className="flex justify-between">
         <p className="capitalize">Shipping</p>
         <p className="uppercase">FREE</p>
       </div>
-      {globalState.cart.discount ? (
+      {globalState.cartData.cart?.discount ? (
         <div className="flex justify-between">
           <p className="capitalize">discount</p>
           <p className="uppercase font-semibold text-lg">
@@ -171,12 +178,9 @@ const CartPreview = () => {
       <div className="flex justify-between">
         <p className="capitalize">total</p>
         <div className="flex items-center gap-1">
-          <div className="capitalize">$</div>
           <div className="text-3xl">
             $
-            {globalState.cart.discount
-              ? globalState.cart.subTotal - globalState.cart.discount
-              : globalState.cart.subTotal}
+            {globalState.cartData.cart?.total || 0}
           </div>
         </div>
       </div>
@@ -186,8 +190,9 @@ const CartPreview = () => {
 
 const CartItem = ({ item }) => {
   const [globalState] = useGlobalContext();
+  const size = item.product.sizes.find(size => size._id === item.selectedSize);
   return (
-    <div className="flex  items-center gap-3 py-2">
+    <div className="flex items-center gap-3 py-2">
       <div className="relative">
         <div>
           <img
@@ -197,22 +202,22 @@ const CartItem = ({ item }) => {
           />
         </div>
         <span className="absolute -top-1 -right-2 bg-gray-500 h-5 w-5 rounded-full text-white flex justify-center items-center">
-          {item.quantity}
+          {item.count}
         </span>
       </div>
       <div className="flex flex-col gap-1 flex-1">
         <div className="font-semibol capitalize text-xl">{item.name}</div>
         <p className="capitalize text-sm">
           <span className="font-semibold">color:</span>{" "}
-          <span className="uppercase">{item.color.name}</span> |{" "}
+          <span className="uppercase">{item.selectedColor.name}</span> |{" "}
           <span className="font-semibold">size:</span>{" "}
-          <span className="uppercase">{item.size.shortHand}</span> |{" "}
+          <span className="uppercase">{size.info}</span> |{" "}
           <span className="font-semibold">mount:</span>{" "}
-          <span className="uppercase">{item.mountType}</span>
+          <span className="uppercase">{item.selectedMountType}</span>
         </p>
       </div>
       <div className="flex h-full items-center justify-center">
-        <span className="text-">${item.quantity * item.size.price}</span>
+        <span className="text-">${item.count* size.price}</span>
       </div>
     </div>
   );
@@ -243,4 +248,39 @@ const CartEmptySection = () => {
       <Footer />
     </div>
   );
+};
+
+
+
+export const getServerSideProps = async ({ req }) => {
+  try {
+    const user = await getLoggedInUser(req);
+
+    if (!user) {
+      return {
+        redirect: {
+          destination: "/login",
+          permanent: false,
+        },
+      };
+    }
+    const cart = await Cart.findOne({ userId: user._id })
+      .populate({ path: "items.product", model: Product })
+      .lean();
+    const orders = [];
+    return {
+      props: {
+        orders,
+        user: JSON.parse(JSON.stringify(user)),
+        cart: JSON.parse(JSON.stringify(cart)),
+        serverRendered: true,
+      },
+    };
+  } catch (error) {
+    return {
+      props: {
+        error: { code: 500, message: "server error" },
+      },
+    };
+  }
 };

@@ -99,7 +99,7 @@ export const login = catchASync(async (req, res) => {
 
   // remove sensitive data
   user.password = undefined;
-
+  user.passwordChangedAt = undefined;
   // sign jwt token
   const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {expiresIn: '14d'});
 
@@ -117,7 +117,8 @@ export const login = catchASync(async (req, res) => {
 // @access      User
 export const getMe = catchASync(async (req, res) => {
   // remove sensitive data
-  req.user.password = undefined; 
+  req.user.password = undefined;  
+  req.user.passwordChangedAt = undefined;
   res.json({
     status: "success",
     message: "successfully authenticated user",
@@ -366,7 +367,7 @@ export const updateMe = catchASync(async (req, res) => {
 
   // remove sensitive data
   user.password = undefined;
-
+  user.passwordChangedAt = undefined;
   return res.json({
     status: "success",
     message: "account details updated",

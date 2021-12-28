@@ -13,27 +13,20 @@ const Context = createContext();
 export const useCheckoutContext = () => useContext(Context);
 
 const CheckoutContext = ({ children }) => {
-  
-    const [globalState] = useGlobalContext()
+  const [globalState] = useGlobalContext();
+  const userShipping = globalState.auth.user?.shippingAddress[0];
+  const userBilling = globalState.auth.user?.billingAddress[0];
+
     const [state, setState] = useState({
       activeSection: INFO_SECTION,  
       activeElement: '',
       billingSameAsShipping: true,
-      email: globalState.user?.email || "",
+      email: globalState.auth.user?.email || "",
       allowNewsLetterSignUp: true,
       allowTextMessageOffers: false, 
       paymentMethod: CREDIT_CART,
       shipping: {
-        country: "",
-        firstName: "",
-        lastName: "",
-        company: "",
-        city: "",
-        addressLine1: "",
-        addressLine2: "",
-        stateOrProvince: "",
-        zip: "",
-        phone: "",
+        ...userShipping,
         errors: {
           country: "",
           firstName: "",
@@ -45,18 +38,7 @@ const CheckoutContext = ({ children }) => {
         },
       },
       billing: {
-        country: "",
-        firstName: "",
-        lastName: "",
-        company: "",
-        city: "",
-        addressLine1: "",
-        addressLine2: "",
-        stateOrProvince: "",
-        zip: "",
-        phone: "",
-        allowNewsLetterSignUp: true,
-        allowTextMessageOffers: false,
+        ...userBilling,
         errors: {
           country: "",
           firstName: "",

@@ -1,12 +1,27 @@
+import { useEffect, useState } from "react";
 import { FaChevronLeft } from "react-icons/fa";
 import { CREDIT_CART, INFO_SECTION, PAYPAL, useCheckoutContext } from "../../../context/CheckoutContext";
+import { useGlobalContext } from "../../../context/GlobalContext";
+import Axios from "../../../utils/Axios";
+import catchASync from "../../../utils/catchASync";
 import BillingAddressForm from "../../forms/CheckoutBillingAddressForm";
+import LoadingBtn from "../../LoadingBtn";
 
 
 const PaymentSection = () => {
 
   const [state, setState] = useCheckoutContext();
+  const [globalState, setGlobalState] = useGlobalContext();
+  const [loading, setLoading] = useState(false);
 
+  const checkout = () => catchASync(async () => {
+    setLoading(true); 
+    const res = await Axios.post('stripe/checkout-session', { cartId: globalState.cartData.cart._id });
+    setLoading(false);   
+    window.location.href = res.data.session.url
+   }, setGlobalState, () => setLoading(false));
+
+  useEffect(() => () => { }, []);
     return (
       <div className="flex flex-col gap-10">
         <div className="border border-gray-400 rounded px-2">
@@ -199,9 +214,9 @@ const PaymentSection = () => {
             <FaChevronLeft />
             <p>Return to shipping</p>
           </button>
-          <button className="py-2 px-4 bg-black text-white uppercase tracking-widest">
+          <LoadingBtn loading={loading} className="py-2 px-4 bg-black text-white uppercase tracking-widest" onClick={checkout}>
             Complete payment
-          </button>
+          </LoadingBtn>
         </div>
       </div>
     );

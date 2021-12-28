@@ -1,7 +1,8 @@
 import Head from "next/head";
 import { createContext, useContext, useState } from "react";
 import AccountSection from "../components/sections/account/AccountSection";
-import { NOT_LOGGED_IN_EVALUATED } from "../context/GlobalContext";
+import Cart from "../server/models/cart";
+import Product from "../server/models/product";
 
 import getLoggedInUser from "../utils/getLoggedInUser";
 
@@ -34,12 +35,10 @@ const Account = ({ orders }) => {
 export default Account;
 
 export const getServerSideProps = async ({ req }) => {
-  let user = NOT_LOGGED_IN_EVALUATED;
   try {
-    const loggedInUser = await getLoggedInUser(req);
-    user = loggedInUser || NOT_LOGGED_IN_EVALUATED;
+    const user = await getLoggedInUser(req);
 
-     if (user === NOT_LOGGED_IN_EVALUATED) {
+     if (!user) {
        return {
          redirect: {
            destination: "/login",
@@ -47,26 +46,14 @@ export const getServerSideProps = async ({ req }) => {
          },
        };
      }
-
+    const cart = await Cart.findOne({ userId: user._id }).populate({path: 'items.product', model: Product}).lean();
     const orders = [];
-    for (let x = 1; x <= 3; x++) {
-      const randNumber = Math.random();
-      orders.push({
-        _id: Math.round(Math.random() * 100000),
-        date: Date.now(),
-        address: `this is the address for client ${x}`,
-        items: [1, 2],
-        shippedDate: Date.now(),
-        status: randNumber < 0.5 ? "ORDERED" : "DELIVERED",
-      });
-    }
-    
-   
-
     return {
       props: {
         orders,
-        user, 
+        user: JSON.parse(JSON.stringify(user)),  
+        cart: JSON.parse(JSON.stringify(cart)),
+        serverRendered: true
       }
     };
   } catch (error) {

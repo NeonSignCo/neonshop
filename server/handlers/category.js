@@ -42,7 +42,7 @@ export const getAllCategories =  catchASync(async (req, res) => {
     throw new AppError(400, "invalid limit query. Limit must me a number");
 
 
-  const categories = await Category.find().skip(skip).limit(limit);
+  const categories = await Category.find().skip(skip).limit(limit).lean();
     
   return res.json({
       status: "success",

@@ -1,36 +1,39 @@
-import { NOT_LOGGED_IN_EVALUATED } from "../context/GlobalContext";
 import Axios from "./Axios";
 
 const getInitialData = async (state, setState) => {
-  let cart = state.cart;
+  
+  let categories = state.categories;
   let user = state.auth.user;
-
-  try {
-    // cart data
-    const savedCart = localStorage.getItem("cart");
-    if (savedCart) cart = JSON.parse(savedCart);
-
-    // user data (NOT_LOGGED_IN_EVALUATED indicates that a user authentication has been already done on a page via getServerSideProps, so trying again to get user here is pointless)
+  let cart = state.cartData.cart;
 
 
+  try { 
 
-    if (user === !NOT_LOGGED_IN_EVALUATED || !state.auth.user) { 
-      const loggedInUser = (await Axios.get("/users/me")).data.user;
-      if (loggedInUser) user = loggedInUser;
-    } else {
-      user = user === NOT_LOGGED_IN_EVALUATED ? null : user;
+    // get categories 
+    categories = (await Axios.get("categories")).data.categories;
+
+
+    if (!state.serverRendered) {
+      // authenticate user
+       user = (await Axios.get("users/me")).data.user;
+
+      // get cart data
+       cart = (await Axios.get("cart")).data.cart;
     }
 
     setState((state) => ({
       ...state,
+      categoryData: { loading: false, categories },
       auth: { loading: false, user },
-      cart,
+      cartData: { loading: false, cart },
     }));
+  
   } catch (error) {
     setState((state) => ({
       ...state,
+      categoryData: {loading: false, categories},
       auth: { loading: false, user },
-      cart,
+      cartData: {loading: false, cart}
     }));
   }
 };

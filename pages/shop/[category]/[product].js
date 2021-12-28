@@ -1,4 +1,3 @@
-import { FaStar } from "react-icons/fa";
 import { BsPlus, BsDash } from "react-icons/bs";
 import BreadCrumb from "../../../components/BreadCrumb";
 import { useState } from "react";
@@ -11,8 +10,10 @@ import ContactForm from "../../../components/forms/ContactForm";
 import connectDb from "../../../server/utils/connectDb";
 import Product from "../../../server/models/product";
 import Category from "../../../server/models/category";
-import { Loader } from "../../../components/LoadingBtn";
+import LoadingBtn, { Loader } from "../../../components/LoadingBtn";
 import { useRouter } from "next/router";
+import catchASync from "../../../utils/catchASync";
+import Axios from "../../../utils/Axios";
 
 
 // variations
@@ -39,82 +40,97 @@ const ProductPage = ({ product }) => {
   });
   const [showForm, setShowForm] = useState(false);
 
-  const addToCart = () => {
-    // check if all options are selected
-    if (
-      !state.color ||
-      !state.size.info ||
-      !state.mountType ||
-      !state.quantity
-    ) {
-      setState((state) => ({
-        ...state,
-        errors: {
-          color: !state.color.hex ? "Please select a color" : "",
-          size: !state.size.info ? "Please select a size" : "",
-          mountType: !state.mountType ? "Please select mount type" : "",
-          quantity: !state.quantity ? "Please select quantity" : "",
-        },
-      }));
+  const addToCart = () =>
+    catchASync(
+      async () => {
+        // check if all options are selected
+        if (
+          !state.color ||
+          !state.size.info ||
+          !state.mountType ||
+          !state.quantity
+        ) {
+          setState((state) => ({
+            ...state,
+            errors: {
+              color: !state.color.hex ? "Please select a color" : "",
+              size: !state.size.info ? "Please select a size" : "",
+              mountType: !state.mountType ? "Please select mount type" : "",
+              quantity: !state.quantity ? "Please select quantity" : "",
+            },
+          }));
 
-      // scroll to error point
-      const scrollTarget = document.getElementById(
-        !state.color.hex
-          ? "color"
-          : !state.size.name
-          ? "size"
-          : !state.mountType
-          ? "mount-type"
-          : !state.quantity && "quantity"
-      );
-      window.scrollTo(0, scrollTarget.offsetTop - 70);
-      return;
-    }
+          // scroll to error point
+          const scrollTarget = document.getElementById(
+            !state.color.hex
+              ? "color"
+              : !state.size.name
+              ? "size"
+              : !state.mountType
+              ? "mount-type"
+              : !state.quantity && "quantity"
+          );
+          window.scrollTo(0, scrollTarget.offsetTop - 70);
+          return;
+        }
 
-    const cart = globalState.cart;
-    const productInfo = {
-      _id: product._id,
-      productLink: window.location.href,
-      name: product.name,
-      image: product.image,
-      size: state.size,
-      color: state.color,
-      mountType: state.mountType,
-      quantity: Number(state.quantity),
-    };
+        setGlobalState((state) => ({
+          ...state,
+          cartData: {
+            ...state.cartData,
+            loading: true,
+          },
+        }));
 
-    // ignoring product quantity while calculating duplicate
-    const duplicateIndex = cart.items.findIndex(
-      (item) =>
-        item._id === productInfo._id &&
-        item.size.name === productInfo.size.name &&
-        item.color.hex === productInfo.color.hex &&
-        item.mountType === productInfo.mountType
+        let items = globalState.cartData.cart?.items || [];
+
+         const data = {
+           product: product._id,
+           selectedColor: state.color,
+           selectedMountType: state.mountType,
+           selectedSize: state.size._id,
+           count: state.quantity,
+         };
+        if (items.length > 0) {
+          // find same variation
+          const sameVariationIndex = items.findIndex(
+            (cartItem) =>
+              cartItem.product._id === product._id &&
+              cartItem.selectedColor.hex === state.color.hex &&
+              cartItem.selectedMountType === state.mountType &&
+              cartItem.selectedSize === state.size._id
+          );
+
+
+          if (sameVariationIndex !== -1) {
+            items[sameVariationIndex].count += state.quantity
+          } else {
+            items.push(data)
+          }
+         
+        } else { 
+          items.push(data)
+        }
+
+        const res = await Axios.post("cart", { items });
+
+        setGlobalState((state) => ({
+          ...state,
+          cartData: {
+            ...state.cartData,
+            loading: false,
+            show: true,
+            cart: res.data.cart,
+          },
+        }));
+      },
+      setGlobalState,
+      () =>
+        setGlobalState((state) => ({
+          ...state,
+          cartData: { ...state.cartData, loading: false },
+        }))
     );
-
-    if (duplicateIndex !== -1) {
-      // increase the quantity of the same variation
-      const increasedQuantity =
-        Number(cart.items[duplicateIndex].quantity) +
-        Number(productInfo.quantity);
-
-      // increase subtotal price accroding to new quantity
-      cart.subTotal +=
-        Number(cart.items[duplicateIndex].size.price) *
-        (increasedQuantity - Number(cart.items[duplicateIndex].quantity));
-      cart.items[duplicateIndex].quantity = increasedQuantity;
-    } else {
-      cart.items.push(productInfo);
-      cart.subTotal +=
-        Number(productInfo.size.price) * Number(productInfo.quantity);
-    }
-
-    // save to localStorage
-    localStorage.setItem("cart", JSON.stringify(cart));
-
-    // update state and show cart
-    setGlobalState((state) => ({ ...state, cart, showCart: true }));
-  };
 
    if (useRouter().isFallback)
      return (
@@ -123,35 +139,44 @@ const ProductPage = ({ product }) => {
        </div>
      );
 
+  const currentSize = state.size || product.sizes[0];
+  const discountPrice = product.salePercentage > 0 ? currentSize.price - currentSize.price * product.salePercentage / 100 : currentSize.price;
+  
   return (
     <div className=" pt-10">
       <div className="px-5 lg:px-20 mb-4">
         <BreadCrumb />
       </div>
-      <div className="px-5 lg:px-20 grid grid-cols-1 md:grid-cols-2 place-items-start gap-7">
-        <img
-          src={product.image.url}
-          alt={product.name || "product name"}
-          className="w-full  md:sticky top-12"
-        />
-        <div className="grid gap-5 place-content-star">
-          <h1 className="text-3xl font-semibold uppercase">{product.name}</h1>
-          <div className="flex items-center gap-1">
-            <div className="flex gap-2">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <FaStar
-                  key={i}
-                  className={i > product.rating ? "text-gray-400" : ""}
-                />
-              ))}
+      <div className="px-5 lg:px-20 grid grid-cols-1 md:grid-cols-2  gap-7">
+        <div className="relative">
+          {product.salePercentage > 0 && (
+            <div className="absolute z-10 bg-red-500 py-1 px-2 rounded text-white ">
+              -{product.salePercentage}%
             </div>
-            <span>| {product.reviewsCount || 0} reviews</span>
-          </div>
-          <p className="flex items-center font-semibold text-2xl text-gray-600">
-            <span>$</span>
-            <span>{state.size.price || product.sizes[0].price}</span>
-          </p>
-          <p>{product.description}</p>
+          )}
+          <img
+            src={product.image.url}
+            alt={product.name}
+            className="w-full md:sticky"
+          />
+        </div>
+        <div className="grid gap-5 ">
+          <h1 className="text-3xl font-semibold uppercase">{product.name}</h1>
+          {product.salePercentage > 0 ? (
+            <div className="flex items-center font-semibold text-2xl text-gray-600">
+              <p>$</p>
+              <p>{discountPrice}</p>
+              <p className="relative">
+                <span className="absolute left-1 -top-5 text-[17px] line-through  text-red-500">${currentSize.price}</span>
+              </p>
+            </div>
+          ) : (
+            <p className="flex items-center font-semibold text-2xl text-gray-600">
+              <span>$</span>
+              <span>{currentSize.price}</span>
+            </p>
+          )}
+
           <div id="color">
             <h3 className="uppercase font-semibold mb-1">
               {!state.errors.color ? (
@@ -352,12 +377,13 @@ const ProductPage = ({ product }) => {
             </QnA>
           </div>
 
-          <button
+          <LoadingBtn
+            loading={globalState.cartData.loading}
             className="px-12 text-lg py-3 bg-black text-white uppercase max-w-max"
             onClick={addToCart}
           >
             add to cart
-          </button>
+          </LoadingBtn>
 
           <button
             className="p-2 border border-gray-500 max-w-max"

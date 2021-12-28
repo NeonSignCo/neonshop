@@ -3,7 +3,6 @@ import {
   FaChevronLeft,
   FaChevronRight,
   FaSearch,
-  FaStar,
 } from "react-icons/fa";
 import BreadCrumb from "../../components/BreadCrumb";
 import CustomLink from "../../components/CustomLink";
@@ -186,28 +185,23 @@ const ProductSearch = ({state, setState }) => {
 
 
 const ProductItem = ({ product }) => {
+
   return (
     <CustomLink
       href={`/shop/${product.category.slug}/${product.slug}`}
       className="grid gap-1"
     >
-      <img src={product.image.url} alt={product.name} />
+      <div className="relative">
+        {product.salePercentage > 0 && (
+          <div className="absolute bg-red-500 py-1 px-2 rounded text-white text-sm">
+            -{product.salePercentage}%
+          </div>
+        )}
+        <img src={product.image.url} alt={product.name} />
+      </div>
       <h3 className="text-lg sm:text-xl font-semibold uppercase">
         {product.name}
       </h3>
-      {product.reviews?.length > 0 && (
-        <div className="flex flex-col sm:flex-row  gap-1">
-          <div className="flex flex items-center gap-1">
-            {[1, 2, 3, 4, 5].map((i) => (
-              <FaStar
-                key={i}
-                className={i > i ? "text-gray-400" : "text-black"}
-              />
-            ))}
-          </div>
-          <div>| 10 Reviews</div>
-        </div>
-      )}
       <p className="">{product.sizes[0].price}</p>
     </CustomLink>
   );
@@ -275,9 +269,10 @@ const ProductNavigation = ({ productsCount, state, setState }) => {
 
 
 
-export const getStaticProps = async () => {
+export const getStaticProps = async ({req}) => {
   try {
     await connectDb();  
+
     const categories = await Category.find().lean(); 
     const products = await Product.find().populate({ path: 'category', model: Category, select: 'slug -_id'}).sort({createdAt: -1}).limit(productsPerPage).lean(); 
     const numOfProducts = await Product.countDocuments().lean();
@@ -285,10 +280,10 @@ export const getStaticProps = async () => {
     return {
       props: {
         categories: JSON.parse(JSON.stringify(categories)),
-        products: JSON.parse(JSON.stringify(products)), 
-        numOfProducts
-      },    
-      revalidate: 10
+        products: JSON.parse(JSON.stringify(products)),
+        numOfProducts,
+      },
+      revalidate: 10,
     };
   } catch (error) {
      return {
