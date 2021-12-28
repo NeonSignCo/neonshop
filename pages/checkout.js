@@ -33,7 +33,7 @@ const Container = () => {
   
   return (
     <div>
-      {/* {globalState.cartData.cart?.items?.length > 0 ? (
+      {globalState.cartData.cart?.items?.length > 0 ? (
         <div className="flex flex-col lg:flex-row">
           <div className="flex-1">
             <div
@@ -104,7 +104,7 @@ const Container = () => {
         </div>
       ) : (
         <CartEmptySection />
-      )} */}
+      )}
     </div>
   );
 };
