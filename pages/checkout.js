@@ -15,6 +15,7 @@ import getLoggedInUser from "../utils/getLoggedInUser";
 import Cart from "../server/models/cart";
 import Product from "../server/models/product";
 import { loadStripe } from "@stripe/stripe-js";
+import connectDb from "../server/utils/connectDb";
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
 );
@@ -254,6 +255,8 @@ const CartEmptySection = () => {
 
 export const getServerSideProps = async ({ req }) => {
   try {
+    await connectDb();
+
     const user = await getLoggedInUser(req);
 
     if (!user) {
