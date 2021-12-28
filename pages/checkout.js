@@ -11,10 +11,10 @@ import CheckoutContext, {
 import { useGlobalContext } from "../context/GlobalContext";
 import Nav from "../components/nav/Nav";
 import Footer from "../components/Footer";
-import getLoggedInUser from "../utils/getLoggedInUser";
-import Cart from "../server/models/cart";
-import Product from "../server/models/product";
-import connectDb from "../server/utils/connectDb";
+// import getLoggedInUser from "../utils/getLoggedInUser";
+// import Cart from "../server/models/cart";
+// import Product from "../server/models/product";
+// import connectDb from "../server/utils/connectDb";
 
 const Checkout = () => {
   return (
@@ -248,37 +248,37 @@ const CartEmptySection = () => {
 
 
 
-export const getServerSideProps = async ({ req }) => {
-  try {
-    await connectDb();
+// export const getServerSideProps = async ({ req }) => {
+//   try {
+//     await connectDb();
 
-    const user = await getLoggedInUser(req);
+//     const user = await getLoggedInUser(req);
 
-    if (!user) {
-      return {
-        redirect: {
-          destination: "/login",
-          permanent: false,
-        },
-      };
-    }
-    const cart = await Cart.findOne({ userId: user._id })
-      .populate({ path: "items.product", model: Product })
-      .lean();
-    const orders = [];
-    return {
-      props: {
-        orders,
-        user: JSON.parse(JSON.stringify(user)),
-        cart: JSON.parse(JSON.stringify(cart)),
-        serverRendered: true,
-      },
-    };
-  } catch (error) {
-    return {
-      props: {
-        error: { code: 500, message: "server error" },
-      },
-    };
-  }
-};
+//     if (!user) {
+//       return {
+//         redirect: {
+//           destination: "/login",
+//           permanent: false,
+//         },
+//       };
+//     }
+//     const cart = await Cart.findOne({ userId: user._id })
+//       .populate({ path: "items.product", model: Product })
+//       .lean();
+//     const orders = [];
+//     return {
+//       props: {
+//         orders,
+//         user: JSON.parse(JSON.stringify(user)),
+//         cart: JSON.parse(JSON.stringify(cart)),
+//         serverRendered: true,
+//       },
+//     };
+//   } catch (error) {
+//     return {
+//       props: {
+//         error: { code: 500, message: "server error" },
+//       },
+//     };
+//   }
+// };
