@@ -14,8 +14,8 @@ export const useCheckoutContext = () => useContext(Context);
 
 const CheckoutContext = ({ children }) => {
   const [globalState] = useGlobalContext();
-  const userShipping = globalState.auth.user?.shippingAddress[0];
-  const userBilling = globalState.auth.user?.billingAddress[0];
+  const userShipping = globalState.auth.user?.shippingAddress?.[0];
+  const userBilling = globalState.auth.user?.billingAddress?.[0];
 
     const [state, setState] = useState({
       activeSection: INFO_SECTION,  
