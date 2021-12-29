@@ -4,6 +4,7 @@ import AccountSection from "../components/sections/account/AccountSection";
 import Cart from "../server/models/cart";
 import Category from "../server/models/category";
 import Product from "../server/models/product";
+import connectDb from "../server/utils/connectDb";
 
 import getLoggedInUser from "../utils/getLoggedInUser";
 
@@ -37,6 +38,7 @@ export default Account;
 
 export const getServerSideProps = async ({ req }) => {
   try {
+    await connectDb();
     const user = await getLoggedInUser(req);
 
      if (!user) {

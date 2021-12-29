@@ -7,6 +7,7 @@ import { useGlobalContext } from "../context/GlobalContext";
 import Cart from "../server/models/cart";
 import Category from "../server/models/category";
 import Product from "../server/models/product";
+import connectDb from "../server/utils/connectDb";
 import Axios from "../utils/Axios";
 import catchASync from "../utils/catchASync";
 import getLoggedInUser from "../utils/getLoggedInUser";
@@ -197,6 +198,7 @@ const CartItem = ({ item }) => {
 
 export const getServerSideProps = async ({ req }) => {
   try {
+      await connectDb();
     const user = await getLoggedInUser(req);
 
     if (!user) {
