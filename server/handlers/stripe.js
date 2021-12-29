@@ -90,3 +90,27 @@ export const initCheckoutSession = catchASync(async (req, res) => {
   })
 
 })
+
+
+
+// @route       POST /api/stripe/webhook-checkout
+// @purpose     checkout webhook
+// @access      stripe 
+export const webhookCheckout = catchASync(async (req, res) => {
+  
+   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  if (!webhookSecret) throw new AppError(400, 'webhookSecret is required');
+  
+  const sig = req.headers["stripe-signature"];
+  if (!sig) throw new AppError(400, "no stripe-signature present is request header");
+
+  let event
+   try {
+     event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
+   } catch (error) {
+     console.log(error)
+     throw new AppError(400, `Webhook Error: ${error.message}`)
+   }
+
+  return res.json({ status: 'success', event });
+});
