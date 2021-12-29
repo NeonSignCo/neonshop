@@ -5,6 +5,7 @@ import catchASync from "../utils/catchASync";
 import mongoose from 'mongoose';
 import Product from '../models/product';
 import allowedCountries from '../../utils/allowedCountries';
+import getRawBody from 'raw-body';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {apiVersion: null});
 
 // @route       POST /api/stripe/checkout-session
@@ -104,21 +105,11 @@ export const webhookCheckout = catchASync(async (req, res) => {
   const sig = req.headers["stripe-signature"];
   if (!sig) throw new AppError(400, "no stripe-signature present is request header");
 
-  const rawBodyParser = (req) =>
-    new Promise((resolve) => {
-      let data = "";
-      req.on("data", (chunk) => {
-        data += chunk;
-      });
-      req.on("end", () => {
-        resolve(Buffer.from(data).toString());
-      });
-    });
-
   let event
   try {
-    const body = await rawBodyParser(req);
-     event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
+
+     const rawBody = await getRawBody(req);
+     event = stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);
    } catch (error) {
      console.log(error)
      throw new AppError(400, `Webhook Error: ${error.message}`)
