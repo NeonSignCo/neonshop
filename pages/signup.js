@@ -5,10 +5,10 @@ import CustomLink from "../components/CustomLink";
 import LoadingBtn from "../components/LoadingBtn";
 import {
   ERROR,
-  NOT_LOGGED_IN_EVALUATED,
   SUCCESS,
   useGlobalContext,
 } from "../context/GlobalContext";
+import connectDb from "../server/utils/connectDb";
 import Axios from "../utils/Axios";
 import getLoggedInUser from "../utils/getLoggedInUser";
 
@@ -244,23 +244,24 @@ const SignUp = () => {
 export default SignUp;
 
 export const getServerSideProps = async ({ req }) => {
-  let user = NOT_LOGGED_IN_EVALUATED;
-  try {
-    const loggedInUser = await getLoggedInUser(req);
-    user = loggedInUser || NOT_LOGGED_IN_EVALUATED;
 
-    if (user !== NOT_LOGGED_IN_EVALUATED) {
+  try {
+    await connectDb();
+
+    const user = await getLoggedInUser(req);
+    
+    if (user) {
       return {
         redirect: {
           destination: "/account",
           permanent: false,
-        },
+        }
       };
     }
 
     return {
       props: {
-        user,
+        serverRendered: true
       },
     };
   } catch (error) {

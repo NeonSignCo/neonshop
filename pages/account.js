@@ -2,6 +2,7 @@ import Head from "next/head";
 import { createContext, useContext, useState } from "react";
 import AccountSection from "../components/sections/account/AccountSection";
 import Cart from "../server/models/cart";
+import Category from "../server/models/category";
 import Product from "../server/models/product";
 
 import getLoggedInUser from "../utils/getLoggedInUser";
@@ -46,7 +47,14 @@ export const getServerSideProps = async ({ req }) => {
          },
        };
      }
-    const cart = await Cart.findOne({ userId: user._id }).populate({path: 'items.product', model: Product}).lean();
+    const cart = await Cart.findOne({ userId: user._id })
+      .populate({
+        path: "items.product",
+        model: Product,
+        populate: { path: "category", model: Category },
+      })
+      .lean();
+
     const orders = [];
     return {
       props: {

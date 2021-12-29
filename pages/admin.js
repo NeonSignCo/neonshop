@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { createContext, useContext, useState } from "react"
 import AdminSection from "../components/sections/admin/AdminSection";
-import { NOT_LOGGED_IN_EVALUATED } from "../context/GlobalContext";
+import Cart from "../server/models/cart";
 import Category from '../server/models/category'
 import Product from "../server/models/product";
 import connectDb from "../server/utils/connectDb";
@@ -50,35 +50,36 @@ export default Admin
 
 
 export const getServerSideProps = async ({req}) => {
-  let orders = [] 
-  let categories = []; 
-  let products = [];
-  let user = NOT_LOGGED_IN_EVALUATED;
   try {
 
     await connectDb();
-    const loggedInUser = await getLoggedInUser(req);
-    user = loggedInUser || NOT_LOGGED_IN_EVALUATED;
+    const user = await getLoggedInUser(req);
     
-    if (user === NOT_LOGGED_IN_EVALUATED || user.role !== 'ADMIN') {
+    if (!user || user.role !== 'ADMIN') {
       return {
         notFound: true
       }
     }
-
-    categories = await Category.find(); 
-    products = await Product.find()
-
+     const cart = await Cart.findOne({ userId: user._id })
+       .populate({
+         path: "items.product",
+         model: Product,
+         populate: { path: "category", model: Category },
+       })
+       .lean();
+    const products = await Product.find().lean();
+    const categories = await Category.find().lean();
     return {
       props: {
-        orders,
+        orders: [],
         products: JSON.parse(JSON.stringify(products)),
+        user: JSON.parse(JSON.stringify(user)),
+        cart: JSON.parse(JSON.stringify(cart)), 
         categories: JSON.parse(JSON.stringify(categories)), 
-        user: JSON.parse(JSON.stringify(user))
+        serverRendered: true
       },
     };
   } catch (error) {
-    console.log(error)
     return {
       props: {
         error: {

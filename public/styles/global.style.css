@@ -7,76 +7,84 @@ html {
 
 /* font families */ 
 @font-face {
+  font-family: 'AlluraRegular';
+  src: url('../fonts/Allura-Regular.ttf')
+}
+@font-face {
+  font-family: 'Amster1';
+  src: url('../fonts/Amster1.otf')
+}
+@font-face {
+  font-family: 'Amster2';
+  src: url('../fonts//Amster2.otf')
+}
+@font-face {
+  font-family: 'Amster3';
+  src: url('../fonts//Amster3.otf')
+}
+@font-face {
+  font-family: 'Amster4';
+  src: url('../fonts//Amster4.otf')
+}
+@font-face {
+  font-family: 'Andasia';
+  src: url('../fonts//Andasia.otf')
+}
+@font-face {
   font-family: 'ArchitectsDaughter';
-  src: url('../fonts//ArchitectsDaughter-Regular.ttf')
+  src: url('../fonts//ArchitectsDaughter.ttf')
 }
 @font-face {
-  font-family: 'astroastroRegular';
-  src: url('../fonts//astro.ttf')
+  font-family: 'Bakerie';
+  src: url('../fonts//Bakerie.otf')
 }
 @font-face {
-  font-family: 'cookieastroRegular';
-  src: url('../fonts//Cookie-Regular.ttf')
+  font-family: 'BillingMiracles';
+  src: url('../fonts//Billion\ Miracles.otf')
 }
 @font-face {
-  font-family: 'corinthiaRegular';
-  src: url('../fonts//Corinthia-Regular.ttf')
+  font-family: 'Brilliant';
+  src: url('../fonts//Brilliant.ttf')
 }
 @font-face {
-  font-family: 'fuzzyBubblesRegular';
-  src: url('../fonts//FuzzyBubbles-Regular.ttf')
+  font-family: 'Buffalo';
+  src: url('../fonts//Buffalo.otf')
 }
 @font-face {
-  font-family: 'greatVibesRegular';
-  src: url('../fonts//GreatVibes-Regular.ttf')
+  font-family: 'ColorTime';
+  src: url('../fonts//Color\ Time\ -\ OTF.otf')
 }
 @font-face {
-  font-family: 'gwendolynRegular';
-  src: url('../fonts//Gwendolyn-Regular.ttf')
+  font-family: 'Flation2';
+  src: url('../fonts//Flatlion2.ttf')
 }
 @font-face {
-  font-family: 'kaushanScriptRegular';
-  src: url('../fonts//KaushanScript-Regular.ttf')
+  font-family: 'NeonFuture';
+  src: url('../fonts//Neon\ Future.ttf')
 }
 @font-face {
-  font-family: 'lobsterTwoRegular';
-  src: url('../fonts//LobsterTwo-Regular.ttf')
+  font-family: 'Neoneon';
+  src: url('../fonts//Neoneon.otf')
 }
 @font-face {
-  font-family: 'luckiestGuyRegular';
-  src: url('../fonts//LuckiestGuy-Regular.ttf')
+  font-family: 'Nickainley';
+  src: url('../fonts//Nickainley-Normal.otf')
 }
 @font-face {
-  font-family: 'luxuriousScriptRegular';
-  src: url('../fonts//LuxuriousScript-Regular.ttf')
+  font-family: 'Outline';
+  src: url('../fonts//Outline.ttf')
 }
 @font-face {
-  font-family: 'meowScriptRegular';
-  src: url('../fonts//MeowScript-Regular.ttf')
+  font-family: 'PoiretOne';
+  src: url('../fonts//PoiretOne-Regular.ttf')
 }
 @font-face {
-  font-family: 'montserratRegular';
-  src: url('../fonts//Montserrat-Regular.ttf')
+  font-family: 'TimeBurner';
+  src: url('../fonts//timeburnernormal.ttf')
 }
 @font-face {
-  font-family: 'orbitronVariablesFontRegular';
-  src: url('../fonts//Orbitron-VariableFont_wght.ttf')
-}
-@font-face {
-  font-family: 'pacificoRegular';
-  src: url('../fonts//Pacifico-Regular.ttf')
-}
-@font-face {
-  font-family: 'permanentRegular';
-  src: url('../fonts//PermanentMarker-Regular.ttf')
-}
-@font-face {
-  font-family: 'sacramentoRegular';
-  src: url('../fonts//Sacramento-Regular.ttf')
-}
-@font-face {
-  font-family: 'sassyFrassRegular';
-  src: url('../fonts//SassyFrass-Regular.ttf')
+  font-family: 'Waltograph';
+  src: url('../fonts//waltograph.otf')
 }
 
 

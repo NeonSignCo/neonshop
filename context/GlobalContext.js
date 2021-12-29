@@ -18,7 +18,7 @@ const GlobalContext = ({ children, props }) => {
     showBanner: false,
     modal: { show: false, type: "", data: {} },
     auth: { loading: !serverRendered, user: props.user  },
-    ordersData: { loading: !serverRendered, orders: props.orders },
+    ordersData: { loading: !serverRendered, orders: props.orders},
     categoryData: { loading: true, categories: [] },
     cartData: { show: false, loading: !serverRendered, cart: props.cart },
     alert: { show: false, type: SUCCESS, text: "", timeout: 5000 },

@@ -44,6 +44,7 @@ const AccountSection = () => {
       setGlobalState((state) => ({
         ...state,
         auth: { ...state.auth, loading: false, user: null },
+        cartData: { ...state.cartData, cart: [] },
         alert: {
           ...state.alert,
           show: true,

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaChevronRight, FaChevronDown } from "react-icons/fa";
+import {  FaChevronDown } from "react-icons/fa";
 import CustomLink from "../components/CustomLink";
 import InfoSection from "../components/sections/checkout/InfoSection";
 import PaymentSection from "../components/sections/checkout/PaymentSection";
@@ -16,6 +16,7 @@ import Cart from "../server/models/cart";
 import Product from "../server/models/product";
 import connectDb from "../server/utils/connectDb";
 import { loadStripe } from "@stripe/stripe-js";
+import Category from "../server/models/category";
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
 const stripePromise = loadStripe(
@@ -51,26 +52,7 @@ const Container = () => {
             >
               <CustomLink className="text-3xl md:text-6xl" text="NeonShop" />
               <div className="flex items-center justify-center gap-3 md:gap-5 mt-5">
-                <CustomLink
-                  text="cart"
-                  href="/cart"
-                  className="text-gray-300"
-                  onClick={() => window.scrollTo(0, 0)}
-                />
-                <FaChevronRight />
-                <ToggleBtn
-                  section={INFO_SECTION}
-                  text="information"
-                  state={state}
-                  setState={setState}
-                />
-                <FaChevronRight />
-                <ToggleBtn
-                  section={PAYMENT_SECTION}
-                  text="payment"
-                  state={state}
-                  setState={setState}
-                />
+                <h2 className="text-lg">Checkout</h2>
               </div>
             </div>
             <div className="px-5 lg:px-12 pt-10 grid gap-10">
@@ -86,11 +68,7 @@ const Container = () => {
                 />
               </button>
               {showMobileSummary && <CartPreview />}
-              {state.activeSection === INFO_SECTION ? (
-                <InfoSection />
-              ) : (
-                state.activeSection === PAYMENT_SECTION && <PaymentSection />
-              )}
+              <PaymentSection />
 
               <div className="flex justify-center md:justify-start items-center p-2 border-t border-gray-300 gap-8 capitalize">
                 <CustomLink href="/privacy-policy" text="privacy policy" />
@@ -115,28 +93,7 @@ const Container = () => {
   );
 };
 
-const ToggleBtn = ({ section, text, state, setState }) => {
-  let disabled =
-    section === PAYMENT_SECTION
-      ? state.errors.email ||
-        Object.keys(state.shipping.errors).some((key) => !state.shipping[key])
-      : false;
 
-  return (
-    <button
-      className={` capitalize transition disabled:cursor-text ${
-        state.activeSection === section ? "font-semibold" : "text-gray-300"
-      }`}
-      onClick={() => {
-        if (!section) return;
-        setState((state) => ({ ...state, activeSection: section }));
-      }}
-      disabled={disabled}
-    >
-      {text}
-    </button>
-  );
-};
 
 const CartPreview = () => {
   const [globalState] = useGlobalContext();
@@ -268,10 +225,12 @@ export const getServerSideProps = async ({ req }) => {
         },
       };
     }
-    const cart = await Cart.findOne({ userId: user._id })
-      .populate({ path: "items.product", model: Product })
-      .lean();
-    console.log(user, cart)
+    const cart = await Cart.findOne({ userId: user._id }).populate({
+      path: "items.product",
+      model: Product,
+      populate: { path: "category", model: Category },
+    });
+
     const orders = [];
     return {
       props: {

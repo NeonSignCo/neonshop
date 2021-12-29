@@ -5,7 +5,7 @@ import { useGlobalContext } from "../context/GlobalContext";
 import Axios from "../utils/Axios";
 import catchASync from "../utils/catchASync";
 import CustomLink from "./CustomLink";
-import LoadingBtn from "./LoadingBtn";
+import LoadingBtn, { Loader } from "./LoadingBtn";
 
 const CartPreview = () => {
     const [globalState, setGlobalState] = useGlobalContext();
@@ -65,25 +65,26 @@ const CartPreview = () => {
                     <p className="font-semibold uppercase">shipping</p>
                     <p className="font-semibold uppercase">free</p>
                   </div>
-                  <LoadingBtn
-                    loading={globalState.cartData.loading}
-                    className="w-full bg-black text-white uppercase font-semibold text-center transition"
+                  <CustomLink
+                    href="/checkout"
+                    className="p-2 w-full bg-black text-white uppercase font-semibold transition flex items-center gap-2 justify-center"
                     onClick={() =>
                       setGlobalState((state) => ({
                         ...state,
                         cartData: { ...state.cartData, show: false },
                       }))
                     }
-                  >
-                    <CustomLink href="/checkout" className="p-2 w-full">checkout</CustomLink>
-                  </LoadingBtn>
+                  > 
+                    <span className="">checkout </span>
+                    {globalState.cartData.loading && <Loader />}
+                  </CustomLink>
                   <CustomLink
                     href="/cart"
                     className="w-full bg-white p-2 uppercase border border-gray-400 font-semibold text-center transition hover:bg-black hover:text-white"
                     onClick={() =>
                       setGlobalState((state) => ({
                         ...state,
-                        showCart: false,
+                        cartData: {...state.cartData, show: false}
                       }))
                     }
                   >

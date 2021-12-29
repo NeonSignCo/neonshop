@@ -6,7 +6,6 @@ import BillingAddress from "../server/models/billingAddress";
 
 const getLoggedInUser = async (req) => {
     try {
-        await connectDb() 
         const { token } = req.cookies;
        
         // check token

@@ -62,9 +62,9 @@ const Nav = () => {
           >
             <FaShoppingBag />
             <span className="absolute left-0 top-[13px] h-4 w-4 rounded-full bg-gray-800 flex items-center justify-center text-sm">
-              {globalState.cartData.cart?.items.length > 9
+              {globalState.cartData.cart?.items?.length > 9
                 ? "9+"
-                : globalState.cartData.cart?.items.length || 0}
+                : globalState.cartData.cart?.items?.length || 0}
             </span>
           </button>
           <div ref={searchRef}>
@@ -139,6 +139,7 @@ const AccountBtn = ({ containerRef }) => {
       setGlobalState((state) => ({
         ...state,
         auth: { ...state.auth, loading: false, user: null },
+        cartData: {...state.cartData, cart: []},
         alert: {
           ...state.alert,
           show: true,

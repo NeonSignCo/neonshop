@@ -18,6 +18,11 @@ const AdminHeader = () => {
   const logOut = () => catchASync(async () => {
     await Axios.put('users/logout'); 
     setExpand(false);
+    setGlobalState((state) => ({
+      ...state,
+      auth: { ...state.auth, user: null },
+      cartData: { ...state.cartData, cart: [] },
+    }));
     useRouter().push('/login');
   }, setGlobalState)
 

@@ -1,4 +1,5 @@
 import Cart from "../models/cart";
+import Category from "../models/category";
 import Product from "../models/product";
 import AppError from "../utils/AppError";
 import catchASync from "../utils/catchASync";
@@ -33,7 +34,11 @@ export const addOrUpdateCart = catchASync(async (req, res) => {
 // @access      user
 export const getCart = catchASync(async (req, res) => {
 
-  const cart = await Cart.findOne({ userId: req.user._id }).populate({path: 'items.product', model: Product});
+  const cart = await Cart.findOne({ userId: req.user._id }).populate({
+    path: "items.product",
+    model: Product,
+    populate: { path: "category", model: Category },
+  });
 
   return res.json({
     status: "success",

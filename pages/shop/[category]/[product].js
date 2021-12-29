@@ -85,7 +85,7 @@ const ProductPage = ({ product }) => {
         let items = globalState.cartData.cart?.items || [];
 
          const data = {
-           product: product._id,
+           product,
            selectedColor: state.color,
            selectedMountType: state.mountType,
            selectedSize: state.size._id,

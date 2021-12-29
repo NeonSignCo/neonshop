@@ -157,7 +157,7 @@ const AddressForm = ({type, state, setState}) => {
                    : "billing-address"
                }`, state[type]
              );
-        console.log(res.data)
+    
        setLoading(false);
        setState((state) => ({
          ...state, 

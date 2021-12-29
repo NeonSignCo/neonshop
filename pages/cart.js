@@ -95,7 +95,6 @@ export default CartPage
 
 
 const CartItem = ({ item }) => {
-  console.log(item)
   const [globalState, setGlobalState] = useGlobalContext();
   const size = item.product.sizes.find(
     (size) => size._id === item.selectedSize
@@ -138,7 +137,8 @@ const CartItem = ({ item }) => {
              ...state,
              cartData: { ...state.cartData, loading: false },
            }))
-       );
+    );
+
   return (
     <div className="flex flex-col md:flex-row gap-2 bg-white p-2">
       <CustomLink href={`shop/${item.product.category.slug}/${item.product.slug}`}>
@@ -208,11 +208,13 @@ export const getServerSideProps = async ({ req }) => {
       };
     }
     const cart = await Cart.findOne({ userId: user._id })
-      .populate(
-       [ { path: "items.product", model: Product },
-        { path: "items.product.category", model: Category }]
-      )
+      .populate({
+        path: "items.product",
+        model: Product,
+        populate: { path: "category", model: Category },
+      })
       .lean();
+
     const orders = [];
     return {
       props: {

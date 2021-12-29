@@ -153,7 +153,6 @@ export const getServerSideProps = async ({params}) => {
         const existingToken = await getToken(params.token);  
       token = existingToken;
      
-
       if (!token) return { notFound: true };
 
       if (!token.expires || typeof token.expires !== "number") {
