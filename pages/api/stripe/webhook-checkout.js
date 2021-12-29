@@ -1,7 +1,7 @@
 import { buffer } from "micro";
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {apiVersion: null});
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 const handler = async (req, res) => {
@@ -9,7 +9,7 @@ const handler = async (req, res) => {
     try {
         const buf = await buffer(req);
         const sig = req.headers["stripe-signature"];
-        const event = stripe.webhooks.constructEvent(buf, sig, webhookSecret);
+        const event = stripe.webhooks.constructEvent(buf.toString(), sig, webhookSecret);
         
 
         return res.json({ status: "success", received: true, event });

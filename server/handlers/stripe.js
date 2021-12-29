@@ -5,7 +5,7 @@ import catchASync from "../utils/catchASync";
 import mongoose from 'mongoose';
 import Product from '../models/product';
 import allowedCountries from '../../utils/allowedCountries';
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {apiVersion: null});
 
 // @route       POST /api/stripe/checkout-session
 // @purpose     Init a checkout session
