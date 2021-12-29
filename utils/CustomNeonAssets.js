@@ -23,76 +23,48 @@ export const fonts = [
 
 export const colors = [
   {
+    name: "red",
+    hex: "#FF0000",
+  },
+  {
     name: "white",
-    hex: "#F7F7F7",
-  },
-  {
-    name: "warm white",
-    hex: "#FFFABE",
-  },
-  {
-    name: "sun yellow",
-    hex: "#FFCE02",
-  },
-  {
-    name: "yellow",
-    hex: "#FFF100",
+    hex: "#FFFFFF",
   },
   {
     name: "orange",
-    hex: "#F26F22",
+    hex: "#FF9900",
   },
   {
-    name: "light red",
-    hex: "#E57B7C",
-  },
-  {
-    name: "red",
-    hex: "#BF84DB",
-  },
-  {
-    name: "baby pink",
-    hex: "#E57FA8",
-  },
-  {
-    name: "light pink",
-    hex: "#F2B3CD",
-  },
-  {
-    name: "pink",
-    hex: "#EB018C",
-  },
-  {
-    name: "purple",
-    hex: "#7F00BA",
-  },
-  {
-    name: "mint",
-    hex: "#97FFDF",
-  },
-  {
-    name: "ice blue",
-    hex: "#48D8EF",
-  },
-  {
-    name: "light blue",
-    hex: "#0098FF",
+    name: "yellow",
+    hex: "#FFFC00",
   },
   {
     name: "blue",
-    hex: "#0049FF",
+    hex: "#0D00FF",
   },
   {
-    name: "teal",
-    hex: "#00CCAE",
+    name: "light blue",
+    hex: "#00E0FF",
   },
   {
-    name: "light green",
-    hex: "#7CC798",
+    name: "mint",
+    hex: "#00FFD1",
   },
   {
     name: "green",
-    hex: "#00A551",
+    hex: "#00FD09",
+  },
+  {
+    name: "pink",
+    hex: "#FF94EE",
+  },
+  {
+    name: "hot pink",
+    hex: "#FF01D7",
+  },
+  {
+    name: "purple",
+    hex: "#AE01FF",
   },
 ];
 
