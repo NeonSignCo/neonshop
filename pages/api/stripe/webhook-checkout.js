@@ -7,10 +7,3 @@ const handler = nc().use(bodyParser.raw({ type: "application/json" }))
   .post(webhookCheckout);
 
 export default handler;
-
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
