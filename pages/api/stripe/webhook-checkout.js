@@ -11,9 +11,9 @@ const handler = async (req, res) => {
         const sig = req.headers["stripe-signature"];
         const event = stripe.webhooks.constructEvent(buf.toString(), sig, webhookSecret);
         
-
         return res.json({ status: "success", received: true, event });
     } catch (error) {
+        console.log(error)
         return res.status(500).json({
             status: 'fail', 
             message: error.message
