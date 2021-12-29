@@ -107,9 +107,7 @@ export const webhookCheckout = catchASync(async (req, res) => {
 
   let event
   try {
-
-     const rawBody = await getRawBody(req);
-     event = stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);
+     event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
    } catch (error) {
      console.log(error)
      throw new AppError(400, `Webhook Error: ${error.message}`)
