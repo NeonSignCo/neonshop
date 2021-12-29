@@ -6,21 +6,19 @@ const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 const handler = async (req, res) => {
   if (req.method === "POST") {
-    const buf = await buffer(req);
-    const sig = req.headers["stripe-signature"];
-
-    let event;
-
     try {
-      event = stripe.webhooks.constructEvent(buf, sig, webhookSecret);
-    } catch (err) {
-        res.status(400).json({
-            status: 'fail', 
-            message: err.message
-      })
-    }
+        const buf = await buffer(req);
+        const sig = req.headers["stripe-signature"];
+        const event = stripe.webhooks.constructEvent(buf, sig, webhookSecret);
+        
 
-    res.json({status: 'success',  received: true, event });
+        return res.json({ status: "success", received: true, event });
+    } catch (error) {
+        return res.status(500).json({
+            status: 'fail', 
+            message: error.message
+        })
+    }
   } else {
     res.status(405).end("Method Not Allowed");
   }

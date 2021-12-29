@@ -1,4 +1,4 @@
-import * as Stripe from 'stripe';
+import Stripe from 'stripe';
 import Cart from '../models/cart';
 import AppError from '../utils/AppError';
 import catchASync from "../utils/catchASync";
