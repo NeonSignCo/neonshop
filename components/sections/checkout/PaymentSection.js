@@ -6,7 +6,10 @@ import Axios from "../../../utils/Axios";
 import catchASync from "../../../utils/catchASync";
 import CustomLink from "../../CustomLink";
 import LoadingBtn from "../../LoadingBtn";
-
+import { loadStripe } from '@stripe/stripe-js';
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+);
 
 const PaymentSection = () => {
 
@@ -16,9 +19,24 @@ const PaymentSection = () => {
 
   const checkout = () => catchASync(async () => {
     setLoading(true); 
+     const stripe = await stripePromise;
     const res = await Axios.post('stripe/checkout-session', { cartId: globalState.cartData.cart._id });
+     const result = await stripe.redirectToCheckout({
+       sessionId: res.data.session.id,
+     });
+     if (result.error) {
+       setGlobalState((state) => ({
+         ...state,
+         alert: {
+           ...state.alert,
+           show: true,
+           text: result.error.message,
+           type: ERROR,
+           timeout: 5000,
+         },
+       }));
+     }
     setLoading(false);   
-    window.location.href = res.data.session.url
    }, setGlobalState, () => setLoading(false));
 
   useEffect(() => () => { }, []);

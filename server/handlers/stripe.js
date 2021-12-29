@@ -6,7 +6,6 @@ import mongoose from 'mongoose';
 import Product from '../models/product';
 import allowedCountries from '../../utils/allowedCountries';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-import { buffer } from "micro";
 
 // @route       POST /api/stripe/checkout-session
 // @purpose     Init a checkout session
@@ -91,42 +90,3 @@ export const initCheckoutSession = catchASync(async (req, res) => {
   })
 
 })
-
-
-// @route       GET /api/stripe/webhook-checkkout
-// @purpose     webhook checkout
-// @access      Public
-export const webhookCheckout = catchASync(async (req, res) => {
-     let stripeEvent;
-     try {
-       // (1) get the signature from req.headers
-       const signature = req.headers["stripe-signature"];
-        // const buf = await buffer(req);
-       // (2) get access to the checkout session success event
-       stripeEvent = stripe.webhooks.constructEvent(
-         req.rawBody,
-         signature,
-         process.env.STRIPE_WEBHOOK_SECRET
-       );
-
-       // (3) create an order using the session object in stripeEvent
-         if (stripeEvent.type !== "checkout.session.completed") return;
-         
-         const session = stripeEvent.data.object;
-
-        console.log(session)
-
-       res.json({
-         status: "success",  
-           message: "Your order has been received", 
-         session
-       });
-     } catch (error) {
-       res
-         .status(500)
-         .json({ status: "fail", message: `Webhook error: ${error.message}` });
-     }
-})
-
-
-

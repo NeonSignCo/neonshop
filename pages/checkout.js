@@ -1,11 +1,8 @@
 import { useState } from "react";
 import {  FaChevronDown } from "react-icons/fa";
 import CustomLink from "../components/CustomLink";
-import InfoSection from "../components/sections/checkout/InfoSection";
 import PaymentSection from "../components/sections/checkout/PaymentSection";
 import CheckoutContext, {
-  INFO_SECTION,
-  PAYMENT_SECTION,
   useCheckoutContext,
 } from "../context/CheckoutContext";
 import { useGlobalContext } from "../context/GlobalContext";
@@ -15,13 +12,7 @@ import getLoggedInUser from "../utils/getLoggedInUser";
 import Cart from "../server/models/cart";
 import Product from "../server/models/product";
 import connectDb from "../server/utils/connectDb";
-import { loadStripe } from "@stripe/stripe-js";
 import Category from "../server/models/category";
-// Make sure to call `loadStripe` outside of a component’s render to avoid
-// recreating the `Stripe` object on every render.
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-);
 
 const Checkout = () => {
   return (
@@ -34,7 +25,6 @@ const Checkout = () => {
 export default Checkout;
 
 const Container = () => {
-  const [state, setState] = useCheckoutContext();
   const [globalState] = useGlobalContext();
   const [showMobileSummary, setshowMobileSummary] = useState(false);
   
