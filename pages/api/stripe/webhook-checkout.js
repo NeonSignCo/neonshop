@@ -4,7 +4,7 @@ import { webhookCheckout } from "../../../server/handlers/stripe";
 import ncConfig from "../../../server/utils/ncConfig";
 
 
-const handler = nc(ncConfig).use(bodyParser.raw({ type: "application/json" }))
+const handler = nc(ncConfig)
   .post(webhookCheckout);
 
 export default handler;
