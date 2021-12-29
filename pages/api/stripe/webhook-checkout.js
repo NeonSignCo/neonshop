@@ -7,9 +7,9 @@ const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 const handler = async (req, res) => {
   if (req.method === "POST") {
     try {
-        const buf = await buffer(req);
+        // const buf = await buffer(req);
         const sig = req.headers["stripe-signature"];
-        const event = stripe.webhooks.constructEvent(buf, sig, webhookSecret);
+        const event = stripe.webhooks.constructEvent(req.rawBody, sig, webhookSecret);
         
 
         return res.json({ status: "success", received: true, event });
