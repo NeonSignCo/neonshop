@@ -101,10 +101,10 @@ export const webhookCheckout = catchASync(async (req, res) => {
      try {
        // (1) get the signature from req.headers
        const signature = req.headers["stripe-signature"];
-        const buf = await buffer(req);
+        // const buf = await buffer(req);
        // (2) get access to the checkout session success event
        stripeEvent = stripe.webhooks.constructEvent(
-         buf,
+         req.body,
          signature,
          process.env.STRIPE_WEBHOOK_SECRET
        );

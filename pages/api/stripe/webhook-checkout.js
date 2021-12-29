@@ -8,3 +8,11 @@ const handler = nc(ncConfig)
   .post(webhookCheckout);
 
 export default handler;
+
+
+
+export const config = {
+  api: {
+    bodyParser: false
+  }
+}
