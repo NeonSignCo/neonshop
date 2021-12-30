@@ -30,13 +30,18 @@ const AdminHeader = () => {
   const refreshData = () => catchASync(async () => {
 
     setLoading(true); 
-    const products = (await Axios.get('products')).data.products;
+    const products = (await Axios.get('products?limit=30')).data.products;
 
     const categories = (await Axios.get('categories')).data.categories; 
+    const orders = (
+      await Axios.get(
+        `orders?from=${new Date(Date.now() - 2 * 30 * 24 * 60 * 60 * 1000)}`
+      )
+    ).data.orders; 
 
     setLoading(false); 
 
-    setState(state => ({ ...state, products, categories }));
+    setState(state => ({ ...state, products, categories, orders }));
 
     setGlobalState(state => ({...state, alert: {...state.alert, show: true, text: 'updated', type: SUCCESS, timeout: 1000}}))
    }, setGlobalState, () => setLoading(false));

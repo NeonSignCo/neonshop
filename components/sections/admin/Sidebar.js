@@ -81,7 +81,11 @@ const Mobile = () => {
   const Item = ({ text, children, section }) => {
     return (
       <button
-        className="flex gap-4 items-center p-2 transition  hover:bg-gray-700 active:bg-gray-600 px-4 relative"
+        className={`flex gap-4 items-center p-2 transition active:bg-gray-600 px-4 relative ${
+              state.activeSection === section
+                ? "bg-gray-700"
+                : "hover:bg-gray-700"
+            }`}
         onClick={() =>
           setState((state) => ({
             ...state,
@@ -130,9 +134,6 @@ const Mobile = () => {
         <Item text="orders" section={ORDERS}>
           <FaDollarSign className="w-5" />
         </Item>
-        <Item text="customers" section={CUSTOMERS}>
-          <FaUsers className="w-5" />
-        </Item>
         <Item text="products" section={PRODUCTS}>
           <FaBoxOpen className="w-5" />
         </Item>
@@ -141,9 +142,6 @@ const Mobile = () => {
         </Item>
         <Item text="categories" section={CATEGORIES}>
           <FaFolderOpen className="w-5" />
-        </Item>
-        <Item text="reviews" section={REVIEWS}>
-          <FaComments className="w-5" />
         </Item>
       </motion.div>
       <AnimatePresence>

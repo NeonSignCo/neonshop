@@ -1,20 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {  FaChevronDown } from "react-icons/fa";
 import CustomLink from "../components/CustomLink";
 import PaymentSection from "../components/sections/checkout/PaymentSection";
-import CheckoutContext, {
-  useCheckoutContext,
-} from "../context/CheckoutContext";
 import { useGlobalContext } from "../context/GlobalContext";
 import Nav from "../components/nav/Nav";
 import Footer from "../components/Footer";
 import getLoggedInUser from "../utils/getLoggedInUser";
-import Cart from "../server/models/cart";
-import Product from "../server/models/product";
 import connectDb from "../server/utils/connectDb";
-import Category from "../server/models/category";
+import getUpdatedCart from "../server/utils/getUpdatedCart";
+import CheckoutContext from "../context/CheckoutContext";
+
 
 const Checkout = () => {
+
   return (
     <CheckoutContext>
       <Container />
@@ -139,7 +137,13 @@ const CartPreview = () => {
 };
 
 const CartItem = ({ item }) => {
-  const size = item.product.sizes.find(size => size._id === item.selectedSize);
+  const price =
+    item.product.sizes.find((size) => size._id === item.selectedSize.sizeId)
+      ?.price || item.selectedSize.price;
+  const salePrice =
+    item.product.salePercentage > 0
+      ? price - (price * item.product.salePercentage) / 100
+      : price;
   return (
     <div className="flex items-center gap-3 py-2">
       <div className="relative">
@@ -160,13 +164,13 @@ const CartItem = ({ item }) => {
           <span className="font-semibold">color:</span>{" "}
           <span className="uppercase">{item.selectedColor.name}</span> |{" "}
           <span className="font-semibold">size:</span>{" "}
-          <span className="uppercase">{size?.info}</span> |{" "}
+          <span className="uppercase">{item.selectedSize.info}</span> |{" "}
           <span className="font-semibold">mount:</span>{" "}
           <span className="uppercase">{item.selectedMountType}</span>
         </p>
       </div>
       <div className="flex h-full items-center justify-center">
-        <span className="text-">${item.count* size?.price}</span>
+        <span className="text-">${item.count* salePrice}</span>
       </div>
     </div>
   );
@@ -215,11 +219,7 @@ export const getServerSideProps = async ({ req }) => {
         },
       };
     }
-    const cart = await Cart.findOne({ userId: user._id }).populate({
-      path: "items.product",
-      model: Product,
-      populate: { path: "category", model: Category },
-    });
+    const cart = await getUpdatedCart(user._id);
 
     const orders = [];
     return {

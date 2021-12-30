@@ -5,7 +5,7 @@ import catchASync from "../utils/catchASync";
 import mongoose from 'mongoose';
 import Product from '../models/product';
 import allowedCountries from '../../utils/allowedCountries';
-import getRawBody from 'raw-body';
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {apiVersion: null});
 
 // @route       POST /api/stripe/checkout-session
@@ -33,12 +33,11 @@ export const initCheckoutSession = catchASync(async (req, res) => {
     const metadata = {}; 
     const line_items = [];
     cart.items.forEach(
-        (item, i) => {
-
-            const size = item.product.sizes.find(
-              (i) => String(i._id) === String(item.selectedSize)
-            );
-            const defaultPrice = size.price * 100;
+      (item, i) => {
+        const matchedSize = item.product.sizes.find(
+          (size) => String(size._id) === String(item.selectedSize.sizeId)
+        );
+            const defaultPrice = matchedSize.price * 100;
 
             const price =
                 item.product.salePercentage > 0
@@ -49,10 +48,10 @@ export const initCheckoutSession = catchASync(async (req, res) => {
             // metadata
             metadata[`item-${i + 1}`] = JSON.stringify({
               productId: item.product._id,
-              size,
+              selectedSize: matchedSize,
               count: item.count,
-              color: item.selectedColor,
-              mountType: item.selectedMountType,
+              selectedColor: item.selectedColor,
+              selectedMountType: item.selectedMountType,
             });
 
             // line_item

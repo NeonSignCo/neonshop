@@ -54,6 +54,7 @@ const ChangePasswordSection = () => {
               type="password"
               name="currentPassword"
               id="currentPassword"
+              autoComplete="current-password"
               value={state.currentPassword}
               onChange={inputChange}
               placeholder="Current Password"
@@ -69,6 +70,7 @@ const ChangePasswordSection = () => {
               type="password"
               name="newPassword"
               id="newPassword"
+              autoComplete="new-password"
               value={state.newPassword}
               onChange={inputChange}
               minLength={6}
@@ -89,6 +91,7 @@ const ChangePasswordSection = () => {
               type="password"
               name="confirmPassword"
               id="confirmPassword"
+              autoComplete="new-password"
               value={state.confirmPassword}
               onChange={inputChange}
               minLength={6}
@@ -97,8 +100,8 @@ const ChangePasswordSection = () => {
               className="p-2 bg-gray-200"
               required
             />
-          </div> 
-          {state.error && <p className="text-red-500">{state.error}</p> }
+          </div>
+          {state.error && <p className="text-red-500">{state.error}</p>}
           <LoadingBtn
             loading={loading}
             className="py-2 px-4 bg-gray-800 text-white font-semibold max-w-max capitalize"

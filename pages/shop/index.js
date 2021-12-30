@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import {
-  FaChevronLeft,
-  FaChevronRight,
   FaSearch,
 } from "react-icons/fa";
 import BreadCrumb from "../../components/BreadCrumb";
@@ -14,6 +12,7 @@ import Axios from "../../utils/Axios";
 import { ERROR, useGlobalContext } from '../../context/GlobalContext';
 import LoadingBtn from "../../components/LoadingBtn";
 import connectDb from "../../server/utils/connectDb";
+import ProductNavigation from "../../components/ProductNavigation";
 
 // variables 
 const LTH = 'LTH'; 
@@ -204,66 +203,6 @@ const ProductItem = ({ product }) => {
       </h3>
       <p className="">{product.sizes[0].price}</p>
     </CustomLink>
-  );
-};
-
-const ProductNavigation = ({ productsCount, state, setState }) => {
-  
-  const [, setGlobalState] = useGlobalContext();
-  const pagesCount = Math.ceil(productsCount / state.productsPerPage);
-
-  const btns = [];
-  for (let x = 1; x <= pagesCount; x++) btns.push(x);
-
-  const navigate = async (page) => {
-    try {
-      const res = await Axios.get(
-        `products?category=${state.category}&&name=${state.searchText}&&page=${page}&&limit=${
-          state.productsPerPage
-        }`
-      );
-      setState(state => ({ ...state, page, products: res.data.products }));
-      window.scroll({ top: 0 });
-    } catch (error) {
-      setGlobalState((state) => ({
-        ...state,
-        alert: {
-          show: true,
-          type: ERROR,
-          text:
-            error.response?.data?.message || error.message || "Network Error",
-        },
-      }));
-    }
-  }
-
-  return (
-    <div className="flex justify-center gap-1 flex-wrap mt-10">
-      <button
-        className="bg-black h-10 w-10 flex items-center justify-center text-white disabled:bg-gray-500 disabled:cursor-text"
-        disabled={state.page === 1}
-        onClick={() => navigate(state.page - 1)}
-      >
-        <FaChevronLeft />
-      </button>
-      {btns.map((i) => (
-        <button
-          key={i}
-          className="border border-black h-10 w-10 flex items-center justify-center bg-white transition hover:bg-black hover:text-white disabled:bg-black disabled:text-white disabled:cursor-text"
-          disabled={state.page === i}
-          onClick={() => navigate(i)}
-        >
-          {i}
-        </button>
-      ))}
-      <button
-        className="bg-black h-10 w-10 flex items-center justify-center text-white disabled:bg-gray-500 disabled:cursor-text"
-        disabled={state.page * state.productsPerPage >= productsCount}
-        onClick={() => navigate(state.page + 1)}
-      >
-        <FaChevronRight />
-      </button>
-    </div>
   );
 };
 

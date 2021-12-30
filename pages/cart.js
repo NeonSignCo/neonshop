@@ -1,13 +1,11 @@
 import { BsDash, BsPlus } from "react-icons/bs";
 import CustomLink from "../components/CustomLink";
-import LoadingBtn from "../components/LoadingBtn";
+import { Loader } from "../components/LoadingBtn";
 import FollowSection from "../components/sections/FollowSection"
 import NewsLetterSection from "../components/sections/NewsLetterSection"
 import { useGlobalContext } from "../context/GlobalContext";
-import Cart from "../server/models/cart";
-import Category from "../server/models/category";
-import Product from "../server/models/product";
 import connectDb from "../server/utils/connectDb";
+import getUpdatedCart from "../server/utils/getUpdatedCart";
 import Axios from "../utils/Axios";
 import catchASync from "../utils/catchASync";
 import getLoggedInUser from "../utils/getLoggedInUser";
@@ -49,16 +47,13 @@ const CartPage = () => {
                       ${globalState.cartData.cart.subTotal}
                     </p>
                   </div>
-                  <LoadingBtn
-                    loading={globalState.cartData.loading}
-                    className="bg-black text-white  text-center text-xl uppercase"
+                  <CustomLink
+                    href="/checkout"
+                    className="py-3 px-7 w-full transition bg-black text-white flex justify-center items-center text-lg uppercase gap-3"
                   >
-                    <CustomLink
-                      href="/checkout"
-                      text="checkout"
-                      className="py-3 px-7 w-full"
-                    />
-                  </LoadingBtn>
+                    <span>checkout</span>
+                    {globalState.cartData.loading && <Loader/> }
+                  </CustomLink>
                 </div>
               </div>
             </div>
@@ -97,9 +92,7 @@ export default CartPage
 
 const CartItem = ({ item }) => {
   const [globalState, setGlobalState] = useGlobalContext();
-  const size = item.product.sizes.find(
-    (size) => size._id === item.selectedSize
-  );
+     
      const updateCart = ({ plus = true, remove = false }) =>
        catchASync(
          async () => {
@@ -107,13 +100,14 @@ const CartItem = ({ item }) => {
              ...state,
              cartData: { ...state.cartData, loading: true },
            }));
-           const items = globalState.cartData.cart.items.map((cartItem) => {
+           const itemsCopy = JSON.parse(JSON.stringify(globalState.cartData.cart.items))
+           const items = itemsCopy.map((cartItem) => {
              const sameVariation =
                cartItem._id === item._id &&
                cartItem.product._id === item.product._id &&
                cartItem.selectedColor.hex === item.selectedColor.hex &&
                cartItem.selectedMountType === item.selectedMountType &&
-               cartItem.size === item.size;
+               cartItem.selectedSize._id === item.selectedSize._id;
 
              if (sameVariation) {
                cartItem.count =remove ? 0:  plus ? cartItem.count + 1 : cartItem.count - 1;
@@ -139,10 +133,13 @@ const CartItem = ({ item }) => {
              cartData: { ...state.cartData, loading: false },
            }))
     );
-
+  
+  const price = item.selectedSize.price;
+  const salePrice = item.product.salePercentage > 0 ? price - price * item.product.salePercentage / 100 : price;
+  const link = `shop/${item.product.category.slug}/${item.product.slug}`;
   return (
     <div className="flex flex-col md:flex-row gap-2 bg-white p-2">
-      <CustomLink href={`shop/${item.product.category.slug}/${item.product.slug}`}>
+      <CustomLink href={link}>
         <img
           src={item.product.image.url}
           alt="product"
@@ -151,7 +148,7 @@ const CartItem = ({ item }) => {
       </CustomLink>
       <div className="flex flex-col gap-3 flex-1">
         <CustomLink
-          href={item.productLink}
+          href={link}
           className="font-semibol capitalize text-2xl"
         >
           {item.product.name}
@@ -181,7 +178,7 @@ const CartItem = ({ item }) => {
               <BsPlus />
             </button>
           </div>
-          <p className="font-semibold">${size.price * item.count}</p>
+          <p className="font-semibold">${salePrice * item.count}</p>
         </div>
         <div className="flex justify-end">
           <button
@@ -209,13 +206,7 @@ export const getServerSideProps = async ({ req }) => {
         },
       };
     }
-    const cart = await Cart.findOne({ userId: user._id })
-      .populate({
-        path: "items.product",
-        model: Product,
-        populate: { path: "category", model: Category },
-      })
-      .lean();
+    const cart = await getUpdatedCart(user._id);
 
     const orders = [];
     return {

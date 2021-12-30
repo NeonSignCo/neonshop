@@ -15,15 +15,15 @@ const GlobalContext = ({ children, props }) => {
 
   const [state, setState] = useState({
     serverRendered,
-    showBanner: false,
+    showBanner: true,
     modal: { show: false, type: "", data: {} },
     auth: { loading: !serverRendered, user: props.user  },
-    ordersData: { loading: !serverRendered, orders: props.orders},
     categoryData: { loading: true, categories: [] },
     cartData: { show: false, loading: !serverRendered, cart: props.cart },
     alert: { show: false, type: SUCCESS, text: "", timeout: 5000 },
     error: props.error,
   });
+
 
   useEffect(async () => {
     await getInitialData(state, setState);

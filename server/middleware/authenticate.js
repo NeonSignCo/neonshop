@@ -5,7 +5,6 @@ import removeToken from '../utils/removeToken';
 import jwt from 'jsonwebtoken';
 import ShippingAddress from '../models/shippingAddress';
 import BillingAddress from '../models/billingAddress';
-import Cart from '../models/cart';
 
 const authenticate = catchASync(async (req, res, next) => {
   const { token } = req.cookies;

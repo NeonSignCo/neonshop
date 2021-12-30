@@ -5,26 +5,8 @@ import { FaCaretLeft, FaCaretRight } from "react-icons/fa";
 import { FaDollarSign } from "react-icons/fa";
 import CustomLink from "../CustomLink";
 
-const ProductsSlider = () => { 
-  const products = [
-            { name: "product 1", img: "/img/product-images/product-1.jpg", price: "299" },
-            {
-              name: "product 2",
-              img: "/img/product-images/product-2.jpg",
-              price: "400",
-              hot: true,
-            },
-            { name: "product 3", img: "/img/product-images/product-3.jpg", price: "459" },
-            { name: "product 4", img: "/img/product-images/product-4.jpg", price: "269" },
-            {
-              name: "product 5",
-              img: "/img/product-images/product-5.jpg",
-              price: "129",
-              hot: true,
-            },
-            { name: "product 6", img: "/img/product-images/product-6.jpg", price: "579" },
-  ]
-  
+const ProductsSlider = ({products}) => { 
+ 
   const [review, setreview] = useState(0);
 
   const { width } = useWindowDimensions();
@@ -67,6 +49,7 @@ const ProductsSlider = () => {
                 text={product.text}
                 price={product.price}
                 hot={product.hot}
+                link={product.link}
               />
             </div>
           ))}
@@ -114,8 +97,8 @@ const ProductPreview = ({
   hot = false,
 }) => {
   return (
-    <div className="flex-1 flex flex-col items-center gap-5 text-black relative">
-      <CustomLink hre={link} className="relative h-60">
+    <div className="flex-1 flex flex-col items-center gap-5 text-black relative shadow-2xl border border-gray-200 pb-2">
+      <CustomLink href={link} className="relative h-60">
         <img src={img} alt={name} className="object-cover h-full" />
       </CustomLink>
       <p className="uppercase">{name}</p>

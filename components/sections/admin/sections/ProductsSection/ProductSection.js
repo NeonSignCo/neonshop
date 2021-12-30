@@ -5,56 +5,71 @@ import { useAdminContext } from "../../../../../pages/admin";
 import Axios from "../../../../../utils/Axios";
 import catchASync from "../../../../../utils/catchASync";
 import LoadingBtn from "../../../../LoadingBtn";
+import ProductNavigation from "../../../../ProductNavigation";
 import AddNewProductSection from "../AddNewProductSection";
 import SearchBar from "./SearchBar";
+
 
 const ProductSection = () => {
   const [, setGlobalState] = useGlobalContext();  
   const [adminState, setAdminState] = useAdminContext();
 
     const [state, setState] = useState({
-      category: adminState.categories?.[0]?._id,
-      selectedProdcutIds: [],   
+      category: '',
+      page: 1,
+      productsPerPage: 30,
+      selectedProductIds: [],   
       activeProduct: '', 
+      searchText: '',
       loading: false
     });
-    
-  const deleteAllProducts = () => catchASync(
+
+  const deleteProducts = () => catchASync(
     async () => {
-      const yes = prompt("Delete all products ? type 'yes' to continue", 'no');
+      const yes = confirm("Delete these products ?");
       if (!yes) return;
       setState((state) => ({ ...state, loading: true }));
-      await Axios.delete("products");
-      setAdminState(state => ({ ...state, products: [] }));
-      setState((state) => ({ ...state, loading: false }));
+      await Axios.put("products/specific", { ids: state.selectedProductIds });
+      setAdminState((adminState) => ({
+        ...adminState,
+        products: adminState.products.filter(
+          (item) => !state.selectedProductIds.includes(item._id)
+        ),
+      }));
+      setState((state) => ({
+        ...state,
+        loading: false,
+      }));
       setGlobalState(state => ({ ...state, alert: { ...state.alert, show: true, type: SUCCESS, text: 'products deleted', timeout: 3000 } }));
 
     },
     setGlobalState,
     () => setState((state) => ({ ...state, loading: false }))
   );
-  
+    
+
+
     return (
       <div className="py-5 md:p-10 w-full">
-        {!state.activeProduct && <SearchBar />}
+        {!state.activeProduct && (
+          <SearchBar state={state} setState={setState} />
+        )}
         {!state.activeProduct ? (
           <div className="">
             {" "}
             <div className="hidden md:block mt-5">
-              {state.selectedProdcutIds.length > 0 &&
-                state.selectedProdcutIds.length ===
-                  adminState.products?.length && (
-                  <div className="p-2 pr-12 bg-white border flex justify-between">
-                    <p>delete all products?</p>
-                  <LoadingBtn 
+              {state.selectedProductIds.length > 0 && (
+                <div className="p-2 pr-12 bg-white border flex justify-between">
+                  <p>delete these products?</p>
+                  <LoadingBtn
                     loading={state.loading}
-                      className="bg-red-500 text-white py-1 px-2"
-                      onClick={deleteAllProducts}
-                    >
-                      delete 
-                    </LoadingBtn>
-                  </div>
-                )}
+                    className="bg-red-500 text-white py-1 px-2"
+                    onClick={deleteProducts}
+                  >
+                    delete
+                  </LoadingBtn>
+                </div>
+              )}
               <table className="w-full bg-white">
                 <thead className="h-12 border-b border-gray-200">
                   <tr className="border border-gray-200">
@@ -62,14 +77,14 @@ const ProductSection = () => {
                       <input
                         type="checkbox"
                         checked={
-                          state.selectedProdcutIds.length > 0 &&
-                          state.selectedProdcutIds.length ===
+                          state.selectedProductIds.length > 0 &&
+                          state.selectedProductIds.length ===
                             adminState.products?.length
                         }
                         onChange={(e) =>
                           setState((state) => ({
                             ...state,
-                            selectedProdcutIds: !e.target.checked
+                            selectedProductIds: !e.target.checked
                               ? []
                               : adminState.products.map(
                                   (product) => product._id
@@ -97,6 +112,7 @@ const ProductSection = () => {
               </table>
             </div>
             <div className="md:hidden grid gap-3 text-black mt-5">
+              fdddd
               {adminState.products?.map((product) => (
                 <Item
                   key={product._id}
@@ -106,11 +122,18 @@ const ProductSection = () => {
                 />
               ))}
             </div>
+            <div className="flex p-2 items-center">
+              <ProductNavigation
+                productsCount={state.numOfProducts}
+                state={state}
+                setState={setState}
+              />
+            </div>
           </div>
         ) : (
           <AddNewProductSection
             product={state.activeProduct}
-            close={() => setState((state) => ({ ...state, activeProduct: "" }))}
+            setOrdersSection={setState}
             edit={true}
             className="mt-5 md:p-0 "
           />
@@ -124,7 +147,7 @@ export default ProductSection
 const TableItem = ({ product, state, setState }) => { 
   const [, setGlobalState] = useGlobalContext();
   const [adminState, setAdminState] = useAdminContext();
-  const checked = state.selectedProdcutIds.includes(product._id);
+  const checked = state.selectedProductIds.includes(product._id);
 
   const [loading, setLoading] = useState(false); 
 
@@ -139,14 +162,18 @@ const TableItem = ({ product, state, setState }) => {
       ...state,
       products: adminState.products.filter((item) => item._id !== product._id),
     })); 
+    setState((state) => ({
+      ...state,
+      products: adminState.products.filter((item) => item._id !== product._id),
+    })); 
   }, setGlobalState, setLoading(false))
 
   const toggleCheck = () => {
     setState((state) => ({
       ...state,
-      selectedProdcutIds: checked
-        ? state.selectedProdcutIds?.filter((id) => id !== product._id)
-        : [...state.selectedProdcutIds, product._id],
+      selectedProductIds: checked
+        ? state.selectedProductIds?.filter((id) => id !== product._id)
+        : [...state.selectedProductIds, product._id],
     }));
   }
 

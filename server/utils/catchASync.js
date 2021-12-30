@@ -6,10 +6,10 @@ const catchASync = (fn) => (req, res, next) =>
     if (process.env.NODE_ENV !== "production") console.log(err, err.stack);
 
     // handle mongoose validation error
-    if (err instanceof mongoose.Error)
+    if (err instanceof mongoose.Error.ValidationError)
       return res.status(400).json({
         status: "Fail",
-        message: Object.values(err.errors)[0].message,
+        message: err.message,
       });
 
     if(err && err.code === 11000) return res.status(400).json({
@@ -29,7 +29,7 @@ const catchASync = (fn) => (req, res, next) =>
 
     return res.status(code).json({
       status,
-      message: code === 500 ? "Server Error" : err.message,
+      message:err.message,
     });
   });
 

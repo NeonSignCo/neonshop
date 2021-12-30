@@ -19,7 +19,7 @@ const AdminSection = () => {
           {state.activeSection === DASHBOARD ? (
             <DashboardSection />
           ) : state.activeSection === ORDERS ? (
-            <OrderSection />
+            <OrderSection/>
           ) : state.activeSection === PRODUCTS ? (
             <ProductSection />
           ) : state.activeSection === ADD_NEW_PRODUCT ? (

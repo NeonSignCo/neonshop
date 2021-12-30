@@ -1,6 +1,10 @@
 import mongoose from 'mongoose';
 
 const SizeSchema = new mongoose.Schema({
+  sizeId: {
+    type: mongoose.Schema.Types.ObjectId, 
+    required: [true, 'sizeId is required'],
+  },
   info: {
     type: String,
     validate: {

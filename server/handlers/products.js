@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import uploadImage from "../utils/uploadImage";
 import cloudinary from 'cloudinary';
 import slugify from "../../utils/slugify";
+import Category from "../models/category";
 
 // @route       GET /api/products
 // @purpose     Get all products
@@ -30,12 +31,28 @@ export const getAllProducts = catchASync(async (req, res) => {
 
   const products =
     category && name
-      ? await Product.find({ category, name }).skip(skip).limit(limit)
+      ? await Product.find({ category, name })
+          .skip(skip)
+          .limit(limit)
+          .populate({ path: "category", model: Category })
+          .lean()
       : category
-      ? await Product.find({ category }).skip(skip).limit(limit)
+      ? await Product.find({ category })
+          .skip(skip)
+          .limit(limit)
+          .populate({ path: "category", model: Category })
+          .lean()
       : name
-      ? await Product.find({ name }).skip(skip).limit(limit)
-      : await Product.find().skip(skip).limit(limit);
+      ? await Product.find({ name })
+          .skip(skip)
+          .limit(limit)
+          .populate({ path: "category", model: Category })
+          .lean()
+      : await Product.find()
+          .skip(skip)
+          .limit(limit)
+          .populate({ path: "category", model: Category })
+          .lean();
   return res.json({
     status: "success",
     page,
@@ -50,7 +67,7 @@ export const getAllProducts = catchASync(async (req, res) => {
 // @purpose     Upload product
 // @access      Admin
 export const uploadProduct = catchASync(async (req, res) => {
-  const { name, sizes, description, category, salePercentage } = req.body;
+  const { name, sizes, description, category, salePercentage = 0 } = req.body;
   if (!req.file) throw new AppError(400, "image is required");
   if (!name) throw new AppError(400, "name is required");
   if (!sizes) throw new AppError(400, "sizes is required");
@@ -188,12 +205,13 @@ export const deleteAllProducts = catchASync(async (req, res) => {
      api_secret: process.env.CLOUDINARY_API_SECRET,
    });  
 
+
   //  delete all products
   await Product.deleteMany();
 
-  // delete cloudinary folder containing all product images | don't show error if folder does not exist
+  //  delete all photos folder 
   try {
-    await cloudinary.api.delete_folder("neonshop/img/products");
+   await cloudinary.api.delete_resources_by_prefix("neonshop/img/products");
   } catch (error) { 
   }
 
@@ -201,5 +219,36 @@ export const deleteAllProducts = catchASync(async (req, res) => {
   return res.json({
     status: "success",
     message: "product deleted", 
+  });
+});
+
+
+// @route       DELETE /api/products/sepcific
+// @purpose     Delete specific products
+// @access      Admin
+export const deleteSpecificProducts = catchASync(async (req, res) => {
+  cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  });
+
+  if (!req.body.ids) throw new AppError(400, 'ids is required');
+
+  const products = await Product.find({ _id: { $in: req.body.ids } }).select('_id image');
+  const productIds = products.map(product => product._id);
+  //  delete specific products
+  await Product.deleteMany({_id: {$in: productIds}});
+
+  // delete images
+  try {
+    products.forEach( async product => {
+      await cloudinary.v2.uploader.destroy(product.image.public_id);
+    })
+  } catch (error) {}
+
+  return res.json({
+    status: "success",
+    message: "product deleted",
   });
 });

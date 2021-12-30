@@ -6,7 +6,7 @@ import LoadingBtn from '../../../LoadingBtn';
 import { ERROR, SUCCESS, useGlobalContext } from '../../../../context/GlobalContext';
 import uid from 'uniqid';
 
-const AddNewProductSection = ({product, className, edit= false, close}) => {
+const AddNewProductSection = ({product, className, edit= false, setOrdersSection}) => {
   const [, setGlobalState] = useGlobalContext()
   const [adminState, setAdminState] = useAdminContext();
   const [loading, setLoading] = useState(false);
@@ -71,7 +71,9 @@ const AddNewProductSection = ({product, className, edit= false, close}) => {
               ...state,
               products: edit
                 ? adminState.products.map((item) =>
-                    item._id === product._id ? res.data.product : item
+                    String(item._id) === res.data.product._id
+                      ? res.data.product
+                      : item
                   )
                 : [res.data.product, ...adminState.products],
             }));
@@ -91,8 +93,10 @@ const AddNewProductSection = ({product, className, edit= false, close}) => {
             
           }));
          
-          // close this component after task completed when in edit mode
-          if (edit) close();
+          // for edit mode
+          if (edit) {
+            setOrdersSection(state => ({...state, products: state.products.map(product => product._id === res.data.product._id ? res.data.product : product), activeProduct: ''}))
+          };
         } catch (error) {  
           setLoading(false);
             setGlobalState((state) => ({
@@ -357,8 +361,9 @@ const AddNewProductSection = ({product, className, edit= false, close}) => {
             </LoadingBtn>
             {edit && (
               <button
+                type='button'
                 className="py-2 px-5 border border-gray-800 transition hover:bg-gray-800 hover:text-white max-w-max capitalize"
-                onClick={close}
+                onClick={() => setOrdersSection(state => ({...state, activeProduct: ''}))}
               >
                 cancel
               </button>

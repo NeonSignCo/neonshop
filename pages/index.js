@@ -17,8 +17,11 @@ import InstaGallery from "../components/InstaGallery";
 import ProductsSlider from "../components/sliders/ProductsSlider";
 import ReviewSlider from "../components/sliders/ReviewSlider";
 import NewsLetterSection from "../components/sections/NewsLetterSection";
+import connectDb from "../server/utils/connectDb";
+import Product from "../server/models/product";
+import Category from "../server/models/category";
  
-export default function Home() {
+export default function Home({products}) {
   return (
     <div className="">
       <Head>
@@ -31,18 +34,18 @@ export default function Home() {
           background:
             "linear-gradient(rgba(0, 0, 0,0.5), rgba(0, 0, 0,0.5)), url('/img/neon-banner.jpg')",
         }}
-      >    
+      >
         <h2 className="text-2xl md:text-4xl lg:text-6xl text-center md:text-left">
           NEON SIGNS TO CELEBRATE, <br /> MOTIVATE & INSPIRE
         </h2>
         <p className="text-lg">Imagination is your only limit.</p>
         <div className="flex flex-col items-start md:flex-row gap-3 md:gap-10 uppercase whitespace-nowrap font-semibold">
-          <CustomLink 
+          <CustomLink
             href="/shop"
             text="shop"
             className="h-12 w-52 flex items-center justify-center bg-black"
           />
-          <CustomLink 
+          <CustomLink
             href="/custom-neon-sign"
             text="design your neon"
             className="h-12 w-52 flex items-center justify-center bg-white text-black"
@@ -78,8 +81,9 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="px-5 lg:px-20 py-10 flex flex-col lg:flex-row items-center justify-between gap-10 bg-black text-white relative text-center md:text-left"
-         style={{
+      <section
+        className="px-5 lg:px-20 py-10 flex flex-col lg:flex-row items-center justify-between gap-10 bg-black text-white relative text-center md:text-left"
+        style={{
           background:
             "linear-gradient(rgba(0, 0, 0,0.94), rgba(0, 0, 0,0.94)), url('/img/neon-banner-3.jpg')",
         }}
@@ -102,7 +106,14 @@ export default function Home() {
         <h3 className="text-3xl uppercase font-semibold uppercase text-center mb-10">
           our best-selling products
         </h3>
-        <ProductsSlider/>
+        <ProductsSlider
+          products={products.map((product) => ({
+            name: product.name,
+            img: product.image.url,
+            price: product.sizes[0].price,
+            link: `/shop/${product.category.slug}/${product.slug}`
+          }))}
+        />
       </section>
       <section
         className="px-5 lg:px-20 py-20 bg-black"
@@ -158,36 +169,66 @@ export default function Home() {
         <h3 className="text-3xl uppercase font-semibold uppercase text-center mb-10">
           what our clients say
         </h3>
-        <ReviewSlider/>
+        <ReviewSlider />
       </section>
-      <section className="px-5 lg:px-20 py-20 bg-black text-white"
+      <section
+        className="px-5 lg:px-20 py-20 bg-black text-white"
         style={{
           background:
             "linear-gradient(rgba(0, 0, 0,0.94), rgba(0, 0, 0,0.94)), url('/img/neon-banner-3.jpg')",
         }}
       >
         <h3 className="text-3xl  font-semibold uppercase text-center mb-10">
-          want some inspo? 
+          want some inspo?
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-20 md:gap-10"
-        >
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-20 md:gap-10">
           <CustomLink className="grid gap-3 text-center bg-white text-black pb-3">
-            <img src="/img/product-images/product-1.jpg" alt="product" className="w-full object-cover"/>
-            <p className="text-xl px-5  font-bold uppercase">Juddchella - An Event By NeonShop</p>
-            <p className="px-5">Move over Coachella, The Judd’s are in town. The only person we know that could pull off a housewarming party theme this extravagant is non-other than...</p>
+            <img
+              src="/img/product-images/product-1.jpg"
+              alt="product"
+              className="w-full object-cover"
+            />
+            <p className="text-xl px-5  font-bold uppercase">
+              Juddchella - An Event By NeonShop
+            </p>
+            <p className="px-5">
+              Move over Coachella, The Judd’s are in town. The only person we
+              know that could pull off a housewarming party theme this
+              extravagant is non-other than...
+            </p>
           </CustomLink>
           <CustomLink className="grid gap-3 text-center bg-white text-black pb-3">
-            <img src="/img/product-images/product-3.jpg" alt="product" className="w-full object-cover"/>
-            <p className="text-xl px-5  font-bold uppercase">Home office ideas to boost your productivity </p>
-            <p className="px-5">‘Home Office Ideas’ would have to be one of the most searched for phrases in 2020. Thanks to Covid, our work environments have undergone a...</p>
+            <img
+              src="/img/product-images/product-3.jpg"
+              alt="product"
+              className="w-full object-cover"
+            />
+            <p className="text-xl px-5  font-bold uppercase">
+              Home office ideas to boost your productivity{" "}
+            </p>
+            <p className="px-5">
+              ‘Home Office Ideas’ would have to be one of the most searched for
+              phrases in 2020. Thanks to Covid, our work environments have
+              undergone a...
+            </p>
           </CustomLink>
           <CustomLink className="grid gap-3 text-center bg-white text-black pb-3">
-            <img src="/img/product-images/product-4.jpg" alt="product" className="w-full object-cover"/>
-            <p className="text-xl px-5  font-bold uppercase">retail design | first impressions count</p>
-            <p className="px-5">Retail Design | First Impressions Count 11 mins read This one is for all you business owners out there. Everyone knows that first impressions count....</p>
+            <img
+              src="/img/product-images/product-4.jpg"
+              alt="product"
+              className="w-full object-cover"
+            />
+            <p className="text-xl px-5  font-bold uppercase">
+              retail design | first impressions count
+            </p>
+            <p className="px-5">
+              Retail Design | First Impressions Count 11 mins read This one is
+              for all you business owners out there. Everyone knows that first
+              impressions count....
+            </p>
           </CustomLink>
         </div>
-        </section>
+      </section>
       <section className="px-5 lg:px-20 py-20 bg-white text-center md:text-left">
         <h3 className="text-3xl uppercase font-semibold uppercase text-center mb-16">
           our story
@@ -198,9 +239,8 @@ export default function Home() {
               Meet Ash & Tash (Co-Founders of NeonShop)
             </p>
             <p>
-              NeonShop was co-founded in 2015 by two friends with one
-              vision - to light up people’s lives by creating lasting
-              impressions.
+              NeonShop was co-founded in 2015 by two friends with one vision -
+              to light up people’s lives by creating lasting impressions.
             </p>
             <p>
               From humble beginnings in Geelong, Australia, Ash and Tash came to
@@ -217,14 +257,11 @@ export default function Home() {
             </p>
           </div>
           <div className="relative">
-             <img
-              src="/img/our-story.jpg"
-              alt="our neon store story"
-            />
+            <img src="/img/our-story.jpg" alt="our neon store story" />
           </div>
         </div>
         <div className="flex flex-col sm:flex-row items-center justify-center mt-10 gap-10">
-          <CustomLink 
+          <CustomLink
             href="/shop"
             text="shop now"
             className="h-12 w-52 flex items-center justify-center bg-black text-white uppercase font-semibold transition hover:text-gray-200"
@@ -235,16 +272,21 @@ export default function Home() {
           />
         </div>
       </section>
-      <NewsLetterSection/>
+      <NewsLetterSection />
       <section className=" pt-20 bg-white text-blackflex flex flex-col gap-10 items-center">
         <h3 className="px-5 lg:px-20 text-3xl font-semibold uppercase ">
           follow us on
         </h3>
         <div className="px-5 lg:px-20 flex items-center gap-3 text-4xl">
-          <CustomLink ><FaFacebook/></CustomLink>
-          <CustomLink className="relative"><FaInstagram/> <span className="text-sm absolute left-1 font-semibold">100k</span></CustomLink>
+          <CustomLink>
+            <FaFacebook />
+          </CustomLink>
+          <CustomLink className="relative">
+            <FaInstagram />{" "}
+            <span className="text-sm absolute left-1 font-semibold">100k</span>
+          </CustomLink>
         </div>
-        <InstaGallery/>
+        <InstaGallery />
       </section>
     </div>
   );
@@ -262,3 +304,30 @@ const Item = ({ title, text, children }) => {
   );
 };
 
+
+
+export const getStaticProps = async () => {
+  try {
+    await connectDb();
+
+    const products = await Product.find()
+      .populate({ path: "category", model: Category, select: "slug -_id" })
+      .sort({ createdAt: -1 })
+      .limit(9)
+      .lean()
+
+    return {
+      props: {
+        products: JSON.parse(JSON.stringify(products)),
+      },
+      revalidate: 10,
+    };
+  } catch (error) {
+    return {
+      props: {
+        error: { code: 500, message: "this is the error" },
+      },
+      revalidate: 10,
+    };
+  }
+};

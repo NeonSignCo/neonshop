@@ -29,7 +29,7 @@ const Nav = () => {
   });
   
   return (
-    <div className="bg-black text-white sticky top-0 w-full shadow z-20 ">
+    <div className="bg-black text-white sticky  top-0 w-full shadow z-20 ">
       <AnimatePresence>{globalState.showBanner && <Banner />}</AnimatePresence>
       <div className="py-4 px-5 lg:px-20 flex flex-wrap justify-center gap-3 xs:justify-between items-center">
         <CustomLink

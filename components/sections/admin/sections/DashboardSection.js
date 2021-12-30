@@ -16,9 +16,6 @@ const DashboardSection = () => {
           <Item text="total products" value={100} section={PRODUCTS}>
             <FaBox/>
           </Item>
-          <Item text="pending reviews" value={20} section={REVIEWS}>
-            <FaComments/>
-          </Item>
           
         </div>
       </div>

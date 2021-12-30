@@ -2,7 +2,9 @@ import Cart from "../models/cart";
 import Category from "../models/category";
 import Product from "../models/product";
 import AppError from "../utils/AppError";
+import calcPrice from "../utils/calcPrice";
 import catchASync from "../utils/catchASync";
+import getUpdatedCart from "../utils/getUpdatedCart";
 
 // @route       POST /api/cart
 // @purpose     Add or update cart
@@ -14,13 +16,21 @@ export const addOrUpdateCart = catchASync(async (req, res) => {
 
   await Cart.validate(data);
 
-  const calculatedCart = await Cart.calcPrice(data);
+  const calculatedCart = await calcPrice(data);
 
-  const cart = await Cart.findOneAndUpdate({ userId: data.userId }, calculatedCart, {
-    new: true,
-    upsert: true,
-    runValidators: true, 
-  }).populate({ path: "items.product", model: Product });
+  const cart = await Cart.findOneAndUpdate(
+    { userId: data.userId },
+    calculatedCart,
+    {
+      new: true,
+      upsert: true,
+      runValidators: true,
+    }
+  ).populate({
+    path: "items.product",
+    model: Product,
+    populate: { path: "category", model: Category },
+  });
 
   return res.json({
     status: "success",
@@ -33,17 +43,12 @@ export const addOrUpdateCart = catchASync(async (req, res) => {
 // @purpose     Get cart
 // @access      user
 export const getCart = catchASync(async (req, res) => {
-
-  const cart = await Cart.findOne({ userId: req.user._id }).populate({
-    path: "items.product",
-    model: Product,
-    populate: { path: "category", model: Category },
-  });
-
+  
+  const cart = await getUpdatedCart(req.user._id);
   return res.json({
     status: "success",
     message: "successfully retrieved cart data",
-    cart
+    cart,
   });
 });
 

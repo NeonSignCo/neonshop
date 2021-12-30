@@ -92,7 +92,9 @@ const CartPreview = () => {
                   </CustomLink>
                 </div>
               </div>
-            ) : (
+            ) : globalState.cartData.loading ? <div className="mt-20 max-w-max mx-auto">
+              <Loader borderColor="border-black" />
+            </div>: (
               <div className="flex flex-col items-center h-full bg-white gap-3 p-2">
                 <h3 className="text-xl sm:text-3xl uppercase my-4">
                   your cart is empty
@@ -114,6 +116,7 @@ const CartPreview = () => {
                 </CustomLink>
               </div>
             )}
+            
           </div>
         </div>
       </motion.div>
@@ -125,9 +128,6 @@ export default CartPreview
 
 const CartItem = ({ item }) => {
     const [globalState, setGlobalState] = useGlobalContext();
-      const size = item.product.sizes.find(
-        (size) => size._id === item.selectedSize
-      );
   
   const updateCart = ({plus = true}) =>
     catchASync(
@@ -136,13 +136,14 @@ const CartItem = ({ item }) => {
           ...state,
           cartData: { ...state.cartData, loading: true },
         }));
-        const items = globalState.cartData.cart.items.map(cartItem => {
+        const itemsCopy = JSON.parse(JSON.stringify(globalState.cartData.cart.items))
+        const items = itemsCopy.map(cartItem => {
           const sameVariation =
             cartItem._id === item._id &&
             cartItem.product._id === item.product._id &&
             cartItem.selectedColor.hex === item.selectedColor.hex &&
             cartItem.selectedMountType === item.selectedMountType &&
-            cartItem.size === item.size;
+            cartItem.selectedSize._id === item.selectedSize._id;
           
           if (sameVariation) {
             cartItem.count = plus ? cartItem.count + 1 : cartItem.count - 1;
@@ -168,7 +169,12 @@ const CartItem = ({ item }) => {
         }))
     );
 
+const price = item.selectedSize.price
 
+const salePrice =
+  item.product.salePercentage > 0
+    ? price - (price * item.product.salePercentage) / 100
+    : price;
     return (
       <div className="flex items-center gap-2 bg-white p-2">
         <img
@@ -180,7 +186,7 @@ const CartItem = ({ item }) => {
           <h3 className="font-semibold capitalize">{item.name}</h3>
           <p className="capitalize text-sm">
             color: <span className="uppercase">{item.selectedColor.name}</span> | size:{" "}
-            <span className="uppercase">{size?.info}</span> | mount:{" "}
+            <span className="uppercase">{item.selectedSize.info}</span> | mount:{" "}
             <span className="uppercase">{item.selectedMountType}</span>
           </p>
           <div className="flex flex-wrap justify-between items-center">
@@ -201,7 +207,7 @@ const CartItem = ({ item }) => {
             </div>
             <p className="font-semibold">
               $
-              {size.price * item.count}
+              {salePrice * item.count}
             </p>
           </div>
         </div>

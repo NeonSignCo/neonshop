@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { FaChevronLeft } from "react-icons/fa";
-import { CREDIT_CART, INFO_SECTION, PAYPAL, useCheckoutContext } from "../../../context/CheckoutContext";
-import { useGlobalContext } from "../../../context/GlobalContext";
+import { CREDIT_CART, PAYPAL, useCheckoutContext } from "../../../context/CheckoutContext";
+import { SUCCESS, useGlobalContext } from "../../../context/GlobalContext";
 import Axios from "../../../utils/Axios";
 import catchASync from "../../../utils/catchASync";
 import CustomLink from "../../CustomLink";
 import LoadingBtn from "../../LoadingBtn";
-import { loadStripe } from '@stripe/stripe-js';
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-);
+// import { loadStripe } from '@stripe/stripe-js';
+// const stripePromise = loadStripe(
+//   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+// );
 
 const PaymentSection = () => {
 
@@ -19,23 +19,27 @@ const PaymentSection = () => {
 
   const checkout = () => catchASync(async () => {
     setLoading(true); 
-     const stripe = await stripePromise;
-    const res = await Axios.post('stripe/checkout-session', { cartId: globalState.cartData.cart._id });
-     const result = await stripe.redirectToCheckout({
-       sessionId: res.data.session.id,
-     });
-     if (result.error) {
-       setGlobalState((state) => ({
-         ...state,
-         alert: {
-           ...state.alert,
-           show: true,
-           text: result.error.message,
-           type: ERROR,
-           timeout: 5000,
-         },
-       }));
-     }
+  
+    //  const stripe = await stripePromise;
+
+    const res = await Axios.post('orders', { items: globalState.cartData.cart.items, shippingAddress: globalState.auth.user.shippingAddress[0] });
+
+    //  const result = await stripe.redirectToCheckout({
+    //    sessionId: res.data.session.id,
+    //  });
+    //  if (result.error) {
+    //    setGlobalState((state) => ({
+    //      ...state,
+    //      alert: {
+    //        ...state.alert,
+    //        show: true,
+    //        text: result.error.message,
+    //        type: ERROR,
+    //        timeout: 5000,
+    //      },
+    //    }));
+    //  }
+    setGlobalState(state => ({ ...state, alert: { ...state.alert, show: true, text: res.data.message, type: SUCCESS, timeout: 5000 } }));
     setLoading(false);   
    }, setGlobalState, () => setLoading(false));
 

@@ -21,7 +21,7 @@ const Alert = () => {
         initial={{ scale: 0 }}
         animate={{ scale: 1, transition: {duration: .2} }}
         exit={{ scale: 0 }}
-        className=" fixed top-1/4 inset-x-1/2 flex items-center justify-center "
+        className=" fixed top-1/4 inset-x-1/2 flex items-center justify-center z-50"
       >
         <div className="bg-white gap-4 flex pr-10 rounded overflow-hidden shadow-xl border border-gray-300 border-l-0 min-w-max">
           <div

@@ -1,10 +1,11 @@
 import Head from "next/head";
 import { createContext, useContext, useState } from "react";
 import AccountSection from "../components/sections/account/AccountSection";
-import Cart from "../server/models/cart";
 import Category from "../server/models/category";
+import Order from "../server/models/order";
 import Product from "../server/models/product";
 import connectDb from "../server/utils/connectDb";
+import getUpdatedCart from "../server/utils/getUpdatedCart";
 
 import getLoggedInUser from "../utils/getLoggedInUser";
 
@@ -20,7 +21,7 @@ export const ADDRESS = "ADDRESS";
 
 const Account = ({ orders }) => {
   const [state, setState] = useState({
-    activeSection: ACCOUNT_DETAILS,
+    activeSection: MY_ORDERS,
     orders,
   });
 
@@ -49,24 +50,20 @@ export const getServerSideProps = async ({ req }) => {
          },
        };
      }
-    const cart = await Cart.findOne({ userId: user._id })
-      .populate({
-        path: "items.product",
-        model: Product,
-        populate: { path: "category", model: Category },
-      })
-      .lean();
+    const cart = await getUpdatedCart(user._id)
 
-    const orders = [];
+    const orders = await Order.find({ userId:user._id }).populate({ path: 'items.product', model: Product, populate: {path: 'category', model: Category} });
     return {
       props: {
         orders,
-        user: JSON.parse(JSON.stringify(user)),  
+        user: JSON.parse(JSON.stringify(user)),
         cart: JSON.parse(JSON.stringify(cart)),
-        serverRendered: true
-      }
+        orders: JSON.parse(JSON.stringify(orders)),
+        serverRendered: true,
+      },
     };
   } catch (error) {
+    console.log(error)
     return {
       props: {
         error: { code: 500, message: "server error" },

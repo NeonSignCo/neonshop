@@ -88,7 +88,7 @@ const ProductPage = ({ product }) => {
            product,
            selectedColor: state.color,
            selectedMountType: state.mountType,
-           selectedSize: state.size._id,
+           selectedSize: {info: state.size.info, price: state.size.price, sizeId: state.size._id},
            count: state.quantity,
          };
         if (items.length > 0) {
@@ -98,7 +98,7 @@ const ProductPage = ({ product }) => {
               cartItem.product._id === product._id &&
               cartItem.selectedColor.hex === state.color.hex &&
               cartItem.selectedMountType === state.mountType &&
-              cartItem.selectedSize === state.size._id
+              cartItem.selectedSize.sizeId === state.size._id
           );
 
 
@@ -157,7 +157,7 @@ const ProductPage = ({ product }) => {
           <img
             src={product.image.url}
             alt={product.name}
-            className="w-full md:sticky"
+            className="w-full object-cover"
           />
         </div>
         <div className="grid gap-5 ">
@@ -167,7 +167,9 @@ const ProductPage = ({ product }) => {
               <p>$</p>
               <p>{discountPrice}</p>
               <p className="relative">
-                <span className="absolute left-1 -top-5 text-[17px] line-through  text-red-500">${currentSize.price}</span>
+                <span className="absolute left-1 -top-5 text-[17px] line-through  text-red-500">
+                  ${currentSize.price}
+                </span>
               </p>
             </div>
           ) : (
