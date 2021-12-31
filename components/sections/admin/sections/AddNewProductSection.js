@@ -95,7 +95,7 @@ const AddNewProductSection = ({product, className, edit= false, setOrdersSection
          
           // for edit mode
           if (edit) {
-            setOrdersSection(state => ({...state, products: state.products.map(product => product._id === res.data.product._id ? res.data.product : product), activeProduct: ''}))
+            setOrdersSection(state => ({...state, activeProduct: ''}))
           };
         } catch (error) {  
           setLoading(false);
