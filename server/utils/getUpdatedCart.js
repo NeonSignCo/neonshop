@@ -12,7 +12,8 @@ const getUpdatedCart = (userId) => new Promise(async (resolve, reject) => {
         populate: { path: "category", model: Category },
       })
       .lean();
-    
+
+    if (!cart) return resolve({});
     // filter cart in case any product has been updated
     const {changed, filteredCart} = filterCart(cart);
     if (changed) {
