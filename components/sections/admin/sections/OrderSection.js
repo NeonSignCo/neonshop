@@ -241,20 +241,24 @@ export default OrderSection
 
 const ExpandedOrder = ({ order, setState }) => {
   const [adminState, setAdminState] = useAdminContext();
+  const [status, setStatus] = useState(order.status);
+  const [loading, setLoading] = useState(false)
   const date = new Date(order.createdAt).toLocaleDateString();
   const [, setGlobalState] = useGlobalContext();
   const changeStatus = (e) => catchAsync(async () => {
-    const res = await Axios.patch(`orders/${order._id}`, { status: e.target.value });
-    
+    setLoading(true)
+    const res = await Axios.patch(`orders/${order._id}`, { status });
+    setLoading(false);
     setAdminState((state) => ({
       ...state,
       orders: adminState.orders.map((item) =>
         item._id === order._id ? res.data.order : item
       ),
     }));
+    setLoading(false)
     setState((state) => ({
       ...state,
-      expandedOrder: res.data.order,
+      expandedOrder: '',
     }));
     setGlobalState(state => ({ ...state, alert: { ...state.alert, show: true, type: SUCCESS, text: res.data.message, timeout: 3000 } }))
     setAdminState
@@ -274,13 +278,11 @@ const ExpandedOrder = ({ order, setState }) => {
       <div className="grid gap-1">
         <h2 className="text-lg font-semibold">Shipping Address</h2>
         <p>
-          <span>AddressLine1:</span>{" "}
-          {order.shippingAddress.addressLine1}
+          <span>AddressLine1:</span> {order.shippingAddress.addressLine1}
         </p>
         {order.shippingAddress.addressLine2 && (
           <p>
-            <span>AddressLine2:</span>{" "}
-            {order.shippingAddress.addressLine2}
+            <span>AddressLine2:</span> {order.shippingAddress.addressLine2}
           </p>
         )}
         <p>Phone: {order.shippingAddress.phone}</p>
@@ -298,8 +300,8 @@ const ExpandedOrder = ({ order, setState }) => {
         <h2 className="text-lg font-semibold">Status</h2>
         <select
           className="max-w-max p-1"
-          value={order.status}
-          onChange={changeStatus}
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
         >
           <option value={ORDERED}>Ordered</option>
           <option value={PROCESSING}>Processing</option>
@@ -402,12 +404,21 @@ const ExpandedOrder = ({ order, setState }) => {
           <span className="font-semibold">Total: </span> ${order.total}
         </p>
       </div>
-      <button
-        className="ml-auto py-1 px-4 bg-black text-white"
-        onClick={() => setState((state) => ({ ...state, expandedOrder: "" }))}
-      >
-        Close
-      </button>
+      <div className="flex gap-2 justify-end">
+        <LoadingBtn 
+          loading={loading}
+          className=" py-1 px-4 bg-black text-white"
+          onClick={changeStatus}
+        >
+          Save
+        </LoadingBtn>
+        <button
+          className=" py-1 px-4 transition border border-gray-500 hover:bg-black hover:text-white"
+          onClick={() => setState((state) => ({ ...state, expandedOrder: "" }))}
+        >
+          Close
+        </button>
+      </div>
     </div>
   );
 };
