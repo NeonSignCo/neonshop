@@ -1,19 +1,23 @@
 import { BsCurrencyDollar } from "react-icons/bs"
-import { FaBox, FaComments, FaDollarSign, FaShoppingCart } from "react-icons/fa"
-import { ORDERS, REVIEWS, PRODUCTS, useAdminContext } from '../../../../pages/admin';
+import { FaBox,  FaShoppingCart } from "react-icons/fa"
+import { ORDERS,  PRODUCTS, useAdminContext } from '../../../../pages/admin';
 
 
 const DashboardSection = () => {
+  const [adminState] = useAdminContext();
+  let pendingOrdersCount = 0
+  if (adminState.orders?.length > 0) {
+    adminState.orders.forEach(order => {
+      if (order.status === 'ORDERED' || order.status === 'PROCESSING') pendingOrdersCount += 1;
+    })
+  }
     return (
       <div className="py-10 px-5 lg:px-10 w-full">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-10  w-full">
-          <Item text="monthly revenue" value={3098} showIcon section={ORDERS}>
-            <FaDollarSign/>
-          </Item>
-          <Item text="pending orders" value={14} section={ORDERS}>
+          <Item text="pending orders" value={pendingOrdersCount} section={ORDERS}>
             <FaShoppingCart/>
           </Item>
-          <Item text="total products" value={100} section={PRODUCTS}>
+          <Item text="total products" value={adminState.numOfProducts} section={PRODUCTS}>
             <FaBox/>
           </Item>
           

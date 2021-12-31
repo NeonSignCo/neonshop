@@ -28,7 +28,7 @@ const Admin = ({orders, products, categories, numOfProducts}) => {
       sidebar: {
         expand: true, 
       }, 
-      activeSection: ORDERS, 
+      activeSection: DASHBOARD, 
       orders, 
       products, 
       numOfProducts,
@@ -68,9 +68,7 @@ export const getServerSideProps = async ({req}) => {
       .lean();
      const numOfProducts = await Product.countDocuments().lean();
     const categories = await Category.find().lean();
-    const orders = await Order.find({
-      createdAt: { $gte: new Date(Date.now() - 2 * 30 * 24 * 60 * 60 * 1000) }, // get last two month orders
-    }).populate([
+    const orders = await Order.find().populate([
       { path: "userId", model: User },
       { path: "items.product", model: Product, populate: {path: 'category', model: Category}},
     ]);
