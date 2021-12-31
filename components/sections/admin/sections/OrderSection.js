@@ -492,10 +492,10 @@ const Item = ({order, state, setState}) => {
             <img
               src={order.userId?.image?.url}
               alt={order.userId?.firstName}
-              className=" rounded-full h-20 w-20 object-cover"
+              className=" rounded-full h-10 w-10 object-cover"
             />
           )}
-          <p>{order.userId.name}</p>
+          <p>{order.userId.firstName}</p>
         </div>
       </div>
       <p>
