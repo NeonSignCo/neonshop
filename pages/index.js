@@ -268,6 +268,7 @@ export default function Home({products}) {
           />
           <CustomLink
             text="chat to us"
+            href="/contact"
             className="h-12 w-52 flex items-center justify-center bg-white text-black border border-black uppercase font-semibold transition hover:bg-black hover:text-white"
           />
         </div>
