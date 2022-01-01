@@ -9,7 +9,7 @@ import Category from "../models/category";
 import Cart from "../models/cart";
 import sendMail from '../utils/sendMail';
 import Stripe from 'stripe'; 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {apiVersion: '2020-08-27'});
 
 // @route       POST api/orders/payapl/create-order
 // @purpose     create an order with pending payment
