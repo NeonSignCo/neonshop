@@ -285,7 +285,8 @@ export const createPaymentIntent = catchASync(async (req, res) => {
       payment_method_types: ["card"],
       metadata: {
         orderId: order._id, 
-        userId
+        userId, 
+        some: 'data'
       },
     }); 
 
@@ -293,7 +294,6 @@ export const createPaymentIntent = catchASync(async (req, res) => {
     status: "success",
     message: "payment intent created",
     clientSecret: paymentIntent.client_secret, 
-    orderId: order._id
   });
 });
 
