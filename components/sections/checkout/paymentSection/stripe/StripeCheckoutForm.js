@@ -5,12 +5,13 @@ import {
   useElements,
 } from "@stripe/react-stripe-js";
 import styles from "./stripe.module.css";
+import { useCheckoutContext } from "../../../../../context/CheckoutContext";
 
 
 export default function StripeCheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
-
+  const [state] = useCheckoutContext();
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -30,6 +31,7 @@ export default function StripeCheckoutForm() {
     stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
       switch (paymentIntent.status) {
         case "succeeded":
+          console.log('woo hoo! payment succeded',paymentIntent)
           setMessage("Payment succeeded!");
           break;
         case "processing":
@@ -60,7 +62,9 @@ export default function StripeCheckoutForm() {
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: "http://localhost:3000/checkout",
+        // return_url: "if_required",
+        receipt_email: state.email,
+        return_url: 'http://localhost:3000/checkout'
       },
     });
 
