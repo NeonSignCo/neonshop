@@ -18,6 +18,7 @@ import Banner from "../Banner";
 import { AnimatePresence } from "framer-motion";
 import { useRouter } from "next/router";
 import Axios from "../../utils/Axios";
+import { Loader } from "../LoadingBtn";
 
 const Nav = () => {
   const [globalState, setGlobalState] = useGlobalContext();

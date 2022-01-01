@@ -199,7 +199,7 @@ const Preview = ({ order, setExpand }) => {
               } `}
             >
               {order.status === "ORDERED"
-                ? "on hold"
+                ? "ordered"
                 : order.status === "PROCESSING"
                 ? "processing"
                 : order.status === "DELIVERED"

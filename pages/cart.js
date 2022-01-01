@@ -19,7 +19,7 @@ const CartPage = () => {
           <h1 className="text-2xl sm:text-5xl text-center uppercase font-semibold mb-10">
             cart
           </h1>
-          {globalState.cartData.cart?.items.length > 0 ? (
+          {globalState.cartData.cart?.items?.length > 0 ? (
             <div className="flex flex-col lg:flex-row  gap-5 bg-gray-100">
               <div className="flex lg:self-start flex-col gap-4 bg-gray-200 p-2">
                 {globalState.cartData.cart.items.map((item, i) => (
@@ -208,10 +208,8 @@ export const getServerSideProps = async ({ req }) => {
     }
     const cart = await getUpdatedCart(user._id);
 
-    const orders = [];
     return {
       props: {
-        orders,
         user: JSON.parse(JSON.stringify(user)),
         cart: JSON.parse(JSON.stringify(cart)),
         serverRendered: true,

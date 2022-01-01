@@ -13,10 +13,10 @@ const OrderSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: {
-        values: ["ORDERED", "PROCESSING", "DELIVERED", "CANCELLED"],
-        default: "ORDERED",
+        values: ["PENDING_PAYMENT", "ORDERED", "PROCESSING", "DELIVERED", "CANCELLED"],
+        default: "PENDING_PAYMENT",
         message:
-          "status must be one of 'ORDERED', 'PROCESSING', 'DELIVERED', 'CANCELLED",
+          "status must be one of 'PENDING_PAYMENT', 'ORDERED', 'PROCESSING', 'DELIVERED', 'CANCELLED",
       },
     },
     shippingAddress: {
@@ -27,10 +27,12 @@ const OrderSchema = new mongoose.Schema(
     subTotal: Number,
     discount: Number,
     total: Number,
+    expireAt: Date
   },
   { timestamps: true }
 );
 
+OrderSchema.index({ expireAt: 1 }, { expireAfterSeconds:  0 });
 
 const Order =
   mongoose.models.Order || mongoose.model("Order", OrderSchema);

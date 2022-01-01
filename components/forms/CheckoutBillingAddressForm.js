@@ -25,7 +25,6 @@ const BillingAddressForm = () => {
 
   return (
     <div className="grid gap-3">
-      <h2 className="font-semibold capitalize">billing address</h2>
       <div className="grid gap-1">
         <label htmlFor="country">
           {" "}
@@ -123,7 +122,7 @@ const BillingAddressForm = () => {
         />
       </div>
       <div className="grid gap-1">
-        <label htmlFor="addressLine1">
+        <label htmlFor="billing-addressLine1">
           {" "}
           {state.billing.errors.addressLine1 ? (
             <span className="text-red-500">
@@ -136,7 +135,7 @@ const BillingAddressForm = () => {
         <input
           type="text"
           name="addressLine1"
-          id="addressLine1"
+          id="billing-addressLine1"
           placeholder="Street and house number"
           value={state.billing.addressLine1}
           onChange={inputChange}

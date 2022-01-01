@@ -4,6 +4,7 @@ import CustomLink from "../../CustomLink";
 import { PAYMENT_SECTION, useCheckoutContext } from '../../../context/CheckoutContext';
 import ShippingAddressForm from "../../forms/CheckoutShippingAddressForm";
 import { useEffect } from "react";
+import BillingAddressForm from "../../forms/CheckoutBillingAddressForm";
 
 
 const InfoSection = () => {
@@ -92,7 +93,10 @@ const InfoSection = () => {
                 id="allowNewsLetterSignUp"
                 checked={state.allowNewsLetterSignUp}
                 onChange={(e) =>
-                  setState((state) => ({ ...state, allowNewsLetterSignUp: e.target.checked}))
+                  setState((state) => ({
+                    ...state,
+                    allowNewsLetterSignUp: e.target.checked,
+                  }))
                 }
               />
               <label htmlFor="allowNewsLetterSignUp">
@@ -102,6 +106,7 @@ const InfoSection = () => {
           </div>
         </div>
         <ShippingAddressForm />
+        
         <div className="flex flex-col-reverse md:flex-row gap-5 md:justify-between">
           <CustomLink
             href="/cart"
@@ -112,7 +117,13 @@ const InfoSection = () => {
           </CustomLink>
           <button
             className="py-2 px-4 bg-black text-white uppercase tracking-widest"
-            onClick={goToNextSection}
+            onClick={goToNextSection} 
+            disabled={
+                    !state.email ||
+                    !Object.values(state.shipping.errors).every(
+                      (val) => val === ""
+                    )
+                  }
           >
             continue to payment
           </button>

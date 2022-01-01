@@ -1,7 +1,7 @@
 import { BsArrowClockwise, BsList } from "react-icons/bs"
 import { useAdminContext } from "../../../pages/admin";
 import CustomLink from "../../CustomLink"
-import { useState } from 'react';
+import {  useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { FaPowerOff } from 'react-icons/fa';
 import { SUCCESS, useGlobalContext } from "../../../context/GlobalContext";
@@ -10,6 +10,7 @@ import Axios from "../../../utils/Axios";
 import { useRouter } from "next/router";
 
 const AdminHeader = () => {
+  const Router = useRouter();
   const [globalState, setGlobalState] = useGlobalContext(); 
   const [state, setState] = useAdminContext();
   const [expand, setExpand] = useState();
@@ -17,13 +18,13 @@ const AdminHeader = () => {
 
   const logOut = () => catchASync(async () => {
     await Axios.put('users/logout'); 
-    setExpand(false);
     setGlobalState((state) => ({
       ...state,
-      auth: { ...state.auth, user: null },
-      cartData: { ...state.cartData, cart: [] },
+      auth: { loading: false, user: null },
+      cartData: { ...state.cartData, cart: [] }, 
+      alert: {...state.alert, show: true, text: 'logged out', type: SUCCESS, timeout: 2000}
     }));
-    useRouter().push('/login');
+    Router.push('/login');
   }, setGlobalState)
 
 
@@ -45,7 +46,7 @@ const AdminHeader = () => {
 
     setGlobalState(state => ({...state, alert: {...state.alert, show: true, text: 'updated', type: SUCCESS, timeout: 1000}}))
    }, setGlobalState, () => setLoading(false));
-  
+   
     return (
       <div className="pl-2 pr-4 py-2 flex justify-between items-center bg-gray-800 text-white ">
         <button

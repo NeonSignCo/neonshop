@@ -11,8 +11,9 @@ import authenticate from "../../../server/middleware/authenticate";
 import ncConfig from "../../../server/utils/ncConfig";
 
 const handler = nc(ncConfig)
-  .use(dbConnection, authenticate, restrictTo("ADMIN"))
+  .use(dbConnection)
   .patch(
+    authenticate, restrictTo("ADMIN"),
     multer({
       storage: multer.memoryStorage(),
       limits: { fileSize: 10 * 1024 * 1024 },
@@ -21,13 +22,14 @@ const handler = nc(ncConfig)
   )
   .get(getAllProducts)
   .post(
+    authenticate, restrictTo("ADMIN"),
     multer({
       storage: multer.memoryStorage(),
       limits: { fileSize: 10 * 1024 * 1024 },
     }).single("image"),
     uploadProduct
   )
-  .delete(deleteAllProducts);
+  .delete(authenticate, restrictTo("ADMIN"), deleteAllProducts);
 
 export default handler;
 

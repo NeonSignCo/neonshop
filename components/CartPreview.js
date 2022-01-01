@@ -108,7 +108,7 @@ const CartPreview = () => {
                   onClick={() =>
                     setGlobalState((state) => ({
                       ...state,
-                      showCart: false,
+                      cartData: {...state.cartData, show: false}
                     }))
                   }
                 >

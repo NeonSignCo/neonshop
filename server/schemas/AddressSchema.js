@@ -8,7 +8,10 @@ const AddressSchema = new mongoose.Schema(
       ref: "user",
       required: [true, "userId is required"],
     },
-    country: String,
+    country: {
+      type: String,
+      required: [true, "country is required"],
+    },
     firstName: {
       type: String,
       required: [true, "firstName is required"],

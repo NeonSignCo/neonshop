@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
-import {  FaChevronDown } from "react-icons/fa";
+import {  FaChevronDown, FaChevronRight } from "react-icons/fa";
 import CustomLink from "../components/CustomLink";
-import PaymentSection from "../components/sections/checkout/PaymentSection";
+import PaymentSection from "../components/sections/checkout/paymentSection/PaymentSection";
 import { useGlobalContext } from "../context/GlobalContext";
 import Nav from "../components/nav/Nav";
 import Footer from "../components/Footer";
 import getLoggedInUser from "../utils/getLoggedInUser";
 import connectDb from "../server/utils/connectDb";
 import getUpdatedCart from "../server/utils/getUpdatedCart";
-import CheckoutContext from "../context/CheckoutContext";
+import CheckoutContext, { INFO_SECTION, PAYMENT_SECTION, useCheckoutContext } from "../context/CheckoutContext";
+import InfoSection from "../components/sections/checkout/InfoSection";
 
 
 const Checkout = () => {
@@ -23,11 +24,12 @@ const Checkout = () => {
 export default Checkout;
 
 const Container = () => {
+  const [state, setState] = useCheckoutContext();
   const [globalState] = useGlobalContext();
   const [showMobileSummary, setshowMobileSummary] = useState(false);
-  
+
   return (
-    <div>
+    <div className="">
       {globalState.cartData.cart?.items?.length > 0 ? (
         <div className="flex flex-col lg:flex-row">
           <div className="flex-1">
@@ -40,7 +42,43 @@ const Container = () => {
             >
               <CustomLink className="text-3xl md:text-6xl" text="NeonShop" />
               <div className="flex items-center justify-center gap-3 md:gap-5 mt-5">
-                <h2 className="text-lg">Checkout</h2>
+                <CustomLink href="/cart" text="Cart" />
+                <FaChevronRight />
+                <button
+                  className={`${
+                    state.activeSection === INFO_SECTION ? "font-semibold" : ""
+                  }`}
+                  onClick={() =>
+                    setState((state) => ({
+                      ...state,
+                      activeSection: INFO_SECTION,
+                    }))
+                  }
+                >
+                  Info
+                </button>
+                <FaChevronRight />
+                <button
+                  className={`${
+                    state.activeSection === PAYMENT_SECTION
+                      ? "font-semibold"
+                      : ""
+                  }`}
+                  onClick={() =>
+                    setState((state) => ({
+                      ...state,
+                      activeSection: PAYMENT_SECTION,
+                    }))
+                  }
+                  disabled={
+                    !state.email ||
+                    !Object.values(state.shipping.errors).every(
+                      (val) => val === ""
+                    )
+                  }
+                >
+                  Payment
+                </button>
               </div>
             </div>
             <div className="px-5 lg:px-12 pt-10 grid gap-10">
@@ -56,7 +94,11 @@ const Container = () => {
                 />
               </button>
               {showMobileSummary && <CartPreview />}
-              <PaymentSection />
+              {state.activeSection === INFO_SECTION ? (
+                <InfoSection />
+              ) : (
+                <PaymentSection />
+              )}
 
               <div className="flex justify-center md:justify-start items-center p-2 border-t border-gray-300 gap-8 capitalize">
                 <CustomLink href="/privacy-policy" text="privacy policy" />
@@ -68,7 +110,7 @@ const Container = () => {
               </div>
             </div>
           </div>
-          <div className="hidden lg:block px-4 py-10">
+          <div className="hidden lg:block min-w-[450px] px-4 py-10 ">
             <div className="sticky top-0">
               <CartPreview />
             </div>
@@ -221,10 +263,8 @@ export const getServerSideProps = async ({ req }) => {
     }
     const cart = await getUpdatedCart(user._id);
 
-    const orders = [];
     return {
       props: {
-        orders,
         user: JSON.parse(JSON.stringify(user)),
         cart: JSON.parse(JSON.stringify(cart)),
         serverRendered: true,

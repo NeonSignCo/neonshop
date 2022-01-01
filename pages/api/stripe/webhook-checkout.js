@@ -1,39 +1,31 @@
-import bodyParser from "body-parser";
 import Stripe from 'stripe'; 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {apiVersion: null});
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: "2020-08-27",
+});
+const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
-// ./utils/middleware.utils.ts
- function runMiddleware(req, res, fn
-) {
-  return new Promise((resolve, reject) => {
-    fn(req, res, (result) => {
-      if (result instanceof Error) {
-        return reject(result);
-      }
-      return resolve(result);
-    });
-  });
-}
+const handler = async (req, res) => {
+  if (req.method === "POST") {
+    const buf = await buffer(req);
+    const sig = req.headers["stripe-signature"];
 
-export default async function handler(req, res) {
-  // use bodyParser.raw() as middleware instead
-  await runMiddleware(req, res, bodyParser.raw({ type: "application/json" }));
+    let event;
 
-  try {
-    const signature = req.headers["stripe-signature"];
-    const event = stripe.webhooks.constructEvent(
-      req.body,
-      signature,
-      process.env.STRIPE_WEBHOOK_SECRET
-    );
+    try {
+      event = stripe.webhooks.constructEvent(buf, sig, webhookSecret);
+    } catch (err) {
+      res.status(400).send(`Webhook Errors: ${err.message}`);
+      return;
+    }
 
-    res.status(200).json({received: true, event});
-
-    // TODO: Handle event
-  } catch (e) {
-    return res.status(400).json({ error: `Webhook error: ${e.message}` });
+    res.json({ received: true, event });
+  } else {
+    res.setHeader("Allow", "POST");
+    res.status(405).end("Method Not Allowed");
   }
-}
+};
+
+export default handler;
 
 export const config = {
   api: {

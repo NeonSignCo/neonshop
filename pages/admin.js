@@ -34,7 +34,7 @@ const Admin = ({orders, products, categories, numOfProducts}) => {
       numOfProducts,
       categories
     });
-
+console.log(orders)
     return (
         <Context.Provider value={[state, setState]}>
             <Head>
@@ -68,9 +68,15 @@ export const getServerSideProps = async ({req}) => {
       .lean();
      const numOfProducts = await Product.countDocuments().lean();
     const categories = await Category.find().lean();
-    const orders = await Order.find().populate([
+    const orders = await Order.find({
+      status: { $ne: "PENDING_PAYMENT" },
+    }).populate([
       { path: "userId", model: User },
-      { path: "items.product", model: Product, populate: {path: 'category', model: Category}},
+      {
+        path: "items.product",
+        model: Product,
+        populate: { path: "category", model: Category },
+      },
     ]);
     return {
       props: {

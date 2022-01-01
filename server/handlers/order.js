@@ -6,43 +6,90 @@ import User from "../models/user";
 import { findOrderByOrderId, findOrdersByCustomerId, findOrdersByCustomerName } from "../utils/queries";
 import Product from "../models/product";
 import Category from "../models/category";
+import Cart from "../models/cart";
+import sendMail from '../utils/sendMail';
+import Stripe from 'stripe'; 
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-// @route       POSET api/orders
-// @purpose     create an order
+// @route       POST api/orders/payapl/create-order
+// @purpose     create an order with pending payment
 // @access      User
 export const createOrder = catchASync(async (req, res) => {
-    const { items, shippingAddress } = req.body; 
-
+    const { cartId, shippingAddress } = req.body; 
+  const userId = req.user._id;
     if (!shippingAddress) throw new AppError(400, "shippingAddress is required");
-    if (!items) throw new AppError(400, "items is required");
+    if (!cartId) throw new AppError(400, "cartId is required")
+  
+  // check cart
+  const cart = await Cart.findById(cartId); 
+  if (!cart) throw new AppError(404, 'cart not found. Please add to cart again');
 
-    const data = { items, shippingAddress: { ...shippingAddress, userId: req.user._id }, userId: req.user._id, status: 'ORDERED', subTotal: 0, total: 0 };
-
+  // validate data
+    const data = {
+      items: cart.items,
+      shippingAddress: { ...shippingAddress, userId },
+      userId,
+      status: "PENDING_PAYMENT",
+      subTotal: cart.subTotal,
+      total: cart.total,
+      expireAt: new Date(Date.now() + 1000 * 60 * 30),
+    };
     await Order.validate(data);
 
-    // set final price after discount
-    items.forEach((item, i) => {
-        let price = item.selectedSize.price ;
-        if (item.product.salePercentage > 0) {
-          price = price - (price * item.product.salePercentage) / 100;
-        }
-       
-        const totalPrice = price * item.count
-        data.items[i].selectedSize.price = price
-        data.subTotal += totalPrice; 
-        data.total += totalPrice;
 
-    })
-
-
-    const order = await Order.create(data);
-
+  // create order
+  const order = await Order.create(data);
+  
     return res.json({
         status: 'success', 
-        message: 'your order has been placed', 
-        order
+        message: 'order created with status of PENDING_PAYMENT', 
+        orderId: order._id
     })
 });
+
+// @route       POST api/orders/paypal/capture-order
+// @purpose     Capture order and set status from PENDING_PAYMENT to ORDERED
+// @access      User
+export const captureOrder = catchASync(async (req, res) => {
+  const { orderId } = req.body;
+  const user = req.user;
+  const userId = user._id;
+  if (!orderId) throw new AppError(400, "orderId is required");
+  if (!userId) throw new AppError(400, "userId is required");
+
+  const order = await Order.findOneAndUpdate(
+    { _id: orderId, userId, status: "PENDING_PAYMENT" },
+    { $set: { status: "ORDERED", expireAt: null } }, 
+    {new: true, runValidators: true}
+  ).populate([
+    { path: "userId", model: User },
+    {
+      path: "items.product",
+      model: Product,
+      populate: { path: "category", model: Category },
+    },
+  ]);
+
+  if (!order) throw new AppError(404, "order not found");
+
+  // delete user cart
+  await Cart.deleteMany({userId});
+
+  // send confirmation email
+  try {
+    const text = `Congrats ${user.firstName}, \n Your order has been successfully received by us. \n Your order id is: ${order._id} \n Check your order status from your account: \n ${req.headers.origin}/account`
+    await sendMail({from: 'neonshopco@gmail.com', to: user.email, subject: "Your order has been received!", text })
+  } catch (error) {
+    
+  }
+
+  return res.json({
+    status: "success",
+    message: "order status updated to ORDERED",
+    order,
+  });
+});
+
 
 
 // @route       GET api/orders
@@ -195,5 +242,49 @@ export const deleteOrdersById = catchASync(async (req, res) => {
   return res.json({
     status: "success",
     message: "orders deleted",
+  });
+});
+
+
+// @route       POST /api/orders/stripe/payment-intent
+// @purpose     Create stripe payment intent
+// @access      User
+export const createPaymentIntent = catchASync(async (req, res) => {
+  const { cartId, shippingAddress } = req.body;
+  const userId = req.user._id;
+  if (!cartId) throw new AppError(400, "cartId is required");
+    if (!shippingAddress)
+      throw new AppError(400, "shippingAddress is required");
+  // check cart
+  const cart = await Cart.findById(cartId);
+  if (!cart)
+    throw new AppError(404, "cart not found. Please add to cart again");
+
+  // validate data
+  const data = {
+    items: cart.items,
+    shippingAddress: { ...shippingAddress, userId },
+    userId,
+    status: "PENDING_PAYMENT",
+    subTotal: cart.subTotal,
+    total: cart.total,
+    expireAt: new Date(Date.now() + 1000 * 60 * 30),
+  };
+  await Order.validate(data);
+
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: data.total * 100,
+    currency: "usd", 
+    payment_method_types: ['card'] 
+  }); 
+
+  // create order
+  // const order = await Order.create(data);
+
+  return res.json({ 
+    status: "success",
+    message: "payment intent created",
+    clientSecret: paymentIntent.client_secret, 
+    // orderId: order._id
   });
 });
