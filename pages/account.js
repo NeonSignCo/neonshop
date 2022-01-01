@@ -52,7 +52,7 @@ export const getServerSideProps = async ({ req }) => {
      }
     const cart = await getUpdatedCart(user._id)
 
-    const orders = await Order.find({ userId:user._id, status: {$ne: 'PENDING_PAYMENT'} }).populate({ path: 'items.product', model: Product, populate: {path: 'category', model: Category} }).lean();
+    const orders = await Order.find({ userId:user._id, status: {$ne: 'PENDING_PAYMENT'} }).sort({createdAt: -1}).populate({ path: 'items.product', model: Product, populate: {path: 'category', model: Category} }).lean();
     return {
       props: {
         orders: JSON.parse(JSON.stringify(orders)),
