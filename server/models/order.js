@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import isEmail from "../../utils/isEmail";
 import AddressSchema from "../schemas/AddressSchema";
 import ItemSchema from "../schemas/ItemSchema";
 
@@ -10,6 +11,14 @@ const OrderSchema = new mongoose.Schema(
       ref: "user",
       required: [true, "userId is required"],
     },
+    contactEmail: {
+      type: String, 
+      validate: {
+        validator: val => isEmail(val), 
+        message: 'not a valid email address'
+      }, 
+      required: [true, 'contactEmail is required']
+    }, 
     status: {
       type: String,
       enum: {

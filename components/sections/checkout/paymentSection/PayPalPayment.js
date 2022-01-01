@@ -7,19 +7,16 @@ const PayPalPayment = () => {
   const [globalState, setGlobalState] = useGlobalContext();
   const [state] = useCheckoutContext();
   const Router = useRouter();
-  
   const cartId = globalState.cartData?.cart?._id;
-  const userId = globalState.auth?.user?._id;
  
   const createOrder = async (data, actions) => {
+     console.log(state.shipping);
     try {
-      if (!cartId) throw new Error("your cart is empty");
-      if (!userId) throw new Error("Please login again");
-
       // create order with status of PENDING_PAYMENT
       const res = await Axios.post("orders/paypal/create-order", {
         cartId,
-        shippingAddress: state.shipping,
+        shippingAddress: state.shipping, 
+        contactEmail: state.email   
       });
 
       const order = actions.order.create({

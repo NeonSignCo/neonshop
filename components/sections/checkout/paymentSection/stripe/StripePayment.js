@@ -19,7 +19,7 @@ export default function StripePayment() {
     const createPaymentIntent = () =>
       catchAsync(async () => {
           
-          const res = await Axios.post('orders/stripe/payment-intent', { cartId: globalState.cartData.cart._id, shippingAddress: state.shipping }); 
+          const res = await Axios.post('orders/stripe/payment-intent', { cartId: globalState.cartData.cart._id, shippingAddress: state.shipping, contactEmail: state.email }); 
           setClientSecret(res.data.clientSecret);
 
       }, setGlobalState);

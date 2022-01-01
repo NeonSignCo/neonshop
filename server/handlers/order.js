@@ -17,11 +17,11 @@ const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 // @purpose     create an order with pending payment
 // @access      User
 export const createOrder = catchASync(async (req, res) => {
-    const { cartId, shippingAddress } = req.body; 
+    const { cartId, shippingAddress, contactEmail } = req.body; 
   const userId = req.user._id;
     if (!shippingAddress) throw new AppError(400, "shippingAddress is required");
     if (!cartId) throw new AppError(400, "cartId is required")
-  
+    if(!contactEmail) throw new AppError(400, "contactEmail is required");
   // check cart
   const cart = await Cart.findById(cartId); 
   if (!cart) throw new AppError(404, 'cart not found. Please add to cart again');
@@ -31,9 +31,10 @@ export const createOrder = catchASync(async (req, res) => {
       items: cart.items,
       shippingAddress: { ...shippingAddress, userId },
       userId,
+      contactEmail,
       status: "PENDING_PAYMENT",
       subTotal: cart.subTotal,
-      total: cart.total,
+      total: cart.total, 
       expireAt: new Date(Date.now() + 1000 * 60 * 60 * 24),
     };
     await Order.validate(data);
@@ -80,7 +81,7 @@ export const captureOrder = catchASync(async (req, res) => {
   // send confirmation email
   try {
     const text = `Congrats ${user.firstName}, \n Your order has been successfully received by us. \n Your order id is: ${order._id} \n Check your order status from your account: \n ${req.headers.origin}/account`
-    await sendMail({from: 'neonshopco@gmail.com', to: user.email, subject: "Your order has been received!", text })
+    await sendMail({from: 'neonshopco@gmail.com', to: order.contactEmail, subject: "Your order has been received!", text })
   } catch (error) {
     
   }
@@ -252,11 +253,13 @@ export const deleteOrdersById = catchASync(async (req, res) => {
 // @purpose     Create stripe payment intent
 // @access      User
 export const createPaymentIntent = catchASync(async (req, res) => {
-  const { cartId, shippingAddress } = req.body;
+  const { cartId, shippingAddress, contactEmail } = req.body;
   const userId = req.user._id;
   if (!cartId) throw new AppError(400, "cartId is required");
     if (!shippingAddress)
-      throw new AppError(400, "shippingAddress is required");
+    throw new AppError(400, "shippingAddress is required"); 
+  if (!contactEmail) throw new AppError(400, "contactEmail is required");
+ 
   // check cart
   const cart = await Cart.findById(cartId);
   if (!cart)
@@ -266,7 +269,8 @@ export const createPaymentIntent = catchASync(async (req, res) => {
   const data = {
     items: cart.items,
     shippingAddress: { ...shippingAddress, userId },
-    userId,
+    userId, 
+    contactEmail,
     status: "PENDING_PAYMENT",
     subTotal: cart.subTotal,
     total: cart.total,
@@ -288,6 +292,7 @@ export const createPaymentIntent = catchASync(async (req, res) => {
         userId, 
         some: 'data'
       },
+      
     }); 
 
   return res.json({ 
@@ -311,13 +316,14 @@ export const webhookPaymentIntent = catchASync(async (req, res) => {
   const  event = stripe.webhooks.constructEvent(buf, sig, webhookSecret);
 
   
-  const paymentIntentSucceded = event.type !== "payment_intent.succeeded";
+  
 
     return res.json({ 
     status: "success",
     message: "successfully received order",
     event, 
-    paymentIntentSucceded
+      paymentIntentSucceded, 
+    object: event.data.object
   })
 
 });
