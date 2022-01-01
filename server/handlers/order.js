@@ -9,7 +9,9 @@ import Category from "../models/category";
 import Cart from "../models/cart";
 import sendMail from '../utils/sendMail';
 import Stripe from 'stripe'; 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {apiVersion: '2020-08-27'});
+import { buffer } from "micro";
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2020-08-27' });
+const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 // @route       POST api/orders/payapl/create-order
 // @purpose     create an order with pending payment
@@ -32,7 +34,7 @@ export const createOrder = catchASync(async (req, res) => {
       status: "PENDING_PAYMENT",
       subTotal: cart.subTotal,
       total: cart.total,
-      expireAt: new Date(Date.now() + 1000 * 60 * 30),
+      expireAt: new Date(Date.now() + 1000 * 60 * 60 * 24),
     };
     await Order.validate(data);
 
@@ -268,23 +270,54 @@ export const createPaymentIntent = catchASync(async (req, res) => {
     status: "PENDING_PAYMENT",
     subTotal: cart.subTotal,
     total: cart.total,
-    expireAt: new Date(Date.now() + 1000 * 60 * 30),
+    expireAt: new Date(Date.now() + 1000 * 60 * 60 * 24), //expire after one day
   };
   await Order.validate(data);
 
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: data.total * 100,
-    currency: "usd", 
-    payment_method_types: ['card'] 
-  }); 
+
 
   // create order
-  // const order = await Order.create(data);
+  const order = await Order.create(data);
+
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: data.total * 100,
+      currency: "usd",
+      payment_method_types: ["card"],
+      metadata: {
+        orderId: order._id, 
+        userId
+      },
+    }); 
 
   return res.json({ 
     status: "success",
     message: "payment intent created",
     clientSecret: paymentIntent.client_secret, 
-    // orderId: order._id
+    orderId: order._id
   });
+});
+
+
+
+
+// @route       POST /api/orders/stripe/webhook-payment-intent
+// @purpose     Listen for payment intent succeed
+// @access      Public
+export const webhookPaymentIntent = catchASync(async (req, res) => {
+  
+   const buf = await buffer(req);
+   const sig = req.headers["stripe-signature"];
+
+  const  event = stripe.webhooks.constructEvent(buf, sig, webhookSecret);
+
+  
+  const paymentIntentSucceded = event.type !== "payment_intent.succeeded";
+
+    return res.json({ 
+    status: "success",
+    message: "successfully received order",
+    event, 
+    paymentIntentSucceded
+  })
+
 });
