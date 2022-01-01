@@ -31,7 +31,6 @@ export default function StripeCheckoutForm() {
     stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
       switch (paymentIntent.status) {
         case "succeeded":
-          console.log('woo hoo! payment succeded',paymentIntent)
           setMessage("Payment succeeded!");
           break;
         case "processing":
@@ -60,6 +59,7 @@ export default function StripeCheckoutForm() {
 
     const { error } = await stripe.confirmPayment({
       elements,
+      // redirect: 'if_required',
       confirmParams: {
         // Make sure to change this to your payment completion page
         // return_url: "if_required",
