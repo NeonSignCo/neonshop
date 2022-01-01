@@ -288,11 +288,10 @@ export const createPaymentIntent = catchASync(async (req, res) => {
       currency: "usd",
       payment_method_types: ["card"],
       metadata: {
-        orderId: order._id, 
-        userId, 
-        some: 'data'
+        orderId: String(order._id),
+        userId: String(userId),
+        some: "data",
       },
-      
     }); 
 
   return res.json({ 
