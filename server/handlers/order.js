@@ -290,7 +290,8 @@ export const createPaymentIntent = catchASync(async (req, res) => {
       metadata: {
         orderId: String(order._id),
         userId: String(userId),
-        some: "data",
+        some: "data", 
+        some2: "data2"
       },
     }); 
 
