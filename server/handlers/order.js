@@ -322,7 +322,7 @@ export const webhookPaymentIntent = catchASync(async (req, res) => {
     status: "success",
     message: "successfully received order",
     event, 
-      paymentIntentSucceded, 
+    type: event.type,
     object: event.data.object
   })
 
