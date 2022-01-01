@@ -10,7 +10,7 @@ const PayPalPayment = () => {
   
   const cartId = globalState.cartData?.cart?._id;
   const userId = globalState.auth?.user?._id;
-
+ 
   const createOrder = async (data, actions) => {
     try {
       if (!cartId) throw new Error("your cart is empty");
