@@ -43,9 +43,9 @@ export default ThankYou
 export const getServerSideProps = async ({ query, req }) => {
     
     try {
-        const orderId = query.orderId;
+      const ordered = query.ordered; 
 
-        if (!orderId)
+        if (!ordered)
           return {
             redirect: {
               destination: "/",

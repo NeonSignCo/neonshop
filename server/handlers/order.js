@@ -80,7 +80,7 @@ export const captureOrder = catchASync(async (req, res) => {
 
   // send confirmation email
   try {
-    const text = `Congrats ${user.firstName}, \n Your order has been successfully received by us. \n Your order id is: ${order._id} \n Check your order status from your account: \n ${req.headers.origin}/account`
+    const text = `Congrats ${user.firstName} ${user.lastName}, \n Your order has been successfully received by us. \n Your order id is: ${order._id} \n Check your order status from your account: \n ${req.headers.origin}/account`;
     await sendMail({from: 'neonshopco@gmail.com', to: order.contactEmail, subject: "Your order has been received!", text })
   } catch (error) {
     
@@ -290,8 +290,6 @@ export const createPaymentIntent = catchASync(async (req, res) => {
       metadata: {
         orderId: String(order._id),
         userId: String(userId),
-        some: "data", 
-        some2: "data2"
       },
     }); 
 
@@ -309,21 +307,55 @@ export const createPaymentIntent = catchASync(async (req, res) => {
 // @purpose     Listen for payment intent succeed
 // @access      Public
 export const webhookPaymentIntent = catchASync(async (req, res) => {
-  
-   const buf = await buffer(req);
-   const sig = req.headers["stripe-signature"];
+  const buf = await buffer(req);
+  const sig = req.headers["stripe-signature"];
 
-  const  event = stripe.webhooks.constructEvent(buf, sig, webhookSecret);
+  const event = stripe.webhooks.constructEvent(buf, sig, webhookSecret);
 
-  
-  
+  if (event.type !== "payment_intent.succeeded") return;
 
-    return res.json({ 
+  if (!event.data.object.metadata)
+    throw new AppError(400, "metadata is required");
+  const { orderId, userId } = event.data.object.metadata;
+
+  if (!orderId) throw new AppError(400, "orderId is required");
+  if (!userId) throw new AppError(400, "userId is required");
+
+  const user = await User.findById(userId).select('firstName lastName'); 
+
+  if (!user) throw new AppError(400, 'user not found');
+
+  const order = await Order.findOneAndUpdate(
+    { _id: orderId, userId, status: "PENDING_PAYMENT" },
+    { $set: { status: "ORDERED", expireAt: null } },
+    { new: true, runValidators: true }
+  ).populate([
+    { path: "userId", model: User },
+    {
+      path: "items.product",
+      model: Product,
+      populate: { path: "category", model: Category },
+    },
+  ]);
+
+  if (!order) throw new AppError(404, "order not found");
+
+  // delete user cart
+  await Cart.deleteMany({ userId });
+
+  // send confirmation email
+  try {
+    const text = `Congrats ${user.firstName} ${user.lastName}, \n Your order has been successfully received by us. \n Your order id is: ${order._id} \n Check your order status from your account: \n ${req.headers.origin}/account`;
+    await sendMail({
+      from: "neonshopco@gmail.com",
+      to: order.contactEmail,
+      subject: "Your order has been received!",
+      text,
+    });
+  } catch (error) {}
+
+  return res.json({
     status: "success",
     message: "successfully received order",
-    event, 
-    type: event.type,
-    object: event.data.object
-  })
-
+  });
 });

@@ -61,6 +61,7 @@ const PaymentSection = () => {
         <h2 className="font-semibold capitalize">payment</h2>
         <p>All transactions are secure and encrypted.</p>
         <StripePayment />
+        <p className="text-3xl mx-auto">or</p>
         <PayPalPayment />
       </div>
 

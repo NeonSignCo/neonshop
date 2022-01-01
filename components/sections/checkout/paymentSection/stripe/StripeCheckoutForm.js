@@ -64,7 +64,7 @@ export default function StripeCheckoutForm() {
         // Make sure to change this to your payment completion page
         // return_url: "if_required",
         receipt_email: state.email,
-        return_url: 'http://localhost:3000/checkout'
+        return_url: `${window.location.origin}/thank-you?ordered=true`,
       },
     });
 

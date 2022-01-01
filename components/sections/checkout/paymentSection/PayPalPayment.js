@@ -57,7 +57,7 @@ const PayPalPayment = () => {
         setGlobalState(state => ({...state, cartData: {...state.cartData, cart: null}}))
         
     //   redirect to thank you page 
-        Router.replace(`thank-you?orderId=${res.data.order._id}`)
+        Router.replace(`thank-you?ordered=true`)
       
     } catch (error) {
       setGlobalState((state) => ({
