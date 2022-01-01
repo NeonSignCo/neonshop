@@ -175,8 +175,7 @@ const OrderSection = () => {
                     <th className="text-left pl-2">
                       <input
                         type="checkbox"
-                        checked={adminState.orders
-                          .filter(
+                        checked={adminState.orders?.length > 0 && adminState.orders?.filter(
                             (order) => order.status === state.activeSection
                           )
                           ?.every((order) =>
@@ -525,13 +524,13 @@ const Item = ({order, state, setState}) => {
 }
 
 
-const SearchBar = ({ setState }) => {
+const SearchBar = () => {
   const [, setGlobalState] = useGlobalContext();
+  const [, setState] = useAdminContext();
   const CUSTOMER_ID = 'CUSTOMER_ID'; 
   const ORDER_ID = 'ORDER_ID'; 
   const CUSTOMER_NAME = 'CUSTOMER_NAME';
   const [loading, setLoading] = useState(false);
-    const [typed, setTyped] = useState(false);
   const [filter, setFilter] = useState({
     searchBy: ORDER_ID,
     searchText: '',
@@ -540,7 +539,6 @@ const SearchBar = ({ setState }) => {
   });
 
   const search = () => catchAsync(async () => {
-    if (!typed) return;
     setLoading(true);
     
     const searchBy = filter.searchText ? filter.searchBy === ORDER_ID ? 'id=' : filter.searchBy === CUSTOMER_ID ? 'customer_id=' : filter.searchBy === CUSTOMER_NAME ? 'customer_name=' : "": ''
@@ -561,32 +559,19 @@ const SearchBar = ({ setState }) => {
     
   }, setGlobalState, () => setLoading(false));
 
- useEffect(() => {
-   const debounce = setTimeout(search, 1000);
-   return () => clearTimeout(debounce);
- }, [filter.searchText]);
-
   return (
     <div className="grid gap-3">
-      <div className="flex rounded border max-w-max overflow-hidden">
+      <div className="flex flex-col gap-1">
+        <p className="capitalize">search text</p>
         <input
           type="text"
           placeholder="Search Order"
-          className="p-2"
+          className="p-2  rounded border max-w-max"
           vaue={filter.searchText}
           onChange={(e) => {
             setFilter((filter) => ({ ...filter, searchText: e.target.value }));
-            setTyped(true);
           }}
         />
-
-        <LoadingBtn
-          className="py-2 px-3 bg-gray-200"
-          loading={loading}
-          borderColor="border-black"
-        >
-          {!loading && <FaSearch />}
-        </LoadingBtn>
       </div>
       <div className="flex gap-3 items-center flex-wrap">
         <div className="flex flex-col gap-1">
@@ -632,6 +617,15 @@ const SearchBar = ({ setState }) => {
           />
         </div>
       </div>
+      <LoadingBtn
+        className="py-1 px-3 bg-gray-200 max-w-max"
+        loading={loading}
+        borderColor="border-black"
+        onClick={search}
+      >
+        search
+        <FaSearch/>
+      </LoadingBtn> 
     </div>
   );
 };

@@ -49,7 +49,7 @@ const PayPalPayment = () => {
       const details = await actions.order.capture();
 
     //   update order status to ORDERED
-      const res = await Axios.post("orders/paypal/capture-order", {
+       await Axios.post("orders/paypal/capture-order", {
         orderId: details.purchase_units[0].reference_id,
       });
 
