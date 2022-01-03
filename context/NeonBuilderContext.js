@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { sizes } from "../utils/CustomNeonAssets";
+import { colors, sizes } from "../utils/CustomNeonAssets";
 
 const Context = createContext();
 export const useNeonBuilderContext = () => useContext(Context);
@@ -18,7 +18,7 @@ const NeonBuilderContext = ({ children }) => {
     data: {
       text: "",
       font: "MontserratRegular",
-      color: "#F7F7F7",
+      color: colors[1],
       width: '', 
       size: sizes[0],
       backing: {

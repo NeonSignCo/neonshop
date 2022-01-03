@@ -150,7 +150,7 @@ const CartItem = ({ item }) => {
           }
           return cartItem;
         } )
-        const res = await Axios.post("cart", {items});
+        const res = await Axios.patch("cart", {items});
 
         setGlobalState((state) => ({
           ...state,

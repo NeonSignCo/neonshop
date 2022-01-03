@@ -8,7 +8,9 @@ const calcPrice = async function (doc) {
       let total = 0;
         let addedItems = [];  
         
-        if (doc.items?.length > 0) {
+      if (!doc.items || doc.items.length <= 0) throw new AppError(400, 'cart is empty');
+      
+        if (doc.items.length > 0) {
           await Promise.all(
             doc.items.map(async (item) => {
               // ignore if count is 0

@@ -68,9 +68,9 @@ export const getServerSideProps = async ({req}) => {
       .lean();
      const numOfProducts = await Product.countDocuments().lean();
     const categories = await Category.find().lean();
-    const orders = await Order.find({
-      status: { $ne: "PENDING_PAYMENT" },
-    }).populate([
+
+    // get all orders of last three months
+    const orders = await Order.find({createdAt: {$gte: new Date(Date.now() - 3 * 30 * 24 * 60 * 60 * 1000)}}).populate([
       { path: "userId", model: User },
       {
         path: "items.product",

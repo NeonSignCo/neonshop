@@ -100,6 +100,19 @@ const CartItem = ({ item }) => {
              ...state,
              cartData: { ...state.cartData, loading: true },
            }));
+
+           if (remove) {
+             await Axios.delete('cart');
+             return setGlobalState((state) => ({
+               ...state,
+               cartData: {
+                 ...state.cartData,
+                 loading: false,
+                 cart: null,
+               },
+             }));
+
+           }
            const itemsCopy = JSON.parse(JSON.stringify(globalState.cartData.cart.items))
            const items = itemsCopy.map((cartItem) => {
              const sameVariation =
@@ -110,12 +123,12 @@ const CartItem = ({ item }) => {
                cartItem.selectedSize._id === item.selectedSize._id;
 
              if (sameVariation) {
-               cartItem.count =remove ? 0:  plus ? cartItem.count + 1 : cartItem.count - 1;
+               cartItem.count = plus ? cartItem.count + 1 : cartItem.count - 1;
              }
              return cartItem;
            });
 
-           const res = await Axios.post("cart", { items });
+           const res = await Axios.patch("cart", { items });
 
            setGlobalState((state) => ({
              ...state,
@@ -197,21 +210,15 @@ export const getServerSideProps = async ({ req }) => {
   try {
       await connectDb();
     const user = await getLoggedInUser(req);
+    const userId = user?._id || req.cookies.tempUserId;
 
-    if (!user) {
-      return {
-        redirect: {
-          destination: "/login",
-          permanent: false,
-        },
-      };
-    }
-    const cart = await getUpdatedCart(user._id);
+    let cart;
+    if (userId) { cart = await getUpdatedCart(userId) };
     
     return {
       props: {
-        user: JSON.parse(JSON.stringify(user)),
-        cart: JSON.parse(JSON.stringify(cart)),
+        user: user? JSON.parse(JSON.stringify(user)): null,
+        cart: cart? JSON.parse(JSON.stringify(cart)): null,
         serverRendered: true,
       },
     };

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { FaPencilAlt, FaSearch } from "react-icons/fa"
 import {  useAdminContext } from "../../../../pages/admin";
 import LoadingBtn from '../../../../components/LoadingBtn';

@@ -1,17 +1,19 @@
 import {
     addOrUpdateCart, 
     getCart, 
-    deleteCart
+    deleteCart,
+    updateCart,
+    addToCart
 } from "../../../server/handlers/cart";
-import authenticate from "../../../server/middleware/authenticate";
 import nc from "next-connect";
 import dbConnection from "../../../server/middleware/dbConnection";
 import ncConfig from "../../../server/utils/ncConfig";
 
 const handler = nc(ncConfig)
-  .use(dbConnection, authenticate)
+  .use(dbConnection)
   .get(getCart)
-    .post(addOrUpdateCart)
+    .post(addToCart)
+    .patch(updateCart)
     .delete(deleteCart);
 
 export default handler;
