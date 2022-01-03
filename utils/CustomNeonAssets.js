@@ -24,47 +24,69 @@ export const fonts = [
 export const colors = [
   {
     name: "red",
-    hex: "#FF0000",
+    r: 255,
+    g: 0,
+    b: 0,
   },
   {
     name: "white",
-    hex: "#FFFFFF",
+    r: 255,
+    g: 255,
+    b: 255,
   },
   {
     name: "orange",
-    hex: "#FF9900",
+    r: 255,
+    g: 153,
+    b: 0,
   },
   {
     name: "yellow",
-    hex: "#FFFC00",
+    r: 255,
+    g: 252,
+    b: 0,
   },
   {
     name: "blue",
-    hex: "#0D00FF",
+    r: 13,
+    g: 0,
+    b: 255,
   },
   {
     name: "light blue",
-    hex: "#00E0FF",
+    r: 1,
+    g: 224,
+    b: 255,
   },
   {
     name: "mint",
-    hex: "#00FFD1",
+    r: 0,
+    g: 255,
+    b: 209,
   },
   {
     name: "green",
-    hex: "#00FD09",
+    r: 0,
+    g: 253,
+    b: 9,
   },
   {
     name: "pink",
-    hex: "#FF94EE",
+    r: 255,
+    g: 148,
+    b: 138,
   },
   {
     name: "hot pink",
-    hex: "#FF01D7",
+    r: 255,
+    g: 1,
+    b: 215,
   },
   {
     name: "purple",
-    hex: "#AE01FF",
+    r: 174,
+    g: 1,
+    b: 255,
   },
 ];
 
@@ -77,4 +99,32 @@ export const icons = [
   {link: "TT logo.png", name: "tiktok icon"},
   {link: "TW logo.png", name: "twitter icon"},
   {link: "YT logo.png", name: "youtube icon"},
+];
+
+
+export const sizes = [
+  {
+    name: "regular",
+    letter: {
+      width: 2.5,
+      price: 20,
+    },
+    icon: {
+      width: 12,
+      height: 12,
+      price: 50,
+    },
+  },
+  {
+    name: "large",
+    letter: {
+      width: 3.75,
+      price: 30,
+    },
+    icon: {
+      width: 18,
+      height: 18,
+      price: 75,
+    },
+  },
 ];

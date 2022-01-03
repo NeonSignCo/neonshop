@@ -1,11 +1,9 @@
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef } from "react";
-import { useGlobalContext } from "../../../../context/GlobalContext";
 import { useNeonBuilderContext } from "../../../../context/NeonBuilderContext";
 
 const Visuals = () => {
   const [state] = useNeonBuilderContext();
-  const [globalState] = useGlobalContext();
   const divRef = useRef();
   const textRef = useRef();
 
@@ -34,36 +32,71 @@ const Visuals = () => {
     >
       {state.data.text || state.data.icon.name ? (
         <>
-          <div className="ml-auto text-2xl md:text-5xl absolute top-5 right-5 ">
-            $
-            <span className="italic">
-              {Number(
-                Object.values(state.data.price).reduce((a, b) => a + b)
-              ).toFixed(2)}
-            </span>
-          </div>
+          <AnimatePresence>
+            {!state.controls.typing && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="ml-auto text-2xl md:text-5xl absolute top-3 right-3 "
+              >
+                $
+                <span className="italic">
+                  {Number(state.data.price).toFixed(2)}
+                </span>
+              </motion.div>
+            )}
+          </AnimatePresence>
           <div
             className="flex w-full justify-center items-center overflow-hidden"
             ref={divRef}
           >
-            <div
-              ref={textRef}
-              className="text-5xl md:text-7xl lg:text-9xl transition-all filter brightness-[1.2] relative flex items-center justify-center "
-              style={{
-                textShadow: `0 0 10px ${state.data.color}FF, 0 0 20px ${state.data.color}80,  0 0 40px ${state.data.color}54`,
-                color: state.data.color,
-                fontFamily: state.data.font,
-                transformStyle: "preserve-3d",
-              }}
-            >
-              {state.data.icon.name && (
-                <img
-                  src={`/img/neon-logos/${state.data.icon.link}`}
-                  alt={state.data.icon.name}
-                  className="h-24 md:h-44 "
-                />
-              )}
-              <span className="whitespace-nowrap">{state.data.text}</span>
+            <div className="relative">
+              <div
+                ref={textRef}
+                className="text-5xl md:text-7xl lg:text-9xl transition-all relative flex items-center justify-center"
+                style={{
+                  textShadow: `0 0 10px rgba(${state.data.color.r},${
+                    state.data.color.g
+                  },${state.data.color.b},1),0 0 20px rgba(${
+                    state.data.color.r + 10
+                  },${state.data.color.g + 10},${
+                    state.data.color.b + 10
+                  },0.5),0 0 40px rgba(${state.data.color.r + 10},${
+                    state.data.color.g + 10
+                  },${state.data.color.b + 10},0.33)`,
+                  color: `rgb(${state.data.color.r}, ${state.data.color.g}, ${state.data.color.b})`,
+                  fontFamily: state.data.font,
+                  transformStyle: "preserve-3d",
+                }}
+              >
+                {state.data.icon.name && (
+                  <img
+                    src={`/img/neon-logos/${state.data.icon.link}`}
+                    alt={state.data.icon.name}
+                    className="h-24 md:h-44 "
+                  />
+                )}
+                <span className="whitespace-nowrap">{state.data.text}</span>
+              </div>
+              <AnimatePresence>
+                {!state.controls.typing && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="flex items-center gap-2 absolute -bottom-8 w-full"
+                  >
+                    <div className="h-[1px] bg-white flex-1 relative">
+                      <div className="absolute -top-[6px] h-[13px] w-[2px] bg-gray-500"></div>
+                    </div>
+                    {state.data.width}"
+                    <div className="h-[1px] bg-white flex-1 relative">
+                      <div className="absolute -top-[6px] right-0 h-[13px] w-[2px] bg-gray-500"></div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
         </>

@@ -9,19 +9,18 @@ import LoadingBtn from "../../../../LoadingBtn";
 
 
 const SearchBar = ({state, setState}) => {
-  const [adminState] = useAdminContext();
+  const [adminState, setAdminState] = useAdminContext();
   const [, setGlobalState] = useGlobalContext();
     const changeCategory = async (e) => {
       try {
         const res = await Axios.get(
           `products?category=${e.target.value}&&name=${state.searchText}&&limit=${state.productsPerPage}`
         );
-        // setLoading(false)
         setState((state) => ({
           ...state,
           category: e.target.value,
-          products: res.data.products,
         }));
+        setAdminState(state => ({...state, products: res.data.products}))
       } catch (error) {
         setGlobalState((state) => ({
           ...state,
@@ -67,6 +66,7 @@ export default SearchBar;
 
 const ProductSearch = ({ state, setState }) => {
   const [, setGlobalState] = useGlobalContext();
+  const [, setAdminState] = useAdminContext();
   const [loading, setLoading] = useState(false);
   const [typed, setTyped] = useState(false);
   const search = async () => {
@@ -78,7 +78,11 @@ const ProductSearch = ({ state, setState }) => {
           state.productsPerPage
         }&&category=${state.category}`
       );
-      setState((state) => ({ ...state, products: res.data.products, page: 1 }));
+      setState((state) => ({ ...state, page: 1 }));
+      setAdminState((state) => ({
+        ...state,
+        products: res.data.products,
+      }));
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -95,12 +99,12 @@ const ProductSearch = ({ state, setState }) => {
   };
 
   useEffect(() => {
-    const debounce = setTimeout(search, 1000);
+    const debounce = setTimeout(search, 800);
     return () => clearTimeout(debounce);
   }, [state.searchText]);
 
   return (
-    <form className="flex items-center ">
+    <div className="flex items-center " >
       <input
         type="text"
         className="p-2 border border-gray-300 h-full w-full"
@@ -118,6 +122,6 @@ const ProductSearch = ({ state, setState }) => {
       >
         {!loading && <FaSearch />}
       </LoadingBtn>
-    </form>
+    </div>
   );
 };

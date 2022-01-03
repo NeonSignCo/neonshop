@@ -52,26 +52,32 @@ const Navigation = () => {
       />
 
       <Item
-        title="Neon backing"
+        title="Neon backing color"
         text={
-          state.data.backing === "CUTTOLETTER"
-            ? "cut to letter"
-            : state.data.backing
+          state.data.backing.color
         }
         number="6"
-        target="backing"
+        target="backing-color"
+      />
+      <Item
+        title="Neon backing type"
+        text={
+          state.data.backing.type
+        }
+        number="7"
+        target="backing-type"
       />
       <Item
         title="Moun type"
         text={state.data.mountType}
-        number="7"
+        number="8"
         target="mount-type"
       />
       <Item
-        title="Delivery time"
-        text={state.data.deliveryTime}
-        number="8"
-        target="delivery-time"
+        title="Note"
+        text={state.data.note}
+        number="9"
+        target="note"
       />
       <button className="flex justify-between items-center px-3 py-5 border-b capitalize font-semibold text-lg transition hover:bg-gray-200">
         <span>finish and create neon</span>
@@ -105,7 +111,7 @@ const Item = ({ title, text, number, target }) => {
       <div className="flex items-center gap-2 capitalize">
         <div className="text-xl font-light">{number}</div>
         <div className=" text-left">
-          <p className="font-semibold">{title}</p>
+          <p className="font-semibold" style={{textOverflow: 'ellipsis', overflow: "hidden"}}>{title}</p>
           <p className="text-sm">{text}</p>
         </div>
       </div>

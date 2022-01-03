@@ -624,8 +624,8 @@ const SearchBar = () => {
         onClick={search}
       >
         search
-        <FaSearch/>
-      </LoadingBtn> 
+        {!loading && <FaSearch />}
+      </LoadingBtn>
     </div>
   );
 };

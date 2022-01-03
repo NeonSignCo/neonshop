@@ -3,9 +3,9 @@ import { useGlobalContext, ERROR } from '../context/GlobalContext';
 import Axios from '../utils/Axios';
 
 
-const ProductNavigation = ({ productsCount, state, setState }) => {
+const ProductNavigation = ({ state, setState }) => {
   const [, setGlobalState] = useGlobalContext();
-  const pagesCount = Math.ceil(productsCount / state.productsPerPage);
+  const pagesCount = Math.ceil(state.numOfProducts / state.productsPerPage);
 
   const btns = [];
   for (let x = 1; x <= pagesCount; x++) btns.push(x);
@@ -53,7 +53,7 @@ const ProductNavigation = ({ productsCount, state, setState }) => {
       ))}
       <button
         className="bg-black h-10 w-10 flex items-center justify-center text-white disabled:bg-gray-500 disabled:cursor-text"
-        disabled={state.page * state.productsPerPage >= productsCount}
+        disabled={state.page * state.productsPerPage >= state.numOfProducts}
         onClick={() => navigate(state.page + 1)}
       >
         <FaChevronRight />

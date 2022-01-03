@@ -15,14 +15,12 @@ export const useCheckoutContext = () => useContext(Context);
 const CheckoutContext = ({ children }) => {
   const [globalState] = useGlobalContext();
   const userShipping = globalState.auth.user?.shippingAddress?.[0];
-
     const [state, setState] = useState({
-      activeSection: PAYMENT_SECTION,  
+      activeSection: INFO_SECTION,  
       activeElement: '',
       email: globalState.auth.user?.email || "",
       allowNewsLetterSignUp: true,
       allowTextMessageOffers: false, 
-      paymentMethod: CREDIT_CART,
       shipping: {
         country: userShipping.country || '',
         firstName: userShipping.firstName || '',

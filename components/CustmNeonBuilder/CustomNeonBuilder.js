@@ -9,8 +9,8 @@ const CustomNeonBuilder = () => {
 
   return (
     <NeonBuilderContext>
-      <div className="bg-black h-[calc(100vh-66px)] relative grid lg:grid-cols-3 grid-rows-6">
-        <Visuals/>
+      <div className="bg-black h-[calc(100vh-66px)] lg:h-[calc(100vh-68px)] relative grid lg:grid-cols-3 grid-rows-6">
+        <Visuals />
         <Controls />
       </div>
     </NeonBuilderContext>

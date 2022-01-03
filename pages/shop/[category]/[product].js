@@ -111,7 +111,7 @@ const ProductPage = ({ product }) => {
         } else { 
           items.push(data)
         }
-
+        
         const res = await Axios.post("cart", { items });
 
         setGlobalState((state) => ({

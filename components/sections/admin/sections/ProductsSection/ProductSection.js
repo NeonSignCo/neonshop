@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { FaPencilAlt, FaTrash } from "react-icons/fa";
-import { SUCCESS, useGlobalContext } from "../../../../../context/GlobalContext";
+import { FaChevronLeft, FaChevronRight, FaPencilAlt, FaTrash } from "react-icons/fa";
+import { ERROR, SUCCESS, useGlobalContext } from "../../../../../context/GlobalContext";
 import { useAdminContext } from "../../../../../pages/admin";
 import Axios from "../../../../../utils/Axios";
 import catchASync from "../../../../../utils/catchASync";
 import LoadingBtn from "../../../../LoadingBtn";
-import ProductNavigation from "../../../../ProductNavigation";
 import AddNewProductSection from "../AddNewProductSection";
 import SearchBar from "./SearchBar";
 
@@ -14,10 +13,10 @@ const ProductSection = () => {
   const [, setGlobalState] = useGlobalContext();  
   const [adminState, setAdminState] = useAdminContext();
 
-    const [state, setState] = useState({
+  const [state, setState] = useState({
+    page: 1, 
+    productsPerPage: 30,
       category: '',
-      page: 1,
-      productsPerPage: 30,
       selectedProductIds: [],   
       activeProduct: '', 
       searchText: '',
@@ -112,7 +111,6 @@ const ProductSection = () => {
               </table>
             </div>
             <div className="md:hidden grid gap-3 text-black mt-5">
-              fdddd
               {adminState.products?.map((product) => (
                 <Item
                   key={product._id}
@@ -124,7 +122,6 @@ const ProductSection = () => {
             </div>
             <div className="flex p-2 items-center">
               <ProductNavigation
-                productsCount={state.numOfProducts}
                 state={state}
                 setState={setState}
               />
@@ -216,7 +213,7 @@ const TableItem = ({ product, state, setState }) => {
   );
 };
 
-const Item = ({ product, state, setState }) => {
+const Item = ({ product, setState }) => {
   return (
     <div className="p-2 bg-white border border-gray-300 shadow flex gap-2">
       <img
@@ -254,3 +251,63 @@ const Item = ({ product, state, setState }) => {
 
 
 
+const ProductNavigation = ({state, setState}) => {
+  const [, setGlobalState] = useGlobalContext();
+  const [adminState, setAdminState] = useAdminContext();
+  const pagesCount = Math.ceil(adminState.numOfProducts / state.productsPerPage);
+
+  const btns = [];
+  for (let x = 1; x <= pagesCount; x++) btns.push(x);
+
+  const navigate = async (page) => {
+    try {
+      const res = await Axios.get(
+        `products?${state.category && `category=${state.category}`}${
+          state.searchText && `&&name=${state.searchText}`
+        }&&page=${page}&&limit=${state.productsPerPage}`
+      );
+      setState((state) => ({ ...state, page, }));
+      setAdminState((state) => ({ ...state,  products: res.data.products }));
+      window.scroll({ top: 0 });
+    } catch (error) {
+      setGlobalState((state) => ({
+        ...state,
+        alert: {
+          show: true,
+          type: ERROR,
+          text:
+            error.response?.data?.message || error.message || "Network Error",
+        },
+      }));
+    }
+  };
+
+  return (
+    <div className="flex justify-center gap-1 flex-wrap mt-10">
+      <button
+        className="bg-black h-10 w-10 flex items-center justify-center text-white disabled:bg-gray-500 disabled:cursor-text"
+        disabled={state.page === 1}
+        onClick={() => navigate(state.page - 1)}
+      >
+        <FaChevronLeft />
+      </button>
+      {btns.map((i) => (
+        <button
+          key={i}
+          className="border border-black h-10 w-10 flex items-center justify-center bg-white transition hover:bg-black hover:text-white disabled:bg-black disabled:text-white disabled:cursor-text"
+          disabled={state.page === i}
+          onClick={() => navigate(i)}
+        >
+          {i}
+        </button>
+      ))}
+      <button
+        className="bg-black h-10 w-10 flex items-center justify-center text-white disabled:bg-gray-500 disabled:cursor-text"
+        disabled={state.page * state.productsPerPage >= adminState.numOfProducts}
+        onClick={() => navigate(state.page + 1)}
+      >
+        <FaChevronRight />
+      </button>
+    </div>
+  );
+}

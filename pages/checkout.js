@@ -262,7 +262,7 @@ export const getServerSideProps = async ({ req }) => {
       };
     }
     const cart = await getUpdatedCart(user._id);
-
+    
     return {
       props: {
         user: JSON.parse(JSON.stringify(user)),

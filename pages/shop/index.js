@@ -34,6 +34,7 @@ const Shop = ({ categories, products, numOfProducts }) => {
     products, 
     sort: NTO, 
     searchText: "", 
+    numOfProducts
   });
 
   const changeCategory = async (e) => {
@@ -113,7 +114,6 @@ const Shop = ({ categories, products, numOfProducts }) => {
           )}
         </div>
         <ProductNavigation
-          productsCount={numOfProducts}
           state={state}
           setState={setState}
         />
@@ -201,14 +201,14 @@ const ProductItem = ({ product }) => {
       <h3 className="text-lg sm:text-xl font-semibold uppercase">
         {product.name}
       </h3>
-      <p className="">{product.sizes[0].price}</p>
+      <p className="">${product.sizes[0].price}</p>
     </CustomLink>
   );
 };
 
 
 
-export const getStaticProps = async ({req}) => {
+export const getStaticProps = async () => {
   try {
     await connectDb();  
 

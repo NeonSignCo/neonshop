@@ -27,10 +27,10 @@ const ContactForm = ({ productInfo }) => {
     enquiryType: "",
     expectedDeliveryTime: "",
     size: "",
-    message: "",
     heardFrom: "",
     joinNewsLetter: true,
     productInfo,
+    message: "",
   };
 
   const [, setState] = useGlobalContext();

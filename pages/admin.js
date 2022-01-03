@@ -25,16 +25,16 @@ export const CATEGORIES = 'CATEGORIES';
 
 const Admin = ({orders, products, categories, numOfProducts}) => {
   const [state, setState] = useState({
-      sidebar: {
-        expand: true, 
-      }, 
-      activeSection: DASHBOARD, 
-      orders, 
-      products, 
-      numOfProducts,
-      categories
-    });
-console.log(orders)
+    sidebar: {
+      expand: true,
+    },
+    activeSection: DASHBOARD,
+    orders,
+    products,
+    numOfProducts,
+    categories,
+  });
+
     return (
         <Context.Provider value={[state, setState]}>
             <Head>

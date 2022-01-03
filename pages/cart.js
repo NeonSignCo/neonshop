@@ -207,7 +207,7 @@ export const getServerSideProps = async ({ req }) => {
       };
     }
     const cart = await getUpdatedCart(user._id);
-
+    
     return {
       props: {
         user: JSON.parse(JSON.stringify(user)),
@@ -216,6 +216,7 @@ export const getServerSideProps = async ({ req }) => {
       },
     };
   } catch (error) {
+    console.log(error)
     return {
       props: {
         error: { code: 500, message: "server error" },

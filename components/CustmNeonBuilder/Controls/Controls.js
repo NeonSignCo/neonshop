@@ -1,15 +1,15 @@
 import CustomLink from "../../CustomLink";
 import { FaCartArrowDown } from "react-icons/fa";
-import { colors, fonts, icons } from "../../../utils/CustomNeonAssets";
+import { colors, fonts, icons, sizes } from "../../../utils/CustomNeonAssets";
 import Navigation from "./Navigation";
-import { BLACKACRYLIC, CLEARACRYLIC, GOLDACRYLIC, MIRRORACRYLIC, useNeonBuilderContext } from "../../../context/NeonBuilderContext";
+import { BLACKACRYLIC, CLEARACRYLIC, CUT_TO_SHAPE, GOLDACRYLIC, MIRRORACRYLIC, ROUND, SQUARE, useNeonBuilderContext } from "../../../context/NeonBuilderContext";
 import { AnimatePresence } from "framer-motion";
 import Preview from "./Preview";
 
 const Controls = () => {
   const [state, setState] = useNeonBuilderContext();
 
-  const showPreview = () => {
+  const addToCart = () => {
     // text check
     if (!state.data.text) {
       setState((state) => ({
@@ -26,30 +26,18 @@ const Controls = () => {
         .scrollIntoView({ behavior: "smooth" });
     }
 
-    // size check
-    if (!state.data.height || !state.data.width) {
-      setState((state) => ({
-        ...state,
-        error: {
-          ...state.error,
-          size: "Please select both height and width",
-        },
-      }));
+    
+  };
 
-      // scroll to error section
-      return document
-        .getElementById("size")
-        .scrollIntoView({ behavior: "smooth" });
-    }
-
-    // show preview
-    setState((state) => ({
-      ...state,
-      controls: { ...state.controls, showPreview: true },
-    })); 
-    return document
-      .getElementById("size")
-      .scrollIntoView({ behavior: "smooth" });
+  const calcWidth = ({text = state.data.text, size = state.data.size, icon = state.data.icon}) => {
+    const textLength = text.length * size.letter.width;
+    const iconLength = icon ? size.icon.width : 0; 
+    return textLength + iconLength;
+  }
+  const calcPrice = ({text = state.data.text, size = state.data.size, icon = state.data.icon}) => {
+    const textPrice = text.length * size.letter.price;
+    const iconPrice = icon ? size.icon.price : 0;
+    return textPrice + iconPrice;
   };
 
   return (
@@ -59,7 +47,7 @@ const Controls = () => {
           {state.controls.showNavigation && <Navigation />}
         </AnimatePresence>
         <AnimatePresence>
-          {state.controls.showPreview && <Preview />}
+          {state.controls.addToCart && <Preview />}
         </AnimatePresence>
         <div className="flex flex-col gap-8 p-5 overflow-auto">
           <div className="grid gap-2" id="text">
@@ -78,8 +66,14 @@ const Controls = () => {
               onChange={(e) =>
                 setState((state) => ({
                   ...state,
-                  data: { ...state.data, text: e.target.value }, 
-                  error: {...state.error, text: ''}
+                  data: {
+                    ...state.data,
+                    text: e.target.value,
+                    width: calcWidth({ text: e.target.value }),
+                    price: calcPrice({ text: e.target.value }),
+                  },
+                  controls: { ...state.controls, typing: true },
+                  error: { ...state.error, text: "" },
                 }))
               }
             ></textarea>
@@ -116,7 +110,7 @@ const Controls = () => {
               {colors.map((color, i) => (
                 <button
                   className={`capitalize  flex flex-col items-center gap-2 transition p-2 ${
-                    state.data.color === color.hex
+                    state.data.color.name === color.name
                       ? "bg-gray-900 text-white "
                       : "bg-white text-black "
                   }`}
@@ -124,7 +118,7 @@ const Controls = () => {
                   onClick={() =>
                     setState((state) => ({
                       ...state,
-                      data: { ...state.data, color: color.hex },
+                      data: { ...state.data, color },
                     }))
                   }
                 >
@@ -132,12 +126,47 @@ const Controls = () => {
                     className={`h-8 w-8 rounded-full ${
                       color.name === "white" ? "border border-black" : ""
                     }`}
-                    style={{ background: color.hex }}
+                    style={{
+                      background: `rgb(${color.r}, ${color.g}, ${color.b})`,
+                    }}
                   ></div>
                   <span>{color.name}</span>
                 </button>
               ))}
             </div>
+          </div>
+          <div className="grid gap-2" id="size">
+            <h2 className="text-center text-lg p-2 ">
+              "select your size"
+              <span className="font-semibold"> (in inches)</span>{" "}
+            </h2>
+            {sizes.map((size, i) => (
+              <button
+                className={`p-2 capitalize transition ${
+                  state.data.size.name === size.name
+                    ? "bg-gray-900 text-white "
+                    : "bg-white text-black "
+                }`}
+                onClick={() =>
+                  setState((state) => ({
+                    ...state,
+                    data: {
+                      ...state.data,
+                      size,
+                      width: calcWidth({ size }),
+                      price: calcPrice({ size }),
+                    },
+                  }))
+                }
+                key={i}
+              >
+                <p className="font-semibold">{size.name}</p>
+                <p>letter width: {size.letter.width}"</p>
+                <p>
+                  icon size: {size.icon.height}"x{size.icon.width}"
+                </p>
+              </button>
+            ))}
           </div>
           <div className="grid gap-2" id="icon">
             <h2 className="text-center text-lg p-2 ">
@@ -156,7 +185,16 @@ const Controls = () => {
                   onClick={() =>
                     setState((state) => ({
                       ...state,
-                      data: { ...state.data, icon: state.data.icon.name === icon.name ? {link: '', name: ''}: icon},
+                      data: {
+                        ...state.data,
+                        icon: state.data.icon.name === icon.name ? "" : icon,
+                        width: calcWidth({
+                          icon: state.data.icon.name === icon.name ? "" : icon,
+                        }),
+                        price: calcPrice({
+                          icon: state.data.icon.name === icon.name ? "" : icon,
+                        }),
+                      },
                     }))
                   }
                 >
@@ -165,116 +203,63 @@ const Controls = () => {
               ))}
             </div>
           </div>
-          <div className="grid gap-2" id="size">
-            <h2 className="text-center text-lg p-2 ">
-              {state.error.size ? (
-                <span className="text-red-500">{state.error.size}</span>
-              ) : (
-                "select your size"
-              )}
-              <span className="font-semibold"> (in inches)</span>{" "}
-            </h2>
-            <div className="grid grid-cols-2 gap-4 text-black">
-              <div className="flex items-center gap-2">
-                <p className="capitalize">height</p>
-                <input
-                  type="number"
-                  min={1}
-                  className="p-2 w-20"
-                  value={state.data.height}
-                  onChange={(e) => {
-                    if (e.target.value < 0) e.target.value = 0;
-                    setState((state) => ({
-                      ...state,
-                      data: { ...state.data, height: e.target.value }, 
-                      error: {...state.error, size: ''}
-                    }));
-                  }}
-                />
-              </div>
-              <div className="flex items-center gap-2">
-                <p className="capitalize">width</p>
-                <input
-                  type="number"
-                  min={1}
-                  className="p-2 w-20"
-                  value={state.data.width}
-                  onChange={(e) => {
-                    if (e.target.value < 0) e.target.value = 0;
-                    setState((state) => ({
-                      ...state,
-                      data: { ...state.data, width: e.target.value },
-                      error: { ...state.error, size: "" },
-                    }));
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="grid gap-2 " id="backing">
-            <h2 className="text-center capitalize text-lg p-2">
-              How your neon's backing is finished
-            </h2>
-            <BackingBtn
+
+          <div className="grid gap-2 " id="backing-color">
+            <h2 className="text-center text-lg p-2">Color of backing</h2>
+            <BackingColor
               title="clear acrylic"
               text="Acrylic backing with transparent color"
-              value={CLEARACRYLIC}
-              price={0}
+              color={CLEARACRYLIC}
             />
-            <BackingBtn
+            <BackingColor
               title="black acrylic"
               text="Acrylic backing with black color"
-              value={BLACKACRYLIC}
-              price={0}
+              color={BLACKACRYLIC}
             />
-            <BackingBtn
+            <BackingColor
               title="mirror acrylic"
               text="Acrylic backing with same color as text"
-              value={MIRRORACRYLIC}
-              price={44.12}
+              color={MIRRORACRYLIC}
             />
-            <BackingBtn
+            <BackingColor
               title="gold mirror acrylic"
               text="Acrylic backing with gold color"
-              value={GOLDACRYLIC}
-              price={97.07}
+              color={GOLDACRYLIC}
             />
           </div>
+          <div className="grid gap-2 " id="backing-type">
+            <h2 className="text-center capitalize text-lg p-2">Backing type</h2>
+            <div className="flex flex-wrap gap-2 justify-center">
+              <BackingType title="square" type={SQUARE} />
+              <BackingType title="round" type={ROUND} />
+              <BackingType title="cut to shape" type={CUT_TO_SHAPE} />
+            </div>
+          </div>
           <div className="grid gap-2" id="mount-type">
-            <h2 className="text-center capitalize text-lg p-2">
+            <h2 className="text-center text-lg p-2">
               select how you want to mount your neon
             </h2>
-            <div className="flex gap-2 uppercase">
+            <div className="flex justify-center gap-2 uppercase">
               <MountBtn type="wall" />
               <MountBtn type="hanging" />
             </div>
           </div>
-          <div className="grid gap-2" id="delivery-time">
-            <h2 className="text-center capitalize text-lg p-2">
-              Select your preferred delievry time
-            </h2>
-            <select
-              id="delivery-time"
-              className="w-full p-2 bg-white"
-              name="expectedDeliveryTime"
-              value={state.data.deliveryTime}
+          <div className="grid gap-2" id="note">
+            <label htmlFor="note-box" className="text-center text-lg p-2">
+              Need to be more specific?
+            </label>
+            <textarea
+              id="note-box"
+              rows="3"
+              placeholder="Your note here"
+              className="p-2"
               onChange={(e) =>
                 setState((state) => ({
                   ...state,
-                  data: { ...state.data, deliveryTime: e.target.value },
+                  data: { ...state.data, note: e.target.value },
                 }))
               }
-            >
-              <option value="2-3 weeeks" className="">
-                2-3 Weeks (Rush Fees Apply)
-              </option>
-              <option value="4-6 weeks" className="">
-                4-6 Weeks
-              </option>
-              <option value="6+ weeks" className="">
-                6+ Weeks
-              </option>
-            </select>
+            ></textarea>
           </div>
         </div>
         <div className="flex items-center justify-center lg:justify-start  gap-2 py-2 lg:p-4 bg-gray-300 border-t border-gray-300">
@@ -296,7 +281,7 @@ const Controls = () => {
           <div className="lg:flex-1 grid gap-2">
             <button
               className="bg-gray-900 max-w-max mx-auto px-8 py-3 uppercase text-white text-xs flex justify-center items-center gap-2 "
-              onClick={showPreview}
+              onClick={addToCart}
             >
               <FaCartArrowDown className="text-xl" />
               <span>add to cart</span>
@@ -317,11 +302,10 @@ const Controls = () => {
 export default Controls;
 
 
-const BackingBtn = ({ title, text, value, price = 0 }) => {
+const BackingColor = ({ title, text, color }) => {
 
   const [state, setState] = useNeonBuilderContext(); 
-  const selected = value === state.data.backing; 
-
+  const selected = color === state.data.backing.color; 
 
   return (
     <button
@@ -331,7 +315,7 @@ const BackingBtn = ({ title, text, value, price = 0 }) => {
       onClick={() =>
         setState((state) => ({
           ...state,
-          data: { ...state.data, backing: value, price:  {...state.data.price, backing: price}},
+          data: { ...state.data, backing: {...state.data.backing, color}},
         }))
       }
     >
@@ -341,42 +325,34 @@ const BackingBtn = ({ title, text, value, price = 0 }) => {
           {text}
         </p>
       </div>
-      <p
-        className={`py-1 px-2 transition font-semibold text-lg transition ${
-          selected ? "bg-white text-black" : "bg-gray-400 text-white"
-        }`}
-      >
-        ${Number(price).toFixed(2)}
-      </p>
+    </button>
+  );
+};
+
+
+const BackingType = ({ title, type }) => {
+  const [state, setState] = useNeonBuilderContext();
+  const selected = type === state.data.backing.type;
+
+  return (
+    <button
+      className={`flex items-center justify-between  p-3  gap-2 ${
+        selected ? "bg-gray-900 text-white" : "bg-white text-black"
+      }`}
+      onClick={() =>
+        setState((state) => ({
+          ...state,
+          data: { ...state.data, backing: { ...state.data.backing, type } },
+        }))
+      }
+    >
+      <h3 className="uppercase font-semibold">{title}</h3>
     </button>
   );
 };
 
 
 
-
-const LocationBtn = ({type}) => {
-const [state, setState] = useNeonBuilderContext();
-const selected = state.data.installLocation === type;
-
-  return (
-    <button
-      className={`p-2  transition uppercase ${
-        selected
-          ? "bg-gray-900 text-white"
-          : "bg-white black"
-      }`}
-      onClick={() =>
-        setState((state) => ({
-          ...state,
-          data: { ...state.data, installLocation: type },
-        }))
-      }
-    >
-      {type}
-    </button>
-  );
-}
 
 const MountBtn = ({ type }) => {
   const [state, setState] = useNeonBuilderContext();
