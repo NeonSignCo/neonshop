@@ -74,7 +74,7 @@ export const colors = [
     name: "pink",
     r: 255,
     g: 148,
-    b: 138,
+    b: 238,
   },
   {
     name: "hot pink",

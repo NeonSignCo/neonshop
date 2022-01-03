@@ -72,7 +72,14 @@ export const updateCart = catchASync(async (req, res) => {
   await Cart.validate(data);
 
   const calculatedCart = await calcPrice(data);
-
+  if (calculatedCart.items.length <= 0) {
+    const deletedCart = await Cart.findOneAndDelete({ userId });
+    if (!deletedCart) throw new AppError(404, 'cart not found');
+    return res.json({
+      status: 'success', 
+      message: 'cart deleted duo to no items'
+    })
+  }
   const cart = await Cart.findOneAndUpdate(
     { userId },
     calculatedCart,
