@@ -1,5 +1,5 @@
 export const fonts = [
-  {text: 'Asta Light', family: "AstaLight"},
+  {text: 'Alta Light', family: "AltaLight"},
   {text: 'Lovelo', family: "LoveloLineLight"},
   { text: "Allura Regular", family: "AlluraRegular" },
   { text: "Amster1", family: "Amster1" },
