@@ -1,7 +1,7 @@
 export const fonts = [
   {text: 'Alta Light', family: "AltaLight"},
   {text: 'Lovelo', family: "LoveloLineLight"},
-  { text: "Allura Regular", family: "AlluraRegular" },
+  { text: "Allura ", family: "AlluraRegular" },
   { text: "Amster1", family: "Amster1" },
   { text: "Amster2", family: "Amster2" },
   { text: "Amster3", family: "Amster3" },
@@ -18,8 +18,8 @@ export const fonts = [
   { text: "Neoneon", family: "Neoneon" },
   { text: "Nickainley Normal", family: "NickainleyNormal" },
   { text: "Outline", family: "Outline" },
-  { text: "PoiretOne Regular", family: "PoiretOneRegular" },
-  { text: "TimeBurner Normal", family: "TimeBurnerNormal" },
+  { text: "PoiretOne ", family: "PoiretOneRegular" },
+  { text: "TimeBurner", family: "TimeBurnerNormal" },
   { text: "Waltograph", family: "Waltograph" },
 ];
 
