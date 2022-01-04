@@ -13,7 +13,9 @@ import setToken from "../utils/setToken";
 // @purpose     Add to cart
 // @access      Public
 export const addToCart = catchASync(async (req, res) => {
-  if (!req.body.items) throw new AppError(400, "items is required");
+  const { items, customItems } = req.body; 
+
+  if (!items && !customItems) throw new AppError(400, "items or customItems is required");
   let userId;
 
   // get userId from logged in user
@@ -29,8 +31,9 @@ export const addToCart = catchASync(async (req, res) => {
     setToken(res, "tempUserId", newId);
     userId = newId;
   }
-  const data = { items: req.body.items, userId };
+  const data = { items, customItems, userId };
 
+  
   await Cart.validate(data);
 
   const calculatedCart = await calcPrice(data);
@@ -55,7 +58,8 @@ export const addToCart = catchASync(async (req, res) => {
 // @purpose     update
 // @access      User/tempUser
 export const updateCart = catchASync(async (req, res) => {
-  if (!req.body.items) throw new AppError(400, "items is required");
+  const { items, customItems } = req.body;
+  if (!items && !customItems) throw new AppError(400, "items or customItems is required");
  let userId;
 
  // get userId from logged in user
@@ -67,10 +71,10 @@ export const updateCart = catchASync(async (req, res) => {
   
   if (!userId) throw new AppError(404, 'not authorized'); 
   
-  const data = { items: req.body.items, userId };
-  
-  await Cart.validate(data);
+  const data = { items, customItems, userId };
 
+  await Cart.validate(data);
+ 
   const calculatedCart = await calcPrice(data);
   if (calculatedCart.items.length <= 0) {
     const deletedCart = await Cart.findOneAndDelete({ userId });

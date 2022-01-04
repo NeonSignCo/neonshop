@@ -35,7 +35,7 @@ export const createOrder = catchASync(async (req, res) => {
       status: "PENDING_PAYMENT",
       subTotal: cart.subTotal,
       total: cart.total, 
-      expireAt: new Date(Date.now() + 1000 * 60 * 60 * 24),
+      expireAt: new Date(Date.now() + 1000 * 60 * 60 * 2),//expire after 2 hours
     };
     await Order.validate(data);
 
@@ -274,7 +274,7 @@ export const createPaymentIntent = catchASync(async (req, res) => {
     status: "PENDING_PAYMENT",
     subTotal: cart.subTotal,
     total: cart.total,
-    expireAt: new Date(Date.now() + 1000 * 60 * 60 * 24), //expire after one day
+    expireAt: new Date(Date.now() + 1000 * 60 * 60 * 2), //expire after 2 hours
   };
   await Order.validate(data);
 
@@ -286,7 +286,7 @@ export const createPaymentIntent = catchASync(async (req, res) => {
     const paymentIntent = await stripe.paymentIntents.create({
       amount: data.total * 100,
       currency: "usd",
-      payment_method_types: ["card"],
+      payment_method_types: ["card", "afterpay_clearpay"],
       metadata: {
         orderId: String(order._id),
         userId: String(userId),

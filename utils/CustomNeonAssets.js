@@ -1,5 +1,7 @@
 export const fonts = [
-  { text: "Allura", family: "AlluraRegular" },
+  {text: 'Asta Light', family: "AstaLight"},
+  {text: 'Lovelo', family: "LoveloLineLight"},
+  { text: "Allura Regular", family: "AlluraRegular" },
   { text: "Amster1", family: "Amster1" },
   { text: "Amster2", family: "Amster2" },
   { text: "Amster3", family: "Amster3" },
@@ -14,9 +16,10 @@ export const fonts = [
   { text: "Flation2", family: "Flation2" },
   { text: "NeonFuture", family: "NeonFuture" },
   { text: "Neoneon", family: "Neoneon" },
-  { text: "Nickainley", family: "Nickainley" },
+  { text: "Nickainley Normal", family: "NickainleyNormal" },
   { text: "Outline", family: "Outline" },
-  { text: "TimeBurner", family: "TimeBurner" },
+  { text: "PoiretOne Regular", family: "PoiretOneRegular" },
+  { text: "TimeBurner Normal", family: "TimeBurnerNormal" },
   { text: "Waltograph", family: "Waltograph" },
 ];
 
@@ -27,66 +30,77 @@ export const colors = [
     r: 255,
     g: 0,
     b: 0,
+    hex: "#FF0000",
   },
   {
     name: "white",
     r: 255,
     g: 255,
     b: 255,
+    hex: "#FFFFFF",
   },
   {
     name: "orange",
     r: 255,
     g: 153,
     b: 0,
+    hex: "#FF9900",
   },
   {
     name: "yellow",
     r: 255,
     g: 252,
     b: 0,
+    hex: "#FFFC00",
   },
   {
     name: "blue",
     r: 13,
     g: 0,
     b: 255,
+    hex: "#0D00FF",
   },
   {
     name: "light blue",
     r: 1,
     g: 224,
     b: 255,
+    hex: "#00E0FF",
   },
   {
     name: "mint",
     r: 0,
     g: 255,
     b: 209,
+    hex: "#00FFD1",
   },
   {
     name: "green",
     r: 0,
     g: 253,
     b: 9,
+    hex: "#00FD09",
   },
   {
     name: "pink",
     r: 255,
     g: 148,
     b: 238,
+    hex: "#FF94EE",
   },
   {
     name: "hot pink",
     r: 255,
     g: 1,
     b: 215,
+    hex: "#FF01D7",
   },
   {
     name: "purple",
     r: 174,
     g: 1,
     b: 255,
+    hex: "#AE01FF",
   },
 ];
 
@@ -104,7 +118,7 @@ export const icons = [
 
 export const sizes = [
   {
-    name: "regular",
+    name: "REGULAR",
     letter: {
       width: 2.5,
       price: 20,
@@ -116,7 +130,7 @@ export const sizes = [
     },
   },
   {
-    name: "large",
+    name: "LARGE",
     letter: {
       width: 3.75,
       price: 30,

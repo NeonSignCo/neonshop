@@ -36,7 +36,7 @@ const AdminHeader = () => {
     const categories = (await Axios.get('categories')).data.categories; 
     const orders = (
       await Axios.get(
-        `orders?from=${new Date(Date.now() - 2 * 30 * 24 * 60 * 60 * 1000)}`
+        `orders?from=${new Date(Date.now() - 3 * 30 * 24 * 60 * 60 * 1000)}` //last three months orders
       )
     ).data.orders; 
 

@@ -46,10 +46,10 @@ const filterCart = (doc) => {
    if (cart.items?.length > 0) {
      cart.items.forEach((item) => {
        // check if count is 0
-       if (item.count <= 0) return changed = true;
+       if (item.count <= 0) return (changed = true);
 
        // check if product exists
-       if (!item.product) return changed = true;
+       if (!item.product) return (changed = true);
 
        // check duplicate item
        const dupIndex = addedItems.findIndex(
@@ -59,22 +59,19 @@ const filterCart = (doc) => {
            String(i.selectedSize._id) === String(item.selectedSize._id) &&
            i.selectedMountType === item.selectedMountType
        );
-       if (dupIndex !== -1) return changed = true;
+       if (dupIndex !== -1) return (changed = true);
 
-       // adjust size and price if does not match with product 
+       // adjust size if updated
        const size =
          item.product.sizes.find(
            (size) => String(size._id) === String(item.selectedSize.sizeId)
-         ) || item.product.sizes[0]
-       
-       if (!size.sizeId) {
-         item.selectedSize = {
-           info: size.info, 
-           price: size.price, 
-           sizeId: size._id
-          }
-        changed = true;
-      }
+         ) || item.product.sizes[0];
+
+       item.selectedSize = {
+         info: size.info,
+         price: size.price,
+         sizeId: size._id,
+       };
 
        // update price
        const price =
@@ -86,7 +83,6 @@ const filterCart = (doc) => {
 
        // add item
        addedItems.push(item);
-
      });
    }
 

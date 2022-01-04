@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import CustomItemSchema from "../schemas/CustomItemSchema";
 import ItemSchema from "../schemas/ItemSchema";
 
 const CartSchema = new mongoose.Schema(
@@ -9,6 +10,7 @@ const CartSchema = new mongoose.Schema(
       required: [true, "userId is required"],
     },
     items: [ItemSchema],
+    customItems: [CustomItemSchema],
     subTotal: Number,
     discount: Number,
     total: Number,

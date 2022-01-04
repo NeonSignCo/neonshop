@@ -1,12 +1,12 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { colors, sizes } from "../utils/CustomNeonAssets";
+import { colors, fonts, sizes } from "../utils/CustomNeonAssets";
 
 const Context = createContext();
 export const useNeonBuilderContext = () => useContext(Context);
 export const CLEARACRYLIC = "clear acrylic";
 export const BLACKACRYLIC = "black acrylic";
 export const MIRRORACRYLIC = 'mirror acrylic';
-export const GOLDACRYLIC = 'gold acrylic';
+export const GOLDMIRRORACRYLIC = 'gold mirror acrylic';
 export const SQUARE = 'square'; 
 export const ROUND = 'round'; 
 export const CUT_TO_SHAPE = 'cut to shape'; 
@@ -17,7 +17,7 @@ const NeonBuilderContext = ({ children }) => {
   const [state, setState] = useState({
     data: {
       text: "",
-      font: "MontserratRegular",
+      font: fonts[0],
       color: colors[1],
       width: '', 
       size: sizes[0],
@@ -26,8 +26,7 @@ const NeonBuilderContext = ({ children }) => {
         type: SQUARE
       },
       price: 0,
-      installLocation: "indoor",
-      mountType: "wall",
+      mountType: "WALL",  
       icon: '', 
       note: ''
     },

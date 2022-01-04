@@ -67,7 +67,7 @@ html {
   src: url('../fonts//Neoneon.otf')
 }
 @font-face {
-  font-family: 'Nickainley';
+  font-family: 'NickainleyNormal';
   src: url('../fonts//Nickainley-Normal.otf')
 }
 @font-face {
@@ -75,16 +75,24 @@ html {
   src: url('../fonts//Outline.ttf')
 }
 @font-face {
-  font-family: 'PoiretOne';
+  font-family: 'PoiretOneRegular';
   src: url('../fonts//PoiretOne-Regular.ttf')
 }
 @font-face {
-  font-family: 'TimeBurner';
+  font-family: 'TimeBurnerNormal';
   src: url('../fonts//timeburnernormal.ttf')
 }
 @font-face {
   font-family: 'Waltograph';
   src: url('../fonts//waltograph.otf')
+}
+@font-face {
+  font-family: 'Altalight';
+  src: url('../fonts//alta-light.otf')
+}
+@font-face {
+  font-family: 'LoveloLineLight';
+  src: url('../fonts//Lovelo\ Line\ Light.otf')
 }
 
 

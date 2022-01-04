@@ -66,7 +66,7 @@ const Visuals = () => {
                     state.data.color.g + 10
                   },${state.data.color.b + 10},0.33)`,
                   color: `rgb(${state.data.color.r}, ${state.data.color.g}, ${state.data.color.b})`,
-                  fontFamily: state.data.font,
+                  fontFamily: state.data.font.family,
                   transformStyle: "preserve-3d",
                 }}
               >
@@ -85,14 +85,14 @@ const Visuals = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="flex items-center gap-2 absolute -bottom-8 w-full"
+                    className="flex items-center gap-2 absolute -bottom-7 md:-bottom-16 w-full"
                   >
                     <div className="h-[1px] bg-white flex-1 relative">
-                      <div className="absolute -top-[6px] h-[13px] w-[2px] bg-gray-500"></div>
+                      <div className="absolute -top-[6px] h-[13px] w-[2px] bg-white"></div>
                     </div>
                     {state.data.width}"
                     <div className="h-[1px] bg-white flex-1 relative">
-                      <div className="absolute -top-[6px] right-0 h-[13px] w-[2px] bg-gray-500"></div>
+                      <div className="absolute -top-[6px] right-0 h-[13px] w-[2px] bg-white"></div>
                     </div>
                   </motion.div>
                 )}

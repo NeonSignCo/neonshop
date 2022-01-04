@@ -2,32 +2,59 @@ import CustomLink from "../../CustomLink";
 import { FaCartArrowDown } from "react-icons/fa";
 import { colors, fonts, icons, sizes } from "../../../utils/CustomNeonAssets";
 import Navigation from "./Navigation";
-import { BLACKACRYLIC, CLEARACRYLIC, CUT_TO_SHAPE, GOLDACRYLIC, MIRRORACRYLIC, ROUND, SQUARE, useNeonBuilderContext } from "../../../context/NeonBuilderContext";
+import { BLACKACRYLIC, CLEARACRYLIC, CUT_TO_SHAPE, GOLDMIRRORACRYLIC, MIRRORACRYLIC, ROUND, SQUARE, useNeonBuilderContext } from "../../../context/NeonBuilderContext";
 import { AnimatePresence } from "framer-motion";
 import Preview from "./Preview";
+import { useGlobalContext } from '../../../context/GlobalContext';
+import catchAsync from '../../../utils/catchASync';
+import Axios from "../../../utils/Axios";
+import LoadingBtn from '../../LoadingBtn';
+import { useState } from "react";
 
 const Controls = () => {
+  const [globalState, setGlobalState] = useGlobalContext();
   const [state, setState] = useNeonBuilderContext();
+  const [loading, setLoading] = useState(false);
 
-  const addToCart = () => {
-    // text check
-    if (!state.data.text) {
-      setState((state) => ({
-        ...state,
-        error: {
-          ...state.error,
-          text: "Please write what would you like your neon to say",
-        },
-      }));
+  const addToCart = () => catchAsync(async () => { 
+    // check text
+     if (!state.data.text) {
+       setState((state) => ({
+         ...state,
+         error: {
+           ...state.error,
+           text: "Please write what would you like your neon to say",
+         },
+       }));
+       // scroll to error section
+       return document
+         .getElementById("text")
+         .scrollIntoView({ behavior: "smooth" });
+     }
+     
+    const customItem = { ...state.data, size: state.data.size.name };
+      
+    setLoading(true);
 
-      // scroll to erro section
-      return document
-        .getElementById("text")
-        .scrollIntoView({ behavior: "smooth" });
+
+    return;
+    let res;
+    
+    if (globalState.cartData.cart) {
+      res = await Axios.patch("cart", {
+          items: globalState.cartData.cart.items,
+          customItems: [...globalState.cartData.cart.customItems, customItem],
+        })
+    } else {
+      res - await Axios.post("cart", { customItems: [{...customItem, count: 1}] });
     }
 
     
-  };
+    setLoading(false)
+    console.log(res.data)
+    setGlobalState(state => ({ ...state, cartData: { ...state.cartData, cart: res.data.cart } }));
+  
+  }, setGlobalState, () => setLoading(false));
 
   const calcWidth = ({text = state.data.text, size = state.data.size, icon = state.data.icon}) => {
     const textLength = text.length * size.letter.width;
@@ -51,15 +78,16 @@ const Controls = () => {
         </AnimatePresence>
         <div className="flex flex-col gap-8 p-5 overflow-auto">
           <div className="grid gap-2" id="text">
-            <h2 className="text-center text-lg p-2">
+            <label htmlFor="text-box" className="text-center text-lg p-2">
               {state.error.text ? (
                 <span className="text-red-500">{state.error.text}</span>
               ) : (
                 " What would you like your neon to say?"
               )}
-            </h2>
+            </label>
             <textarea
               rows="3"
+              id="text-box"
               className=" p-1 outline-none "
               placeholder="what's on your mind? "
               value={state.data.text}
@@ -85,17 +113,18 @@ const Controls = () => {
             <div className="grid gap-3 grid-cols-3 text-white">
               {fonts.map((font, i) => (
                 <button
-                  className={`py-3  transition  ${
-                    state.data.font === font.family
+                  className={`py-3  transition overflow-hidden ${
+                    state.data.font.family === font.family
                       ? "bg-gray-900  text-white "
                       : "bg-white text-black"
                   }  ${font.family === "MontserratRegular" ? "text-xs" : ""}`}
                   key={i}
                   style={{ fontFamily: font.family }}
+                  title={font.text}
                   onClick={() =>
                     setState((state) => ({
                       ...state,
-                      data: { ...state.data, font: font.family },
+                      data: { ...state.data, font },
                     }))
                   }
                 >
@@ -137,7 +166,7 @@ const Controls = () => {
           </div>
           <div className="grid gap-2" id="size">
             <h2 className="text-center text-lg p-2 ">
-              "select your size"
+              Select your size
               <span className="font-semibold"> (in inches)</span>{" "}
             </h2>
             {sizes.map((size, i) => (
@@ -182,6 +211,7 @@ const Controls = () => {
                       : "bg-gray-400"
                   }`}
                   key={i}
+                  title={icon.name}
                   onClick={() =>
                     setState((state) => ({
                       ...state,
@@ -224,7 +254,7 @@ const Controls = () => {
             <BackingColor
               title="gold mirror acrylic"
               text="Acrylic backing with gold color"
-              color={GOLDACRYLIC}
+              color={GOLDMIRRORACRYLIC}
             />
           </div>
           <div className="grid gap-2 " id="backing-type">
@@ -240,8 +270,8 @@ const Controls = () => {
               select how you want to mount your neon
             </h2>
             <div className="flex justify-center gap-2 uppercase">
-              <MountBtn type="wall" />
-              <MountBtn type="hanging" />
+              <MountBtn type="WALL" />
+              <MountBtn type="HANGING" />
             </div>
           </div>
           <div className="grid gap-2" id="note">
@@ -279,13 +309,14 @@ const Controls = () => {
             </button>
           </div>
           <div className="lg:flex-1 grid gap-2">
-            <button
+            <LoadingBtn
+              loading={loading}
               className="bg-gray-900 max-w-max mx-auto px-8 py-3 uppercase text-white text-xs flex justify-center items-center gap-2 "
               onClick={addToCart}
             >
               <FaCartArrowDown className="text-xl" />
               <span>add to cart</span>
-            </button>
+            </LoadingBtn>
             <CustomLink
               target="_blank"
               href="/contact"

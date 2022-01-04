@@ -6,11 +6,15 @@ const calcPrice = async function (doc) {
     try {
       let subTotal = 0;
       let total = 0;
-        let addedItems = [];  
-        
-      if (!doc.items || doc.items.length <= 0) throw new AppError(400, 'cart is empty');
+      let addedItems = [];  
+      let addedCustomItems = [];
       
-        if (doc.items.length > 0) {
+      // check if cart is empty
+      if (!doc.items || !doc.customItems) throw new AppError(400, 'cart is empty');
+      if (doc.items.length <= 0 && doc.customItems.length <= 0) throw new AppError(400, 'cart is empty');
+      
+      // for regular items
+        if (doc.items?.length > 0) {
           await Promise.all(
             doc.items.map(async (item) => {
               // ignore if count is 0
@@ -52,7 +56,12 @@ const calcPrice = async function (doc) {
                })
              );
       }
-     
+      
+      // // for custom items 
+      if (doc.customItems?.length > 0) {
+        
+      }
+
       doc.subTotal = subTotal;
       doc.total = total;
         doc.items = addedItems;
