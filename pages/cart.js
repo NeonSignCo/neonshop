@@ -8,8 +8,9 @@ import connectDb from "../server/utils/connectDb";
 import getUpdatedCart from "../server/utils/getUpdatedCart";
 import Axios from "../utils/Axios";
 import catchASync from "../utils/catchASync";
-import { colors, NeonPreview } from "../utils/CustomNeonAssets";
+import { colors } from "../utils/CustomNeonAssets";
 import getLoggedInUser from "../utils/getLoggedInUser";
+import NeonPreview from "../components/NeonPreview";
 
 const CartPage = () => {
     const [globalState] = useGlobalContext();    
@@ -230,11 +231,10 @@ const CartCustomItem = ({ item }) => {
         icon={item.icon}
         font={item.font}
         className="py-5 w-full md:w-60 bg-black text-3xl"
+        iconClass="h-10 lg:h-10 "
       />
       <div className="flex flex-col gap-3 flex-1">
-        <h2 className="font-semibol capitalize text-2xl">
-          custom neon
-        </h2>
+        <h2 className="font-semibol capitalize text-2xl">custom neon</h2>
         <div className="flex flex-wrap justify-between items-center">
           <div className="flex items-center gap-2">
             <button

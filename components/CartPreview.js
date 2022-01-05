@@ -4,9 +4,10 @@ import { FaChevronRight, FaMinus, FaPlane, FaPlus } from "react-icons/fa"
 import { useGlobalContext } from "../context/GlobalContext";
 import Axios from "../utils/Axios";
 import catchASync from "../utils/catchASync";
-import { colors, NeonPreview } from "../utils/CustomNeonAssets";
+import { colors } from "../utils/CustomNeonAssets";
 import CustomLink from "./CustomLink";
 import { Loader } from "./LoadingBtn";
+import NeonPreview from "./NeonPreview";
 
 const CartPreview = () => {
     const [globalState, setGlobalState] = useGlobalContext();
@@ -260,6 +261,7 @@ const CartCustomItem = ({ item }) => {
         icon={item.icon}
         font={item.font}
         className="h-20 w-20 bg-black text-xl overflow-hidden"
+        iconClass="h-10 lg:h-10 "
       />
       <div className="flex flex-col justify-between flex-1">
         <h3 className="font-semibold capitalize">custom neon</h3>

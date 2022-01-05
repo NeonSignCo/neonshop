@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef } from "react";
 import { useNeonBuilderContext } from "../../../../context/NeonBuilderContext";
-import { NeonPreview } from "../../../../utils/CustomNeonAssets";
+import NeonPreview from "../../../NeonPreview";
 
 const Visuals = () => {
   const [state] = useNeonBuilderContext();

@@ -8,7 +8,8 @@ import {SUCCESS, useGlobalContext } from '../../../../context/GlobalContext';
 import catchAsync from '../../../../utils/catchASync'
 import CustomLink from "../../../CustomLink";
 import catchASync from "../../../../utils/catchASync";
-import { colors, NeonPreview } from "../../../../utils/CustomNeonAssets";
+import { colors } from "../../../../utils/CustomNeonAssets";
+import NeonPreview from "../../../NeonPreview";
 
 // variables 
 const ORDERED = 'ORDERED'; 
@@ -269,31 +270,67 @@ const ExpandedOrder = ({ order, setState }) => {
       <div className="grid gap-1">
         <h2 className="text-lg font-semibold">Order</h2>
         <p>
-          <span>Date:</span> {date}
+          <span className="font-semibold"> Date</span>: {date}
         </p>
         <p>
-          <span>Order Id:</span> {order._id}
+          <span className="font-semibold"> Order Id</span>: {order._id}
         </p>
       </div>
       <div className="grid gap-1">
-        <h2 className="text-lg font-semibold">Shipping Address</h2>
+        <h2 className="text-lg font-semibold">Customer</h2>
+        {order.userId.image && (
+          <div className="flex items-center gap-2">
+            <span className="font-semibold"> Photo:</span>{" "}
+            <img
+              src={order.userId.image.url}
+              alt={order.userId.firstName}
+              className="h-16 w-16 rounded-full object-cover"
+            />
+          </div>
+        )}
         <p>
-          <span>AddressLine1:</span> {order.shippingAddress.addressLine1}
+          <span className="font-semibold">Name</span>: {order.userId.firstName}{" "}
+          {order.userId.lastName}
+        </p>
+        <a href={`mailto:${order.contactEmail}`}>
+          <span className="font-semibold"> Email:</span>: {order.contactEmail}
+        </a>
+      </div>
+      <div className="grid gap-1">
+        <h2 className="text-lg font-semibold">Shipping Details</h2>
+        <p>
+          <span className="font-semibold"> First Name:</span>{" "}
+          {order.shippingAddress.firstName}
+        </p>
+        <p>
+          <span className="font-semibold"> Last Name:</span>{" "}
+          {order.shippingAddress.lastName}
+        </p>
+        <p>
+          <span className="font-semibold"> Address Line1:</span>{" "}
+          {order.shippingAddress.addressLine1}
         </p>
         {order.shippingAddress.addressLine2 && (
           <p>
-            <span>AddressLine2:</span> {order.shippingAddress.addressLine2}
+            <span className="font-semibold"> Address Line2:</span>{" "}
+            {order.shippingAddress.addressLine2}
           </p>
         )}
-        <p>Phone: {order.shippingAddress.phone}</p>
         <p>
-          <span>State:</span> {order.shippingAddress.stateOrProvince}
+          <span className="font-semibold">Phone:</span>{" "}
+          {order.shippingAddress.phone}
         </p>
         <p>
-          <span>Zip:</span> {order.shippingAddress.zip}
+          <span className="font-semibold"> State:</span>{" "}
+          {order.shippingAddress.stateOrProvince}
         </p>
         <p>
-          <span>Country:</span> {order.shippingAddress.country}
+          <span className="font-semibold"> Zip:</span>{" "}
+          {order.shippingAddress.zip}
+        </p>
+        <p>
+          <span className="font-semibold"> Country:</span>{" "}
+          {order.shippingAddress.country}
         </p>
       </div>
       <div className="grid gap-1">
@@ -322,7 +359,8 @@ const ExpandedOrder = ({ order, setState }) => {
                 color={colors.find((color) => color.hex === item.color.hex)}
                 icon={item.icon}
                 font={item.font}
-                className="py-10 bg-black text-3xl overflow-hidden "
+                className="py-10 bg-black text-5xl overflow-hidden "
+                iconClass="h-20 lg:h-20 "
               />
 
               <p>

@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useACcountContext } from "../../../../pages/account"
-import { colors, NeonPreview } from "../../../../utils/CustomNeonAssets";
+import { colors } from "../../../../utils/CustomNeonAssets";
 import CustomLink from "../../../CustomLink";
+import NeonPreview from '../../../NeonPreview';
 
 const MyOrdersSection = () => {
 
@@ -86,7 +87,8 @@ const ExpandedContent = ({ order, setExpand }) => {
                 color={colors.find((color) => color.hex === item.color.hex)}
                 icon={item.icon}
                 font={item.font}
-                className="py-10 bg-black text-3xl overflow-hidden "
+                className="py-10 bg-black text-5xl overflow-hidden "
+                iconClass="h-20 lg:h-20 " 
               />
 
               <p>
@@ -259,6 +261,7 @@ const Preview = ({ order, setExpand }) => {
               color={colors.find((color) => color.hex === item.color.hex)}
               icon={item.icon}
               className="h-20 w-20 overflow-hidden bg-black"
+              iconClass="h-10 lg:h-10 "
             />
           ))}
           {order.items?.map((item, i) => (

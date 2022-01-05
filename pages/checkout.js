@@ -10,8 +10,8 @@ import connectDb from "../server/utils/connectDb";
 import getUpdatedCart from "../server/utils/getUpdatedCart";
 import CheckoutContext, { INFO_SECTION, PAYMENT_SECTION, useCheckoutContext } from "../context/CheckoutContext";
 import InfoSection from "../components/sections/checkout/InfoSection";
-import { colors, NeonPreview } from "../utils/CustomNeonAssets";
-
+import { colors } from "../utils/CustomNeonAssets";
+import NeonPreview from "../components/NeonPreview";
 
 const Checkout = () => {
 
