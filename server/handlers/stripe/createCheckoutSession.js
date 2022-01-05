@@ -15,9 +15,9 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 export const createCheckoutSession = catchASync(async (req, res) => {
   const { cartId, shippingAddress, contactEmail, paymentMethod } = req.body;
 
-    if(!userId) throw new AppError(400, 'not logged in')
-    const userId = req.user._id;
-
+    const userId = req.user?._id;
+  if (!userId) throw new AppError(400, "not logged in");
+  
     // check paymentMethod
     if (paymentMethod !== "card" && paymentMethod !== "afterpay_clearpay") throw new AppError('paymentMethod must be either card or afterpay_clearpay')
       
