@@ -277,7 +277,7 @@ const Preview = ({ order, setExpand }) => {
           </div>
           <div className="grid">
             <p className="font-semibold capitalize">items</p>
-            <p>{order.items.length + order.customItems.length}</p>
+            <p>{order.items?.length || 0 + order.customItems?.length || 0}</p>
           </div>
           <div className="grid">
             <p className="font-semibold capitalize">total</p>
