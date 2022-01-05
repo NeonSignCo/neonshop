@@ -1,5 +1,5 @@
 import nc from "next-connect";
-import { createCheckoutSession } from "../../../server/handlers/stripe/checkout-session";
+import { createCheckoutSession } from "../../../server/handlers/stripe/createCheckoutSession";
 import dbConnection from "../../../server/middleware/dbConnection";
 import ncConfig from "../../../server/utils/ncConfig";
 import authenticate from '../../../server/middleware/authenticate';

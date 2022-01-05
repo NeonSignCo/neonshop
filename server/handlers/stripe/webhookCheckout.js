@@ -17,6 +17,7 @@ export const webhookCheckout = catchASync(async (req, res) => {
 
   const event = stripe.webhooks.constructEvent(buf, sig, webhookSecret);
 
+  const lineItems = await stripe.checkout.sessions.listLineItems(event.data.object.id);
 //   if (event.type !== "checkout.session.completed") return;
 
 //   if (!event.data.object.metadata)
@@ -62,6 +63,7 @@ export const webhookCheckout = catchASync(async (req, res) => {
   return res.json({
     status: "success",
       message: "successfully received order",
-    event
+    eventtype: event.type, 
+    lineItems
   });
 });

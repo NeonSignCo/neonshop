@@ -7,7 +7,6 @@ import Stripe from "stripe";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   apiVersion: "2020-08-27",
 });
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 // @route       POST /api/stripe/checkout-session
 // @purpose     Create stripe checkout session
