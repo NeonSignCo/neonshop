@@ -1,8 +1,4 @@
 import CustomLink from "../components/CustomLink";
-import connectDb from "../server/utils/connectDb";
-import getUpdatedCart from "../server/utils/getUpdatedCart";
-import getLoggedInUser from "../utils/getLoggedInUser";
-
 const ThankYou = () => {
     return (
       <div className="px-5 lg:px-20 py-20">
@@ -53,31 +49,10 @@ export const getServerSideProps = async ({ query, req }) => {
             },
             };
         
-        
-       await connectDb();
-       
-      
-     const user = await getLoggedInUser(req);
-
-     if (!user) {
-       return {
-         redirect: {
-           destination: "/login",
-           permanent: false,
-         },
-       };
-     }
-     const cart = await getUpdatedCart({
-       userId: user?._id,
-       tempUserId: req.cookies.tempUserId,
-     });
 
      
      return {
        props: {
-         user: JSON.parse(JSON.stringify(user)),
-         cart: JSON.parse(JSON.stringify(cart)),
-         serverRendered: true,
        },
      };
    } catch (error) {
