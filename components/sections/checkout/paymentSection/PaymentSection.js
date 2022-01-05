@@ -6,7 +6,6 @@ import LoadingBtn from "../../../LoadingBtn";
 import catchAsync from '../../../../utils/catchASync';
 import Axios from '../../../../utils/Axios';
 // import PayPalPayment from "./PayPalPayment";
-// import StripePayment from "./stripe/StripePayment";
 
 const PaymentSection = () => {
   const [globalState, setGlobalState] = useGlobalContext();
