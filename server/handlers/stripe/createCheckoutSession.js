@@ -14,6 +14,8 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 // @access      User
 export const createCheckoutSession = catchASync(async (req, res) => {
   const { cartId, shippingAddress, contactEmail, paymentMethod } = req.body;
+
+    if(!userId) throw new AppError(400, 'not logged in')
     const userId = req.user._id;
 
     // check paymentMethod
