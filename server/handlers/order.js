@@ -36,7 +36,7 @@ export const createOrder = catchASync(async (req, res) => {
       status: "PENDING_PAYMENT",
       subTotal: cart.subTotal,
       total: cart.total, 
-      expireAt: new Date(Date.now() + 1000 * 60 * 60 * 2),//expire after 2 hours
+      expireAt: new Date(Date.now() + 1000 * 60 * 60 * 5),//expire after 5 hours
     };
     await Order.validate(data);
 

@@ -30,22 +30,22 @@ export const createCheckoutSession = catchASync(async (req, res) => {
   if (!cart)
     throw new AppError(404, "cart not found. Please add to cart again");
 
-//   // validate data
-//   const data = {
-//     items: cart.items, 
-//     customItems: cart.customItems,
-//     shippingAddress: { ...shippingAddress, userId },
-//     userId, 
-//     contactEmail,
-//     status: "PENDING_PAYMENT",
-//     subTotal: cart.subTotal,
-//     total: cart.total,
-//     expireAt: new Date(Date.now() + 1000 * 60 * 60 * 2), //expire after 2 hours
-//   };
-//   await Order.validate(data);
+  // validate data
+  const data = {
+    items: cart.items, 
+    customItems: cart.customItems,
+    shippingAddress: { ...shippingAddress, userId },
+    userId, 
+    contactEmail,
+    status: "PENDING_PAYMENT",
+    subTotal: cart.subTotal,
+    total: cart.total,
+    expireAt: new Date(Date.now() + 1000 * 60 * 60 * 5), //expire after 5 hours
+  };
+  await Order.validate(data);
 
-//   // create order
-//   const order = await Order.create(data);
+  // create order with PENDING_PAYMENT status
+  const order = await Order.create(data);
 
     const line_items = []; 
     
@@ -58,13 +58,6 @@ export const createCheckoutSession = catchASync(async (req, res) => {
           name: item.product.name,
           description: item.product.description,
           images: [item.product.image.url],
-          metadata: {
-            type: JSON.stringify('custom'),
-            productId: JSON.stringify(item.product._id),
-            selectedSize: JSON.stringify(item.selectedSize),
-            selectedColor: JSON.stringify(item.selectedColor),
-            selectedMountType: JSON.stringify(item.selectedMountType),
-          },
         },
         unit_amount: item.selectedSize.price * 100,
       },
@@ -80,18 +73,6 @@ export const createCheckoutSession = catchASync(async (req, res) => {
             product_data: {
               name: "Custom Neon",
               description: "custom neon created by you",
-              metadata: {
-                type: JSON.stringify("custom"),
-                text: JSON.stringify(item.text),
-                font: JSON.stringify(item.font),
-                color: JSON.stringify(item.color),
-                size: JSON.stringify(item.size),
-                icon: JSON.stringify(item.icon),
-                backing: JSON.stringify(item.backing),
-                mountType: JSON.stringify(item.mountType),
-                note: JSON.stringify(item.note),
-                width: JSON.stringify(item.width),
-              },
             },
             unit_amount: item.price * 100,
           },
@@ -107,7 +88,8 @@ export const createCheckoutSession = catchASync(async (req, res) => {
      success_url: `${req.headers.origin}/thank-you?ordered=true`,
      cancel_url: `${req.headers.origin}/shop?text=order cancelled&type=ERROR&timeout=5000`,
      metadata: {
-       userId
+       userId: String(userId), 
+       orderId: String(order._id)
      },
    });
 
