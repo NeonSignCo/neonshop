@@ -4,6 +4,7 @@ import Product from "../../models/product";
 import AppError from "../../utils/AppError";
 import catchASync from "../../utils/catchASync";
 import Stripe from "stripe";
+import countries from "../../../utils/countries";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   apiVersion: "2020-08-27",
 });
@@ -87,9 +88,25 @@ export const createCheckoutSession = catchASync(async (req, res) => {
      customer_email: contactEmail,
      success_url: `${req.headers.origin}/thank-you?ordered=true`,
      cancel_url: `${req.headers.origin}/shop?text=order cancelled&type=ERROR&timeout=5000`,
+     payment_intent_data: {
+       receipt_email: contactEmail,
+       shipping: {
+         name: shippingAddress.firstName + shippingAddress.lastName,
+         address: {
+           line1: shippingAddress.addressLine1,
+           line2: shippingAddress.addressLine2,
+           city: shippingAddress.city,
+           postal_code: shippingAddress.zip, 
+           state: shippingAddress.stateOrProvince,
+           country: countries.find(
+             (i) => i.country === shippingAddress.country
+           ).alpha2Code,
+         },
+       },
+     },
      metadata: {
-       userId: String(userId), 
-       orderId: String(order._id)
+       userId: String(userId),
+       orderId: String(order._id),
      },
    });
 
