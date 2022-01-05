@@ -73,7 +73,7 @@ const ExpandedContent = ({ order, setExpand }) => {
           </p>
         </div>
       </div>
-      {order.customItems.length > 0 && (
+      {order.customItems?.length > 0 && (
         <div className="grid gap-1">
           <h2 className="text-lg font-semibold">Custom Neons</h2>
           {order.customItems.map((item) => (
@@ -131,7 +131,7 @@ const ExpandedContent = ({ order, setExpand }) => {
           ))}
         </div>
       )}
-      {order.items.length > 0 && (
+      {order.items?.length > 0 && (
         <div className="grid gap-1">
           <h2 className="text-lg font-semibold">Neons</h2>
           <div className="hidden md:block">
