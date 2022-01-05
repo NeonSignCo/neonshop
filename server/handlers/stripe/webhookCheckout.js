@@ -5,6 +5,8 @@ import catchASync from "../../utils/catchASync";
 import { buffer } from "micro";
 import Stripe from "stripe"; 
 import User from "../../models/user";
+import Product from "../../models/product";
+import Category from "../../models/category";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   apiVersion: "2020-08-27",
 });
