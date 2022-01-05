@@ -17,7 +17,7 @@ export const webhookCheckout = catchASync(async (req, res) => {
 
   const event = stripe.webhooks.constructEvent(buf, sig, webhookSecret);
 
-  if (event.type !== "checkout.session.completed") return;
+//   if (event.type !== "checkout.session.completed") return;
 
 //   if (!event.data.object.metadata)
 //     throw new AppError(400, "metadata is required");
