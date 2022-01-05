@@ -5,7 +5,7 @@ import { useGlobalContext } from '../../../../context/GlobalContext';
 import LoadingBtn from "../../../LoadingBtn";
 import catchAsync from '../../../../utils/catchASync';
 import Axios from '../../../../utils/Axios';
-// import PayPalPayment from "./PayPalPayment";
+import PayPalPayment from "./PayPalPayment";
 
 const PaymentSection = () => {
   const [globalState, setGlobalState] = useGlobalContext();
@@ -14,13 +14,14 @@ const PaymentSection = () => {
 
 
   const completeOrder = () => catchAsync(async () => { 
+    if (state.paymentMethod === PAYPAL) return;
     setLoading(true); 
     const res = await Axios.post("stripe/checkout-session", {
       cartId: globalState.cartData.cart._id,
       shippingAddress: state.shipping,
       contactEmail: state.email,
       paymentMethod:
-        state.paymentMethod === CREDIT_CARD ? "card" : "afterpay_clearpay",
+        state.paymentMethod === CREDIT_CARD ? "card" : state.paymentMethod === AFTERPAY && "afterpay_clearpay",
     });
 
     setLoading(false)
@@ -119,34 +120,6 @@ const PaymentSection = () => {
               <span>and more...</span>
             </div>
           </button>
-          <div className="border border-gray-400">
-            <button
-              className="px-4 py-3 flex items-center gap-4 w-full"
-              onClick={() =>
-                setState((state) => ({ ...state, paymentMethod: PAYPAL }))
-              }
-            >
-              <div className="flex gap-4 items-center">
-                <input
-                  type="radio"
-                  id="credit-card"
-                  checked={state.paymentMethod === PAYPAL}
-                  className="scale-[1.5]"
-                />
-
-                <label
-                  htmlFor="credit-cart"
-                  className="font-semibold capitalize"
-                >
-                  <img
-                    src="/img/card-icons/paypal.svg"
-                    alt="paypal"
-                    className="h-8"
-                  />
-                </label>
-              </div>
-            </button>
-          </div>
           <button
             className="px-4 py-3 flex items-center gap-4 border rounded-b border-gray-400"
             onClick={() =>
@@ -171,6 +144,8 @@ const PaymentSection = () => {
           </button>
           <div className=" border border-t-0 rounded-b  border-gray-400"></div>
         </div>
+        <div className="h-[1px] bg-black w-20 mx-auto"></div>
+        <PayPalPayment />
       </div>
 
       <div className="flex flex-col-reverse md:flex-row gap-5 md:justify-between mt-5">
