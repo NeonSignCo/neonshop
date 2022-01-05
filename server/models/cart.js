@@ -14,10 +14,13 @@ const CartSchema = new mongoose.Schema(
     subTotal: Number,
     discount: Number,
     total: Number,
+    expireAt: Date
   },
   { timestamps: true }
 );
 
+
+CartSchema.index({ expireAt: 1 }, { expireAfterSeconds: 0 });
 
 const Cart = mongoose.models.Cart || mongoose.model("Cart", CartSchema);
 

@@ -67,7 +67,10 @@ export const getServerSideProps = async ({ query, req }) => {
          },
        };
      }
-     const cart = await getUpdatedCart(user._id);
+     const cart = await getUpdatedCart({
+       userId: user?._id,
+       tempUserId: req.cookies.tempUserId,
+     });
 
      
      return {

@@ -8,6 +8,7 @@ import {SUCCESS, useGlobalContext } from '../../../../context/GlobalContext';
 import catchAsync from '../../../../utils/catchASync'
 import CustomLink from "../../../CustomLink";
 import catchASync from "../../../../utils/catchASync";
+import { colors, NeonPreview } from "../../../../utils/CustomNeonAssets";
 
 // variables 
 const ORDERED = 'ORDERED'; 
@@ -264,7 +265,7 @@ const ExpandedOrder = ({ order, setState }) => {
   }, setGlobalState)
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 bg-white p-2">
       <div className="grid gap-1">
         <h2 className="text-lg font-semibold">Order</h2>
         <p>
@@ -298,7 +299,7 @@ const ExpandedOrder = ({ order, setState }) => {
       <div className="grid gap-1">
         <h2 className="text-lg font-semibold">Status</h2>
         <select
-          className="max-w-max p-1"
+          className="max-w-max p-1 border border-gray-500"
           value={status}
           onChange={(e) => setStatus(e.target.value)}
         >
@@ -308,89 +309,152 @@ const ExpandedOrder = ({ order, setState }) => {
           <option value={CANCELLED}>Cancelled</option>
         </select>
       </div>
-      <div className="grid gap-1">
-        <h2 className="text-lg font-semibold">Items</h2>
-        <div className="hidden md:block">
-          <table className="w-full bg-white  border border-gray-500">
-            <thead className="h-12 border-b border-gray-200">
-              <tr className="border border-gray-200 ">
-                <th className="text-left pl-2">Image</th>
-                <th className="text-left">name</th>
-                <th className="text-left">size</th>
-                <th className="text-left">color</th>
-                <th className="text-left">mount type</th>
-                <th className="text-left">count</th>
-                <th className="text-left">price</th>
-              </tr>
-            </thead>
-            <tbody>
-              {order.items.map((item) => (
-                <tr className="border border-gray-300" key={item._id}>
-                  <td className="pl-2">
-                    <CustomLink
-                      href={`shop/${item.product.category.slug}/${item.product.slug}`}
-                    >
-                      <img
-                        src={item.product.image.url}
-                        alt={item.product.name}
-                        className="h-16"
-                      />
-                    </CustomLink>
-                  </td>
-                  <td>{item.product.name}</td>
-                  <td>{item.selectedSize.info}</td>
-                  <td>{item.selectedColor.name}</td>
-                  <td>{item.selectedMountType}</td>
-                  <td>{item.count}</td>
-                  <td>${item.selectedSize.price}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="md:hidden grid gap-1">
-          {order.items.map((item) => (
+      {order.customItems.length > 0 && (
+        <div className="grid gap-1">
+          <h2 className="text-lg font-semibold">Custom Neons</h2>
+          {order.customItems.map((item) => (
             <div
               className="grid gap-2 border border-gray-300 p-2"
               key={item._id}
             >
-              <CustomLink
-                href={`shop/${item.product.category.slug}/${item.product.slug}`}
-              >
-                <img
-                  src={item.product.image.url}
-                  alt={item.product.name}
-                  className="h"
-                />
-              </CustomLink>
+              <NeonPreview
+                text={item.text}
+                color={colors.find((color) => color.hex === item.color.hex)}
+                icon={item.icon}
+                font={item.font}
+                className="py-10 bg-black text-3xl overflow-hidden "
+              />
 
               <p>
-                <span className="font-semibold">Name: </span>{" "}
-                {item.product.name}
+                <span className="font-semibold">Text: </span> {item.text}
               </p>
               <p>
-                <span className="font-semibold">Size: </span>{" "}
-                {item.selectedSize.info}
+                <span className="font-semibold">Font: </span> {item.font.text}
               </p>
               <p>
-                <span className="font-semibold">Color: </span>{" "}
-                {item.selectedColor.name}
+                <span className="font-semibold">Color: </span> {item.color.name}
+              </p>
+              <p>
+                <span className="font-semibold">Size: </span> {item.size}
+              </p>
+              <p>
+                <span className="font-semibold">Width: </span> {item.width}"
+              </p>
+              <p>
+                <span className="font-semibold">Icon: </span>{" "}
+                {item.icon ? (
+                  <img
+                    src={`/img/neon-logos/${item.icon.link}`}
+                    alt={item.icon.name}
+                    title={item.icon.name}
+                    className="bg-black h-10 w-10 rounded"
+                  />
+                ) : (
+                  "none"
+                )}
               </p>
               <p>
                 <span className="font-semibold">Mount type: </span>{" "}
-                {item.selectedMountType}
+                {item.mountType}
+              </p>
+              <p>
+                <span className="font-semibold">Note: </span> {item.note}
               </p>
               <p>
                 <span className="font-semibold">Count: </span> {item.count}
               </p>
               <p>
-                <span className="font-semibold">Price: </span> $
-                {item.selectedSize.price}
+                <span className="font-semibold">Price: </span> ${item.price}
               </p>
             </div>
           ))}
         </div>
-      </div>
+      )}
+      {order.items.length > 0 && (
+        <div className="grid gap-1">
+          <h2 className="text-lg font-semibold">Neons</h2>
+          <div className="hidden md:block">
+            <table className="w-full bg-white  border border-gray-500">
+              <thead className="h-12 border-b border-gray-200">
+                <tr className="border border-gray-200 ">
+                  <th className="text-left pl-2">Image</th>
+                  <th className="text-left">name</th>
+                  <th className="text-left">size</th>
+                  <th className="text-left">color</th>
+                  <th className="text-left">mount type</th>
+                  <th className="text-left">count</th>
+                  <th className="text-left">price</th>
+                </tr>
+              </thead>
+              <tbody>
+                {order.items.map((item) => (
+                  <tr className="border border-gray-300" key={item._id}>
+                    <td className="pl-2">
+                      <CustomLink
+                        href={`shop/${item.product.category.slug}/${item.product.slug}`}
+                      >
+                        <img
+                          src={item.product.image.url}
+                          alt={item.product.name}
+                          className="h-16"
+                        />
+                      </CustomLink>
+                    </td>
+                    <td>{item.product.name}</td>
+                    <td>{item.selectedSize.info}</td>
+                    <td>{item.selectedColor.name}</td>
+                    <td>{item.selectedMountType}</td>
+                    <td>{item.count}</td>
+                    <td>${item.selectedSize.price}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="md:hidden grid gap-1">
+            {order.items.map((item) => (
+              <div
+                className="grid gap-2 border border-gray-300 p-2"
+                key={item._id}
+              >
+                <CustomLink
+                  href={`shop/${item.product.category.slug}/${item.product.slug}`}
+                >
+                  <img
+                    src={item.product.image.url}
+                    alt={item.product.name}
+                    className="h"
+                  />
+                </CustomLink>
+
+                <p>
+                  <span className="font-semibold">Name: </span>{" "}
+                  {item.product.name}
+                </p>
+                <p>
+                  <span className="font-semibold">Size: </span>{" "}
+                  {item.selectedSize.info}
+                </p>
+                <p>
+                  <span className="font-semibold">Color: </span>{" "}
+                  {item.selectedColor.name}
+                </p>
+                <p>
+                  <span className="font-semibold">Mount type: </span>{" "}
+                  {item.selectedMountType}
+                </p>
+                <p>
+                  <span className="font-semibold">Count: </span> {item.count}
+                </p>
+                <p>
+                  <span className="font-semibold">Price: </span> $
+                  {item.selectedSize.price}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
       <div className="grid gap-1">
         <h2 className="text-lg font-semibold">Totals</h2>
         <p>
@@ -404,7 +468,7 @@ const ExpandedOrder = ({ order, setState }) => {
         </p>
       </div>
       <div className="flex gap-2 justify-end">
-        <LoadingBtn 
+        <LoadingBtn
           loading={loading}
           className=" py-1 px-4 bg-black text-white"
           onClick={changeStatus}
@@ -460,8 +524,8 @@ const TableItem = ({order, state, setState}) => {
           {order.shippingAddress.stateOrProvince} {order.shippingAddress.zip},{" "}
           {order.shippingAddress.country}
         </td>
-        <td>{order.items.length}</td>
-        <td className="font-semibold">$400</td>
+        <td>{order.items.length + order.customItems.length}</td>
+        <td className="font-semibold">${order.total}</td>
         <td>
           <button
             className=" rounded-full h-7 w-7 mx-2 flex items-center justify-center transition active:bg-gray-200 text-purple-600"

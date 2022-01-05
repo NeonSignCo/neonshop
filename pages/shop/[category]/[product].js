@@ -82,7 +82,6 @@ const ProductPage = ({ product }) => {
           },
         }));
 
-        let items = globalState.cartData.cart?.items || [];
 
          const data = {
            product,
@@ -90,29 +89,18 @@ const ProductPage = ({ product }) => {
            selectedMountType: state.mountType,
            selectedSize: {info: state.size.info, price: state.size.price, sizeId: state.size._id},
            count: state.quantity,
-         };
-        if (items.length > 0) {
-          // find same variation
-          const sameVariationIndex = items.findIndex(
-            (cartItem) =>
-              cartItem.product._id === product._id &&
-              cartItem.selectedColor.hex === state.color.hex &&
-              cartItem.selectedMountType === state.mountType &&
-              cartItem.selectedSize.sizeId === state.size._id
-          );
-
-
-          if (sameVariationIndex !== -1) {
-            items[sameVariationIndex].count += state.quantity
-          } else {
-            items.push(data)
-          }
-         
-        } else { 
-          items.push(data)
-        }
+        };
         
-        const res = await Axios.post("cart", { items });
+        let res;
+        
+        if (globalState.cartData.cart?.items  || globalState.cartData.cart?.customItems) {
+          res = await Axios.patch("cart", {
+            customItems: globalState.cartData.cart?.customItems,
+            items: [...globalState.cartData.cart?.items, data],
+          });
+        } else {
+          res = await Axios.post('cart', { items: [data] });
+        }
 
         setGlobalState((state) => ({
           ...state,

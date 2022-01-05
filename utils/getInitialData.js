@@ -15,10 +15,18 @@ const getInitialData = async (state, setState) => {
 
     if (!state.serverRendered) {
       // authenticate user
-       user = (await Axios.get("users/me")).data.user;
+       try {
+         user = (await Axios.get("users/me")).data.user;
+       } catch (error) {
+         
+       }
 
       // get cart data
-       cart = (await Axios.get("cart")).data.cart;
+       try {
+         cart = (await Axios.get("cart")).data.cart;
+       } catch (error) {
+         
+       }
     }
 
     setState((state) => ({

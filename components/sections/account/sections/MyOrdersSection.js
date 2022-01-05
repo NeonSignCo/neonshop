@@ -1,19 +1,25 @@
 import { useState } from "react";
 import { useACcountContext } from "../../../../pages/account"
+import { colors, NeonPreview } from "../../../../utils/CustomNeonAssets";
 import CustomLink from "../../../CustomLink";
 
 const MyOrdersSection = () => {
 
-    const [state, setState] = useACcountContext();
-
+    const [state] = useACcountContext();
     return (
-        <div className="bg-white w-full">
-            <h2 className="text-xl font-semibold capitalize">orders</h2>
-            <div className="grid gap-10 mt-5">
-                {state.orders?.length > 0 ? state.orders.map(order => <OrderItem key={order._id} order={order}/> ) : <div className="No orders yet!"></div> }
-            </div>
+      <div className="bg-white w-full">
+        <h2 className="text-xl font-semibold capitalize">orders</h2>
+        <div className="grid gap-10 mt-5">
+          {state.orders?.length > 0 ? (
+            state.orders.map((order) => (
+              <OrderItem key={order._id} order={order} />
+            ))
+          ) : (
+            <div className="">No orders yet!</div>
+          )}
         </div>
-    )
+      </div>
+    );
 }
 
 export default MyOrdersSection
@@ -37,7 +43,7 @@ const ExpandedContent = ({ order, setExpand }) => {
   const date = new Date(order.createdAt).toLocaleDateString();
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-5">
       <div className="grid gap-1">
         <h2 className="text-lg font-semibold">Order</h2>
         <p>
@@ -46,35 +52,116 @@ const ExpandedContent = ({ order, setExpand }) => {
         <p>
           <span className="font-semibold">Order Id:</span> {order._id}
         </p>
-      </div>
-      <div className="grid gap-1">
-        <h2 className="text-lg font-semibold">Items</h2>
-        <div className="hidden md:block">
-          <table className="w-full bg-white  border border-gray-500">
-            <thead className="h-12 border-b border-gray-200">
-              <tr className="border border-gray-200 ">
-                <th className="text-left pl-2">Image</th>
-                <th className="text-left">name</th>
-                <th className="text-left">size</th>
-                <th className="text-left">color</th>
-                <th className="text-left">mount type</th>
-                <th className="text-left">count</th>
-                <th className="text-left">price</th>
-              </tr>
-            </thead>
-            <tbody>
-              {order.items.map((item) => (
-                <TableItem key={item._id} item={item} />
-              ))}
-            </tbody>
-          </table>
+        <div className="grid">
+          <p className="font-semibold capitalize">status</p>
+          <p
+            className={`capitalize ${
+              order.status === "ORDERED"
+                ? "text-gray-500"
+                : order.status === "DELIVERED"
+                ? "text-green-500"
+                : order.status === "CANCELLED" && "text-red-500"
+            } `}
+          >
+            {order.status === "ORDERED"
+              ? "ordered"
+              : order.status === "PROCESSING"
+              ? "processing"
+              : order.status === "DELIVERED"
+              ? "delivered"
+              : order.status === "CANCELLED" && "cancelled"}
+          </p>
         </div>
-        <div className="md:hidden grid gap-1">
-          {order.items.map((item) => (
-            <Item key={item._id} item={item} />
+      </div>
+      {order.customItems.length > 0 && (
+        <div className="grid gap-1">
+          <h2 className="text-lg font-semibold">Custom Neons</h2>
+          {order.customItems.map((item) => (
+            <div
+              className="grid gap-2 border border-gray-300 p-2"
+              key={item._id}
+            >
+              <NeonPreview
+                text={item.text}
+                color={colors.find((color) => color.hex === item.color.hex)}
+                icon={item.icon}
+                font={item.font}
+                className="py-10 bg-black text-3xl overflow-hidden "
+              />
+
+              <p>
+                <span className="font-semibold">Text: </span> {item.text}
+              </p>
+              <p>
+                <span className="font-semibold">Font: </span> {item.font.text}
+              </p>
+              <p>
+                <span className="font-semibold">Color: </span> {item.color.name}
+              </p>
+              <p>
+                <span className="font-semibold">Size: </span> {item.size}
+              </p>
+              <p>
+                <span className="font-semibold">Width: </span> {item.width}"
+              </p>
+              <p>
+                <span className="font-semibold">Icon: </span>{" "}
+                {item.icon ? (
+                  <img
+                    src={`/img/neon-logos/${item.icon.link}`}
+                    alt={item.icon.name}
+                    title={item.icon.name}
+                    className="bg-black h-10 w-10 rounded"
+                  />
+                ) : (
+                  "none"
+                )}
+              </p>
+              <p>
+                <span className="font-semibold">Mount type: </span>{" "}
+                {item.mountType}
+              </p>
+              <p>
+                <span className="font-semibold">Count: </span> {item.count}
+              </p>
+              <p>
+                <span className="font-semibold">Price: </span> ${item.price}
+              </p>
+            </div>
           ))}
         </div>
-      </div>
+      )}
+      {order.items.length > 0 && (
+        <div className="grid gap-1">
+          <h2 className="text-lg font-semibold">Neons</h2>
+          <div className="hidden md:block">
+            <table className="w-full bg-white  border border-gray-500">
+              <thead className="h-12 border-b border-gray-200">
+                <tr className="border border-gray-200 ">
+                  <th className="text-left pl-2">Image</th>
+                  <th className="text-left">name</th>
+                  <th className="text-left">size</th>
+                  <th className="text-left">color</th>
+                  <th className="text-left">mount type</th>
+                  <th className="text-left">count</th>
+                  <th className="text-left">price</th>
+                </tr>
+              </thead>
+              <tbody>
+                {order.items.map((item) => (
+                  <TableItem key={item._id} item={item} />
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="md:hidden grid gap-1">
+            {order.items.map((item) => (
+              <Item key={item._id} item={item} />
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="grid gap-1">
         <h2 className="text-lg font-semibold">Totals</h2>
         <p>
@@ -164,14 +251,23 @@ const Preview = ({ order, setExpand }) => {
     <div className="flex flex-wrap gap-2">
       <div className="flex-1 flex flex-col gap-2">
         <div className="flex gap-1">
+          {order.customItems?.map((item) => (
+            <NeonPreview
+              key={item._id}
+              text={item.text}
+              font={item.font}
+              color={colors.find((color) => color.hex === item.color.hex)}
+              icon={item.icon}
+              className="h-20 w-20 overflow-hidden bg-black"
+            />
+          ))}
           {order.items?.map((item, i) => (
-           
-              <img
-                key={i}
-                src={item.product.image?.url}
-                alt="product name"
-                className="h-20 w-20 object-cover"
-              /> 
+            <img
+              key={i}
+              src={item.product.image?.url}
+              alt="product name"
+              className="h-20 w-20 object-cover"
+            />
           ))}
         </div>
         <div className="flex flex-col md:flex-row gap-x-5 gap-y-2 md:gap-10">
@@ -181,7 +277,7 @@ const Preview = ({ order, setExpand }) => {
           </div>
           <div className="grid">
             <p className="font-semibold capitalize">items</p>
-            <p>{order.items.length}</p>
+            <p>{order.items.length + order.customItems.length}</p>
           </div>
           <div className="grid">
             <p className="font-semibold capitalize">total</p>

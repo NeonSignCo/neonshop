@@ -3,11 +3,11 @@ import Cart from "../models/cart";
 import Category from "../models/category";
 import Product from "../models/product";
 import AppError from "../utils/AppError";
-import calcPrice from "../utils/calcPrice";
 import catchASync from "../utils/catchASync";
 import getUpdatedCart from "../utils/getUpdatedCart";
 import getLoggedInUser from '../../utils/getLoggedInUser';
 import setToken from "../utils/setToken";
+import calcCartPrice from "../utils/calcCartPrice";
 
 // @route       POST /api/cart
 // @purpose     Add to cart
@@ -17,7 +17,6 @@ export const addToCart = catchASync(async (req, res) => {
 
   if (!items && !customItems) throw new AppError(400, "items or customItems is required");
   let userId;
-
   // get userId from logged in user
   const user = await getLoggedInUser(req);
   if (user) userId = user._id;
@@ -31,12 +30,17 @@ export const addToCart = catchASync(async (req, res) => {
     setToken(res, "tempUserId", newId);
     userId = newId;
   }
-  const data = { items, customItems, userId };
+
+  // expire after 30 days if not logged in
+  const expireAt = user?._id
+    ? null
+    : new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
+  const data = { items, customItems, userId, expireAt  };
 
   
   await Cart.validate(data);
 
-  const calculatedCart = await calcPrice(data);
+  const calculatedCart = await calcCartPrice(data);
   // update cart if exists
   const cart = await Cart.findOneAndUpdate({ userId }, calculatedCart, {
     new: true,
@@ -61,7 +65,6 @@ export const updateCart = catchASync(async (req, res) => {
   const { items, customItems } = req.body;
   if (!items && !customItems) throw new AppError(400, "items or customItems is required");
  let userId;
-
  // get userId from logged in user
  const user = await getLoggedInUser(req);
  if (user) userId = user._id;
@@ -70,18 +73,29 @@ export const updateCart = catchASync(async (req, res) => {
   if (!userId && req.cookies.tempUserId) userId = req.cookies.tempUserId; 
   
   if (!userId) throw new AppError(404, 'not authorized'); 
-  
-  const data = { items, customItems, userId };
+
+  // expire after 30 days if not logged in
+  const expireAT = user?._id
+    ? null
+    : new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
+  const data = {
+    items,
+    customItems,
+    userId,
+    expireAT
+  };
 
   await Cart.validate(data);
  
-  const calculatedCart = await calcPrice(data);
-  if (calculatedCart.items.length <= 0) {
+  const calculatedCart = await calcCartPrice(data);
+
+  // delete cart if empty
+  if (calculatedCart.items?.length <= 0 && calculatedCart.customItems?.length <=0) {
     const deletedCart = await Cart.findOneAndDelete({ userId });
     if (!deletedCart) throw new AppError(404, 'cart not found');
     return res.json({
       status: 'success', 
-      message: 'cart deleted duo to no items'
+      message: 'cart deleted due to no items'
     })
   }
   const cart = await Cart.findOneAndUpdate(
@@ -108,20 +122,12 @@ export const updateCart = catchASync(async (req, res) => {
 
 // @route       GET /api/cart
 // @purpose     Get cart
-// @access      user
+// @access      user/tempUser
 export const getCart = catchASync(async (req, res) => {
-   let userId;
-
-   // get userId from logged in user
-   const user = await getLoggedInUser(req);
-   if (user) userId = user._id;
-
-   // else get temporary userId from cookitempU
-   if (!userId && req.cookies.tempUserId) userId = req.cookies.tempUserId;
-
-  if (!userId) throw new AppError(404, "not authorized"); 
+  const user = await getLoggedInUser(req);
   
-  const cart = await getUpdatedCart(userId);
+  
+  const cart = await getUpdatedCart({userId: user?._id, tempUserId: req.cookies.tempUserId});
   return res.json({
     status: "success",
     message: "successfully retrieved cart data",

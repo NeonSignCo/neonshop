@@ -8,22 +8,26 @@ import connectDb from "../server/utils/connectDb";
 import getUpdatedCart from "../server/utils/getUpdatedCart";
 import Axios from "../utils/Axios";
 import catchASync from "../utils/catchASync";
+import { colors, NeonPreview } from "../utils/CustomNeonAssets";
 import getLoggedInUser from "../utils/getLoggedInUser";
 
 const CartPage = () => {
-    const [globalState] = useGlobalContext(); 
-    
+    const [globalState] = useGlobalContext();    
     return (
       <div className=" pt-20">
         <div className="px-5 lg:px-20">
           <h1 className="text-2xl sm:text-5xl text-center uppercase font-semibold mb-10">
             cart
           </h1>
-          {globalState.cartData.cart?.items?.length > 0 ? (
+          {globalState.cartData.cart?.items?.length > 0 ||
+          globalState.cartData.cart?.customItems?.length > 0 ? (
             <div className="flex flex-col lg:flex-row  gap-5 bg-gray-100">
               <div className="flex lg:self-start flex-col gap-4 bg-gray-200 p-2">
-                {globalState.cartData.cart.items.map((item, i) => (
-                  <CartItem item={item} key={i} />
+                {globalState.cartData.cart?.customItems?.map((item) => (
+                  <CartCustomItem item={item} key={item._id} />
+                ))}
+                {globalState.cartData.cart?.items?.map((item) => (
+                  <CartItem item={item} key={item._id} />
                 ))}
               </div>
               <div className="w-full md:w-[500px] mx-auto">
@@ -52,7 +56,7 @@ const CartPage = () => {
                     className="py-3 px-7 w-full transition bg-black text-white flex justify-center items-center text-lg uppercase gap-3"
                   >
                     <span>checkout</span>
-                    {globalState.cartData.loading && <Loader/> }
+                    {globalState.cartData.loading && <Loader />}
                   </CustomLink>
                 </div>
               </div>
@@ -101,34 +105,18 @@ const CartItem = ({ item }) => {
              cartData: { ...state.cartData, loading: true },
            }));
 
-           if (remove) {
-             await Axios.delete('cart');
-             return setGlobalState((state) => ({
-               ...state,
-               cartData: {
-                 ...state.cartData,
-                 loading: false,
-                 cart: null,
-               },
-             }));
-
+          
+         const updatedItems = globalState.cartData.cart.items.map((i) => {
+           if (i._id === item._id) {
+            remove ? i.count = 0: plus ? (i.count += 1) : (i.count -= 1);
            }
-           const itemsCopy = JSON.parse(JSON.stringify(globalState.cartData.cart.items))
-           const items = itemsCopy.map((cartItem) => {
-             const sameVariation =
-               cartItem._id === item._id &&
-               cartItem.product._id === item.product._id &&
-               cartItem.selectedColor.hex === item.selectedColor.hex &&
-               cartItem.selectedMountType === item.selectedMountType &&
-               cartItem.selectedSize._id === item.selectedSize._id;
+           return i;
+         });
 
-             if (sameVariation) {
-               cartItem.count = plus ? cartItem.count + 1 : cartItem.count - 1;
-             }
-             return cartItem;
-           });
-
-           const res = await Axios.patch("cart", { items });
+         const res = await Axios.patch("cart", {
+           ...globalState.cartData.cart,
+           items: updatedItems,
+         });
 
            setGlobalState((state) => ({
              ...state,
@@ -139,16 +127,9 @@ const CartItem = ({ item }) => {
              },
            }));
          },
-         setGlobalState,
-         () =>
-           setGlobalState((state) => ({
-             ...state,
-             cartData: { ...state.cartData, loading: false },
-           }))
+         setGlobalState
     );
-  
-  const price = item.selectedSize.price;
-  const salePrice = item.product.salePercentage > 0 ? price - price * item.product.salePercentage / 100 : price;
+
   const link = `shop/${item.product.category.slug}/${item.product.slug}`;
   return (
     <div className="flex flex-col md:flex-row gap-2 bg-white p-2">
@@ -160,10 +141,7 @@ const CartItem = ({ item }) => {
         />
       </CustomLink>
       <div className="flex flex-col gap-3 flex-1">
-        <CustomLink
-          href={link}
-          className="font-semibol capitalize text-2xl"
-        >
+        <CustomLink href={link} className="font-semibol capitalize text-2xl">
           {item.product.name}
         </CustomLink>
         <p className="capitalize text-sm">
@@ -191,7 +169,90 @@ const CartItem = ({ item }) => {
               <BsPlus />
             </button>
           </div>
-          <p className="font-semibold">${salePrice * item.count}</p>
+          <p className="font-semibold">
+            ${item.selectedSize.price * item.count}
+          </p>
+        </div>
+        <div className="flex justify-end">
+          <button
+            className="py-1 px-2 bg-gray-200 transition hover:bg-black hover:text-white"
+            onClick={() => updateCart({ remove: true })}
+          >
+            remove
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const CartCustomItem = ({ item }) => {
+  const [globalState, setGlobalState] = useGlobalContext();
+
+  const updateCart = ({ plus = true, remove = false }) =>
+    catchASync(
+      async () => {
+        setGlobalState((state) => ({
+          ...state,
+          cartData: { ...state.cartData, loading: true },
+        }));
+
+       const updatedItems = globalState.cartData.cart.customItems.map((i) => {
+         if (i._id === item._id) {
+          remove ? i.count = 0: plus ? (i.count += 1) : (i.count -= 1);
+         }
+         return i;
+       });
+
+       const res = await Axios.patch("cart", {
+         ...globalState.cartData.cart,
+         customItems: updatedItems,
+       });
+
+        setGlobalState((state) => ({
+          ...state,
+          cartData: {
+            ...state.cartData,
+            loading: false,
+            cart: res.data.cart,
+          },
+        }));
+      },
+      setGlobalState,
+    );
+
+  
+  return (
+    <div className="flex flex-col md:flex-row gap-2 bg-white p-2">
+      <NeonPreview
+        text={item.text}
+        color={colors.find((color) => color.hex === item.color.hex)}
+        icon={item.icon}
+        font={item.font}
+        className="py-5 w-full md:w-60 bg-black text-3xl"
+      />
+      <div className="flex flex-col gap-3 flex-1">
+        <h2 className="font-semibol capitalize text-2xl">
+          custom neon
+        </h2>
+        <div className="flex flex-wrap justify-between items-center">
+          <div className="flex items-center gap-2">
+            <button
+              className="h-7 w-7 flex items-center justify-center bg-gray-300 transition hover:bg-black hover:text-white text-5xl disabled:bg-gray-300 disabled:text-black disabled:cursor-text"
+              onClick={() => updateCart({ plus: false })}
+              disabled={item.count === 1}
+            >
+              <BsDash />
+            </button>
+            <p className="text-2xl">{item.count}</p>
+            <button
+              className="h-7 w-7 flex items-center justify-center bg-gray-300 transition hover:bg-black hover:text-white text-5xl"
+              onClick={updateCart}
+            >
+              <BsPlus />
+            </button>
+          </div>
+          <p className="font-semibold">${item.count * item.price}</p>
         </div>
         <div className="flex justify-end">
           <button
@@ -210,10 +271,11 @@ export const getServerSideProps = async ({ req }) => {
   try {
       await connectDb();
     const user = await getLoggedInUser(req);
-    const userId = user?._id || req.cookies.tempUserId;
 
-    let cart;
-    if (userId) { cart = await getUpdatedCart(userId) };
+    const cart = await getUpdatedCart({
+      userId: user?._id,
+      tempUserId: req.cookies.tempUserId,
+    });
     
     return {
       props: {

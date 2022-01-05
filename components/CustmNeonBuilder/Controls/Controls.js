@@ -1,6 +1,6 @@
 import CustomLink from "../../CustomLink";
 import { FaCartArrowDown } from "react-icons/fa";
-import { colors, fonts, icons, sizes } from "../../../utils/CustomNeonAssets";
+import { calcPrice, calcWidth, colors, fonts, icons, sizes } from "../../../utils/CustomNeonAssets";
 import Navigation from "./Navigation";
 import { BLACKACRYLIC, CLEARACRYLIC, CUT_TO_SHAPE, GOLDMIRRORACRYLIC, MIRRORACRYLIC, ROUND, SQUARE, useNeonBuilderContext } from "../../../context/NeonBuilderContext";
 import { AnimatePresence } from "framer-motion";
@@ -32,40 +32,26 @@ const Controls = () => {
          .scrollIntoView({ behavior: "smooth" });
      }
      
-    const customItem = { ...state.data, size: state.data.size.name };
-      
+    const customItem = { ...state.data, size: state.data.size.name, count: 1 };
+
     setLoading(true);
 
-
-    return;
     let res;
     
-    if (globalState.cartData.cart) {
+    if (globalState.cartData.cart?.items || globalState.cartData.cart?.customItems) {
       res = await Axios.patch("cart", {
-          items: globalState.cartData.cart.items,
-          customItems: [...globalState.cartData.cart.customItems, customItem],
-        })
+        items: globalState.cartData.cart?.items,
+        customItems: [...globalState.cartData.cart?.customItems, customItem],
+      });
     } else {
-      res - await Axios.post("cart", { customItems: [{...customItem, count: 1}] });
+      res = (await Axios.post("cart", { customItems: [customItem] }));
     }
-
     
     setLoading(false)
-    console.log(res.data)
-    setGlobalState(state => ({ ...state, cartData: { ...state.cartData, cart: res.data.cart } }));
+    setGlobalState(state => ({ ...state, cartData: { ...state.cartData, cart: res.data.cart, show: true } }));
   
   }, setGlobalState, () => setLoading(false));
 
-  const calcWidth = ({text = state.data.text, size = state.data.size, icon = state.data.icon}) => {
-    const textLength = text.length * size.letter.width;
-    const iconLength = icon ? size.icon.width : 0; 
-    return textLength + iconLength;
-  }
-  const calcPrice = ({text = state.data.text, size = state.data.size, icon = state.data.icon}) => {
-    const textPrice = text.length * size.letter.price;
-    const iconPrice = icon ? size.icon.price : 0;
-    return textPrice + iconPrice;
-  };
 
   return (
     <div className=" col-span-3 lg:col-span-1 row-span-4 lg:row-span-6 overflow-hidden md:p-5">
@@ -97,8 +83,16 @@ const Controls = () => {
                   data: {
                     ...state.data,
                     text: e.target.value,
-                    width: calcWidth({ text: e.target.value }),
-                    price: calcPrice({ text: e.target.value }),
+                    width: calcWidth({
+                      text: e.target.value,
+                      sizeName: state.data.size.name,
+                      icon: state.data.icon,
+                    }),
+                    price: calcPrice({
+                      text: e.target.value,
+                      sizeName: state.data.size.name,
+                      icon: state.data.icon,
+                    }),
                   },
                   controls: { ...state.controls, typing: true },
                   error: { ...state.error, text: "" },
@@ -182,8 +176,16 @@ const Controls = () => {
                     data: {
                       ...state.data,
                       size,
-                      width: calcWidth({ size }),
-                      price: calcPrice({ size }),
+                      width: calcWidth({
+                        text: state.data.text,
+                        sizeName: size.name,
+                        icon: state.data.icon,
+                      }),
+                      price: calcPrice({
+                        text: state.data.text,
+                        sizeName: size.name,
+                        icon: state.data.icon,
+                      }),
                     },
                   }))
                 }
@@ -219,9 +221,13 @@ const Controls = () => {
                         ...state.data,
                         icon: state.data.icon.name === icon.name ? "" : icon,
                         width: calcWidth({
+                          text: state.data.text,
+                          sizeName: state.data.size.name,
                           icon: state.data.icon.name === icon.name ? "" : icon,
                         }),
                         price: calcPrice({
+                          text: state.data.text,
+                          sizeName: state.data.size.name,
                           icon: state.data.icon.name === icon.name ? "" : icon,
                         }),
                       },
@@ -336,7 +342,7 @@ export default Controls;
 const BackingColor = ({ title, text, color }) => {
 
   const [state, setState] = useNeonBuilderContext(); 
-  const selected = color === state.data.backing.color; 
+  const selected = color === state.data.backing.backingColor; 
 
   return (
     <button
@@ -346,7 +352,7 @@ const BackingColor = ({ title, text, color }) => {
       onClick={() =>
         setState((state) => ({
           ...state,
-          data: { ...state.data, backing: {...state.data.backing, color}},
+          data: { ...state.data, backing: {...state.data.backing, backingColor:color}},
         }))
       }
     >
@@ -363,7 +369,7 @@ const BackingColor = ({ title, text, color }) => {
 
 const BackingType = ({ title, type }) => {
   const [state, setState] = useNeonBuilderContext();
-  const selected = type === state.data.backing.type;
+  const selected = type === state.data.backing.backingType;
 
   return (
     <button
@@ -373,7 +379,7 @@ const BackingType = ({ title, type }) => {
       onClick={() =>
         setState((state) => ({
           ...state,
-          data: { ...state.data, backing: { ...state.data.backing, type } },
+          data: { ...state.data, backing: { ...state.data.backing, backingType: type } },
         }))
       }
     >

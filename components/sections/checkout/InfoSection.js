@@ -4,7 +4,6 @@ import CustomLink from "../../CustomLink";
 import { PAYMENT_SECTION, useCheckoutContext } from '../../../context/CheckoutContext';
 import ShippingAddressForm from "../../forms/CheckoutShippingAddressForm";
 import { useEffect } from "react";
-import BillingAddressForm from "../../forms/CheckoutBillingAddressForm";
 
 
 const InfoSection = () => {

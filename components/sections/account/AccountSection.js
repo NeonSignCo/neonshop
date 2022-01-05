@@ -77,7 +77,7 @@ const AccountSection = () => {
         <h1 className="text-3xl capitalize">My account</h1>
         <MobileOptions logout={logout} />
       </div>
-      <div className="flex-1 flex gap-10 mt-10 bg-white px-5 lg:px-20 py-10">
+      <div className="flex-1 flex gap-8 mt-10 bg-white px-5 lg:px-20 py-10">
         <DesktopSideBar logout={logout} />
         {state.activeSection === MY_ORDERS ? (
           <MyOrdersSection />
@@ -101,7 +101,7 @@ const DesktopSideBar = ({ logout }) => {
   const Item = ({ text, children, section }) => {
     return (
       <button
-        className={`flex items-center justify-between gap-16 ml-2 transition p-3 capitalize whitespace-nowrap group ${
+        className={`flex items-center justify-between gap-2 ml-2 transition p-3 capitalize whitespace-nowrap group ${
           state.activeSection === section ? "bg-gray-200" : "hover:bg-gray-200"
         }`}
         onClick={() =>

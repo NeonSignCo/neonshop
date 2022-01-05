@@ -6,8 +6,10 @@ export const INFO_SECTION = 'INFO_SECTION';
 export const PAYMENT_SECTION = 'PAYMENT_SECTION';
 export const SHIPPING= "SHIPPING";
 export const BILLING = "BILLING";
-export const CREDIT_CART = 'CREDIT_CARD'; 
+export const CREDIT_CARD = 'CREDIT_CARD'; 
 export const PAYPAL = 'PAYPAL'; 
+export const AFTERPAY = 'AFTERPAY'; 
+
 
 const Context = createContext();
 export const useCheckoutContext = () => useContext(Context);
@@ -18,6 +20,7 @@ const CheckoutContext = ({ children }) => {
     const [state, setState] = useState({
       activeSection: INFO_SECTION,  
       activeElement: '',
+      paymentMethod: CREDIT_CARD,
       email: globalState.auth.user?.email || "",
       allowNewsLetterSignUp: true,
       allowTextMessageOffers: false, 

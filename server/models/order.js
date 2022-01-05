@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import isEmail from "../../utils/isEmail";
 import AddressSchema from "../schemas/AddressSchema";
+import CustomItemSchema from "../schemas/CustomItemSchema";
 import ItemSchema from "../schemas/ItemSchema";
 
 
@@ -12,17 +13,23 @@ const OrderSchema = new mongoose.Schema(
       required: [true, "userId is required"],
     },
     contactEmail: {
-      type: String, 
+      type: String,
       validate: {
-        validator: val => isEmail(val), 
-        message: 'not a valid email address'
-      }, 
-      required: [true, 'contactEmail is required']
-    }, 
+        validator: (val) => isEmail(val),
+        message: "not a valid email address",
+      },
+      required: [true, "contactEmail is required"],
+    },
     status: {
       type: String,
       enum: {
-        values: ["PENDING_PAYMENT", "ORDERED", "PROCESSING", "DELIVERED", "CANCELLED"],
+        values: [
+          "PENDING_PAYMENT",
+          "ORDERED",
+          "PROCESSING",
+          "DELIVERED",
+          "CANCELLED",
+        ],
         default: "PENDING_PAYMENT",
         message:
           "status must be one of 'PENDING_PAYMENT', 'ORDERED', 'PROCESSING', 'DELIVERED', 'CANCELLED",
@@ -33,10 +40,11 @@ const OrderSchema = new mongoose.Schema(
       required: [true, "shippingAddress is required"],
     },
     items: [ItemSchema],
+    customItems: [CustomItemSchema],
     subTotal: Number,
     discount: Number,
     total: Number,
-    expireAt: Date
+    expireAt: Date,
   },
   { timestamps: true }
 );

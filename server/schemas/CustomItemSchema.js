@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { BLACKACRYLIC, CLEARACRYLIC, GOLDMIRRORACRYLIC, MIRRORACRYLIC } from '../../context/NeonBuilderContext';
+import { BLACKACRYLIC, CLEARACRYLIC, CUT_TO_SHAPE, GOLDMIRRORACRYLIC, MIRRORACRYLIC, ROUND, SQUARE } from '../../context/NeonBuilderContext';
 import ColorSchema from './ColorSchema';
 
 
@@ -58,6 +58,11 @@ const CustomItemSchema = new mongoose.Schema({
     },
     backingType: {
       type: String,
+      enum: {
+        values: [ROUND, SQUARE, CUT_TO_SHAPE],
+        default: SQUARE,
+        message: `backingType must be on of ${ROUND}, ${SQUARE}, ${CUT_TO_SHAPE}`,
+      },
       required: [true, "backingType is required"],
     },
     required: [true, "backing is required"],
@@ -73,8 +78,8 @@ const CustomItemSchema = new mongoose.Schema({
   },
   note: String,
   price: Number,
-  width: Number, 
-  count: Number
+  width: Number,
+  count: Number,
 });
 
 export default CustomItemSchema;

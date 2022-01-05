@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef } from "react";
 import { useNeonBuilderContext } from "../../../../context/NeonBuilderContext";
+import { NeonPreview } from "../../../../utils/CustomNeonAssets";
 
 const Visuals = () => {
   const [state] = useNeonBuilderContext();
@@ -52,32 +53,14 @@ const Visuals = () => {
             ref={divRef}
           >
             <div className="relative">
-              <div
-                ref={textRef}
-                className="text-5xl md:text-7xl lg:text-9xl transition-all relative flex items-center justify-center"
-                style={{
-                  textShadow: `0 0 10px rgba(${state.data.color.r},${
-                    state.data.color.g
-                  },${state.data.color.b},1),0 0 20px rgba(${
-                    state.data.color.r + 10
-                  },${state.data.color.g + 10},${
-                    state.data.color.b + 10
-                  },0.5),0 0 40px rgba(${state.data.color.r + 10},${
-                    state.data.color.g + 10
-                  },${state.data.color.b + 10},0.33)`,
-                  color: `rgb(${state.data.color.r}, ${state.data.color.g}, ${state.data.color.b})`,
-                  fontFamily: state.data.font.family,
-                  transformStyle: "preserve-3d",
-                }}
-              >
-                {state.data.icon.name && (
-                  <img
-                    src={`/img/neon-logos/${state.data.icon.link}`}
-                    alt={state.data.icon.name}
-                    className="h-24 md:h-44 "
-                  />
-                )}
-                <span className="whitespace-nowrap">{state.data.text}</span>
+              <div className="" ref={textRef}>
+                <NeonPreview
+                  text={state.data.text}
+                  color={state.data.color}
+                  icon={state.data.icon}
+                  font={state.data.font}
+                  className="text-5xl md:text-7xl lg:text-9xl"
+                />
               </div>
               <AnimatePresence>
                 {!state.controls.typing && (

@@ -3,11 +3,10 @@ import { BsX } from "react-icons/bs";
 import { useNeonBuilderContext } from "../../../context/NeonBuilderContext";
 import { motion } from "framer-motion";
 import CustomLink from "../../CustomLink";
-import { colors, icons } from "../../../utils/CustomNeonAssets";
+import { colors } from "../../../utils/CustomNeonAssets";
 
 const Navigation = () => {
   const [state, setState] = useNeonBuilderContext();
-
 
   return (
     <motion.div
@@ -29,7 +28,12 @@ const Navigation = () => {
       </button>
       <Item title="Neon Text" text={state.data.text} number="1" target="text" />
 
-      <Item title="Neon Font" text={state.data.font} number="2" target="font" />
+      <Item
+        title="Neon Font"
+        text={state.data.font.text}
+        number="2"
+        target="font"
+      />
 
       <Item
         title="Neon Color"
@@ -37,24 +41,20 @@ const Navigation = () => {
         number="3"
         target="color"
       />
+
       <Item
         title="Neon Icon"
         text={state.data.icon.name}
         number="4"
         target="icon"
       />
-
-      <Item
-        title="Neon Size"
-        text={`${state.data.height || 0} x ${state.data.width || 0} (inches)`}
-        number="5"
-        target="size"
-      />
-
+      
+      <Item title="Neon Size" text={state.data.size.name} number="5" target="size" />
+      
       <Item
         title="Neon backing color"
         text={
-          state.data.backing.color
+          state.data.backing.backingColor
         }
         number="6"
         target="backing-color"
@@ -62,7 +62,7 @@ const Navigation = () => {
       <Item
         title="Neon backing type"
         text={
-          state.data.backing.type
+          state.data.backing.backingType
         }
         number="7"
         target="backing-type"
@@ -79,10 +79,6 @@ const Navigation = () => {
         number="9"
         target="note"
       />
-      <button className="flex justify-between items-center px-3 py-5 border-b capitalize font-semibold text-lg transition hover:bg-gray-200">
-        <span>finish and create neon</span>
-        <FaAngleDoubleRight />
-      </button>
       <CustomLink
         target="_blank"
         href="/contact"

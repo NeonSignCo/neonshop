@@ -21,7 +21,7 @@ import Axios from "../../utils/Axios";
 import { Loader } from "../LoadingBtn";
 
 const Nav = () => {
-  const [globalState, setGlobalState] = useGlobalContext();
+  const [globalState] = useGlobalContext();
   const searchRef = useRef();
   const dropDownRef = useRef();
   const optionRef = useRef();
@@ -52,22 +52,7 @@ const Nav = () => {
           <div ref={optionRef}>
             <AccountBtn containerRef={optionRef} />
           </div>
-          <button
-            className="relative"
-            onClick={() =>
-              setGlobalState((state) => ({
-                ...state,
-               cartData: {...state.cartData, show: true}
-              }))
-            }
-          >
-            <FaShoppingBag />
-            <span className="absolute left-0 top-[13px] h-4 w-4 rounded-full bg-gray-800 flex items-center justify-center text-sm">
-              {globalState.cartData.cart?.items?.length > 9
-                ? "9+"
-                : globalState.cartData.cart?.items?.length || 0}
-            </span>
-          </button>
+          <CartBtn/>
           <div ref={searchRef}>
             <SearchBar containerRef={searchRef} />
           </div>
@@ -231,3 +216,27 @@ const AccountBtn = ({ containerRef }) => {
     </div>
   );
 };
+
+
+const CartBtn = () => {
+  const [globalState, setGlobalState] = useGlobalContext();
+  const numOfItems = globalState.cartData.cart?.items?.length + globalState.cartData.cart?.customItems?.length;
+  return (
+    <button
+      className="relative"
+      onClick={() =>
+        setGlobalState((state) => ({
+          ...state,
+          cartData: { ...state.cartData, show: true },
+        }))
+      }
+    >
+      <FaShoppingBag />
+      <span className="absolute left-0 top-[13px] h-4 w-4 rounded-full bg-gray-800 flex items-center justify-center text-sm">
+        {numOfItems > 9
+          ? "9+"
+          : numOfItems || 0}
+      </span>
+    </button>
+  );
+}

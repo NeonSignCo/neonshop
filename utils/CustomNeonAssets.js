@@ -1,25 +1,24 @@
 export const fonts = [
   {text: 'Alta Light', family: "AltaLight"},
-  {text: 'Lovelo', family: "LoveloLineLight"},
-  { text: "Allura ", family: "AlluraRegular" },
+  {text: 'Lovelo Line Light', family: "LoveloLineLight"},
+  { text: "Allura Regular ", family: "AlluraRegular" },
   { text: "Amster1", family: "Amster1" },
   { text: "Amster2", family: "Amster2" },
   { text: "Amster3", family: "Amster3" },
   { text: "Amster4", family: "Amster4" },
   { text: "Andasia ", family: "Andasia" },
-  { text: "Architect", family: "ArchitectsDaughter" },
+  { text: "Architects Daughter", family: "ArchitectsDaughter" },
   { text: "Bakerie", family: "Bakerie" },
-  { text: "Billing", family: "BillingMiracles" },
+  { text: "Billing Miracles", family: "BillingMiracles" },
   { text: "Brilliant", family: "Brilliant" },
   { text: "Buffalo", family: "Buffalo" },
   { text: "ColorTime", family: "ColorTime" },
   { text: "Flation2", family: "Flation2" },
-  { text: "NeonFuture", family: "NeonFuture" },
   { text: "Neoneon", family: "Neoneon" },
-  { text: "Nickainley Normal", family: "NickainleyNormal" },
+  { text: "Nickainle Normal", family: "NickainleyNormal" },
   { text: "Outline", family: "Outline" },
-  { text: "PoiretOne ", family: "PoiretOneRegular" },
-  { text: "TimeBurner", family: "TimeBurnerNormal" },
+  { text: "PoiretOne Regular", family: "PoiretOneRegular" },
+  { text: "TimeBurner Normal", family: "TimeBurnerNormal" },
   { text: "Waltograph", family: "Waltograph" },
 ];
 
@@ -142,3 +141,59 @@ export const sizes = [
     },
   },
 ];
+
+
+export const NeonPreview = ({ text, color,  icon, font, className, background}) => {
+  
+  return (
+    <div
+      className={` transition-all relative flex items-center justify-center ${className}`}
+      style={{
+        textShadow: `0 0 10px rgba(${color.r},${color.g},${
+          color.b
+        },1),0 0 20px rgba(${color.r + 10},${color.g + 10},${
+          color.b + 10
+        },0.5),0 0 40px rgba(${color.r + 10},${color.g + 10},${
+          color.b + 10
+        },0.33)`,
+        color: `rgb(${color.r}, ${color.g}, ${color.b})`,
+        fontFamily: font.family,
+        transformStyle: "preserve-3d", 
+        background
+      }}
+    >
+      {icon.name && (
+        <img
+          src={`/img/neon-logos/${icon.link}`}
+          alt={icon.name}
+          className="h-24 md:h-44 "
+        />
+      )}
+      <span className="whitespace-nowrap">{text}</span>
+    </div>
+  );
+}
+
+export const calcWidth = ({
+   text,
+   sizeName,
+   icon,
+ }) => {
+  const size = sizes.find(i => i.name === sizeName);
+   if (!size) throw new Error('Only medium and large size is accepted');
+
+   const textLength = text.length * size.letter.width;
+   const iconLength = icon ? size.icon.width : 0;
+   return textLength + iconLength;
+ };
+export const calcPrice = ({
+   text,
+   sizeName,
+   icon,
+}) => {
+     const size = sizes.find((i) => i.name === sizeName);
+     if (!size) throw new Error("Only medium and large size is accepted");
+   const textPrice = text.length * size.letter.price;
+   const iconPrice = icon ? size.icon.price : 0;
+   return textPrice + iconPrice;
+ };

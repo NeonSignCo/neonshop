@@ -22,8 +22,8 @@ const NeonBuilderContext = ({ children }) => {
       width: '', 
       size: sizes[0],
       backing: {
-        color: CLEARACRYLIC, 
-        type: SQUARE
+        backingColor: CLEARACRYLIC, 
+        backingType: SQUARE
       },
       price: 0,
       mountType: "WALL",  

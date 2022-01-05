@@ -62,7 +62,10 @@ export const getServerSideProps = async ({req}) => {
         notFound: true
       }
     }
-     const cart = await getUpdatedCart(user._id)
+     const cart = await getUpdatedCart({
+       userId: user?._id,
+       tempUserId: req.cookies.tempUserId,
+     });
     const products = await Product.find()
       .limit(30)
       .lean();

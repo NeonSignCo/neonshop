@@ -9,6 +9,7 @@ import {
   useGlobalContext,
 } from "../context/GlobalContext";
 import connectDb from "../server/utils/connectDb";
+import getUpdatedCart from "../server/utils/getUpdatedCart";
 import Axios from "../utils/Axios";
 import getLoggedInUser from "../utils/getLoggedInUser";
 
@@ -136,7 +137,11 @@ export const getServerSideProps = async ({ req }) => {
      await connectDb();
 
      const user = await getLoggedInUser(req);
-
+    const cart = await getUpdatedCart({
+      userId: user?._id,
+      tempUserId: req.cookies.tempUserId,
+    });
+    
     if (user) {
       return {
         redirect: {
@@ -148,7 +153,8 @@ export const getServerSideProps = async ({ req }) => {
 
     return {
       props: {
-        serverRendered: true
+        serverRendered: true, 
+        cart: JSON.parse(JSON.stringify(cart))
       },
     };
   } catch (error) {

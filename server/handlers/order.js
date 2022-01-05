@@ -9,7 +9,7 @@ import Category from "../models/category";
 import Cart from "../models/cart";
 import sendMail from '../utils/sendMail';
 import Stripe from 'stripe'; 
-import { buffer } from "micro";
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2020-08-27' });
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
@@ -28,7 +28,8 @@ export const createOrder = catchASync(async (req, res) => {
 
   // validate data
     const data = {
-      items: cart.items,
+      items: cart.items, 
+      customItems: cart.customItems,
       shippingAddress: { ...shippingAddress, userId },
       userId,
       contactEmail,
@@ -249,113 +250,7 @@ export const deleteOrdersById = catchASync(async (req, res) => {
 });
 
 
-// @route       POST /api/orders/stripe/payment-intent
-// @purpose     Create stripe payment intent
-// @access      User
-export const createPaymentIntent = catchASync(async (req, res) => {
-  const { cartId, shippingAddress, contactEmail } = req.body;
-  const userId = req.user._id;
-  if (!cartId) throw new AppError(400, "cartId is required");
-    if (!shippingAddress)
-    throw new AppError(400, "shippingAddress is required"); 
-  if (!contactEmail) throw new AppError(400, "contactEmail is required");
- 
-  // check cart
-  const cart = await Cart.findById(cartId);
-  if (!cart)
-    throw new AppError(404, "cart not found. Please add to cart again");
-
-  // validate data
-  const data = {
-    items: cart.items,
-    shippingAddress: { ...shippingAddress, userId },
-    userId, 
-    contactEmail,
-    status: "PENDING_PAYMENT",
-    subTotal: cart.subTotal,
-    total: cart.total,
-    expireAt: new Date(Date.now() + 1000 * 60 * 60 * 2), //expire after 2 hours
-  };
-  await Order.validate(data);
-
-
-
-  // create order
-  const order = await Order.create(data);
-
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: data.total * 100,
-      currency: "usd",
-      payment_method_types: ["card", "afterpay_clearpay"],
-      metadata: {
-        orderId: String(order._id),
-        userId: String(userId),
-      },
-    }); 
-
-  return res.json({ 
-    status: "success",
-    message: "payment intent created",
-    clientSecret: paymentIntent.client_secret, 
-  });
-});
 
 
 
 
-// @route       POST /api/orders/stripe/webhook-payment-intent
-// @purpose     Listen for payment intent succeed
-// @access      Public
-export const webhookPaymentIntent = catchASync(async (req, res) => {
-  const buf = await buffer(req);
-  const sig = req.headers["stripe-signature"];
-
-  const event = stripe.webhooks.constructEvent(buf, sig, webhookSecret);
-
-  if (event.type !== "payment_intent.succeeded") return;
-
-  if (!event.data.object.metadata)
-    throw new AppError(400, "metadata is required");
-  const { orderId, userId } = event.data.object.metadata;
-
-  if (!orderId) throw new AppError(400, "orderId is required");
-  if (!userId) throw new AppError(400, "userId is required");
-
-  const user = await User.findById(userId).select('firstName lastName'); 
-
-  if (!user) throw new AppError(400, 'user not found');
-
-  const order = await Order.findOneAndUpdate(
-    { _id: orderId, userId, status: "PENDING_PAYMENT" },
-    { $set: { status: "ORDERED", expireAt: null } },
-    { new: true, runValidators: true }
-  ).populate([
-    { path: "userId", model: User },
-    {
-      path: "items.product",
-      model: Product,
-      populate: { path: "category", model: Category },
-    },
-  ]);
-
-  if (!order) throw new AppError(404, "order not found");
-
-  // delete user cart
-  await Cart.deleteMany({ userId });
-
-  // send confirmation email
-  try {
-    const text = `Congrats ${user.firstName} ${user.lastName}, \n Your order has been successfully received by us. \n Your order id is: ${order._id} \n Check your order status from your account: \n ${req.headers.origin}/account`;
-    await sendMail({
-      from: "neonshopco@gmail.com",
-      to: order.contactEmail,
-      subject: "Your order has been received!",
-      text,
-    });
-  } catch (error) {}
-
-  return res.json({
-    status: "success",
-    message: "successfully received order",
-  });
-});

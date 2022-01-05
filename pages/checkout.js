@@ -10,6 +10,7 @@ import connectDb from "../server/utils/connectDb";
 import getUpdatedCart from "../server/utils/getUpdatedCart";
 import CheckoutContext, { INFO_SECTION, PAYMENT_SECTION, useCheckoutContext } from "../context/CheckoutContext";
 import InfoSection from "../components/sections/checkout/InfoSection";
+import { colors, NeonPreview } from "../utils/CustomNeonAssets";
 
 
 const Checkout = () => {
@@ -30,7 +31,8 @@ const Container = () => {
 
   return (
     <div className="">
-      {globalState.cartData.cart?.items?.length > 0 ? (
+      {globalState.cartData.cart?.items?.length > 0 ||
+      globalState.cartData.cart?.customItems?.length > 0 > 0 ? (
         <div className="flex flex-col lg:flex-row">
           <div className="flex-1">
             <div
@@ -130,8 +132,11 @@ const CartPreview = () => {
   return (
     <div>
       <div className="grid gap-2">
-        {globalState.cartData.cart?.items?.map((item, i) => (
-          <CartItem key={i} item={item} />
+        {globalState.cartData.cart?.customItems?.map((item) => (
+          <CartCustomItem item={item} key={item._id} />
+        ))}
+        {globalState.cartData.cart?.items?.map((item) => (
+          <CartItem key={item._id} item={item} />
         ))}
       </div>
       <div className="h-[2px] bg-black/10 my-5"></div>
@@ -169,8 +174,7 @@ const CartPreview = () => {
         <p className="capitalize">total</p>
         <div className="flex items-center gap-1">
           <div className="text-3xl">
-            $
-            {globalState.cartData.cart?.total || 0}
+            ${globalState.cartData.cart?.total || 0}
           </div>
         </div>
       </div>
@@ -213,6 +217,30 @@ const CartItem = ({ item }) => {
       </div>
       <div className="flex h-full items-center justify-center">
         <span className="text-">${item.count* salePrice}</span>
+      </div>
+    </div>
+  );
+};
+const CartCustomItem = ({ item }) => {
+  return (
+    <div className="flex items-center justify-between py-2">
+      <div className="flex items-center gap-3">
+        <div className="relative">
+          <NeonPreview
+            text={item.text}
+            color={colors.find((color) => color.hex === item.color.hex)}
+            icon={item.icon}
+            font={item.font}
+            className="h-16 w-16 rounded bg-black text-3xl overflow-hidden"
+          />
+          <span className="absolute -top-1 -right-2 bg-gray-500 h-5 w-5 rounded-full text-white flex justify-center items-center">
+            {item.count}
+          </span>
+        </div>
+        <p className="capitalize">Custom neon</p>
+      </div>
+      <div className="flex h-full items-center justify-center">
+        <span className="text-">${item.count * item.price}</span>
       </div>
     </div>
   );
@@ -261,7 +289,10 @@ export const getServerSideProps = async ({ req }) => {
         },
       };
     }
-    const cart = await getUpdatedCart(user._id);
+    const cart = await getUpdatedCart({
+      userId: user._id,
+      tempUserId: req.cookies.tempUserId,
+    });
     
     return {
       props: {

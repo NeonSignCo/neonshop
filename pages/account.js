@@ -1,6 +1,7 @@
 import Head from "next/head";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import AccountSection from "../components/sections/account/AccountSection";
+import { useGlobalContext } from "../context/GlobalContext";
 import Category from "../server/models/category";
 import Order from "../server/models/order";
 import Product from "../server/models/product";
@@ -19,11 +20,16 @@ export const ACCOUNT_DETAILS = "ACCOUNT_DETAILS";
 export const CHANGE_PASSWORD = "CHANGE_PASSWORD";
 export const ADDRESS = "ADDRESS";
 
-const Account = ({ orders }) => {
+const Account = ({ orders, cart }) => {
+  const [, setGlobalState] = useGlobalContext();
   const [state, setState] = useState({
     activeSection: MY_ORDERS,
     orders,
   });
+  
+  useEffect(() => {
+    setGlobalState(state => ({...state, cartData: {...state.cartData, cart, loading: false}}))
+  }, [cart])
 
   return (
     <Context.Provider value={[state, setState]}>
@@ -49,9 +55,9 @@ export const getServerSideProps = async ({ req }) => {
            permanent: false,
          },
        };
-     }
-    const cart = await getUpdatedCart(user._id)
+    }
 
+    const cart = await getUpdatedCart({userId: user?._id, tempUserId: req.cookies.tempUserId})
     const orders = await Order.find({ userId:user._id, status: {$ne: 'PENDING_PAYMENT'} }).sort({createdAt: -1}).populate({ path: 'items.product', model: Product, populate: {path: 'category', model: Category} }).lean();
     return {
       props: {
