@@ -28,6 +28,8 @@ TokenSchema.statics.genToken = () =>
       reject(error);
     }
   });
+  
+TokenSchema.index({ expires: 1 }, { expireAfterSeconds: 0 });
 
 const Token = mongoose.models.Token || mongoose.model("Token", TokenSchema);
 
