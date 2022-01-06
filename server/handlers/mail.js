@@ -7,8 +7,6 @@ import sendMail from "../utils/sendMail";
 // @purpose     Send mail
 // @access      Admin
 export const sendEmail = catchASync(async (req, res) => {
-  const user = req.user;
-  if (!user) throw new AppError(401, "not authorized");
 
   const { from, to, subject, text, html } = req.body;
 
