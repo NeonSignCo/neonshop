@@ -106,14 +106,16 @@ export default function Home({products}) {
         <h3 className="text-3xl uppercase font-semibold uppercase text-center mb-10">
           our best-selling products
         </h3>
-        <ProductsSlider
-          products={products.map((product) => ({
-            name: product.name,
-            img: product.image.url,
-            price: product.sizes[0].price,
-            link: `/shop/${product.category.slug}/${product.slug}`
-          }))}
-        />
+        {products?.length > 0 && (
+          <ProductsSlider
+            products={products?.map((product) => ({
+              name: product.name,
+              img: product.image.url,
+              price: product.sizes[0].price,
+              link: `/shop/${product.category.slug}/${product.slug}`,
+            }))}
+          />
+        )}
       </section>
       <section
         className="px-5 lg:px-20 py-20 bg-black"
@@ -326,7 +328,7 @@ export const getStaticProps = async () => {
   } catch (error) {
     return {
       props: {
-        error: { code: 500, message: "this is the error" },
+        error: { code: 500, message: "server error" },
       },
       revalidate: 10,
     };

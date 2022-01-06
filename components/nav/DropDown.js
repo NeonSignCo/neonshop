@@ -63,7 +63,7 @@ const DropDown = ({ title, containerRef }) => {
               <div key={i} className="">
                 <h3 className="font-semibold mb-3 uppercase">{item.title}</h3>
                 <div className="grid gap-1">
-                  {item.links.map((link, i) => (
+                  {item.links?.map((link, i) => (
                     <CustomLink
                       key={i}
                       text={link.text}

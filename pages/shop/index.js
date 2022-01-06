@@ -225,9 +225,10 @@ export const getStaticProps = async () => {
       revalidate: 10,
     };
   } catch (error) {
+    console.log(error)
      return {
        props: {
-         error: { code: 500, message: "this is the error" },
+         error: { code: 500, message: "server error" },
        },
        revalidate: 10,
      };
