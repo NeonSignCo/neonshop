@@ -1,8 +1,14 @@
 import { motion } from "framer-motion";
+import { useGlobalContext } from "../../context/GlobalContext";
 import CustomLink from "../CustomLink"
 import MobileDropDown from "./MobileDropDown"
 
-const MobileMenu = ({closeMenu}) => {
+const MobileMenu = () => {
+  const [, setState] = useGlobalContext();
+  
+  const closeMenu = () =>
+    setState((state) => ({ ...state, showMobileMenu: false }));
+
     return (
       <motion.div
         initial={{ x: "100%" }}
@@ -14,12 +20,10 @@ const MobileMenu = ({closeMenu}) => {
           <CustomLink
             href="/custom-neon-sign"
             text="design your neon"
-            onClick={closeMenu}
+            onClick={closeMenu
+            }
           />
-          <MobileDropDown
-            closeMenu={closeMenu}
-            title="shop neons"
-          />
+          <MobileDropDown closeMenu={closeMenu} title="shop neons" />
           <CustomLink href="/about" text="about" onClick={closeMenu} />
           <CustomLink href="/contact" text="contact" onClick={closeMenu} />
         </div>

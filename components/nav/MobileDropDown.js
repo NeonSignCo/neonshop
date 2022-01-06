@@ -26,7 +26,7 @@ const MobileDropDown = ({ title, closeMenu }) => {
   ];
     const [expand, setExpand] = useState(false);
      return (
-       <div className="">
+       <div className="text-white">
          <button
            className="w-full flex justify-between text-lg uppercase"
            onClick={() => setExpand((bool) => !bool)}

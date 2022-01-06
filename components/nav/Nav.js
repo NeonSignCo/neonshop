@@ -21,14 +21,11 @@ import Axios from "../../utils/Axios";
 import { Loader } from "../LoadingBtn";
 
 const Nav = () => {
-  const [globalState] = useGlobalContext();
+  const [globalState, setGlobalState] = useGlobalContext();
   const searchRef = useRef();
   const dropDownRef = useRef();
   const optionRef = useRef();
-  const [state, setState] = useState({
-    showMobileMenu: false,
-  });
-  
+
   return (
     <div className="bg-black text-white sticky  top-0 w-full shadow z-20 ">
       <AnimatePresence>{globalState.showBanner && <Banner />}</AnimatePresence>
@@ -59,7 +56,7 @@ const Nav = () => {
           <button
             className="grid lg:hidden gap-1"
             onClick={() =>
-              setState((state) => ({
+              setGlobalState((state) => ({
                 ...state,
                 showMobileMenu: !state.showMobileMenu,
               }))
@@ -67,30 +64,27 @@ const Nav = () => {
           >
             <div
               className={`bg-white h-[2px] w-5 transition ${
-                state.showMobileMenu
+                globalState.showMobileMenu
                   ? "translate-y-[5.5px] rotate-45"
                   : "rotate-0"
               }`}
             ></div>
             <div
               className={`bg-white h-[2px] w-5 transition ${
-                state.showMobileMenu ? "hidden" : "block"
+                globalState.showMobileMenu ? "hidden" : "block"
               }`}
             ></div>
             <div
               className={`bg-white h-[2px] w-5 transition ${
-                state.showMobileMenu ? "rotate-[-45deg]" : "rotate-0"
+                globalState.showMobileMenu ? "rotate-[-45deg]" : "rotate-0"
               }`}
             ></div>
           </button>
         </div>
       </div>
       <AnimatePresence>
-        {state.showMobileMenu && (
+        {globalState.showMobileMenu && (
           <MobileMenu
-            closeMenu={() =>
-              setState((state) => ({ ...state, showMobileMenu: false }))
-            }
           />
         )}
       </AnimatePresence>

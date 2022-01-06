@@ -15,6 +15,7 @@ const GlobalContext = ({ children, props }) => {
 
   const [state, setState] = useState({
     serverRendered,
+    showMobileMenu: false,
     showBanner: true,
     modal: { show: false, type: "", data: {} },
     auth: { loading: !serverRendered, user: props.user  },

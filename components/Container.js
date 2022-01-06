@@ -32,25 +32,41 @@ const Container = ({ children }) => {
               ? "w-screen h-screen fixed"
               : state.showCart
               ? "w-screen h-screen fixed"
+              : state.showMobileMenu
+              ? "w-screen h-screen fixed"
               : "min-h-screen"
           }`}
         >
-          {route !== "/checkout" && route !== '/admin' && <Nav />}
+          {route !== "/checkout" && route !== "/admin" && <Nav />}
           <div>
-            <div className="max-w-screen-2xl mx-auto">{state.error ? <div className="py-40 text-red-500 text-4xl text-center">{state.error.message}</div> : children}</div>
+            <div className="max-w-screen-2xl mx-auto">
+              {state.error ? (
+                <div className="py-40 text-red-500 text-4xl text-center">
+                  {state.error.message}
+                </div>
+              ) : (
+                children
+              )}
+            </div>
           </div>
-          {route !== "/custom-neon-sign" && route !== '/checkout' &&  route !== '/admin' && <Footer />}
-        </div> 
-        { <AnimatePresence>
-          {state.alert.show && <Alert/> }
-        </AnimatePresence> } 
-        
+          {route !== "/custom-neon-sign" &&
+            route !== "/checkout" &&
+            route !== "/admin" && <Footer />}
+        </div>
+        {<AnimatePresence>{state.alert.show && <Alert />}</AnimatePresence>}
+
         <AnimatePresence>
           {state.modal?.show && <ModalContainer />}
         </AnimatePresence>
-        <AnimatePresence>{state.cartData.show && <CartPreview />}</AnimatePresence>
         <AnimatePresence>
-          {state.modal.show ? <Backdrop /> : state.cartData.show && <Backdrop />}
+          {state.cartData.show && <CartPreview />}
+        </AnimatePresence>
+        <AnimatePresence>
+          {state.modal.show ? (
+            <Backdrop />
+          ) : (
+            state.cartData.show && <Backdrop />
+          )}
         </AnimatePresence>
       </>
     );
