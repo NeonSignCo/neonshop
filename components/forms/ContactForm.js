@@ -59,7 +59,7 @@ const ContactForm = ({ productInfo }) => {
 
     const mailData = {
       from: `"From Customer" <${process.env.NEXT_PUBLIC_MAIL_ADDRESS}>`,
-      to: data.email,
+      to: process.env.NEXT_PUBLIC_MAIL_ADDRESS,
       subject: data.enquiryType,
       text,
       html,
