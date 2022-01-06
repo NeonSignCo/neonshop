@@ -13,6 +13,9 @@ const sendMail = ({ from, to, subject, text, html }) => new Promise(async (resol
       },
     });
 
+    // verify transporter configuration
+    await transporter.verify();
+
     // send mail with defined transport object
     let info = await transporter.sendMail({
       from,
