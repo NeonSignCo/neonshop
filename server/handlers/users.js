@@ -594,7 +594,14 @@ export const forgotPassword = catchASync(async (req, res) => {
 
     const newToken = await Token.findOneAndUpdate(
       { userId: existingUser._id },
-      { $set: { userId: existingUser._id, token, expires: Date.now() + 1000 * 60 * 60 * 24 } }, // 1 day limit
+      {
+        $set: {
+          userId: existingUser._id,
+          token,
+          expires: Date.now() + 1000 * 60 * 60 * 24,
+          expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24),
+        },
+      }, // 1 day limit
       { new: true, upsert: true }
     );
    

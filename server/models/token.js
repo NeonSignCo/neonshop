@@ -16,7 +16,8 @@ const TokenSchema = new Schema({
   expires: {
     type: Number, 
     required: true
-  }
+  }, 
+  expiresAt: Date
 }, { timestamps: true });
 
 TokenSchema.statics.genToken = () =>
@@ -29,7 +30,7 @@ TokenSchema.statics.genToken = () =>
     }
   });
   
-TokenSchema.index({ expires: 1 }, { expireAfterSeconds: 0 });
+TokenSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 const Token = mongoose.models.Token || mongoose.model("Token", TokenSchema);
 
