@@ -59,7 +59,7 @@ const ContactForm = ({ productInfo }) => {
 
     const mailData = {
       from: `"NeonShop" <${process.env.NEXT_PUBLIC_MAIL_ADDRESS}>`,
-      to: NEXT_PUBLIC_MAIL_ADDRESS,
+      to: process.env.NEXT_PUBLIC_MAIL_ADDRESS,
       subject: data.enquiryType,
       text,
       html,
