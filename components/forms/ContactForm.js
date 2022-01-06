@@ -46,7 +46,7 @@ const ContactForm = ({ productInfo }) => {
 
     // generate email text and html
     for (let key in data) {
-      if (key === "productInfo" && productInfo?.name) {
+      if (key === "productInfo" && productInfo?.name?.length > 0) {
         text += `Product Name: ${data[key].name} \nProduct Image: ${data[key].image} \nProduct link: ${data[key].link}`;
         html += `<p style="color:black"><span style="font-weight: bold">Product Name:</span> ${data[key].name}</p>
                  <p style="color:black"><span style="font-weight: bold">Product Image:</span> <img src=${data[key].image} style="width: 300px; object-fit: cover;"/></p>
@@ -59,7 +59,7 @@ const ContactForm = ({ productInfo }) => {
 
     const mailData = {
       from: data.email,
-      to: data.email,
+      to: process.env.MAIL_ADDRESS,
       subject: data.enquiryType,
       text, 
       html

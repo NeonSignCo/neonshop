@@ -96,6 +96,7 @@ export default function Home({products}) {
             Customize your very own neon sign
           </p>
           <CustomLink
+            href="/custom-neon-sign"
             text="customize"
             className="h-12 w-52 flex items-center justify-center bg-white uppercase text-black font-semibold mt-10"
           />
