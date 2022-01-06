@@ -113,7 +113,7 @@ export default function Home({products}) {
               img: product.image.url,
               price: product.sizes[0].price,
               link: `/shop/${product.category.slug}/${product.slug}`,
-            }))}
+            }))} 
           />
         )}
       </section>
