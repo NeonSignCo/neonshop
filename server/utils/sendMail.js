@@ -26,17 +26,18 @@ const sendMail = ({ from, to, subject, text, html }) => new Promise(async (resol
     });
 
 
-    // send mail with defined transport object
-    let info = await transporter.sendMail({
-      from,
-      to,
-      subject,
-      text,
-      html,
+   const info =  await new Promise((resolve, reject) => {
+      // send mail
+      transporter.sendMail({from, to, subject, text, html}, (err, info) => {
+        if (err) {
+          console.error(err);
+          reject(err);
+        } else {
+          resolve(info);
+        }
+      });
     });
- 
-    
-    resolve(info);
+    resolve(info)
   } catch (error) {
     reject(error)
   }
