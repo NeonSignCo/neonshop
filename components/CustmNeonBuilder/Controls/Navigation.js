@@ -3,7 +3,6 @@ import { BsX } from "react-icons/bs";
 import { useNeonBuilderContext } from "../../../context/NeonBuilderContext";
 import { motion } from "framer-motion";
 import CustomLink from "../../CustomLink";
-import { colors } from "../../../utils/CustomNeonAssets";
 
 const Navigation = () => {
   const [state, setState] = useNeonBuilderContext();
@@ -13,7 +12,7 @@ const Navigation = () => {
       initial={{ y: "100%" }}
       animate={{ y: 0, transition: { duration: 0.2 } }}
       exit={{ y: "100%", transition: { duration: 0.2 } }}
-      className="absolute inset-0 bg-white flex flex-col overflow-auto"
+      className="absolute inset-0 bg-white flex flex-col overflow-auto z-10"
     >
       <button
         className="flex gap-2 items-center px-3 py-2 border-b capitalize text-lg transition hover:bg-gray-200"
