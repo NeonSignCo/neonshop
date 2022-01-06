@@ -40,11 +40,7 @@ html {
 }
 @font-face {
   font-family: 'BillingMiracles';
-  src: url('../fonts//Billion\ Miracles.otf')
-}
-@font-face {
-  font-family: 'Brilliant';
-  src: url('../fonts//Brilliant.ttf')
+  src: url('../fonts//Billion\ Miracles.otf') 
 }
 @font-face {
   font-family: 'Buffalo';
@@ -55,8 +51,12 @@ html {
   src: url('../fonts//Color\ Time\ -\ OTF.otf')
 }
 @font-face {
-  font-family: 'Flation2';
-  src: url('../fonts//Flatlion2.ttf')
+  font-family: 'Flation';
+  src: url('../fonts//Flatlion.otf')
+}
+@font-face {
+  font-family: 'TheBigMarker';
+  src: url('../fonts//The\ Bigmaker.otf')
 }
 @font-face {
   font-family: 'NeonFuture';

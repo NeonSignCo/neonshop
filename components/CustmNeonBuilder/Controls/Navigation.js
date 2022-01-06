@@ -37,7 +37,7 @@ const Navigation = () => {
 
       <Item
         title="Neon Color"
-        text={colors.find((item) => item.hex === state.data.color)?.name}
+        text={state.data.color.name}
         number="3"
         target="color"
       />
