@@ -601,7 +601,7 @@ export const forgotPassword = catchASync(async (req, res) => {
   const text = `Hello ${existingUser.firstName}, visit this link to reset your password: ${req.headers.origin}/forgot-password/${newToken.token}`;
 
     await sendMail({
-      from: `"NeonShop" <${process.env.MAIL_ADDRESS}>`,
+      from: `"NeonShop" <${process.env.NEXT_PUBLIC_MAIL_ADDRESS}>`,
       to: email,
       subject: "Password Reset",
       text,

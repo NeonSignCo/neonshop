@@ -83,7 +83,7 @@ export const captureOrder = catchASync(async (req, res) => {
   try {
     const text = `Congrats ${user.firstName} ${user.lastName}, \n Your order has been successfully received by us. \n Your order id is: ${order._id} \n Check your order status from your account: \n ${req.headers.origin}/account`;
     await sendMail({
-      from: `"NeonShop" <${process.env.MAIL_ADDRESS}>`,
+      from: `"NeonShop" <${process.env.NEXT_PUBLIC_MAIL_ADDRESS}>`,
       to: order.contactEmail,
       subject: "Your order has been received!",
       text,

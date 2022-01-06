@@ -58,11 +58,11 @@ const ContactForm = ({ productInfo }) => {
     }
 
     const mailData = {
-      from: data.email,
-      to: process.env.MAIL_ADDRESS,
+      from: `"NeonShop" <${process.env.NEXT_PUBLIC_MAIL_ADDRESS}>`,
+      to: NEXT_PUBLIC_MAIL_ADDRESS,
       subject: data.enquiryType,
-      text, 
-      html
+      text,
+      html,
     };
 
     const res = await Axios.post("mail", mailData);

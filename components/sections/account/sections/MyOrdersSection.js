@@ -1,30 +1,28 @@
 import { useState } from "react";
-import { useACcountContext } from "../../../../pages/account"
+import { useACcountContext } from "../../../../pages/account";
 import { colors } from "../../../../utils/CustomNeonAssets";
 import CustomLink from "../../../CustomLink";
-import NeonPreview from '../../../NeonPreview';
+import NeonPreview from "../../../NeonPreview";
 
 const MyOrdersSection = () => {
-
-    const [state] = useACcountContext();
-    return (
-      <div className="bg-white w-full">
-        <h2 className="text-xl font-semibold capitalize">orders</h2>
-        <div className="grid gap-10 mt-5">
-          {state.orders?.length > 0 ? (
-            state.orders.map((order) => (
-              <OrderItem key={order._id} order={order} />
-            ))
-          ) : (
-            <div className="">No orders yet!</div>
-          )}
-        </div>
+  const [state] = useACcountContext();
+  return (
+    <div className="bg-white w-full">
+      <h2 className="text-xl font-semibold capitalize">orders</h2>
+      <div className="grid gap-10 mt-5">
+        {state.orders?.length > 0 ? (
+          state.orders.map((order) => (
+            <OrderItem key={order._id} order={order} />
+          ))
+        ) : (
+          <div className="">No orders yet!</div>
+        )}
       </div>
-    );
-}
+    </div>
+  );
+};
 
-export default MyOrdersSection
-
+export default MyOrdersSection;
 
 const OrderItem = ({ order }) => {
   const [expand, setExpand] = useState(false);
@@ -88,7 +86,7 @@ const ExpandedContent = ({ order, setExpand }) => {
                 icon={item.icon}
                 font={item.font}
                 className="py-10 bg-black text-5xl overflow-hidden "
-                iconClass="h-20 lg:h-20 " 
+                iconClass="h-20 lg:h-20 "
               />
 
               <p>
@@ -186,7 +184,6 @@ const ExpandedContent = ({ order, setExpand }) => {
   );
 };
 
-
 const TableItem = ({ item }) => {
   return (
     <tr className="border border-gray-300">
@@ -209,7 +206,7 @@ const TableItem = ({ item }) => {
       <td>${item.selectedSize.price}</td>
     </tr>
   );
-}
+};
 
 const Item = ({ item }) => {
   return (
@@ -246,7 +243,7 @@ const Item = ({ item }) => {
       </p>
     </div>
   );
-}
+};
 
 const Preview = ({ order, setExpand }) => {
   return (
@@ -261,7 +258,7 @@ const Preview = ({ order, setExpand }) => {
               color={colors.find((color) => color.hex === item.color.hex)}
               icon={item.icon}
               className="h-20 w-20 overflow-hidden bg-black"
-              iconClass="h-10 lg:h-10 "
+              iconClass="h-10 lg:h-7"
             />
           ))}
           {order.items?.map((item, i) => (
