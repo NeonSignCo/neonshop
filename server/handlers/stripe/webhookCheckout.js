@@ -45,7 +45,9 @@ export const webhookCheckout = catchASync(async (req, res) => {
   if (!order) throw new AppError(404, "order not found");
 
   // delete user cart
-  await Cart.deleteMany({ $or: [{ userId: order.userId?._id }, { userId: req.cookies.tempUserId }] });
+  await Cart.findOneAndDelete({
+    $or: [{ userId: order.userId?._id }, { userId: req.cookies.tempUserId }],
+  });
 
   // send confirmation email
   try {
