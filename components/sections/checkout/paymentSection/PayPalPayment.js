@@ -11,17 +11,9 @@ const PayPalPayment = () => {
  
   const createOrder = async (data, actions) => {
     try {
-      let guestCheckout = false;
-      // create a guest account if not logged in or not registered
-      if (!globalState.auth.user) {
-        const res = await Axios.post("users/register-guest");
-        setGlobalState(state => ({...state, auth: {loading: false, user: res.data.user}}))
-        guestCheckout = true;
-      }
       // create order with status of PENDING_PAYMENT
       const res = await Axios.post("orders/paypal/create-order", {
         cartId,
-        guestCheckout,
         shippingAddress: state.shipping,
         contactEmail: state.email,
       });
@@ -93,7 +85,6 @@ const PayPalPayment = () => {
         options={{ clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID, commit: true }}
         createOrder={createOrder}
         onApprove={onApprove} 
-        onCancel={(data) => console.log(data)}
       />
     </div>
   );

@@ -8,13 +8,14 @@ import Product from "../models/product";
 import Category from "../models/category";
 import Cart from "../models/cart";
 import sendMail from '../utils/sendMail';
+import getLoggedInUser from '../../utils/getLoggedInUser';
 
 // @route       POST api/orders/payapl/create-order
 // @purpose     create an order with pending payment
-// @access      User
+// @access      Public
 export const createOrder = catchASync(async (req, res) => {
-    const { cartId, shippingAddress, contactEmail, guestCheckout } = req.body; 
-  const userId = req.user._id;
+    const { cartId, shippingAddress, contactEmail } = req.body;
+  const user = await getLoggedInUser(req)
     if (!shippingAddress) throw new AppError(400, "shippingAddress is required");
     if (!cartId) throw new AppError(400, "cartId is required")
     if(!contactEmail) throw new AppError(400, "contactEmail is required");
@@ -26,11 +27,11 @@ export const createOrder = catchASync(async (req, res) => {
     const data = {
       items: cart.items, 
       customItems: cart.customItems,
-      shippingAddress: { ...shippingAddress, userId },
-      userId,
+      shippingAddress: { ...shippingAddress, userId: user?._id },
+      userId: user?._id,
       contactEmail,
       status: "PENDING_PAYMENT",
-      guestCheckout,
+      guestCheckout: !user,
       subTotal: cart.subTotal,
       total: cart.total, 
       expireAt: new Date(Date.now() + 1000 * 60 * 60 * 5),//expire after 5 hours
@@ -50,16 +51,12 @@ export const createOrder = catchASync(async (req, res) => {
 
 // @route       POST api/orders/paypal/capture-order
 // @purpose     Capture order and set status from PENDING_PAYMENT to ORDERED
-// @access      User
+// @access      public
 export const captureOrder = catchASync(async (req, res) => {
   const { orderId } = req.body;
-  const user = req.user;
-  const userId = user._id;
   if (!orderId) throw new AppError(400, "orderId is required");
-  if (!userId) throw new AppError(400, "userId is required");
-
   const order = await Order.findOneAndUpdate(
-    { _id: orderId, userId, status: "PENDING_PAYMENT" },
+    { _id: orderId, status: "PENDING_PAYMENT" },
     { $set: { status: "ORDERED", expireAt: null } }, 
     {new: true, runValidators: true}
   ).populate([
@@ -74,21 +71,28 @@ export const captureOrder = catchASync(async (req, res) => {
   if (!order) throw new AppError(404, "order not found");
 
   // delete user cart
-  await Cart.deleteMany({$or: [{userId}, {userId: req.cookies.tempUserId}]});
+   await Cart.findOneAndDelete({
+     $or: [{ userId: order.userId?._id }, { userId: req.cookies.tempUserId }],
+   });
+
 
   // send confirmation email
   try {
      const text = `Congrats ${
-       order.guestCheckout ? order.shippingAddress.firstName :req.user.firstName
+       order.guestCheckout
+         ? order.shippingAddress.firstName
+         : order.userId?.firstName
      } ${
-       order.guestCheckout ? order.shippingAddress.lastName : req.user.lastName
+       order.guestCheckout
+         ? order.shippingAddress.lastName
+         : order.userId?.lastName
      }, \n Your order has been successfully received by us. \n Your order id is: ${
        order._id
      } \n Check your order status from your account: \n ${
        req.headers.origin
      }/account`;
     await sendMail({
-      from: `"NeonShop" <${process.env.NEXT_PUBLIC_MAIL_ADDRESS}>`,
+      from: `"NeonShop" <${process.env.MAIL_SMTP_USERNAME}>`,
       to: order.contactEmail,
       subject: "Your order has been received!",
       text,

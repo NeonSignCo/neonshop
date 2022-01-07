@@ -6,7 +6,6 @@ const AddressSchema = new mongoose.Schema(
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",
-      required: [true, "userId is required"],
     },
     country: {
       type: String,

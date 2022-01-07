@@ -5,18 +5,18 @@ import AppError from "../../utils/AppError";
 import catchASync from "../../utils/catchASync";
 import Stripe from "stripe";
 import countries from "../../../utils/countries";
+import getLoggedInUser from "../../../utils/getLoggedInUser";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   apiVersion: "2020-08-27",
 });
 
 // @route       POST /api/stripe/checkout-session
 // @purpose     Create stripe checkout session
-// @access      User
+// @access      Public
 export const createCheckoutSession = catchASync(async (req, res) => {
-  const { cartId, shippingAddress, contactEmail, paymentMethod, guestCheckout } = req.body;
+  const { cartId, shippingAddress, contactEmail, paymentMethod } = req.body;
 
-    const userId = req.user?._id;
-  if (!userId) throw new AppError(400, "not logged in");
+  const user = await getLoggedInUser(req);
   
     // check paymentMethod
     if (paymentMethod !== "card" && paymentMethod !== "afterpay_clearpay") throw new AppError('paymentMethod must be either card or afterpay_clearpay')
@@ -37,11 +37,11 @@ export const createCheckoutSession = catchASync(async (req, res) => {
   const data = {
     items: cart.items, 
     customItems: cart.customItems,
-    shippingAddress: { ...shippingAddress, userId },
-    userId, 
+    shippingAddress: { ...shippingAddress, userId: user?._id },
+    userId: user?._id, 
     contactEmail,
     status: "PENDING_PAYMENT",
-    guestCheckout,
+    guestCheckout: !user,
     subTotal: cart.subTotal,
     total: cart.total,
     expireAt: new Date(Date.now() + 1000 * 60 * 60 * 5), //expire after 5 hours
@@ -108,7 +108,6 @@ export const createCheckoutSession = catchASync(async (req, res) => {
        },
      },
      metadata: {
-       userId: String(userId),
        orderId: String(order._id),
      },
    });

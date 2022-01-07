@@ -10,7 +10,6 @@ const OrderSchema = new mongoose.Schema(
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",
-      required: [true, "userId is required"],
     },
     contactEmail: {
       type: String,

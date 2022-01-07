@@ -294,7 +294,7 @@ const CartCustomItem = ({ item }) => {
         icon={item.icon}
         font={item.font}
         className="h-20 w-20 bg-black text-xl overflow-hidden"
-        iconClass="h-10 lg:h-10 "
+        iconClass="h-10 lg:h-12 "
       />
       <div className="flex flex-col justify-between flex-1">
         <h3 className="font-semibold capitalize">custom neon</h3>

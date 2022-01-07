@@ -25,17 +25,12 @@ export const webhookCheckout = catchASync(async (req, res) => {
 
   if (!event.data.object.metadata)
     throw new AppError(400, "metadata is required");
-  const { orderId, userId } = event.data.object.metadata;
+  const { orderId } = event.data.object.metadata;
 
   if (!orderId) throw new AppError(400, "orderId is required");
-  if (!userId) throw new AppError(400, "userId is required");
-
-  const user = await User.findById(userId).select("firstName lastName");
-
-  if (!user) throw new AppError(400, "user not found");
 
   const order = await Order.findOneAndUpdate(
-    { _id: orderId, userId, status: "PENDING_PAYMENT" },
+    { _id: orderId, status: "PENDING_PAYMENT" },
     { $set: { status: "ORDERED", expireAt: null } },
     { new: true, runValidators: true }
   ).populate([
@@ -50,11 +45,23 @@ export const webhookCheckout = catchASync(async (req, res) => {
   if (!order) throw new AppError(404, "order not found");
 
   // delete user cart
-  await Cart.deleteMany({ $or: [{ userId }, { userId: req.cookies.tempUserId }] });
+  await Cart.deleteMany({ $or: [{ userId: order.userId?._id }, { userId: req.cookies.tempUserId }] });
 
   // send confirmation email
   try {
-    const text = `Congrats ${order.guestCheckout ? order.shippingAddress.firstName: user.firstName} ${order.guestCheckout ? order.shippingAddress.lastName: user.lastName}, \n Your order has been successfully received by us. \n Your order id is: ${order._id} \n Check your order status from your account: \n ${req.headers.origin}/account`;
+    const text = `Congrats ${
+      order.guestCheckout
+        ? order.shippingAddress.firstName
+        : order.userId?.firstName
+    } ${
+      order.guestCheckout
+        ? order.shippingAddress.lastName
+        : order.userId?.lastName
+    }, \n Your order has been successfully received by us. \n Your order id is: ${
+      order._id
+    } \n Check your order status from your account: \n ${
+      req.headers.origin
+    }/account`;
     await sendMail({
       from: `"NeonShop" <${process.env.MAIL_SMTP_USERNAME}>`,
       to: order.contactEmail,

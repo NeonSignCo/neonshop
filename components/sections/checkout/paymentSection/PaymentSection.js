@@ -15,19 +15,11 @@ const PaymentSection = () => {
 
   const completeOrder = () => catchAsync(async () => { 
     setLoading(true); 
-    let guestCheckout = false;
-    // create a guest account if not logged in or not registered
-    if (!globalState.auth.user) {
-      const res = await Axios.post("users/register-guest");
-      setGlobalState(state => ({ ...state, auth: { loading: false, user: res.data.user } }));
-      guestCheckout = true;
-    }
 
     const res = await Axios.post("stripe/checkout-session", {
       cartId: globalState.cartData.cart._id,
       shippingAddress: state.shipping,
       contactEmail: state.email,
-      guestCheckout,
       paymentMethod:
       state.paymentMethod === CREDIT_CARD ? "card" : state.paymentMethod === AFTERPAY && "afterpay_clearpay",
     });
