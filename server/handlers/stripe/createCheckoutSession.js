@@ -87,7 +87,7 @@ export const createCheckoutSession = catchASync(async (req, res) => {
      mode: "payment",
      payment_method_types: [paymentMethod],
      line_items,
-     client_reference_id: userId,
+     client_reference_id: order._id,
      customer_email: contactEmail,
      success_url: `${req.headers.origin}/thank-you?ordered=true`,
      cancel_url: `${req.headers.origin}/shop?text=order cancelled&type=ERROR&timeout=5000`,
