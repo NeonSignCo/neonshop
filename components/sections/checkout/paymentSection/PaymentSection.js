@@ -33,7 +33,7 @@ const PaymentSection = () => {
     });
 
     setLoading(false)
-    // window.location.href = res.data.sessionUrl;
+    window.location.href = res.data.sessionUrl;
   }, setGlobalState, () => setLoading(false));
 
   return (
