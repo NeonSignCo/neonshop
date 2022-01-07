@@ -1,7 +1,7 @@
 import { motion } from "framer-motion"
 import { useEffect } from "react";
 import { FaChevronRight, FaMinus, FaPlane, FaPlus } from "react-icons/fa"
-import { useGlobalContext } from "../context/GlobalContext";
+import { ERROR, useGlobalContext } from "../context/GlobalContext";
 import Axios from "../utils/Axios";
 import catchASync from "../utils/catchASync";
 import { colors } from "../utils/CustomNeonAssets";
@@ -135,37 +135,54 @@ export default CartPreview
 
 const CartItem = ({ item }) => {
     const [globalState, setGlobalState] = useGlobalContext();
-  const updateCart = ({plus = true}) =>
-    catchASync(
-      async () => {
-        setGlobalState((state) => ({
-          ...state,
-          cartData: { ...state.cartData, loading: true },
-        }));
+  const updateCart = async ({ plus = true }) => {
+    try {
+      setGlobalState((state) => ({
+        ...state,
+        cartData: { ...state.cartData, loading: true },
+      }));
 
-         const updatedItems = globalState.cartData.cart.items.map((i) => {
-           if (i._id === item._id) {
-             plus ? (i.count += 1) : (i.count -= 1);
-           }
-           return i;
-         });
+      const itemsCopy = JSON.parse(
+        JSON.stringify(globalState.cartData.cart.items)
+      );
+      const updatedItems = itemsCopy.map((i) => {
+        if (i._id === item._id) {
+          plus ? (i.count += 1) : (i.count -= 1);
+        }
+        return i;
+      });
 
-         const res = await Axios.patch("cart", {
-           ...globalState.cartData.cart,
-           items: updatedItems,
-         });
+      const res = await Axios.patch("cart", {
+        ...globalState.cartData.cart,
+        items: updatedItems,
+      });
 
-        setGlobalState((state) => ({
-          ...state,
-          cartData: {
-            ...state.cartData,
-            loading: false,
-            cart: res.data.cart,
-          },
-        }));
-      },
-      setGlobalState,
-    );
+      setGlobalState((state) => ({
+        ...state,
+        cartData: {
+          ...state.cartData,
+          loading: false,
+          cart: res.data.cart,
+        },
+      }));
+    } catch (error) {
+      setGlobalState((state) => ({
+        ...state,
+        alert: {
+          ...state.alert,
+          show: true,
+          text:
+            error.response?.data.message || error.message || "network error",
+          type: ERROR,
+          timeout: 5000,
+        },
+        cartData: {
+          ...state.cartData,
+          loading: false,
+        },
+      }));
+    }
+  } 
 
     return (
       <div className="flex items-center gap-2 bg-white p-2">
@@ -220,38 +237,54 @@ const CartItem = ({ item }) => {
 const CartCustomItem = ({ item }) => {
   const [globalState, setGlobalState] = useGlobalContext();
 
-  const updateCart = ({ plus = true }) =>
-    catchASync(
-      async () => {
-        setGlobalState((state) => ({
-          ...state,
-          cartData: { ...state.cartData, loading: true },
-        }));
-        
-        const updatedItems = globalState.cartData.cart.customItems.map((i) => {
-          if (i._id === item._id) {
-            plus ? i.count += 1 : i.count -= 1
-          }
-          return i;
+  const updateCart = async ({ plus = true }) => {
+    try {
+      setGlobalState((state) => ({
+        ...state,
+        cartData: { ...state.cartData, loading: true },
+      }));
+
+      const itemsCopy = JSON.parse(
+        JSON.stringify(globalState.cartData.cart.customItems)
+      );
+      const updatedItems = itemsCopy.map((i) => {
+        if (i._id === item._id) {
+          plus ? (i.count += 1) : (i.count -= 1);
         }
-        );
+        return i;
+      });
 
-        const res = await Axios.patch("cart", {
-          ...globalState.cartData.cart,
-          customItems: updatedItems
-        });
+      const res = await Axios.patch("cart", {
+        ...globalState.cartData.cart,
+        customItems: updatedItems,
+      });
 
-        setGlobalState((state) => ({
-          ...state,
-          cartData: {
-            ...state.cartData,
-            loading: false,
-            cart: res.data.cart,
-          },
-        }));
-      },
-      setGlobalState
-    );
+      setGlobalState((state) => ({
+        ...state,
+        cartData: {
+          ...state.cartData,
+          loading: false,
+          cart: res.data.cart,
+        },
+      }));
+    } catch (error) {
+       setGlobalState((state) => ({
+         ...state,
+         alert: {
+           ...state.alert,
+           show: true,
+           text:
+             error.response?.data.message || error.message || "network error",
+           type: ERROR,
+           timeout: 5000,
+         },
+         cartData: {
+           ...state.cartData,
+           loading: false,
+         },
+       }));
+    }
+  }
 
   return (
     <div className="flex items-center gap-2 bg-white p-2">
