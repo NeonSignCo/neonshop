@@ -18,7 +18,7 @@ const PaymentSection = () => {
     let guestCheckout = false;
     // create a guest account if not logged in or not registered
     if (!globalState.auth.user) {
-      await Axios.post("users/register-guest");
+      const res = await Axios.post("users/register-guest");
       setGlobalState(state => ({ ...state, auth: { loading: false, user: res.data.user } }));
       guestCheckout = true;
     }
@@ -33,7 +33,7 @@ const PaymentSection = () => {
     });
 
     setLoading(false)
-    window.location.href = res.data.sessionUrl;
+    // window.location.href = res.data.sessionUrl;
   }, setGlobalState, () => setLoading(false));
 
   return (
