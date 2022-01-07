@@ -296,10 +296,9 @@ const Controls = () => {
                 }))
               }
             ></textarea>
-            <div className="h-24 lg:hidden"></div>
           </div>
         </div>
-        <div className="flex fixed lg:static bottom-0 inset-x-0 items-center justify-center lg:justify-start  gap-2 py-2 lg:p-4 bg-gray-300 border-t border-gray-300">
+        <div className="flex  items-center justify-center lg:justify-start  gap-2 py-2 lg:p-4 bg-gray-300 border-t border-gray-300">
           <div className="lg:mt-auto  ">
             <button
               className="p-2 bg-gray-900 text-white grid gap-1"

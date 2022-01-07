@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import getInitialData from "../utils/getInitialData";
+import { useRouter } from 'next/router';
 
 const Context = createContext();
 export const useGlobalContext = () => useContext(Context);
@@ -10,13 +11,13 @@ export const ERROR = "ERROR";
 export const NOT_LOGGED_IN_EVALUATED = "NOT_LOGGED_IN_EVALUATED";
 export const NOT_FOUND_EVALUATED = 'NOT_FOUND_EVALUATED';
 const GlobalContext = ({ children, props }) => {
-  
+  const Router = useRouter();
   const serverRendered = props.serverRendered || false;
 
   const [state, setState] = useState({
     serverRendered,
     showMobileMenu: false,
-    showBanner: true,
+    showBanner: Router.route!== '/custom-neon-sign',
     modal: { show: false, type: "", data: {} },
     auth: { loading: !serverRendered, user: props.user  },
     categoryData: { loading: true, categories: [] },
