@@ -98,38 +98,54 @@ export default CartPage
 const CartItem = ({ item }) => {
   const [globalState, setGlobalState] = useGlobalContext();
      
-     const updateCart = ({ plus = true, remove = false }) =>
-       catchASync(
-         async () => {
-           setGlobalState((state) => ({
-             ...state,
-             cartData: { ...state.cartData, loading: true },
-           }));
+  const updateCart = async ({ plus = true, remove = false }) => {
+       try {
+          setGlobalState((state) => ({
+            ...state,
+            cartData: { ...state.cartData, loading: true },
+          }));
 
-          
-         const updatedItems = globalState.cartData.cart.items.map((i) => {
-           if (i._id === item._id) {
-            remove ? i.count = 0: plus ? (i.count += 1) : (i.count -= 1);
-           }
-           return i;
-         });
+         const itemsCopy = JSON.parse(
+           JSON.stringify(globalState.cartData.cart.items)
+         );
+          const updatedItems = itemsCopy.map((i) => {
+            if (i._id === item._id) {
+              remove ? (i.count = 0) : plus ? (i.count += 1) : (i.count -= 1);
+            }
+            return i;
+          });
 
-         const res = await Axios.patch("cart", {
-           ...globalState.cartData.cart,
-           items: updatedItems,
-         });
+          const res = await Axios.patch("cart", {
+            ...globalState.cartData.cart,
+            items: updatedItems,
+          });
 
-           setGlobalState((state) => ({
-             ...state,
-             cartData: {
-               ...state.cartData,
-               loading: false,
-               cart: res.data.cart,
-             },
-           }));
-         },
-         setGlobalState
-    );
+          setGlobalState((state) => ({
+            ...state,
+            cartData: {
+              ...state.cartData,
+              loading: false,
+              cart: res.data.cart,
+            },
+          }));
+       } catch (error) {
+         setGlobalState((state) => ({
+           ...state,
+           alert: {
+             ...state.alert,
+             show: true,
+             text:
+               error.response?.data.message || error.message || "network error",
+             type: ERROR,
+             timeout: 5000,
+           },
+           cartData: {
+             ...state.cartData,
+             loading: false,
+           },
+         }));
+       }
+     }
 
   const link = `shop/${item.product.category.slug}/${item.product.slug}`;
   return (
@@ -190,17 +206,19 @@ const CartItem = ({ item }) => {
 const CartCustomItem = ({ item }) => {
   const [globalState, setGlobalState] = useGlobalContext();
 
-  const updateCart = ({ plus = true, remove = false }) =>
-    catchASync(
-      async () => {
-        setGlobalState((state) => ({
-          ...state,
-          cartData: { ...state.cartData, loading: true },
-        }));
+   const updateCart = async ({ plus = true, remove = false }) => {
+     try {
+       setGlobalState((state) => ({
+         ...state,
+         cartData: { ...state.cartData, loading: true },
+       }));
 
-       const updatedItems = globalState.cartData.cart.customItems.map((i) => {
+       const itemsCopy = JSON.parse(
+         JSON.stringify(globalState.cartData.cart.customItems)
+       );
+       const updatedItems = itemsCopy.map((i) => {
          if (i._id === item._id) {
-          remove ? i.count = 0: plus ? (i.count += 1) : (i.count -= 1);
+           remove ? (i.count = 0) : plus ? (i.count += 1) : (i.count -= 1);
          }
          return i;
        });
@@ -210,17 +228,32 @@ const CartCustomItem = ({ item }) => {
          customItems: updatedItems,
        });
 
-        setGlobalState((state) => ({
-          ...state,
-          cartData: {
-            ...state.cartData,
-            loading: false,
-            cart: res.data.cart,
-          },
-        }));
-      },
-      setGlobalState,
-    );
+       setGlobalState((state) => ({
+         ...state,
+         cartData: {
+           ...state.cartData,
+           loading: false,
+           cart: res.data.cart,
+         },
+       }));
+     } catch (error) {
+       setGlobalState((state) => ({
+         ...state,
+         alert: {
+           ...state.alert,
+           show: true,
+           text:
+             error.response?.data.message || error.message || "network error",
+           type: ERROR,
+           timeout: 5000,
+         },
+         cartData: {
+           ...state.cartData,
+           loading: false,
+         },
+       }));
+     }
+   };
 
   
   return (

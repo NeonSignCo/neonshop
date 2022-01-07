@@ -166,7 +166,7 @@ export const getServerSideProps = async ({params}) => {
           return {
             props: {
               errorMessage:
-                "Token expired. Please request another on and try again.",
+                "Token expired. Please request another one and try again.",
             },
           };
         }

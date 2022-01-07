@@ -8,16 +8,12 @@ import Product from "../models/product";
 import Category from "../models/category";
 import Cart from "../models/cart";
 import sendMail from '../utils/sendMail';
-import Stripe from 'stripe'; 
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2020-08-27' });
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 // @route       POST api/orders/payapl/create-order
 // @purpose     create an order with pending payment
 // @access      User
 export const createOrder = catchASync(async (req, res) => {
-    const { cartId, shippingAddress, contactEmail } = req.body; 
+    const { cartId, shippingAddress, contactEmail, guestCheckout } = req.body; 
   const userId = req.user._id;
     if (!shippingAddress) throw new AppError(400, "shippingAddress is required");
     if (!cartId) throw new AppError(400, "cartId is required")
@@ -34,6 +30,7 @@ export const createOrder = catchASync(async (req, res) => {
       userId,
       contactEmail,
       status: "PENDING_PAYMENT",
+      guestCheckout,
       subTotal: cart.subTotal,
       total: cart.total, 
       expireAt: new Date(Date.now() + 1000 * 60 * 60 * 5),//expire after 5 hours
@@ -77,11 +74,19 @@ export const captureOrder = catchASync(async (req, res) => {
   if (!order) throw new AppError(404, "order not found");
 
   // delete user cart
-  await Cart.deleteMany({userId});
+  await Cart.deleteMany({$or: [{userId}, {userId: req.cookies.tempUserId}]});
 
   // send confirmation email
   try {
-    const text = `Congrats ${user.firstName} ${user.lastName}, \n Your order has been successfully received by us. \n Your order id is: ${order._id} \n Check your order status from your account: \n ${req.headers.origin}/account`;
+     const text = `Congrats ${
+       order.guestCheckout ? order.shippingAddress.firstName :req.user.firstName
+     } ${
+       order.guestCheckout ? order.shippingAddress.lastName : req.user.lastName
+     }, \n Your order has been successfully received by us. \n Your order id is: ${
+       order._id
+     } \n Check your order status from your account: \n ${
+       req.headers.origin
+     }/account`;
     await sendMail({
       from: `"NeonShop" <${process.env.NEXT_PUBLIC_MAIL_ADDRESS}>`,
       to: order.contactEmail,

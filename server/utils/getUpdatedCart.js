@@ -82,12 +82,38 @@ const getUpdatedCart = ({ userId, tempUserId }) => new Promise(async (resolve, r
 
     if (!cart && tempUserCart) {
       // delete if empty
-      if (tempUserCart.items.length <= 0 && tempUserCart.customItems.length <= 0) {
-        await tempUserCart.delete(); 
+      if (
+        tempUserCart.items.length <= 0 &&
+        tempUserCart.customItems.length <= 0
+      ) {
+        await tempUserCart.delete();
         return resolve({});
       }
+
       const { changed, filteredCart } = filterCart(tempUserCart);
-      
+
+      // if logged in, add new cart under user with filteredCart data and delete the temtpUserCart
+      if (userId) {
+        // create new cart with tempUserCart data
+        const newCart = await Cart.findOneAndUpdate(
+          { userId },
+          {
+            items: filteredCart.items,
+            customItems: filteredCart.customItems,
+            subTotal: filteredCart.subTotal,
+            total: filteredCart.total,
+            discount: filteredCart.discount,
+            userId,
+          },
+          { new: true, upsert: true, runValidators: true }
+        );
+
+        // delete tempUserCart
+        await tempUserCart.delete();
+
+        return resolve(newCart);
+      }
+
       // update if change needed
       if (changed) {
         const updatedCart = await Cart.findOneAndUpdate(
@@ -98,7 +124,7 @@ const getUpdatedCart = ({ userId, tempUserId }) => new Promise(async (resolve, r
           path: "items.product",
           model: Product,
           populate: { path: "category", model: Category },
-        });;
+        });
 
         return resolve(updatedCart);
       }

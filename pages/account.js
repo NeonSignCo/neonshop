@@ -47,7 +47,7 @@ export const getServerSideProps = async ({ req }) => {
   try {
     await connectDb();
     const user = await getLoggedInUser(req);
-
+   
      if (!user) {
        return {
          redirect: {
@@ -58,7 +58,7 @@ export const getServerSideProps = async ({ req }) => {
     }
 
     const cart = await getUpdatedCart({userId: user?._id, tempUserId: req.cookies.tempUserId})
-    const orders = await Order.find({ userId:user._id, status: {$ne: 'PENDING_PAYMENT'} }).sort({createdAt: -1}).populate({ path: 'items.product', model: Product, populate: {path: 'category', model: Category} }).lean();
+    const orders = await Order.find({ userId:user?._id, status: {$ne: 'PENDING_PAYMENT'} }).sort({createdAt: -1}).populate({ path: 'items.product', model: Product, populate: {path: 'category', model: Category} }).lean();
     return {
       props: {
         orders: JSON.parse(JSON.stringify(orders)),

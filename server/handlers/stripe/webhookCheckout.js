@@ -50,11 +50,11 @@ export const webhookCheckout = catchASync(async (req, res) => {
   if (!order) throw new AppError(404, "order not found");
 
   // delete user cart
-  await Cart.deleteMany({ userId });
+  await Cart.deleteMany({ $or: [{ userId }, { userId: req.cookies.tempUserId }] });
 
   // send confirmation email
   try {
-    const text = `Congrats ${user.firstName} ${user.lastName}, \n Your order has been successfully received by us. \n Your order id is: ${order._id} \n Check your order status from your account: \n ${req.headers.origin}/account`;
+    const text = `Congrats ${order.guestCheckout ? order.shippingAddress.firstName: user.firstName} ${order.guestCheckout ? order.shippingAddress.lastName: user.lastName}, \n Your order has been successfully received by us. \n Your order id is: ${order._id} \n Check your order status from your account: \n ${req.headers.origin}/account`;
     await sendMail({
       from: `"NeonShop" <${process.env.NEXT_PUBLIC_MAIL_ADDRESS}>`,
       to: order.contactEmail,

@@ -281,19 +281,11 @@ export const getServerSideProps = async ({ req }) => {
 
     const user = await getLoggedInUser(req);
 
-    if (!user) {
-      return {
-        redirect: {
-          destination: "/login",
-          permanent: false,
-        },
-      };
-    }
     const cart = await getUpdatedCart({
-      userId: user._id,
+      userId: user?._id,
       tempUserId: req.cookies.tempUserId,
     });
-    
+
     return {
       props: {
         user: JSON.parse(JSON.stringify(user)),
@@ -302,6 +294,7 @@ export const getServerSideProps = async ({ req }) => {
       },
     };
   } catch (error) {
+    console.log(error)
     return {
       props: {
         error: { code: 500, message: "server error" },

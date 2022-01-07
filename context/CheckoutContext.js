@@ -7,7 +7,6 @@ export const PAYMENT_SECTION = 'PAYMENT_SECTION';
 export const SHIPPING= "SHIPPING";
 export const BILLING = "BILLING";
 export const CREDIT_CARD = 'CREDIT_CARD'; 
-export const PAYPAL = 'PAYPAL'; 
 export const AFTERPAY = 'AFTERPAY'; 
 
 

@@ -13,7 +13,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 // @purpose     Create stripe checkout session
 // @access      User
 export const createCheckoutSession = catchASync(async (req, res) => {
-  const { cartId, shippingAddress, contactEmail, paymentMethod } = req.body;
+  const { cartId, shippingAddress, contactEmail, paymentMethod, guestCheckout } = req.body;
 
     const userId = req.user?._id;
   if (!userId) throw new AppError(400, "not logged in");
@@ -41,6 +41,7 @@ export const createCheckoutSession = catchASync(async (req, res) => {
     userId, 
     contactEmail,
     status: "PENDING_PAYMENT",
+    guestCheckout,
     subTotal: cart.subTotal,
     total: cart.total,
     expireAt: new Date(Date.now() + 1000 * 60 * 60 * 5), //expire after 5 hours

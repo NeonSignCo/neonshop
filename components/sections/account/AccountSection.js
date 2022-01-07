@@ -97,7 +97,7 @@ export default AccountSection;
 
 const DesktopSideBar = ({ logout }) => {
   const [state, setState] = useACcountContext();
-
+  const [globalState] = useGlobalContext();
   const Item = ({ text, children, section }) => {
     return (
       <button
@@ -126,7 +126,7 @@ const DesktopSideBar = ({ logout }) => {
   return (
     <div className="hidden md:flex flex-col text-gray-700 bg-white">
       <p className="text-xl font-semibold whitespace-nowrap mb-5">
-        Welcome, John Doe
+        Welcome, {globalState.auth.user?.firstName}
       </p>
       <Item text="orders" section={MY_ORDERS}>
         <FaBoxOpen className="text-2xl" />

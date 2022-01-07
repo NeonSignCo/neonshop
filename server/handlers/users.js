@@ -12,7 +12,7 @@ import cloudinary from 'cloudinary';
 import BillingAddress from '../models/billingAddress';
 import ShippingAddress from '../models/shippingAddress';
 import sendMail from '../utils/sendMail';
-
+import crypto from 'crypto';
 
 // @route       POST /api/users/register 
 // @purpose     Register User
@@ -64,10 +64,51 @@ export const register = catchASync(async (req, res, next) => {
   
   // remove password before sending user 
   user.password = undefined;
+  user.passwordChangedAt = undefined;
   return res.status(201).json({
     status: "success",
     message: "Successfully registered new user",
     user,
+  });
+})
+
+// @route       POST /api/users/register-guest
+// @purpose     Register guest with random userData
+// @access      public
+export const registerGuest = catchASync(async (req, res, next) => {
+
+  const firstName = 'guest'; 
+  const lastName = String(Math.round(Math.random() * 10000000000));
+  const userName = firstName + ' ' + lastName;
+  const email = firstName + lastName + '@gmail.com';
+  const password = crypto.randomBytes(6).toString('hex'); 
+  const encryptedPassword = await User.encryptPassword(password);
+
+  const userData = {
+    firstName,
+    lastName,
+    userName,
+    email,
+    password: encryptedPassword,
+    role: "USER",
+  };
+
+  const user = await User.create(userData);
+ 
+  // sign jwt token 
+  const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {expiresIn: '14d'});
+
+  // auth token
+  setToken(res, 'token', token);
+  
+  // remove password before sending user 
+  user.password = undefined;
+  user.passwordChangedAt = undefined;
+  return res.status(201).json({
+    status: "success",
+    message: "Successfully registered guest user",
+    user,
+    password
   });
 } )
 

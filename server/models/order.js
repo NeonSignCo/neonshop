@@ -20,6 +20,14 @@ const OrderSchema = new mongoose.Schema(
       },
       required: [true, "contactEmail is required"],
     },
+    guestCheckout: {
+      type: Boolean,
+      enum: {
+        values: [true, false], 
+        message: "guestCheckout must be either true or false"
+      },
+      default: false,
+    },
     status: {
       type: String,
       enum: {
