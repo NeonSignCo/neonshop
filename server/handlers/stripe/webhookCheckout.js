@@ -7,6 +7,7 @@ import Stripe from "stripe";
 import User from "../../models/user";
 import Product from "../../models/product";
 import Category from "../../models/category";
+import sendMail from "../../utils/sendMail";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   apiVersion: "2020-08-27",
 });
@@ -25,7 +26,7 @@ export const webhookCheckout = catchASync(async (req, res) => {
 
   if (!event.data.object.metadata)
     throw new AppError(400, "metadata is required");
-  const { orderId } = event.data.object.metadata;
+  const { orderId, tempUserId } = event.data.object.metadata;
 
   if (!orderId) throw new AppError(400, "orderId is required");
 
@@ -46,7 +47,7 @@ export const webhookCheckout = catchASync(async (req, res) => {
 
   // delete user cart
   await Cart.findOneAndDelete({
-    $or: [{ userId: order.userId?._id }, { userId: req.cookies.tempUserId }],
+    $or: [{ userId: order.userId?._id }, { userId: tempUserId }],
   });
 
   // send confirmation email

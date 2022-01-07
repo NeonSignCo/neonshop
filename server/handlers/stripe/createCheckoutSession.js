@@ -108,7 +108,8 @@ export const createCheckoutSession = catchASync(async (req, res) => {
        },
      },
      metadata: {
-       orderId: String(order._id),
+       orderId: String(order._id), 
+       tempUserId: String(req.cookies.tempUserId)
      },
    });
 

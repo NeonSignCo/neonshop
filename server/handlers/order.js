@@ -98,17 +98,12 @@ export const captureOrder = catchASync(async (req, res) => {
       text,
     });
   } catch (error) {
-    return res.status(400).json({
-      status: "fail",
-      message: error.message,
-    });
   }
 
   return res.json({
     status: "success",
     message: "order status updated to ORDERED",
     order,
-    tempUserId: req.cookies.tempUserId,
   });
 });
 
