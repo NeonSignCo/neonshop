@@ -14,6 +14,11 @@ const Footer = () => {
           <div className="grid gap-2 place-content-start">
             <h4 className="font-semibold uppercase mb-3">customer care</h4>
             <CustomLink
+              href="/track-order"
+              className="transition hover:underline"
+              text="Track order"
+            />
+            <CustomLink
               href="/shipping-returns"
               className="transition hover:underline"
               text="Shipping & returns"
@@ -22,7 +27,11 @@ const Footer = () => {
               className="transition hover:underline uppercase"
               text="faq"
             />
-            <CustomLink href="/contact" className="transition hover:underline" text="contact" />
+            <CustomLink
+              href="/contact"
+              className="transition hover:underline"
+              text="contact"
+            />
             <CustomLink
               href="/privacy-policy"
               className="transition hover:underline"
@@ -96,9 +105,9 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between items-center gap-5">
           <p>© {new Date().getFullYear()} NeonShop</p>
           <div className="flex gap-2 text-6xl">
-                    <FaCcVisa />
-                    <FaCcMastercard />
-                    <FaCcPaypal/>
+            <FaCcVisa />
+            <FaCcMastercard />
+            <FaCcPaypal />
           </div>
         </div>
       </div>

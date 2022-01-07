@@ -20,12 +20,16 @@ const MobileMenu = () => {
           <CustomLink
             href="/custom-neon-sign"
             text="design your neon"
-            onClick={closeMenu
-            }
+            onClick={closeMenu}
           />
           <MobileDropDown closeMenu={closeMenu} title="shop neons" />
           <CustomLink href="/about" text="about" onClick={closeMenu} />
           <CustomLink href="/contact" text="contact" onClick={closeMenu} />
+          <CustomLink
+            href="/track-order"
+            text="track order"
+            onClick={closeMenu}
+          />
         </div>
       </motion.div>
     );

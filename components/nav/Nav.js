@@ -44,6 +44,7 @@ const Nav = () => {
           </div>
           <CustomLink href="/about" text="about" />
           <CustomLink href="/contact" text="contact" />
+          <CustomLink href="/track-order" text="track order" />
         </div>
         <div className="flex items-center gap-4 capitalize text-xl md:text-2xl">
           <div ref={optionRef}>

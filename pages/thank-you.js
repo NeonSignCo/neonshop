@@ -4,16 +4,10 @@ const ThankYou = () => {
       <div className="px-5 lg:px-20 py-20">
         <div className="flex flex-col gap-10 items-center text-center">
           <h1 className="text-3xl text-green-500">
-            thank you for you order!
+            Thank you for you order!
           </h1>
           <p>
-            Check your email for confirmation message or check you order status
-            in your{" "}
-            <CustomLink
-              href="/account"
-              className="font-semibold"
-              text="account page"
-            />
+            Check your email for confirmation message
           </p>
           <div className="flex gap-2 items-center gap-3">
             <CustomLink

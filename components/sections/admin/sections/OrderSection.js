@@ -275,10 +275,13 @@ const ExpandedOrder = ({ order, setState }) => {
         <p>
           <span className="font-semibold"> Order Id</span>: {order._id}
         </p>
+        <p>
+          <span className="font-semibold"> Checkout Type</span>: {order.guestCheckout ? 'Guest Checkout': 'Customer Checkout'}
+        </p>
       </div>
       <div className="grid gap-1">
         <h2 className="text-lg font-semibold">Customer</h2>
-        {order.userId.image && (
+        {order.userId?.image && (
           <div className="flex items-center gap-2">
             <span className="font-semibold"> Photo:</span>{" "}
             <img
@@ -288,10 +291,12 @@ const ExpandedOrder = ({ order, setState }) => {
             />
           </div>
         )}
-        <p>
-          <span className="font-semibold">Name</span>: {order.userId.firstName}{" "}
-          {order.userId.lastName}
-        </p>
+        {order.userId && (
+          <p>
+            <span className="font-semibold">Name</span>:{" "}
+            {order.userId?.firstName} {order.userId?.lastName}
+          </p>
+        )}
         <a href={`mailto:${order.contactEmail}`}>
           <span className="font-semibold"> Email:</span>: {order.contactEmail}
         </a>
@@ -546,16 +551,16 @@ const TableItem = ({order, state, setState}) => {
         </td>
         <td>{order._id}</td>
         <td>
-          <div className="flex items-center gap-2">
-            {order.userId.image && (
+          {order.userId ? <div className="flex items-center gap-2">
+            {order.userId?.image && (
               <img
                 src={order.userId?.image?.url}
                 alt={order.userId?.firstName}
                 className="h-7 w-7 rounded-full object-cover"
               />
             )}
-            <p className="text-purple-700">{order.userId.firstName}</p>
-          </div>
+            <p className="text-purple-700">{order.userId?.firstName}</p>
+          </div>: 'Guest'}
         </td>
         <td>
           {order.shippingAddress.addressLine1},{" "}
@@ -599,16 +604,18 @@ const Item = ({order, state, setState}) => {
       </div>
       <div className="flex items-center gap-3">
         <p className="text-lg">Customer:</p>
-        <div className="flex items-center gap-1 text-purple-500">
-          {order.userId.image && (
-            <img
-              src={order.userId?.image?.url}
-              alt={order.userId?.firstName}
-              className=" rounded-full h-10 w-10 object-cover"
-            />
-          )}
-          <p>{order.userId.firstName}</p>
-        </div>
+        {order.userId ? (
+          <div className="flex items-center gap-1 text-purple-500">
+            {order.userId?.image && (
+              <img
+                src={order.userId?.image?.url}
+                alt={order.userId?.firstName}
+                className=" rounded-full h-10 w-10 object-cover"
+              />
+            )}
+            <p>{order.userId?.firstName}</p>
+          </div>
+        ): 'Guest'}
       </div>
       <p>
         <span className="text-lg">Date:</span>{" "}

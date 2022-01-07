@@ -10,6 +10,25 @@ import Cart from "../models/cart";
 import sendMail from '../utils/sendMail';
 import getLoggedInUser from '../../utils/getLoggedInUser';
 
+
+
+// @route       post api/orders/track-order
+// @purpose     track order by order id and email
+// @access      Public 
+export const trackOrder = catchASync(async (req, res) => {
+  const { orderId, email } = req.body; 
+  if (!orderId) throw new AppError(400, 'orderId is required');
+  if (!mongoose.Types.ObjectId.isValid(orderId)) throw new AppError(400, 'not a valid orderId');
+  if (!email) throw new AppError(400, 'email is required');
+
+  const order = await Order.findOne({ _id: orderId, contactEmail: email });
+
+  if (!order) throw new AppError(404, 'order not found');
+
+  return res.json({status: 'success', message: 'successfully retrieved order data', order})
+})
+
+
 // @route       POST api/orders/payapl/create-order
 // @purpose     create an order with pending payment
 // @access      Public
@@ -88,9 +107,9 @@ export const captureOrder = catchASync(async (req, res) => {
          : order.userId?.lastName
      }, \n Your order has been successfully received by us. \n Your order id is: ${
        order._id
-     } \n Check your order status from your account: \n ${
+     } \n Check your order status from here: \n ${
        req.headers.origin
-     }/account`;
+     }/track-order?orderId=${order._id}&email=${order.contactEmail}`;
     await sendMail({
       from: `"NeonShop" <${process.env.MAIL_SMTP_USERNAME}>`,
       to: order.contactEmail,
@@ -183,10 +202,6 @@ export const getAllOrders = catchASync(async (req, res) => {
       orders,
     });
 })
-
-
-
-
 
 
 

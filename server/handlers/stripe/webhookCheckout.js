@@ -21,14 +21,14 @@ export const webhookCheckout = catchASync(async (req, res) => {
 
   const event = stripe.webhooks.constructEvent(buf, sig, webhookSecret);
 
- 
   if (event.type !== "checkout.session.completed") return;
 
   if (!event.data.object.metadata)
     throw new AppError(400, "metadata is required");
-  const { orderId, tempUserId } = event.data.object.metadata;
+  const { orderId, tempUserId, websiteUrl } = event.data.object.metadata;
 
   if (!orderId) throw new AppError(400, "orderId is required");
+  if (!websiteUrl) throw new AppError(400, "websiteUrl is required");
 
   const order = await Order.findOneAndUpdate(
     { _id: orderId, status: "PENDING_PAYMENT" },
@@ -62,9 +62,8 @@ export const webhookCheckout = catchASync(async (req, res) => {
         : order.userId?.lastName
     }, \n Your order has been successfully received by us. \n Your order id is: ${
       order._id
-    } \n Check your order status from your account: \n ${
-      req.headers.origin
-    }/account`;
+      } \n Check your order status from here: \n ${websiteUrl}/track-order?orderId=${order._id}&email=${order.contactEmail}`;
+    
     await sendMail({
       from: `"NeonShop" <${process.env.MAIL_SMTP_USERNAME}>`,
       to: order.contactEmail,
