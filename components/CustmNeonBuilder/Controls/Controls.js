@@ -62,7 +62,7 @@ const Controls = () => {
         <AnimatePresence>
           {state.controls.addToCart && <Preview />}
         </AnimatePresence>
-        <div className="flex flex-col gap-8 p-5  overflow-auto">
+        <div className="flex flex-col gap-8 p-5 pb-20 lg:pb-5 overflow-auto">
           <div className="grid gap-2" id="text">
             <label htmlFor="text-box" className="text-center text-lg p-2">
               {state.error.text ? (
