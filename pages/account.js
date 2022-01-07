@@ -48,7 +48,7 @@ export const getServerSideProps = async ({ req }) => {
     await connectDb();
     const user = await getLoggedInUser(req);
    
-     if (!user) {
+     if (!user) { 
        return {
          redirect: {
            destination: "/login",
