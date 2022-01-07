@@ -100,7 +100,7 @@ const PaymentSection = () => {
             <div className="flex gap-4 items-center">
               <input
                 type="radio"
-                checked={state.paymentMethod === CREDIT_CARD}
+                defaultChecked={state.paymentMethod === CREDIT_CARD}
                 className="scale-[1.5]"
               />
               <div className="font-semibold capitalize"> credit card</div>
@@ -138,7 +138,7 @@ const PaymentSection = () => {
               <input
                 type="radio"
                 id="credit-card"
-                checked={state.paymentMethod === AFTERPAY}
+                defaultChecked={state.paymentMethod === AFTERPAY}
                 className="scale-[1.5]"
               />{" "}
               <label htmlFor="credit-cart" className="font-semibold capitalize">

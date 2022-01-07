@@ -92,7 +92,8 @@ const PayPalPayment = () => {
         }}
         options={{ clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID, commit: true }}
         createOrder={createOrder}
-        onApprove={onApprove}
+        onApprove={onApprove} 
+        onCancel={(data) => console.log(data)}
       />
     </div>
   );

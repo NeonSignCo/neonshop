@@ -1,4 +1,4 @@
-import { serialize } from "cookie";
+import { serialize } from "cookie"; 
 
 const setToken = (res, name, token) =>  res.setHeader(
   "Set-Cookie",
