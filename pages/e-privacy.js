@@ -1,3 +1,4 @@
+import Head from "next/head";
 import CustomLink from "../components/CustomLink";
 import FollowSection from "../components/sections/FollowSection";
 import NewsLetterSection from "../components/sections/NewsLetterSection";
