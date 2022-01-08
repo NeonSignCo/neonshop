@@ -51,15 +51,16 @@ const Visuals = () => {
           <div
             className="flex w-full justify-center items-center overflow-hidden"
             ref={divRef}
-          > 
+          >
             <div className="relative">
               <div className="" ref={textRef}>
                 <NeonPreview
-                  text={state.data.text} 
+                  text={state.data.text}
                   color={state.data.color}
                   icon={state.data.icon}
                   font={state.data.font}
                   className="text-5xl md:text-7xl lg:text-9xl"
+                  iconClass="h-24 lg:h-56"
                 />
               </div>
               <AnimatePresence>

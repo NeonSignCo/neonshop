@@ -3,7 +3,7 @@ import CustomLink from "../components/CustomLink";
 import { Loader } from "../components/LoadingBtn";
 import FollowSection from "../components/sections/FollowSection"
 import NewsLetterSection from "../components/sections/NewsLetterSection"
-import { useGlobalContext } from "../context/GlobalContext";
+import { ERROR, useGlobalContext } from "../context/GlobalContext";
 import connectDb from "../server/utils/connectDb";
 import getUpdatedCart from "../server/utils/getUpdatedCart";
 import Axios from "../utils/Axios";

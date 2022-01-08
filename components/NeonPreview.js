@@ -7,7 +7,7 @@ export const NeonPreview = ({ text, color, icon, font, className, iconClass }) =
         <img
           src={`/img/neon-logos/${icon.link}`}
           alt={icon.name}
-          className={`h-24 lg:h-56 ${iconClass}`}
+          className={`${iconClass}`}
         />
       )}
       <span
