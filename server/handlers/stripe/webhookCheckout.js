@@ -52,7 +52,7 @@ export const webhookCheckout = catchASync(async (req, res) => {
 
   // send confirmation email
   try {
-    const text = `Congrats ${
+    const name = `${
       order.guestCheckout
         ? order.shippingAddress.firstName
         : order.userId?.firstName
@@ -60,15 +60,27 @@ export const webhookCheckout = catchASync(async (req, res) => {
       order.guestCheckout
         ? order.shippingAddress.lastName
         : order.userId?.lastName
-    }, \n Your order has been successfully received by us. \n Your order id is: ${
+    }`;
+    const text = `Congrats ${name}, \n Your order has been successfully received by us. \n Your order id is: ${
       order._id
-      } \n Check your order status from here: \n ${websiteUrl}/track-order?orderId=${order._id}&email=${order.contactEmail}`;
-    
+    } \n Check your order status from here: \n ${websiteUrl}/track-order?orderId=${
+      order._id
+    }&email=${order.contactEmail}`;
+
+    // send mail to customer
     await sendMail({
       from: `"NeonShop" <${process.env.MAIL_SMTP_USERNAME}>`,
       to: order.contactEmail,
       subject: "Your order has been received!",
       text,
+    });
+
+    // send mail to business owner
+    await sendMail({
+      from: `"NeonShop" <${process.env.MAIL_SMTP_USERNAME}>`,
+      to: process.env.MAIL_SMTP_USERNAME,
+      subject: `You received an order!`,
+      text: `You have just received an order from ${name}!. Please check your admin panel for full details.`,
     });
   } catch (error) {}
 
