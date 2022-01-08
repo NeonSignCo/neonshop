@@ -51,7 +51,7 @@ const OrderSection = () => {
                ...state.alert,
                show: true,
                type: SUCCESS,
-               text: "products deleted",
+               text: "orders deleted",
                timeout: 3000,
              },
            }));
