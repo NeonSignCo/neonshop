@@ -68,6 +68,7 @@ const About = () => {
             className="mt-20 mx-auto"
           />
           <CustomLink
+            href="/shop"
             text="shop now"
             className="max-w-max px-10 sm:px-20 py-4 flex items-center justify-center bg-black text-white uppercase mx-auto my-10  text-2xl"
           />
