@@ -75,7 +75,7 @@ export const webhookCheckout = catchASync(async (req, res) => {
       text,
     });
 
-    // send mail to business owner
+    // send mail to business owner 
     await sendMail({
       from: `"NeonShop" <${process.env.MAIL_SMTP_USERNAME}>`,
       to: process.env.MAIL_SMTP_USERNAME,
