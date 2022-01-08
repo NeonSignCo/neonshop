@@ -31,16 +31,13 @@ const Nav = () => {
       <AnimatePresence>{globalState.showBanner && <Banner />}</AnimatePresence>
       <div className="py-4 px-5 lg:px-20 flex flex-wrap justify-center gap-3 xs:justify-between items-center">
         <CustomLink
-          text="NeonShop"
+          text="NeonSignCo"
           className="font-semibold text-2xl lg:text-3xl"
         />
         <div className="hidden lg:flex items-center gap-7 capitalize text-lg">
           <CustomLink href="/custom-neon-sign" text="design your neon" />
           <div ref={dropDownRef}>
-            <DropDown
-              containerRef={dropDownRef}
-              title="shop neons"
-            />
+            <DropDown containerRef={dropDownRef} title="shop neons" />
           </div>
           <CustomLink href="/about" text="about" />
           <CustomLink href="/contact" text="contact" />
@@ -50,7 +47,7 @@ const Nav = () => {
           <div ref={optionRef}>
             <AccountBtn containerRef={optionRef} />
           </div>
-          <CartBtn/>
+          <CartBtn />
           <div ref={searchRef}>
             <SearchBar containerRef={searchRef} />
           </div>
@@ -84,10 +81,7 @@ const Nav = () => {
         </div>
       </div>
       <AnimatePresence>
-        {globalState.showMobileMenu && (
-          <MobileMenu
-          />
-        )}
+        {globalState.showMobileMenu && <MobileMenu />}
       </AnimatePresence>
     </div>
   );

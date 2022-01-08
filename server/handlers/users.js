@@ -391,7 +391,7 @@ export const updateMe = catchASync(async (req, res) => {
     const img = await uploadImage({
       buffer: req.file.buffer,
       width: 200,
-      folder: "neonshop/img/users",
+      folder: "neonsignco/img/users",
     });
     image = {
       version: img.version,
@@ -649,7 +649,7 @@ export const forgotPassword = catchASync(async (req, res) => {
   const text = `Hello ${existingUser.firstName}, visit this link to reset your password: ${req.headers.origin}/forgot-password/${newToken.token}`;
 
     await sendMail({
-      from: `"NeonShop" <${process.env.MAIL_SMTP_USERNAME}>`,
+      from: `"NeonSignCo" <${process.env.MAIL_SMTP_USERNAME}>`,
       to: email,
       subject: "Password Reset",
       text,

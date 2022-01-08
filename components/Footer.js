@@ -8,7 +8,7 @@ const Footer = () => {
         <CustomLink
           className="transition hover:underline"
           className="text-4xl"
-          text="NeonShop"
+          text="NeonSignCo"
         />
         <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-20 sm:gap-10 capitalize text-sm">
           <div className="grid gap-2 place-content-start">
@@ -57,10 +57,12 @@ const Footer = () => {
           <div className="grid gap-2 place-content-start">
             <h4 className="font-semibold uppercase mb-3">company</h4>
             <CustomLink
+              href="/custom-neon-sign"
               className="transition hover:underline"
               text="custom neons"
             />
             <CustomLink
+              href="/about-us"
               className="transition hover:underline"
               text="about us"
             />
@@ -78,10 +80,10 @@ const Footer = () => {
                 <span>email:</span>
               </div>
               <a
-                href="mailto:contact@neonshop.com"
+                href={`mailto:${process.env.NEXT_PUBLIC_MAIL_ADDRESS}`}
                 className="transition hover:underline"
               >
-                contact@neonshop.com
+                {process.env.NEXT_PUBLIC_MAIL_ADDRESS}
               </a>
             </div>
             <div>
@@ -103,7 +105,7 @@ const Footer = () => {
         </div>
         <div className="h-[1px] bg-gray-900 my-4"></div>
         <div className="flex flex-col md:flex-row justify-between items-center gap-5">
-          <p>© {new Date().getFullYear()} NeonShop</p>
+          <p>© {new Date().getFullYear()} NeonSignCo</p>
           <div className="flex gap-2 text-6xl">
             <FaCcVisa />
             <FaCcMastercard />

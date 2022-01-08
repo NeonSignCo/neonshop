@@ -62,12 +62,15 @@ const AdminHeader = () => {
         >
           <BsList className="text-2xl text-gray-300 " />
         </button>
-        <CustomLink text="NeonShop" className="text-3xl hidden  sm:block" />
+        <CustomLink text="NeonSignCo" className="text-3xl hidden  sm:block" />
         <div className="flex items-center gap-3">
-          <button className="transition active:bg-gray-700 h-10 w-10 rounded-full flex items-center justify-center"
+          <button
+            className="transition active:bg-gray-700 h-10 w-10 rounded-full flex items-center justify-center"
             onClick={refreshData}
           >
-            <BsArrowClockwise className={`text-2xl ${loading ? 'animate-spin': ""}`} />
+            <BsArrowClockwise
+              className={`text-2xl ${loading ? "animate-spin" : ""}`}
+            />
           </button>
           <div className="relative">
             <button
@@ -85,13 +88,16 @@ const AdminHeader = () => {
               {expand && (
                 <motion.div
                   initial={{ scale: 0 }}
-                  animate={{ scale: 1, transition: {duration: .1} }}
-                  exit={{ scale: 0 }} 
+                  animate={{ scale: 1, transition: { duration: 0.1 } }}
+                  exit={{ scale: 0 }}
                   className=""
                 >
                   <div className="absolute right-0 bg-gray-700 shadow p-2 rounded">
-                    <button className="flex gap-2 items-center px-5 py-3 hover:bg-gray-600 whitespace-nowrap" onClick={logOut}>
-                      <FaPowerOff /> 
+                    <button
+                      className="flex gap-2 items-center px-5 py-3 hover:bg-gray-600 whitespace-nowrap"
+                      onClick={logOut}
+                    >
+                      <FaPowerOff />
                       <span>log out</span>
                     </button>
                   </div>

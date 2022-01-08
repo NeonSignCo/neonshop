@@ -34,7 +34,7 @@ const Account = ({ orders, cart }) => {
   return (
     <Context.Provider value={[state, setState]}>
       <Head>
-        <title>My Account | NeonShop</title>
+        <title>My Account | NeonSignCo</title>
       </Head>
       <AccountSection />
     </Context.Provider>

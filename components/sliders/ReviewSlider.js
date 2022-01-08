@@ -17,12 +17,12 @@ const reviews = [
             },
             {
               name: "leo",
-              img: "/img/client-images/client-3.jpg", text:"NeonShop were SO easy to deal with, very attentive to ourvision and created the most stunning and...",
+              img: "/img/client-images/client-3.jpg", text:"NeonSignCo were SO easy to deal with, very attentive to ourvision and created the most stunning and...",
               position: 'street skate corp',
               neon: { img: '/img/product-images/product-3.jpg', name: 'neon art name' }
             },
             {
-              name: "mary", img: "/img/client-images/client-4.jpg", text: "NeonShop have been so enjoyable to work with especially Tash. Their communication and attention to detail is amazing....", position: 'mariana cafe', neon: { img: '/img/product-images/product-4.jpg', name: 'neon art name' }
+              name: "mary", img: "/img/client-images/client-4.jpg", text: "NeonSignCo have been so enjoyable to work with especially Tash. Their communication and attention to detail is amazing....", position: 'mariana cafe', neon: { img: '/img/product-images/product-4.jpg', name: 'neon art name' }
             },
             {
               name: "stephan",

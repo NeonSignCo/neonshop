@@ -16,7 +16,7 @@ const ShippingReturns = () => {
           <h3 className="mt-5 uppercase font-semibold text-xl sm:text-2xl">
             how long will my order take?
           </h3>
-          <p>NeonShop Neon handcraft every item to order.</p>
+          <p>NeonSignCo Neon handcraft every item to order.</p>
           <p>
             Standard orders take 10-20 days, including delivery time from the
             date you approve your proof.
@@ -32,8 +32,8 @@ const ShippingReturns = () => {
             ust remember to enter your event date (minimum 4 weeks away from
             your order date) at check-out, email us at{" "}
             <CustomLink
-              text=" hello@neonshop.co"
-              href="mailto:hello@neonshop.co"
+              text={process.env.NEXT_PUBLIC_MAIL_ADDRESS}
+              href={`mailto:${process.env.NEXT_PUBLIC_MAIL_ADDRESS}`}
               className="font-semibold"
             />{" "}
             or let us know when you get sent your proof to apply this guarantee
@@ -45,7 +45,7 @@ const ShippingReturns = () => {
           <p>
             Need it sooner than 10-20 days? Our team will do our absolute best
             to accommodate rush orders where possible. Contact us at
-            hello@neonshop.co to see if we can help!
+            hello@NeonSignCo.co to see if we can help!
           </p>
           <h3 className="mt-5 uppercase font-semibold text-xl sm:text-2xl">
             HOW CAN I CANCEL AN ORDER THAT I’VE PLACED?
@@ -64,10 +64,10 @@ const ShippingReturns = () => {
             an order. If you have designed your own custom neon sign on our site
             and need to update a mis-spelt word, please get in touch with our
             team within 24 hours and they may be able to help. Email them at
-            hello@neonshop.co including your order number and amendment/s.
+            hello@NeonSignCo.co including your order number and amendment/s.
           </p>
           <p>
-            We understand that sometimes you may want to add more NeonShop
+            We understand that sometimes you may want to add more NeonSignCo
             goodies to your order, however once an order is submitted, we’re
             unable to add more items to that order – even if it’s still
             processing. If you’d like to purchase more items, we recommend
@@ -103,7 +103,7 @@ const ShippingReturns = () => {
           </ul>
           <p>
             If you continue to experience any issues, please don’t hesitate to
-            contact us at hello@neonshop.co and we will find an alternative
+            contact us at hello@NeonSignCo.co and we will find an alternative
             solution to help you place your order online.
           </p>
         </section>
@@ -132,15 +132,15 @@ const ShippingReturns = () => {
           <p>
             Once your order has been dispatched, you will receive a tracking
             number to follow from our door to yours. Please contact
-            hello@neonshop.co if you have any trouble with this tracking.
+            hello@NeonSignCo.co if you have any trouble with this tracking.
           </p>
           <h3 className="mt-5 uppercase font-semibold text-xl sm:text-2xl">
             I HAVEN’T RECEIVED MY ORDER, WHAT DO I DO?
           </h3>
           <p>
-            Your NeonShop order should arrive between 10-20 days (standard
+            Your NeonSignCo order should arrive between 10-20 days (standard
             orders). If you are still waiting for your order or believe some of
-            your order may be missing, please contact hello@neonshop.co with
+            your order may be missing, please contact hello@NeonSignCo.co with
             your query.
           </p>
           <h3 className="mt-5 uppercase font-semibold text-xl sm:text-2xl">
@@ -149,7 +149,7 @@ const ShippingReturns = () => {
           <p>
             If you purchased multiple items in your order, it may be delivered
             in separate deliveries over a couple of days depending on your
-            courier. Please contact hello@neonshop.co if you believe some of
+            courier. Please contact hello@NeonSignCo.co if you believe some of
             your order may be missing.
           </p>
           <h3 className="mt-5 uppercase font-semibold text-xl sm:text-2xl">
@@ -182,7 +182,7 @@ const ShippingReturns = () => {
             WHAT IS YOUR RETURNS POLICY?
           </h3>
           <p>
-            Every NeonShop Neon sign is made from scratch, especially for you.
+            Every NeonSignCo Neon sign is made from scratch, especially for you.
             Due to the highly custom nature of our product, we do not offer
             change of mind returns or exchanges.
           </p>
@@ -202,15 +202,15 @@ const ShippingReturns = () => {
             SOMETHING’S WRONG WITH MY NEON!
           </h3>
           <p>
-            At NeonShop, we strive to produce pieces of the highest quality. Our
+            At NeonSignCo, we strive to produce pieces of the highest quality. Our
             items are quality checked before they are carefully packaged and
             sent to you. In the unlikely event that your item arrives damaged,
             or is not working as intended, please refrain from using the
             product. We kindly ask you to send images, a video and brief
-            description of the fault to hello@neonshop.co within 24 hours of
+            description of the fault to hello@NeonSignCo.co within 24 hours of
             receiving the product. Please include your order number in the
             subject line. If you believe you have received the incorrect order,
-            please contact our team at hello@neonshop.co with an image of the
+            please contact our team at hello@NeonSignCo.co with an image of the
             received item, and a brief description of the discrepancy within 24
             hours of receiving the item. Please include your order number in the
             subject line.
@@ -219,17 +219,17 @@ const ShippingReturns = () => {
             DOES MY NEON COME WITH A WARRANTY?
           </h3>
           <p>
-            NeonShop’s items are of the highest quality. We offer an amazing
+            NeonSignCo’s items are of the highest quality. We offer an amazing
             24-month manufacturer’s warranty – DOUBLE the industry standard!
             Please note, our manufacturer’s warranty covers all electrical
             components, when used appropriately indoors.
           </p>
           <p>
-            Depending on the fault, NeonShop will either fix, replace or refund
-            the product. NeonShop reserve the right to select the most
+            Depending on the fault, NeonSignCo will either fix, replace or refund
+            the product. NeonSignCo reserve the right to select the most
             appropriate actions to fulfil the warranty.
           </p>
-          <p>Please contact hello@neonshop.co for all warranty queries.</p>
+          <p>Please contact hello@NeonSignCo.co for all warranty queries.</p>
         </section>
       </div>
       <NewsLetterSection />

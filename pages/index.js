@@ -156,7 +156,7 @@ export default function Home({products}) {
           </Item>
           <Item
             title="EASY INSTALLATION"
-            text="They go up like a picture frame and plug in like a lamp! Every NeonShop Neon comes with an installation kit and pre-drilled holes, ready to hang and enjoy right out of the box. Find out more about how to hang your Neon here."
+            text="They go up like a picture frame and plug in like a lamp! Every NeonSignCo Neon comes with an installation kit and pre-drilled holes, ready to hang and enjoy right out of the box. Find out more about how to hang your Neon here."
           >
             <FaCogs className="text-green-500" />
           </Item>
@@ -192,7 +192,7 @@ export default function Home({products}) {
               className="w-full object-cover"
             />
             <p className="text-xl px-5  font-bold uppercase">
-              Juddchella - An Event By NeonShop
+              Juddchella - An Event By NeonSignCo
             </p>
             <p className="px-5">
               Move over Coachella, The Judd’s are in town. The only person we
@@ -239,10 +239,10 @@ export default function Home({products}) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-20 ">
           <div className="flex flex-col gap-4 justify-center">
             <p className="font-semibold">
-              Meet Ash & Tash (Co-Founders of NeonShop)
+              Meet Ash & Tash (Co-Founders of NeonSignCo)
             </p>
             <p>
-              NeonShop was co-founded in 2015 by two friends with one vision -
+              NeonSignCo was co-founded in 2015 by two friends with one vision -
               to light up people’s lives by creating lasting impressions.
             </p>
             <p>
@@ -254,7 +254,7 @@ export default function Home({products}) {
               Ash originally owned a drone business, while Tash had her roots
               grounded in photography. Thank the Neon stars, that in a
               bitter-sweet twist of fate, Ash’s drone business literally crashed
-              and burned. And soon after from the embers, the NeonShop
+              and burned. And soon after from the embers, the NeonSignCo
               partnership was founded. The rest, as they say, is history.
               <CustomLink className="font-semibold"> Read more.</CustomLink>
             </p>

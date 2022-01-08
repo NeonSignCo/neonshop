@@ -36,15 +36,15 @@ const Admin = ({orders, products, categories, numOfProducts}) => {
   });
 
     return (
-        <Context.Provider value={[state, setState]}>
-            <Head>
-              <title>Admin | NeonShop</title>  
-              <meta name="robots" content="noindex"></meta> 
-              <meta name="googlebot" content="noindex"></meta>
-            </Head>
-            <AdminSection state={state}/>
-        </Context.Provider>
-    ) 
+      <Context.Provider value={[state, setState]}>
+        <Head>
+          <title>Admin | NeonSignCo</title>
+          <meta name="robots" content="noindex"></meta>
+          <meta name="googlebot" content="noindex"></meta>
+        </Head>
+        <AdminSection state={state} />
+      </Context.Provider>
+    ); 
 }
 
 export default Admin

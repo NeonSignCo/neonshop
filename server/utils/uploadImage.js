@@ -1,7 +1,7 @@
 import {v2 as cloudinary} from 'cloudinary';
 import streamifier from 'streamifier';
 
-const uploadImage = ({buffer, width = 500, crop = 'scale', format = 'webp', folder= 'neonshop/img'}) => new Promise(async (resolve, reject) => {
+const uploadImage = ({buffer, width = 500, crop = 'scale', format = 'webp', folder= 'neonsignco/img'}) => new Promise(async (resolve, reject) => {
     try {
       cloudinary.config({
         cloud_name: process.env.CLOUDINARY_CLOUD_NAME,

@@ -69,7 +69,7 @@ export const webhookCheckout = catchASync(async (req, res) => {
 
     // send mail to customer
     await sendMail({
-      from: `"NeonShop" <${process.env.MAIL_SMTP_USERNAME}>`,
+      from: `"NeonSignCo" <${process.env.MAIL_SMTP_USERNAME}>`,
       to: order.contactEmail,
       subject: "Your order has been received!",
       text,
@@ -77,7 +77,7 @@ export const webhookCheckout = catchASync(async (req, res) => {
 
     // send mail to business owner 
     await sendMail({
-      from: `"NeonShop" <${process.env.MAIL_SMTP_USERNAME}>`,
+      from: `"NeonSignCo" <${process.env.MAIL_SMTP_USERNAME}>`,
       to: process.env.MAIL_SMTP_USERNAME,
       subject: `You received an order!`,
       text: `You have just received an order from ${name}!. Please check your admin panel for full details.`,

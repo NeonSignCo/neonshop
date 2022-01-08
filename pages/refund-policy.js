@@ -14,7 +14,7 @@ const RefundPolicy = () => {
             WHAT IS YOUR RETURNS POLICY?
           </h3>
           <p>
-            Every NeonShop Neon sign is made from scratch, especially for you.
+            Every NeonSignCo Neon sign is made from scratch, especially for you.
             Due to the highly custom nature of our product, we do not offer
             change of mind returns or exchanges.
           </p>
@@ -33,17 +33,17 @@ const RefundPolicy = () => {
             SOMETHING’S WRONG WITH MY NEON!
           </h3>
           <p>
-            NeonShop Neon strives to produce pieces of the highest quality. Our
+            NeonSignCo Neon strives to produce pieces of the highest quality. Our
             items are quality checked before they are carefully packaged and
             sent to you. In the unlikely event that your item arrives damaged,
             or is not working as intended, please refrain from using the
             product. We kindly ask you to send images and brief description of
-            the fault to hello@neonshop.co within 24 hours of receiving the
+            the fault to hello@NeonSignCo.co within 24 hours of receiving the
             product. Please include your order number in the subject line.
           </p>
           <p>
             If you believe you have received the incorrect order, please contact
-            our team at hello@neonshop.co with an image of the received item,
+            our team at hello@NeonSignCo.co with an image of the received item,
             and a brief description of the discrepancy within 24 hours of
             receiving the item. Please include your order number in the subject
             line.
@@ -52,7 +52,7 @@ const RefundPolicy = () => {
             DOES MY NEON COME WITH A WARRANTY?
           </h3>
           <p>
-            NeonShop Neon signs and neon lights are of the highest quality. We
+            NeonSignCo Neon signs and neon lights are of the highest quality. We
             offer an amazing 24-month manufacturer’s warranty – DOUBLE the
             industry standard! Please note, our manufacturer’s warranty covers
             all electrical components, when used appropriately indoors.
@@ -64,13 +64,19 @@ const RefundPolicy = () => {
             permanent fixture and not designed to be moved regularly.
           </p>
           <p>
-            Depending on the fault, NeonShop will either fix, replace or refund
-            the product. NeonShop reserve the right to select the most
+            Depending on the fault, NeonSignCo will either fix, replace or refund
+            the product. NeonSignCo reserve the right to select the most
             appropriate actions to fulfil the warranty.
           </p>
 
           <p>
-            Please contact <CustomLink href="mailto:hello@neonshop.com" text="hello@neonshop.com" className="font-semibold"/> for all warranty queries.
+            Please contact{" "}
+            <CustomLink
+              href={`mailto:${process.env.NEXT_PUBLIC_MAIL_ADDRESS}`}
+              text={process.env.NEXT_PUBLIC_MAIL_ADDRESS}
+              className="font-semibold"
+            />{" "}
+            for all warranty queries.
           </p>
         </section>
       </div>

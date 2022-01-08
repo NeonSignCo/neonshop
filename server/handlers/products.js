@@ -87,7 +87,7 @@ export const uploadProduct = catchASync(async (req, res) => {
   const img = await uploadImage({
     buffer: req.file.buffer,
     width: 500,
-    folder: "neonshop/img/products",
+    folder: "neonsignco/img/products",
   });
 
   // update product image
@@ -135,7 +135,7 @@ export const updateProduct = catchASync(async (req, res) => {
     const img = await uploadImage({
       buffer: req.file.buffer,
       width: 500,
-      folder: "neonshop/img/products",
+      folder: "neonsignco/img/products",
     });
     image = {
       version: img.version,
@@ -211,7 +211,7 @@ export const deleteAllProducts = catchASync(async (req, res) => {
 
   //  delete all photos folder 
   try {
-   await cloudinary.api.delete_resources_by_prefix("neonshop/img/products");
+   await cloudinary.api.delete_resources_by_prefix("neonsignco/img/products");
   } catch (error) { 
   }
 

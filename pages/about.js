@@ -11,7 +11,7 @@ const About = () => {
           </h1>
           <div className="grid gap-10 text-lg  mt-20 text-center md:text-left">
             <p>
-              NeonShop was co-founded in 2015 by two friends with one
+              NeonSignCo was co-founded in 2015 by two friends with one
               vision - to light up people’s lives by creating lasting
               impressions.
             </p>
@@ -24,18 +24,18 @@ const About = () => {
               Ash originally owned a drone business, while Tash had her roots
               grounded in photography. Thank the Neon stars, that in a
               bitter-sweet twist of fate, Ash’s drone business literally crashed
-              and burned. And soon after from the embers, the NeonShop
+              and burned. And soon after from the embers, the NeonSignCo
               partnership was founded. The rest, as they say, is history.
             </p>
             <p>
-              Now, 6 years on, NeonShop has built up a global team of
+              Now, 6 years on, NeonSignCo has built up a global team of
               extraordinary individuals - each an expert in their own areas.
               Some are LED neon artisans and epic customer experience managers,
               while others are design geniuses...and more! All, however, work
               magic and are (as we like to say) wizards.{" "}
             </p>
             <p>
-              Through your journey with NeonShop bringing your vision to
+              Through your journey with NeonSignCo bringing your vision to
               life, you’ll get to experience this magic first hand!{" "}
             </p>
             <p>

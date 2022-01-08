@@ -16,7 +16,7 @@ const PrivacyPolicy = () => {
             <p>
               This page (together with documents referred to on it) tells you
               the terms of use on which you may make use of our website
-              (<CustomLink href="https://neonshop.com" text="neonshop.com" className="font-semibold"/>). Please read these terms of use carefully
+              (<CustomLink  text="neonsignco.com" className="font-semibold"/>). Please read these terms of use carefully
               before you start to use the site.
             </p>
 
@@ -32,7 +32,7 @@ const PrivacyPolicy = () => {
               INFORMATION ABOUT US
             </h3>
             <p>
-              neonshop.co is a site operated by NeonShop (we or us).
+              NeonSignCo.com is a site operated by NeonSignCo (we or us).
               We are registered in Australia under
             </p>
             <p class="text-2xl uppercase">ABN 73 607 963 057.</p>

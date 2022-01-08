@@ -66,7 +66,7 @@ const Login = () => {
   return (
     <div className="px-5 lg:px-20 py-20">
       <Head>
-        <title>Login | NeonShop</title>
+        <title>Login | NeonSignCo</title>
       </Head>
       <h1 className="text-3xl lg:text-5xl text-center capitalize">login</h1>
       <div className="flex flex-col items-center">

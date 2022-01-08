@@ -10,11 +10,11 @@ const TermsConditions = () => {
       </h1>
       <div className="mb-20 grid gap-5 px-5 lg:px-20 max-w-4xl mx-auto text-lg">
         <p>
-          Terms of Website Use NeonShop and purchasing from NeonShop directly.{" "}
+          Terms of Website Use NeonSignCo and purchasing from NeonSignCo directly.{" "}
         </p>
         <section className="mb-20 grid gap-5">
           <p>
-            NeonShop Laser Designs Pty Ltd is committed to providing quality
+            NeonSignCo Laser Designs Pty Ltd is committed to providing quality
             services to you and this policy outlines our ongoing obligations to
             you in respect of how we manage your Personal Information.
           </p>
@@ -40,7 +40,7 @@ const TermsConditions = () => {
           <p>
             This Personal Information is obtained in many ways including
             interviews, correspondence, by telephone, by email, via our website
-            www.neonshop.com, from your website, from social media platforms
+            www.NeonSignCo.com, from your website, from social media platforms
             such as Instagram and Facebook, from media and publications, from
             other publicly available sources, from cookies and from third
             parties. We don’t guarantee website links or policy of authorized
@@ -127,7 +127,7 @@ const TermsConditions = () => {
             to access your Personal Information, please contact us in writing.
           </p>
           <p>
-            NeonShop Laser Designs Pty Ltd will not charge any fee for your
+            NeonSignCo Laser Designs Pty Ltd will not charge any fee for your
             access request, but may charge an administrative fee for providing a
             copy of your Personal Information.
           </p>
@@ -161,11 +161,11 @@ const TermsConditions = () => {
             please contact us at:
           </p>
           <h3 className="mt-5 uppercase font-semibold text-xl sm:text-2xl">
-            NeonShop LASER DESIGNS PTY LTD
+            NeonSignCo LASER DESIGNS PTY LTD
           </h3>
           <CustomLink
-            text="hello@neonshop.co"
-            href="mailto:hello@neonshop.co"
+            text={process.env.NEXT_PUBLIC_MAIL_ADDRESS}
+            href={`mailto:${process.env.NEXT_PUBLIC_MAIL_ADDRESS}`}
             className="uppercase font-semibold"
           />
           <CustomLink

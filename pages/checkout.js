@@ -42,7 +42,7 @@ const Container = () => {
                   "linear-gradient(rgba(0, 0, 0,0.87), rgba(0, 0, 0,0.87)), url('/img/neon-banner-5.jpg')",
               }}
             >
-              <CustomLink className="text-3xl md:text-6xl" text="NeonShop" />
+              <CustomLink className="text-3xl md:text-6xl" text="NeonSignCo" />
               <div className="flex items-center justify-center gap-3 md:gap-5 mt-5">
                 <CustomLink href="/cart" text="Cart" />
                 <FaChevronRight />

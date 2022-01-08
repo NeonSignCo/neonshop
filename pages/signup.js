@@ -73,7 +73,7 @@ const SignUp = () => {
   return (
     <div className="px-5 lg:px-20 py-20">
       <Head>
-        <title>Sign up | NeonShop</title>
+        <title>Sign up | NeonSignCo</title>
       </Head>
       <h1 className="text-3xl lg:text-5xl text-center capitalize">sign up</h1>
       <div className="flex flex-col items-center">

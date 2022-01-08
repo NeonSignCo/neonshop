@@ -13,7 +13,7 @@ const NewsLetterSection = () => {
           get exclusive benefits!
         </h3>
         <p>
-          Become part of the <span className="font-semibold">NeonShop</span>{" "}
+          Become part of the <span className="font-semibold">NeonSignCo</span>{" "}
           family. You will be first in the know about new products and exclusive
           promotions. Enter your email below to join today!
         </p>
