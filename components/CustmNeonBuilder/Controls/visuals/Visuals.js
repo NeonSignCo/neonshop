@@ -51,11 +51,11 @@ const Visuals = () => {
           <div
             className="flex w-full justify-center items-center overflow-hidden"
             ref={divRef}
-          >
+          > 
             <div className="relative">
               <div className="" ref={textRef}>
                 <NeonPreview
-                  text={state.data.text}
+                  text={state.data.text} 
                   color={state.data.color}
                   icon={state.data.icon}
                   font={state.data.font}
