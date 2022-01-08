@@ -1,7 +1,7 @@
 export const NeonPreview = ({ text, color, icon, font, className, iconClass }) => {
   return (
     <div
-      className={` transition-all relative flex items-center justify-center overflow-hidden ${className}`}
+      className={` transition-all relative flex items-center justify-center ${className}`}
     >
       {icon.name && (
         <img

@@ -263,8 +263,8 @@ const CartCustomItem = ({ item }) => {
         color={colors.find((color) => color.hex === item.color.hex)}
         icon={item.icon}
         font={item.font}
-        className="py-5 w-full md:w-60 bg-black text-3xl"
-        iconClass="h-10 lg:h-12"
+        className="py-5 w-full md:w-60 bg-black text-3xl overflow-hidden"
+        iconClass="h-10 lg:h-10"
       />
       <div className="flex flex-col gap-3 flex-1">
         <h2 className="font-semibol capitalize text-2xl">custom neon</h2>

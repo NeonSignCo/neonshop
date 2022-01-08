@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { FaChevronRight, FaMinus, FaPlane, FaPlus } from "react-icons/fa"
 import { ERROR, useGlobalContext } from "../context/GlobalContext";
 import Axios from "../utils/Axios";
-import catchASync from "../utils/catchASync";
 import { colors } from "../utils/CustomNeonAssets";
 import CustomLink from "./CustomLink";
 import { Loader } from "./LoadingBtn";
@@ -293,7 +292,7 @@ const CartCustomItem = ({ item }) => {
         color={colors.find((color) => color.hex === item.color.hex)}
         icon={item.icon}
         font={item.font}
-        className="h-20 w-20 bg-black text-xl overflow-hidden"
+        className="h-20 w-20 bg-black text-xl overflow-hidden "
         iconClass="h-10 lg:h-12 "
       />
       <div className="flex flex-col justify-between flex-1">
