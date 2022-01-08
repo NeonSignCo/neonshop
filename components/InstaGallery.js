@@ -6,7 +6,12 @@ const InstaGallery = ({}) => {
   return (
     <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-[1px]">
       {items.map((item, i) => (
-        <CustomLink className="relative group" href={item.link || "/"} key={i}>
+        <CustomLink
+          className="relative group"
+          href="https://instagram.com/NeonSignCo.shop"
+          target="_blank"
+          key={i}
+        >
           <img
             src={item.img || `/img/product-images/product-${i + 1}.jpg`}
             alt={item.alt || `product ${i + 1}`}

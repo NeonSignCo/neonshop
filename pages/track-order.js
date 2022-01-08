@@ -138,7 +138,8 @@ const OrderDetails = ({ order }) => {
                 icon={item.icon}
                 font={item.font}
                 className="py-10 bg-black text-5xl overflow-hidden "
-                iconClass="h-20 lg:h-20 "
+                iconClass="h-20 lg:h-20 " 
+                hideWidth
               />
 
               <p>

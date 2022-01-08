@@ -85,8 +85,10 @@ const ExpandedContent = ({ order, setExpand }) => {
                 color={colors.find((color) => color.hex === item.color.hex)}
                 icon={item.icon}
                 font={item.font}
-                className="py-10 bg-black text-5xl overflow-hidden "
-                iconClass="h-20 lg:h-20 "
+                textClass="text-5xl md:text-3xl"
+                className="py-5 w-full md:w-60 bg-black overflow-hidden "
+                iconClass="h-20"
+                hideWidth 
               />
 
               <p>
@@ -258,7 +260,8 @@ const Preview = ({ order, setExpand }) => {
               color={colors.find((color) => color.hex === item.color.hex)}
               icon={item.icon}
               className="h-20 w-20 overflow-hidden bg-black"
-              iconClass="h-10 lg:h-7"
+              iconClass="h-10 lg:h-7" 
+              hideWidth
             />
           ))}
           {order.items?.map((item, i) => (

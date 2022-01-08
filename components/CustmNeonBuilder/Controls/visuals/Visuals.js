@@ -1,27 +1,11 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useRef } from "react";
 import { useNeonBuilderContext } from "../../../../context/NeonBuilderContext";
 import NeonPreview from "../../../NeonPreview";
 
+
 const Visuals = () => {
   const [state] = useNeonBuilderContext();
-  const divRef = useRef();
-  const textRef = useRef();
-
-  // adjust text size to fit one line
-  useEffect(() => {
-    if (!divRef.current || !textRef.current) return;
-    const divWidth = divRef.current.offsetWidth;
-    const textWidth = textRef.current.offsetWidth;
-    let scale = divWidth / textWidth;
-    if (scale > 1) {
-      scale = 1;
-    } else {
-      if (state.data.icon.name) scale = scale - scale * 0.28;
-    }
-    textRef.current.style.transform = `scale(${scale})`;
-  }, [state.data.text, state.data.icon.name, state.data.font]);
-
+  
   return (
     <div
       className="col-span-3 lg:col-span-2 row-span-2 lg:row-span-6 flex text-white  relative overflow-hidden p-4"
@@ -48,41 +32,16 @@ const Visuals = () => {
               </motion.div>
             )}
           </AnimatePresence>
-          <div
-            className="flex w-full justify-center items-center overflow-hidden"
-            ref={divRef}
-          >
-            <div className="relative">
-              <div className="" ref={textRef}>
-                <NeonPreview
-                  text={state.data.text}
-                  color={state.data.color}
-                  icon={state.data.icon}
-                  font={state.data.font}
-                  className="text-5xl md:text-7xl lg:text-9xl"
-                  iconClass="h-24 lg:h-56"
-                />
-              </div>
-              <AnimatePresence>
-                {!state.controls.typing && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="flex items-center gap-2 absolute -bottom-7 md:-bottom-16 w-full"
-                  >
-                    <div className="h-[1px] bg-white flex-1 relative">
-                      <div className="absolute -top-[6px] h-[13px] w-[2px] bg-white"></div>
-                    </div>
-                    {state.data.width}"
-                    <div className="h-[1px] bg-white flex-1 relative">
-                      <div className="absolute -top-[6px] right-0 h-[13px] w-[2px] bg-white"></div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </div>
+          <NeonPreview
+            text={state.data.text}
+            color={state.data.color}
+            icon={state.data.icon}
+            font={state.data.font}
+            typing={state.controls.typing}
+            width={state.data.width}
+            textClass="text-5xl md:text-7xl lg:text-9xl"
+            iconClass="h-24 lg:h-56"
+          />
         </>
       ) : (
         <div className="h-full w-full flex flex-col gap-5 justify-center">

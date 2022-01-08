@@ -9,12 +9,8 @@ const FollowSection = () => {
           follow us on
         </h1>
         <div className="px-5 lg:px-20 flex items-center justify-center gap-5 text-5xl">
-          <CustomLink>
-            <FaFacebook />
-          </CustomLink>
-          <CustomLink className="relative">
+          <CustomLink href="https://instagram.com/NeonSignCo.shop" target="_blank" className="relative">
             <FaInstagram />{" "}
-            <span className="text-sm absolute left-1 font-semibold">100k</span>
           </CustomLink>
         </div>
         <div className="mt-20">

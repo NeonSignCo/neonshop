@@ -4,22 +4,19 @@ import {
   FaClock,
   FaCogs,
   FaDesktop,
-  FaFacebook,
   FaFileSignature,
   FaHandHoldingHeart,
   FaHands,
-  FaInstagram,
   FaRibbon,
   FaShippingFast,
 } from "react-icons/fa";
 import CustomLink from "../components/CustomLink";
-import InstaGallery from "../components/InstaGallery";
 import ProductsSlider from "../components/sliders/ProductsSlider";
-import ReviewSlider from "../components/sliders/ReviewSlider";
 import NewsLetterSection from "../components/sections/NewsLetterSection";
 import connectDb from "../server/utils/connectDb";
 import Product from "../server/models/product";
 import Category from "../server/models/category";
+import FollowSection from "../components/sections/FollowSection";
  
 export default function Home({products}) {
   return (
@@ -279,21 +276,7 @@ export default function Home({products}) {
       <div className="mt-32">
         <NewsLetterSection />
       </div>
-      <section className=" pt-20 bg-white text-blackflex flex flex-col gap-10 items-center">
-        <h3 className="px-5 lg:px-20 text-3xl font-semibold uppercase ">
-          follow us on
-        </h3>
-        <div className="px-5 lg:px-20 flex items-center gap-3 text-4xl">
-          <CustomLink>
-            <FaFacebook />
-          </CustomLink>
-          <CustomLink className="relative">
-            <FaInstagram />{" "}
-            <span className="text-sm absolute left-1 font-semibold">100k</span>
-          </CustomLink>
-        </div>
-        <InstaGallery />
-      </section>
+      <FollowSection/>
     </div>
   );
 }

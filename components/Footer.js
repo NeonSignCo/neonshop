@@ -47,7 +47,6 @@ const Footer = () => {
               className="transition hover:underline"
               text="refund policy"
             />
-            <CustomLink className="transition hover:underline" text="sitemap" />
             <CustomLink
               href="/e-privacy"
               className="transition hover:underline"
@@ -86,21 +85,7 @@ const Footer = () => {
                 {process.env.NEXT_PUBLIC_MAIL_ADDRESS}
               </a>
             </div>
-            <div>
-              <div className="flex items-center gap-1">
-                <FaMapMarkedAlt />
-                <span>Address:</span>
-              </div>
-              <CustomLink
-                href="https://goo.gl/maps/m3UfXirNQnHZNMnv7"
-                target="_blank"
-              >
-                <p className="transition hover:underline">
-                  Los Angeles <br /> 3951 Hguera Street, Los Angeles, CA <br />{" "}
-                  90232 <br /> United States
-                </p>
-              </CustomLink>
-            </div>
+
           </div>
         </div>
         <div className="h-[1px] bg-gray-900 my-4"></div>

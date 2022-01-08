@@ -236,7 +236,10 @@ const CartCustomItem = ({ item }) => {
             color={colors.find((color) => color.hex === item.color.hex)}
             icon={item.icon}
             font={item.font}
-            className="h-16 w-16 rounded bg-black text-3xl overflow-hidden"
+            className="h-16 w-16 rounded bg-black overflow-hidden"
+            textClass=" text-3xl md:text-xl "
+            iconClass="h-10"
+            hideWidth
           />
           <span className="absolute -top-1 -right-2 bg-gray-500 h-5 w-5 rounded-full text-white flex justify-center items-center">
             {item.count}
