@@ -4,6 +4,7 @@ import { ERROR, SUCCESS, useGlobalContext } from "../../context/GlobalContext";
 import Axios from "../../utils/Axios";
 import getToken from '../../utils/getToken';
 import { useRouter } from 'next/router'
+import Head from 'next/head';
 
 const ResetPassword = ({ token, errorMessage }) => {
     const Router = useRouter();
@@ -60,8 +61,14 @@ const ResetPassword = ({ token, errorMessage }) => {
 
   return (
     <div className="p-5 lg:px-20 py-20">
+      <Head>
+        <title>Reset Password | NeonSignCo</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       {errorMessage ? (
-        <p className="text-lg md:text-2xl text-red-500 text-center py-20">{errorMessage}</p>
+        <p className="text-lg md:text-2xl text-red-500 text-center py-20">
+          {errorMessage}
+        </p>
       ) : (
         <div>
           <h2 className="text-3xl lg:text-5xl capitalize  text-center">

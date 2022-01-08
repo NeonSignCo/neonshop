@@ -13,6 +13,7 @@ import { ERROR, useGlobalContext } from '../../context/GlobalContext';
 import LoadingBtn from "../../components/LoadingBtn";
 import connectDb from "../../server/utils/connectDb";
 import ProductNavigation from "../../components/ProductNavigation";
+import Head from 'next/head';
 
 // variables 
 const LTH = 'LTH'; 
@@ -74,28 +75,42 @@ const Shop = ({ categories, products, numOfProducts }) => {
   }
   return (
     <div>
+      <Head>
+        <title>Shop | NeonSignCo</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <div className=" py-10 bg-gray-100">
         <div className="px-5 lg:px-20">
           <h1 className="text-3xl lg:text-4xl max-w-max mx-auto uppercase">
             Products
           </h1>
-          <div className=" mb-5"> 
+          <div className=" mb-5">
             <BreadCrumb />
           </div>
           <div className="flex flex-col gap-5">
             <div className="flex flex-col gap-3 md:flex-row justify-between">
               <div className="flex items-center gap-2">
                 <p>Shop by category</p>
-                <select className="capitalize p-1 border border-gray-300" defaultValue={state.category} onChange={e => changeCategory(e)}>
+                <select
+                  className="capitalize p-1 border border-gray-300"
+                  defaultValue={state.category}
+                  onChange={(e) => changeCategory(e)}
+                >
                   <option value="">all</option>
-                  {state.categories.map(item => (
-                    <option value={item._id} key={item._id}>{item.name}</option>
-                  ) )}
+                  {state.categories.map((item) => (
+                    <option value={item._id} key={item._id}>
+                      {item.name}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className="flex items-center gap-1">
                 <p>Sort by</p>
-                <select className="capitalize p-1 border border-gray-300" value={state.sort} onChange={e => sortItems(e)}>
+                <select
+                  className="capitalize p-1 border border-gray-300"
+                  value={state.sort}
+                  onChange={(e) => sortItems(e)}
+                >
                   <option value={LTH}>price: low to high</option>
                   <option value={HTL}>price: high to low</option>
                   <option value={ATZ}>A-Z</option>
@@ -105,18 +120,15 @@ const Shop = ({ categories, products, numOfProducts }) => {
                 </select>
               </div>
             </div>
-            <ProductSearch state={state} setState={setState}/>
+            <ProductSearch state={state} setState={setState} />
           </div>
         </div>
         <div className="px-5 lg:px-20 grid grid-cols-2 md:grid-cols-3  gap-x-12 gap-y-16 bg-white mt-4">
-          {state.products.map(
-            (product) => <ProductItem key={product._id} product={product}/>
-          )}
+          {state.products.map((product) => (
+            <ProductItem key={product._id} product={product} />
+          ))}
         </div>
-        <ProductNavigation
-          state={state}
-          setState={setState}
-        />
+        <ProductNavigation state={state} setState={setState} />
       </div>
       <NewsLetterSection />
       <FollowSection />

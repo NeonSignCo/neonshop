@@ -14,7 +14,7 @@ import { ERROR, useGlobalContext } from "../../../context/GlobalContext";
 import LoadingBtn, { Loader } from "../../../components/LoadingBtn";
 import Axios from "../../../utils/Axios";
 import { useRouter } from "next/router";
-
+import Head from 'next/head';
 
 // variables 
 const LTH = 'LTH'; 
@@ -65,6 +65,10 @@ const CategoryPage = ({category, products}) => {
 
   return (
     <div>
+      <Head>
+        <title>{category.name} | NeonSignCo</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <div
         className="px-5 lg:px-20 py-20 bg-black text-white flex flex-col gap-5 items-center text-center "
         style={{
@@ -100,11 +104,13 @@ const CategoryPage = ({category, products}) => {
                 </select>
               </div>
             </div>
-            <ProductSearch state={state} setState={setState}/>
+            <ProductSearch state={state} setState={setState} />
           </div>
         </div>
         <div className="px-5 lg:px-20 grid grid-cols-2 md:grid-cols-3  gap-x-12 gap-y-16 bg-white mt-4">
-          {state.products.map( product => <ProductItem key={product._id} product={product}/>)}
+          {state.products.map((product) => (
+            <ProductItem key={product._id} product={product} />
+          ))}
         </div>
       </div>
       <NewsLetterSection />

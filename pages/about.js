@@ -1,19 +1,23 @@
 import CustomLink from "../components/CustomLink";
 import FollowSection from "../components/sections/FollowSection";
 import NewsLetterSection from "../components/sections/NewsLetterSection";
+import Head from 'next/head';
 
 const About = () => {
     return (
       <div className=" pt-20">
+        <Head>
+          <title>About | NeonSignCo</title>
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
         <div className="max-w-4xl mx-auto px-5 lg:px-20">
           <h1 className="text-4xl sm:text-5xl text-center uppercase font-semibold">
             our story
           </h1>
           <div className="grid gap-10 text-lg  mt-20 text-center md:text-left">
             <p>
-              NeonSignCo was co-founded in 2015 by two friends with one
-              vision - to light up people’s lives by creating lasting
-              impressions.
+              NeonSignCo was co-founded in 2015 by two friends with one vision -
+              to light up people’s lives by creating lasting impressions.
             </p>
             <p>
               From humble beginnings in Geelong, Australia, Ash and Tash came to
@@ -35,8 +39,8 @@ const About = () => {
               magic and are (as we like to say) wizards.{" "}
             </p>
             <p>
-              Through your journey with NeonSignCo bringing your vision to
-              life, you’ll get to experience this magic first hand!{" "}
+              Through your journey with NeonSignCo bringing your vision to life,
+              you’ll get to experience this magic first hand!{" "}
             </p>
             <p>
               Our team works with you to design and create beautifully bright
@@ -68,8 +72,8 @@ const About = () => {
             className="max-w-max px-10 sm:px-20 py-4 flex items-center justify-center bg-black text-white uppercase mx-auto my-10  text-2xl"
           />
         </div>
-        <NewsLetterSection/>
-        <FollowSection/>
+        <NewsLetterSection />
+        <FollowSection />
       </div>
     );
 }

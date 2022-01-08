@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import { useState } from "react";
 import LoadingBtn from "../../components/LoadingBtn";
 import { ERROR, SUCCESS, useGlobalContext } from "../../context/GlobalContext";
@@ -45,6 +46,10 @@ const ForgotPassword = () => {
 
   return (
     <div className="p-5 lg:px-20 py-20">
+      <Head>
+        <title>Forgot Password | NeonSignCo</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <h2 className="text-3xl lg:text-5xl capitalize  text-center">
         forgot password?
       </h2>
@@ -68,9 +73,11 @@ const ForgotPassword = () => {
             }
             className="p-2 bg-gray-200"
             required
-          /> 
-        </div>  
-          {state.successMessage && <p className="text-green-500">{state.successMessage}</p> }
+          />
+        </div>
+        {state.successMessage && (
+          <p className="text-green-500">{state.successMessage}</p>
+        )}
         <LoadingBtn
           loading={state.loading}
           className="py-2 px-4 bg-gray-800 text-white font-semibold max-w-max capitalize"

@@ -11,6 +11,7 @@ import catchASync from "../utils/catchASync";
 import { colors } from "../utils/CustomNeonAssets";
 import getLoggedInUser from "../utils/getLoggedInUser";
 import NeonPreview from "../components/NeonPreview";
+import Head from "next/head";
 
 const CartPage = () => {
     const [globalState] = useGlobalContext();    
@@ -258,6 +259,10 @@ const CartCustomItem = ({ item }) => {
   
   return (
     <div className="flex flex-col md:flex-row gap-2 bg-white p-2">
+      <Head>
+        <title>Cart | NeonSignCo</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <NeonPreview
         text={item.text}
         color={colors.find((color) => color.hex === item.color.hex)}

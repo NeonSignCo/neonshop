@@ -1,3 +1,4 @@
+import Head from "next/head";
 import CustomLink from "../components/CustomLink";
 import FollowSection from "../components/sections/FollowSection";
 import NewsLetterSection from "../components/sections/NewsLetterSection";
@@ -5,6 +6,10 @@ import NewsLetterSection from "../components/sections/NewsLetterSection";
 const RefundPolicy = () => {
   return (
     <div className="pt-20">
+      <Head>
+        <title>Refund Policy | NeonSignCo</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <h1 className="text-4xl sm:text-5xl text-center uppercase font-semibold mb-20">
         Refund Policy
       </h1>
@@ -33,8 +38,8 @@ const RefundPolicy = () => {
             SOMETHING’S WRONG WITH MY NEON!
           </h3>
           <p>
-            NeonSignCo Neon strives to produce pieces of the highest quality. Our
-            items are quality checked before they are carefully packaged and
+            NeonSignCo Neon strives to produce pieces of the highest quality.
+            Our items are quality checked before they are carefully packaged and
             sent to you. In the unlikely event that your item arrives damaged,
             or is not working as intended, please refrain from using the
             product. We kindly ask you to send images and brief description of
@@ -64,8 +69,8 @@ const RefundPolicy = () => {
             permanent fixture and not designed to be moved regularly.
           </p>
           <p>
-            Depending on the fault, NeonSignCo will either fix, replace or refund
-            the product. NeonSignCo reserve the right to select the most
+            Depending on the fault, NeonSignCo will either fix, replace or
+            refund the product. NeonSignCo reserve the right to select the most
             appropriate actions to fulfil the warranty.
           </p>
 

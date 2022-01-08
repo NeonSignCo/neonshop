@@ -25,7 +25,7 @@ export default function Home({products}) {
   return (
     <div className="">
       <Head>
-        <title>Neon Shop</title>
+        <title>NeonSignCo</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <section
@@ -114,7 +114,7 @@ export default function Home({products}) {
               img: product.image.url,
               price: product.sizes[0].price,
               link: `/shop/${product.category.slug}/${product.slug}`,
-            }))} 
+            }))}
           />
         )}
       </section>
@@ -168,13 +168,13 @@ export default function Home({products}) {
           </Item>
         </div>
       </section>
-      <section className="px-5 lg:px-20 py-20 bg-white">
+      {/* <section className="px-5 lg:px-20 py-20 bg-white">
         <h3 className="text-3xl uppercase font-semibold uppercase text-center mb-10">
           what our clients say
         </h3>
         <ReviewSlider />
-      </section>
-      <section
+      </section> */}
+      {/* <section
         className="px-5 lg:px-20 py-20 bg-black text-white"
         style={{
           background:
@@ -231,8 +231,8 @@ export default function Home({products}) {
             </p>
           </CustomLink>
         </div>
-      </section>
-      <section className="px-5 lg:px-20 py-20 bg-white text-center md:text-left">
+      </section> */}
+      {/* <section className="px-5 lg:px-20 py-20 bg-white text-center md:text-left">
         <h3 className="text-3xl uppercase font-semibold uppercase text-center mb-16">
           our story
         </h3>
@@ -275,8 +275,10 @@ export default function Home({products}) {
             className="h-12 w-52 flex items-center justify-center bg-white text-black border border-black uppercase font-semibold transition hover:bg-black hover:text-white"
           />
         </div>
-      </section>
-      <NewsLetterSection />
+      </section> */}
+      <div className="mt-32">
+        <NewsLetterSection />
+      </div>
       <section className=" pt-20 bg-white text-blackflex flex flex-col gap-10 items-center">
         <h3 className="px-5 lg:px-20 text-3xl font-semibold uppercase ">
           follow us on

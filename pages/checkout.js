@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {  FaChevronDown, FaChevronRight } from "react-icons/fa";
 import CustomLink from "../components/CustomLink";
 import PaymentSection from "../components/sections/checkout/paymentSection/PaymentSection";
@@ -12,6 +12,7 @@ import CheckoutContext, { INFO_SECTION, PAYMENT_SECTION, useCheckoutContext } fr
 import InfoSection from "../components/sections/checkout/InfoSection";
 import { colors } from "../utils/CustomNeonAssets";
 import NeonPreview from "../components/NeonPreview";
+import Head from 'next/head';
 
 const Checkout = () => {
 
@@ -31,6 +32,10 @@ const Container = () => {
 
   return (
     <div className="">
+      <Head>
+        <title>Checkout | NeonSignCo</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       {globalState.cartData.cart?.items?.length > 0 ||
       globalState.cartData.cart?.customItems?.length > 0 > 0 ? (
         <div className="flex flex-col lg:flex-row">

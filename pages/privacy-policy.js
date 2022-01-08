@@ -1,3 +1,4 @@
+import Head from "next/head";
 import CustomLink from "../components/CustomLink";
 import FollowSection from "../components/sections/FollowSection";
 import NewsLetterSection from "../components/sections/NewsLetterSection";
@@ -5,6 +6,10 @@ import NewsLetterSection from "../components/sections/NewsLetterSection";
 const PrivacyPolicy = () => {
     return (
       <div className="pt-20">
+        <Head>
+          <title>Privacy Policy | NeonSignCo</title>
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
         <h1 className="text-4xl sm:text-5xl text-center uppercase font-semibold mb-20">
           Privacy Policy
         </h1>
@@ -15,9 +20,10 @@ const PrivacyPolicy = () => {
             </h3>
             <p>
               This page (together with documents referred to on it) tells you
-              the terms of use on which you may make use of our website
-              (<CustomLink  text="neonsignco.com" className="font-semibold"/>). Please read these terms of use carefully
-              before you start to use the site.
+              the terms of use on which you may make use of our website (
+              <CustomLink text="neonsignco.com" className="font-semibold" />
+              ). Please read these terms of use carefully before you start to
+              use the site.
             </p>
 
             <p>
@@ -32,8 +38,8 @@ const PrivacyPolicy = () => {
               INFORMATION ABOUT US
             </h3>
             <p>
-              NeonSignCo.com is a site operated by NeonSignCo (we or us).
-              We are registered in Australia under
+              NeonSignCo.com is a site operated by NeonSignCo (we or us). We are
+              registered in Australia under
             </p>
             <p class="text-2xl uppercase">ABN 73 607 963 057.</p>
             <h3 className="mt-5 uppercase font-semibold text-xl sm:text-2xl">
@@ -63,7 +69,7 @@ const PrivacyPolicy = () => {
               PRICING POLICY
             </h3>
             <p>Prices shown on the Site are in United States Dollars (USD).</p>
-            <p >
+            <p>
               Prices are subject to change effective immediately upon posting to
               our site or other form of notification.
             </p>

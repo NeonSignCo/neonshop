@@ -1,9 +1,14 @@
+import Head from "next/head";
 import CustomLink from "../components/CustomLink";
 import { useGlobalContext } from "../context/GlobalContext";
 const ThankYou = () => {
   const [globalSTate] = useGlobalContext();
     return (
       <div className="px-5 lg:px-20 py-20">
+        <Head>
+          <title>Thank You | NeonSignCo</title>
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
         <div className="flex flex-col gap-10 items-center text-center">
           <h1 className="text-3xl text-green-500">thank you for you order!</h1>
           <p>

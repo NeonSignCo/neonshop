@@ -5,6 +5,10 @@ import NewsLetterSection from "../components/sections/NewsLetterSection";
 const EPrivacy = () => {
     return (
       <div className="pt-20">
+        <Head>
+          <title>E-Privacy | NeonSignCo</title>
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
         <h1 className="text-4xl sm:text-5xl text-center uppercase font-semibold mb-10">
           e-privacy
         </h1>

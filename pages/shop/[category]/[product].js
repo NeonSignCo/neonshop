@@ -14,7 +14,7 @@ import LoadingBtn, { Loader } from "../../../components/LoadingBtn";
 import { useRouter } from "next/router";
 import catchASync from "../../../utils/catchASync";
 import Axios from "../../../utils/Axios";
-
+import Head from 'next/head';
 
 // variations
 const colors = [
@@ -132,6 +132,10 @@ const ProductPage = ({ product }) => {
   
   return (
     <div className=" pt-10">
+      <Head>
+        <title>{product.name} | NeonSignCo</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <div className="px-5 lg:px-20 mb-4">
         <BreadCrumb />
       </div>

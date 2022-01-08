@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import CustomLink from "../components/CustomLink";
@@ -38,10 +39,16 @@ const TrackOrder = () => {
 
     return (
       <div className="px-5 lg:px-20 py-20  bg-gray-200">
+        <Head>
+          <title>Track Order | NeonSignCo</title>
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
         <div className="flex flex-col items-center gap-3 md:max-w-[800px] mx-auto">
-          <h1 className="text-3xl md:text-5xl text-center mb-10 font-semibold">Track your order</h1>
+          <h1 className="text-3xl md:text-5xl text-center mb-10 font-semibold">
+            Track your order
+          </h1>
           <form
-            onSubmit={e => findOrder({e})}
+            onSubmit={(e) => findOrder({ e })}
             className="grid sm:grid-cols-3 gap-2 text-lg mb-5 w-full"
           >
             <input
@@ -73,8 +80,8 @@ const TrackOrder = () => {
             >
               Track Order
             </LoadingBtn>
-          </form> 
-          {order && <OrderDetails order={order}/> }
+          </form>
+          {order && <OrderDetails order={order} />}
         </div>
       </div>
     );

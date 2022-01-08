@@ -1,3 +1,4 @@
+import Head from "next/head";
 import CustomLink from "../components/CustomLink";
 import FollowSection from "../components/sections/FollowSection";
 import NewsLetterSection from "../components/sections/NewsLetterSection";
@@ -5,12 +6,17 @@ import NewsLetterSection from "../components/sections/NewsLetterSection";
 const TermsConditions = () => {
   return (
     <div className="pt-20">
+      <Head>
+        <title>Terms & Conditions | NeonSignCo</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <h1 className="text-4xl sm:text-5xl text-center uppercase font-semibold mb-20">
         terms & conditions
       </h1>
       <div className="mb-20 grid gap-5 px-5 lg:px-20 max-w-4xl mx-auto text-lg">
         <p>
-          Terms of Website Use NeonSignCo and purchasing from NeonSignCo directly.{" "}
+          Terms of Website Use NeonSignCo and purchasing from NeonSignCo
+          directly.{" "}
         </p>
         <section className="mb-20 grid gap-5">
           <p>
