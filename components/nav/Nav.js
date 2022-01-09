@@ -13,7 +13,6 @@ import { ERROR, SUCCESS, useGlobalContext } from "../../context/GlobalContext";
 import CustomLink from "../CustomLink";
 import SearchBar from "../SearchBar";
 import DropDown from "./DropDown";
-import MobileMenu from "./MobileMenu";
 import Banner from "../Banner";
 import { AnimatePresence } from "framer-motion";
 import { useRouter } from "next/router";
@@ -80,9 +79,6 @@ const Nav = () => {
           </button>
         </div>
       </div>
-      <AnimatePresence>
-        {globalState.showMobileMenu && <MobileMenu />}
-      </AnimatePresence>
     </div>
   );
 };

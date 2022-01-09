@@ -9,17 +9,18 @@ import CartPreview from "./CartPreview";
 import Backdrop from "./Backdrop";
 import Alert from "./Alert";
 import { useEffect } from "react";
+import MobileMenu from './nav/MobileMenu'
 
 const Container = ({ children }) => {
-  const [, setGlobalState] = useGlobalContext();
+  const [state, setState] = useGlobalContext();
   const Router = useRouter();  
   const route = Router.route;
-    const [state] = useGlobalContext();
+
   
   // show alert message through query string
   useEffect(() => {
     if (!Router.query.text) return; 
-    setGlobalState(state => ({ ...state, alert: { show: true, text: Router.query.text, type: Router.query.type, timeout: Router.query.timeout || 5000 } }));
+    setState(state => ({ ...state, alert: { show: true, text: Router.query.text, type: Router.query.type, timeout: Router.query.timeout || 5000 } }));
 
     return () => { };
   }, [Router.query.text])
@@ -60,6 +61,9 @@ const Container = ({ children }) => {
         </AnimatePresence>
         <AnimatePresence>
           {state.cartData.show && <CartPreview />}
+        </AnimatePresence>
+        <AnimatePresence>
+          {state.showMobileMenu && <MobileMenu />}
         </AnimatePresence>
         <AnimatePresence>
           {state.modal.show ? (

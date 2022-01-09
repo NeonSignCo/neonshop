@@ -12,7 +12,6 @@ const MobileDropDown = ({ title, closeMenu }) => {
       title: "explore",
       links: [
         { link: "/custom-neon-sign", text: "build your own" },
-        { text: "inspiration" },
         { link: "/shop", text: "shop all" },
       ],
     },
