@@ -63,7 +63,7 @@ const About = () => {
             </p>
           </div>
           <img
-            src="/img/our-story.jpg"
+            src="/img/about-us.png"
             alt="neon store story"
             className="mt-20 mx-auto"
           />
