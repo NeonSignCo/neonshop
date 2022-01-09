@@ -27,7 +27,7 @@ export default function Home({products}) {
       </Head>
       <section className="relative text-white md:py-9 bg-black" >
         <div>
-          <div className=" md:hidden h-[400px] filter brightness-[.1]" style={{backgroundImage: "url(/img/neon-banner-5.jpg)"}}></div>
+          <div className=" md:hidden h-[400px] filter brightness-[.2]" style={{backgroundImage: "url(/img/neon-banner-5.jpg)"}}></div>
           <img
             src="img/neon-banner.png"
             alt="neonsignco banner"
