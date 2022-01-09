@@ -23,8 +23,8 @@ const ContactForm = ({ productInfo }) => {
     phone: "",
     country: "",
     enquiryType: "",
-    expectedDeliveryTime: "",
     size: "",
+    image: "",
     heardFrom: "",
     joinNewsLetter: true,
     productInfo,
@@ -39,34 +39,13 @@ const ContactForm = ({ productInfo }) => {
   const sendMail = (e) => catchASync(async () => {
     e.preventDefault();
     setLoading(true); 
-    let text = '';
-    let html = '';
 
-    // generate email text and html
-    for (let key in data) {
-      if (key === "productInfo" && productInfo?.name?.length > 0) {
-        text += `Product Name: ${data[key].name} \nProduct Image: ${data[key].image} \nProduct link: ${data[key].link}`;
-        html += `<p style="color:black"><span style="font-weight: bold">Product Name:</span> ${data[key].name}</p>
-                 <p style="color:black"><span style="font-weight: bold">Product Image:</span> <img src=${data[key].image} style="width: 300px; object-fit: cover;"/></p>
-                 <p style="color:black"><span style="font-weight: bold">Product Link:</span> <a href=${data[key].link}>Link</a></p>`;
-      } else {
-        text += key === "productInfo" ? "" : `${key}: ${data[key]}\n`;
-        html += `<p><span style="font-weight: bold">${key}:</span> ${data[key]}</p>`;
-      }
-    }
+    const formData = new FormData(); 
+    for (let key in data) formData.append(key, JSON.stringify(data[key]));
 
-    const mailData = {
-      from: `"NeonSignCo" <${process.env.NEXT_PUBLIC_MAIL_ADDRESS}>`,
-      to: process.env.NEXT_PUBLIC_MAIL_ADDRESS,
-      subject: data.enquiryType,
-      text,
-      html,
-    };
-
-    // const res = await Axios.post("mail", mailData);
+    const res = await Axios.post("mail", formData);
     setLoading(false);
-    // setData(initialData)
-    setState(state => ({ ...state, alert: { show: true, text: 'your message has been received', type: SUCCESS, timeout: 5000 } }));
+    setState(state => ({ ...state, alert: { show: true, text: res.data.message, type: SUCCESS, timeout: 5000 } }));
   }, setState, () => setLoading(false)) 
   
 
@@ -160,6 +139,18 @@ const ContactForm = ({ productInfo }) => {
             placeholder="Requested Size"
           />
           <FaTextHeight className="absolute top-4" />
+        </div>
+        <div className="md:col-span-2 relative flex flex-wrap gap-5">
+          <label htmlFor="image">Upload your logo/image</label>
+          <input
+            type="file"
+            name="image"
+            id="image"
+            accept="image/*"
+            onChange={(e) =>
+              setData((data) => ({ ...data, image: e.target.files[0] }))
+            }
+          />
         </div>
         <div className="md:col-span-2 relative">
           <select

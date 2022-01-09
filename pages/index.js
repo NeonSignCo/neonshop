@@ -25,20 +25,37 @@ export default function Home({products}) {
         <title>NeonSignCo</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <section className="relative text-white md:py-9 bg-black" >
-        <div>
-          <div className=" md:hidden h-[400px] filter brightness-[.2]" style={{backgroundImage: "url(/img/neon-banner-5.jpg)"}}></div>
-          <img
-            src="img/neon-banner.png"
-            alt="neonsignco banner"
-            className=" h-[300px] object-cover sm:h-auto filter md:brightness-[.9] hidden md:block "
-          />
-        </div>
-        <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 md:translate-x-0 md:translate-y-0 md:bottom-24 md:left-24 md:top-auto flex flex-col items-start md:flex-row gap-3 md:gap-10 uppercase whitespace-nowrap font-semibold ">
+      <section
+        className="text-white md:hidden py-20 flex items-center justify-center"
+        style={{
+          background:
+            "linear-gradient(rgba(0, 0, 0,0.8), rgba(0, 0, 0,0.8)), url(/img/neon-banner-5.jpg)",
+        }}
+      >
+        <div className="flex flex-col items-start md:flex-row gap-3 md:gap-10 uppercase whitespace-nowrap font-semibold ">
           <CustomLink
             href="/shop"
             text="shop"
             className="h-12 w-52 flex items-center justify-center bg-black"
+          />
+          <CustomLink
+            href="/custom-neon-sign"
+            text="design your neon"
+            className="h-12 w-52 flex items-center justify-center bg-white text-black filter "
+          />
+        </div>
+      </section>
+      <section className="hidden md:block relative text-white  bg-black">
+        <img
+          src="img/neon-banner.png"
+          alt="neonsignco banner"
+          className=" object-cover  filter md:brightness-[.9] hidden md:block "
+        />
+        <div className="mx-auto max-w-max py-10 flex gap-10 uppercase whitespace-nowrap font-semibold ">
+          <CustomLink
+            href="/shop"
+            text="shop"
+            className="h-12 w-52 flex items-center justify-center bg-gray-900"
           />
           <CustomLink
             href="/custom-neon-sign"

@@ -5,22 +5,67 @@ import sendMail from "../utils/sendMail";
 
 // @route       POSET api/mail
 // @purpose     Send mail
-// @access      Admin
+// @access      Public
 export const sendEmail = catchASync(async (req, res) => {
+  const {
+    firstName,
+    lastName,
+    email,
+    phone,
+    country,
+    enquiryType,
+    size,
+    heardFrom,
+    joinNewsLetter,
+    productInfo,
+    message,
+  } = req.body;
 
-  const { from, to, subject, text, html } = req.body;
+  if (!enquiryType)
+    throw new AppError(400, "enquiryType is required");
 
-    // check required fields 
-  if (!from || !to || !subject || !text)
-    throw new AppError(400, "from, to, subject, text fields are required");
+  const data = {
+    firstName,
+    lastName,
+    email,
+    phone,
+    country,
+    enquiryType,
+    size,
+    heardFrom,
+    joinNewsLetter,
+    productInfo: JSON.parse(productInfo),
+    message,
+  };
+  let text = "";
+  let html = "";
 
+  // generate email text and html
+  for (let key in data) {
+    if (key === "productInfo" && productInfo?.name?.length > 0) {
+      text += `Product Name: ${data[key].name} \nProduct Image: ${data[key].image} \nProduct link: ${data[key].link}`;
+      html += `<p style="color:black"><span style="font-weight: bold">Product Name:</span> ${data[key].name}</p>
+               <p style="color:black"><span style="font-weight: bold">Product Image:</span> <img src=${data[key].image} style="width: 300px; object-fit: cover;"/></p>
+               <p style="color:black"><span style="font-weight: bold">Product Link:</span> <a href=${data[key].link}>Link</a></p>`;
+    } else {
+      text += key === "productInfo" ? "" : `${key}: ${data[key]}\n`;
+      html += `<p><span style="font-weight: bold">${key}:</span> ${data[key]}</p>`;
+    }
+  }
 
-    // check email 
-    if(!isEmail(from) || !isEmail(to)) throw new AppError(400, 'not a valid email address')
+  const mailData = {
+    from: `"NeonSignCo" <${process.env.MAIL_SMTP_USERNAME}>`,
+    to: process.env.MAIL_SMTP_USERNAME,
+    subject: data.enquiryType,
+    text,
+    html,
+  };
 
-  await sendMail({ from, to, subject, text, html });
+ 
+  // await sendMail({ from, to, subject, text, html });
   return res.json({
     status: "success",
-    message: "your message has been received",
+    message: "Your message has been received",
+    mailData
   });
 });
