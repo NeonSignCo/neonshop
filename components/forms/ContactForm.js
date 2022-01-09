@@ -40,11 +40,14 @@ const ContactForm = ({ productInfo }) => {
     e.preventDefault();
     setLoading(true); 
 
-    const formData = new FormData(); 
-    for (let key in data) formData.append(key, JSON.stringify(data[key]));
+    const formData = new FormData();
+    for (let key in data) {
+      if(key === 'image') return formData.append(key, data[key]);
+    };
 
     const res = await Axios.post("mail", formData);
     setLoading(false);
+    console.log(res.data)
     setState(state => ({ ...state, alert: { show: true, text: res.data.message, type: SUCCESS, timeout: 5000 } }));
   }, setState, () => setLoading(false)) 
   

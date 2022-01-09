@@ -21,6 +21,8 @@ export const sendEmail = catchASync(async (req, res) => {
     message,
   } = req.body;
 
+  return console.log(req.body, req.file)
+
   if (!enquiryType)
     throw new AppError(400, "enquiryType is required");
 
@@ -34,14 +36,16 @@ export const sendEmail = catchASync(async (req, res) => {
     size,
     heardFrom,
     joinNewsLetter,
-    productInfo: JSON.parse(productInfo),
+    productInfo,
     message,
   };
+
   let text = "";
   let html = "";
 
   // generate email text and html
   for (let key in data) {
+    data[key] = JSON.parse(data[key]);
     if (key === "productInfo" && productInfo?.name?.length > 0) {
       text += `Product Name: ${data[key].name} \nProduct Image: ${data[key].image} \nProduct link: ${data[key].link}`;
       html += `<p style="color:black"><span style="font-weight: bold">Product Name:</span> ${data[key].name}</p>

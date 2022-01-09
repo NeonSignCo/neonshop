@@ -25,7 +25,7 @@ export default function Home({products}) {
         <title>NeonSignCo</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <section
+      {/* <section
         className="text-white md:hidden py-20 flex items-center justify-center"
         style={{
           background:
@@ -44,14 +44,19 @@ export default function Home({products}) {
             className="h-12 w-52 flex items-center justify-center bg-white text-black filter "
           />
         </div>
-      </section>
-      <section className="hidden md:block relative text-white  bg-black">
+      </section> */}
+      <section className=" pt-5  relative text-white  bg-black">
+        <img
+          src="img/neon-banner-mobile.png"
+          alt="neonsignco banner"
+          className=" object-cover  filter md:brightness-[.9] md:hidden "
+        />
         <img
           src="img/neon-banner.png"
           alt="neonsignco banner"
           className=" object-cover  filter md:brightness-[.9] hidden md:block "
         />
-        <div className="mx-auto max-w-max py-10 flex gap-10 uppercase whitespace-nowrap font-semibold ">
+        <div className="mx-auto max-w-max py-10 flex flex-col sm:flex-row gap-10 uppercase whitespace-nowrap font-semibold ">
           <CustomLink
             href="/shop"
             text="shop"
