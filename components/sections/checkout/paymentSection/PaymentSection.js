@@ -28,6 +28,7 @@ const PaymentSection = () => {
     window.location.href = res.data.sessionUrl;
   }, setGlobalState, () => setLoading(false));
 
+
   return (
     <div className="flex flex-col gap-10">
       <div className="">
@@ -92,7 +93,8 @@ const PaymentSection = () => {
             <div className="flex gap-4 items-center">
               <input
                 type="radio"
-                defaultChecked={state.paymentMethod === CREDIT_CARD}
+                checked={state.paymentMethod === CREDIT_CARD}
+                onChange={() => {}}
                 className="scale-[1.5]"
               />
               <div className="font-semibold capitalize"> credit card</div>
@@ -130,7 +132,8 @@ const PaymentSection = () => {
               <input
                 type="radio"
                 id="credit-card"
-                defaultChecked={state.paymentMethod === AFTERPAY}
+                checked={state.paymentMethod === AFTERPAY}
+                onChange={() => {}}
                 className="scale-[1.5]"
               />{" "}
               <label htmlFor="credit-cart" className="font-semibold capitalize">
