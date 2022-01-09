@@ -68,7 +68,7 @@ const SearchBar = ({ containerRef }) => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1, transition: { duration: 0.2 } }}
-            className="absolute left-0 md:left-auto right-0 top-0 md:top-1 md:right-0 md:w-72 bg-black min-w-max  grid gap-0 p-2 md:p-0"
+            className="absolute left-0 md:left-auto right-0 top-0 md:right-0 md:w-72 bg-black min-w-max  grid gap-0 p-2 md:p-0"
           >
             <div className="relative">
               <input
