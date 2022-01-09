@@ -54,12 +54,18 @@ const About = () => {
             <p>
               Ready to get started?{" "}
               <CustomLink
-                href="/products/custom-neon"
+                href="/custom-neon-sign"
                 className="font-semibold hover:underline capitalize"
                 text="click here"
               />{" "}
               to design your very own custom neon sign, or get in touch with our
-              team directly here.
+              team directly{" "}
+              <CustomLink
+                href="/contact"
+                className="font-semibold hover:underline capitalize"
+                text="here"
+              />
+              .
             </p>
           </div>
           <img
