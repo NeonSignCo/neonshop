@@ -1,12 +1,10 @@
 import { useState } from "react";
 import {
-  FaCalendarAlt,
   FaCommentDots,
   FaEarlybirds,
   FaEnvelope,
   FaFlag,
   FaPhone,
-  FaQuestionCircle,
   FaTextHeight,
   FaUserAlt,
 } from "react-icons/fa";
@@ -65,19 +63,10 @@ const ContactForm = ({ productInfo }) => {
       html,
     };
 
-    const res = await Axios.post("mail", mailData);
+    // const res = await Axios.post("mail", mailData);
     setLoading(false);
-    setData(initialData)
-    setState((state) => ({
-      ...state,
-      alert: {
-        ...state.alert,
-        show: true,
-        text: res.data.message,
-        type: SUCCESS,
-        timeout: 5000,
-      },
-    }));
+    // setData(initialData)
+    setState(state => ({ ...state, alert: { show: true, text: 'your message has been received', type: SUCCESS, timeout: 5000 } }));
   }, setState, () => setLoading(false)) 
   
 
@@ -161,75 +150,14 @@ const ContactForm = ({ productInfo }) => {
           </select>
           <FaFlag className="absolute top-4" />
         </div>
-
-        <div className="md:col-span-2 relative">
-          <select
-            className="w-full p-3 pl-7 bg-transparent border-b outline-none transition focus:border-b-white"
-            name="enquiryType"
-            value={data.enquiryType}
-            onChange={inputChange}
-            required
-          >
-            <option value="" className="bg-gray-800">
-              Enquiry Type
-            </option>
-            <option value="Wedding/Engagement" className="bg-gray-800">
-              Wedding/Engagement
-            </option>
-            <option value="Business/entrepreneur" className="bg-gray-800">
-              Business/entrepreneur
-            </option>
-            <option value="Birthday" className="bg-gray-800">
-              Birthday
-            </option>
-            <option value="Engagement" className="bg-gray-800">
-              Engagement
-            </option>
-            <option value="Agency/Stylist" className="bg-gray-800">
-              Agency/Stylist
-            </option>
-            <option value="Home Decor" className="bg-gray-800">
-              Home Decor
-            </option>
-            <option value="Kid's Room" className="bg-gray-800">
-              Kid's Room
-            </option>
-            <option value="Other" className="bg-gray-800">
-              Other
-            </option>
-          </select>
-          <FaQuestionCircle className="absolute top-4" />
-        </div>
-        <div className="md:col-span-2 relative">
-          <select
-            className="w-full p-3 pl-7 bg-transparent border-b outline-none transition focus:border-b-white"
-            name="expectedDeliveryTime"
-            value={data.expectedDeliveryTime}
-            onChange={inputChange}
-          >
-            <option value="" className="bg-gray-800">
-              How quickly do you require your items?
-            </option>
-            <option value="2-3 weeeks" className="bg-gray-800">
-              2-3 Weeks (Rush Fees Apply)
-            </option>
-            <option value="4-6 weeks" className="bg-gray-800">
-              4-6 Weeks
-            </option>
-            <option value="6+ weeks" className="bg-gray-800">
-              6+ Weeks
-            </option>
-          </select>
-          <FaCalendarAlt className="absolute top-4" />
-        </div>
         <div className="md:col-span-2 relative">
           <input
             type="text"
             name="size"
-            value={data.siz}
+            value={data.size}
             onChange={inputChange}
             className="w-full p-3 pl-7 bg-transparent border-b outline-none transition focus:border-b-white"
-            placeholder="Did you have a size in mind for your neon sign? (Enter approx. size in inches or cm)"
+            placeholder="Requested Size"
           />
           <FaTextHeight className="absolute top-4" />
         </div>
@@ -297,7 +225,9 @@ const ContactForm = ({ productInfo }) => {
             you!
           </label>
         </div>
-        <LoadingBtn loading={loading} className="uppercase p-2 bg-gray-800">submit</LoadingBtn>
+        <LoadingBtn loading={loading} className="uppercase p-2 bg-gray-800">
+          submit
+        </LoadingBtn>
       </div>
     </form>
   );

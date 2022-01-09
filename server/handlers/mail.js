@@ -21,6 +21,6 @@ export const sendEmail = catchASync(async (req, res) => {
   await sendMail({ from, to, subject, text, html });
   return res.json({
     status: "success",
-    message: "your message has been received, we will get back to you shortly",
+    message: "your message has been received",
   });
 });

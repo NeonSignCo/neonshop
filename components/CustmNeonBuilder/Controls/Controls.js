@@ -254,12 +254,12 @@ const Controls = () => {
             />
             <BackingColor
               title="mirror acrylic"
-              text="Acrylic backing with same color as text"
+              text="Acrylic backing with mirror"
               color={MIRRORACRYLIC}
             />
             <BackingColor
               title="gold mirror acrylic"
-              text="Acrylic backing with gold color"
+              text=" Acrylic backing with gold mirror"
               color={GOLDMIRRORACRYLIC}
             />
           </div>
