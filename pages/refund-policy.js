@@ -24,17 +24,6 @@ const RefundPolicy = () => {
             change of mind returns or exchanges.
           </p>
           <h3 className="mt-5 uppercase font-semibold text-xl sm:text-2xl">
-            I PURCHASED A NEON FROM YOU A WEEK AGO AND NOW YOU HAVE A SALE, CAN
-            I GET A DISCOUNT?
-          </h3>
-          <p>
-            We get it, it's frustrating when this happens. If you happen to make
-            a purchase with us 48 hours before a Sale begins and the Sale price
-            is cheaper, we will offer you the difference as a Gift Card with a
-            12 months expiry. Beyond this, all promotional discounts or sales
-            are for future orders and cannot be used retroactively.
-          </p>
-          <h3 className="mt-5 uppercase font-semibold text-xl sm:text-2xl">
             SOMETHING’S WRONG WITH MY NEON!
           </h3>
           <p>
@@ -43,12 +32,20 @@ const RefundPolicy = () => {
             sent to you. In the unlikely event that your item arrives damaged,
             or is not working as intended, please refrain from using the
             product. We kindly ask you to send images and brief description of
-            the fault to hello@NeonSignCo.co within 24 hours of receiving the
+            the fault to <CustomLink
+              className="font-semibold hover:underline"
+              href={`mailto:${process.env.NEXT_PUBLIC_MAIL_ADDRESS}`}
+              text={process.env.NEXT_PUBLIC_MAIL_ADDRESS}
+            />{" "} within 24 hours of receiving the
             product. Please include your order number in the subject line.
           </p>
           <p>
             If you believe you have received the incorrect order, please contact
-            our team at hello@NeonSignCo.co with an image of the received item,
+            our team at <CustomLink
+              className="font-semibold hover:underline"
+              href={`mailto:${process.env.NEXT_PUBLIC_MAIL_ADDRESS}`}
+              text={process.env.NEXT_PUBLIC_MAIL_ADDRESS}
+            />{" "} with an image of the received item,
             and a brief description of the discrepancy within 24 hours of
             receiving the item. Please include your order number in the subject
             line.

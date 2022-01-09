@@ -21,10 +21,9 @@ const ShippingReturns = () => {
           <h3 className="mt-5 uppercase font-semibold text-xl sm:text-2xl">
             how long will my order take?
           </h3>
-          <p>NeonSignCo Neon handcraft every item to order.</p>
+          <p>NeonSignCo handcrafts every item to order.</p>
           <p>
-            Standard orders take 10-20 days, including delivery time from the
-            date you approve your proof.
+            Standard orders take 10-15 days, including delivery time.
           </p>
           <p>
             We’re so committed to getting your sign to you in time for your big
@@ -50,7 +49,11 @@ const ShippingReturns = () => {
           <p>
             Need it sooner than 10-20 days? Our team will do our absolute best
             to accommodate rush orders where possible. Contact us at
-            hello@NeonSignCo.co to see if we can help!
+            <CustomLink
+              className="font-semibold hover:underline"
+              href={`mailto:${process.env.NEXT_PUBLIC_MAIL_ADDRESS}`}
+              text={process.env.NEXT_PUBLIC_MAIL_ADDRESS}
+            />{" "} to see if we can help!
           </p>
           <h3 className="mt-5 uppercase font-semibold text-xl sm:text-2xl">
             HOW CAN I CANCEL AN ORDER THAT I’VE PLACED?
@@ -69,7 +72,11 @@ const ShippingReturns = () => {
             an order. If you have designed your own custom neon sign on our site
             and need to update a mis-spelt word, please get in touch with our
             team within 24 hours and they may be able to help. Email them at
-            hello@NeonSignCo.co including your order number and amendment/s.
+            <CustomLink
+              className="font-semibold hover:underline"
+              href={`mailto:${process.env.NEXT_PUBLIC_MAIL_ADDRESS}`}
+              text={process.env.NEXT_PUBLIC_MAIL_ADDRESS}
+            />{" "} including your order number and amendment/s.
           </p>
           <p>
             We understand that sometimes you may want to add more NeonSignCo
@@ -108,7 +115,11 @@ const ShippingReturns = () => {
           </ul>
           <p>
             If you continue to experience any issues, please don’t hesitate to
-            contact us at hello@NeonSignCo.co and we will find an alternative
+            contact us at <CustomLink
+              className="font-semibold hover:underline"
+              href={`mailto:${process.env.NEXT_PUBLIC_MAIL_ADDRESS}`}
+              text={process.env.NEXT_PUBLIC_MAIL_ADDRESS}
+            />{" "} and we will find an alternative
             solution to help you place your order online.
           </p>
         </section>
@@ -137,7 +148,11 @@ const ShippingReturns = () => {
           <p>
             Once your order has been dispatched, you will receive a tracking
             number to follow from our door to yours. Please contact
-            hello@NeonSignCo.co if you have any trouble with this tracking.
+            <CustomLink
+              className="font-semibold hover:underline"
+              href={`mailto:${process.env.NEXT_PUBLIC_MAIL_ADDRESS}`}
+              text={process.env.NEXT_PUBLIC_MAIL_ADDRESS}
+            />{" "} if you have any trouble with this tracking.
           </p>
           <h3 className="mt-5 uppercase font-semibold text-xl sm:text-2xl">
             I HAVEN’T RECEIVED MY ORDER, WHAT DO I DO?
@@ -145,7 +160,11 @@ const ShippingReturns = () => {
           <p>
             Your NeonSignCo order should arrive between 10-20 days (standard
             orders). If you are still waiting for your order or believe some of
-            your order may be missing, please contact hello@NeonSignCo.co with
+            your order may be missing, please contact <CustomLink
+              className="font-semibold hover:underline"
+              href={`mailto:${process.env.NEXT_PUBLIC_MAIL_ADDRESS}`}
+              text={process.env.NEXT_PUBLIC_MAIL_ADDRESS}
+            />{" "} with
             your query.
           </p>
           <h3 className="mt-5 uppercase font-semibold text-xl sm:text-2xl">
@@ -154,7 +173,11 @@ const ShippingReturns = () => {
           <p>
             If you purchased multiple items in your order, it may be delivered
             in separate deliveries over a couple of days depending on your
-            courier. Please contact hello@NeonSignCo.co if you believe some of
+            courier. Please contact <CustomLink
+              className="font-semibold hover:underline"
+              href={`mailto:${process.env.NEXT_PUBLIC_MAIL_ADDRESS}`}
+              text={process.env.NEXT_PUBLIC_MAIL_ADDRESS}
+            />{" "} if you believe some of
             your order may be missing.
           </p>
           <h3 className="mt-5 uppercase font-semibold text-xl sm:text-2xl">
@@ -191,17 +214,6 @@ const ShippingReturns = () => {
             Due to the highly custom nature of our product, we do not offer
             change of mind returns or exchanges.
           </p>
-          <h3 className="mt-5 uppercase font-semibold text-xl sm:text-2xl">
-            I PURCHASED A NEON FROM YOU A WEEK AGO AND NOW YOU HAVE A SALE, CAN
-            I GET A DISCOUNT?
-          </h3>
-          <p>
-            We get it, it's frustrating when this happens. If you happen to make
-            a purchase with us 48 hours before a Sale begins and the Sale price
-            is cheaper, we will offer you the difference as a Gift Card with a
-            12 months expiry. Beyond this, all promotional discounts or sales
-            are for future orders and cannot be used retroactively.
-          </p>
 
           <h3 className="mt-5 uppercase font-semibold text-xl sm:text-2xl">
             SOMETHING’S WRONG WITH MY NEON!
@@ -212,13 +224,22 @@ const ShippingReturns = () => {
             sent to you. In the unlikely event that your item arrives damaged,
             or is not working as intended, please refrain from using the
             product. We kindly ask you to send images, a video and brief
-            description of the fault to hello@NeonSignCo.co within 24 hours of
-            receiving the product. Please include your order number in the
-            subject line. If you believe you have received the incorrect order,
-            please contact our team at hello@NeonSignCo.co with an image of the
-            received item, and a brief description of the discrepancy within 24
-            hours of receiving the item. Please include your order number in the
-            subject line.
+            description of the fault to{" "}
+            <CustomLink
+              className="font-semibold hover:underline"
+              href={`mailto:${process.env.NEXT_PUBLIC_MAIL_ADDRESS}`}
+              text={process.env.NEXT_PUBLIC_MAIL_ADDRESS}
+            />{" "}
+            within 24 hours of receiving the product. Please include your order
+            number in the subject line. If you believe you have received the
+            incorrect order, please contact our team at <CustomLink
+              className="font-semibold hover:underline"
+              href={`mailto:${process.env.NEXT_PUBLIC_MAIL_ADDRESS}`}
+              text={process.env.NEXT_PUBLIC_MAIL_ADDRESS}
+            />{" "} with
+            an image of the received item, and a brief description of the
+            discrepancy within 24 hours of receiving the item. Please include
+            your order number in the subject line.
           </p>
           <h3 className="mt-5 uppercase font-semibold text-xl sm:text-2xl">
             DOES MY NEON COME WITH A WARRANTY?
@@ -234,7 +255,11 @@ const ShippingReturns = () => {
             refund the product. NeonSignCo reserve the right to select the most
             appropriate actions to fulfil the warranty.
           </p>
-          <p>Please contact hello@NeonSignCo.co for all warranty queries.</p>
+          <p>Please contact <CustomLink
+              className="font-semibold hover:underline"
+              href={`mailto:${process.env.NEXT_PUBLIC_MAIL_ADDRESS}`}
+              text={process.env.NEXT_PUBLIC_MAIL_ADDRESS}
+            />{" "} for all warranty queries.</p>
         </section>
       </div>
       <NewsLetterSection />
