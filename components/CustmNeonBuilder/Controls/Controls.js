@@ -320,6 +320,7 @@ const Controls = () => {
                 type="checkbox"
                 checked={state.data.concent}
                 id="concent-box"
+                className="scale-[1.5]"
                 onChange={() =>
                   setState((state) => ({
                     ...state,

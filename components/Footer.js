@@ -32,11 +32,11 @@ const Footer = () => {
               className="transition hover:underline"
               text="contact"
             />
-            <CustomLink
+            {/* <CustomLink
               href="/privacy-policy"
               className="transition hover:underline"
               text="privacy policy"
-            />
+            /> */}
             {/* <CustomLink
               href="/terms-conditions"
               className="transition hover:underline"

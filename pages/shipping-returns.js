@@ -32,29 +32,7 @@ const ShippingReturns = () => {
             the (super rare!) event that your neon sign does not arrive on time!
             Plus, you’ll get to keep your neon. How good is that?
           </p>
-          <p>
-            ust remember to enter your event date (minimum 4 weeks away from
-            your order date) at check-out, email us at{" "}
-            <CustomLink
-              text={process.env.NEXT_PUBLIC_MAIL_ADDRESS}
-              href={`mailto:${process.env.NEXT_PUBLIC_MAIL_ADDRESS}`}
-              className="font-semibold"
-            />{" "}
-            or let us know when you get sent your proof to apply this guarantee
-            to your order.{" "}
-          </p>
-          <h3 className="mt-5 uppercase font-semibold text-xl sm:text-2xl">
-            I NEED MY NEON SIGN SOONER!
-          </h3>
-          <p>
-            Need it sooner than 10-20 days? Our team will do our absolute best
-            to accommodate rush orders where possible. Contact us at
-            <CustomLink
-              className="font-semibold hover:underline"
-              href={`mailto:${process.env.NEXT_PUBLIC_MAIL_ADDRESS}`}
-              text={process.env.NEXT_PUBLIC_MAIL_ADDRESS}
-            />{" "} to see if we can help!
-          </p>
+          
           <h3 className="mt-5 uppercase font-semibold text-xl sm:text-2xl">
             HOW CAN I CANCEL AN ORDER THAT I’VE PLACED?
           </h3>
