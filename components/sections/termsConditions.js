@@ -1,7 +1,7 @@
 import Head from "next/head";
-import CustomLink from "../components/CustomLink";
-import FollowSection from "../components/sections/FollowSection";
-import NewsLetterSection from "../components/sections/NewsLetterSection";
+import CustomLink from "../CustomLink";
+import FollowSection from "./FollowSection";
+import NewsLetterSection from "./NewsLetterSection";
 
 const TermsConditions = () => {
   return (
@@ -181,7 +181,7 @@ const TermsConditions = () => {
           />
         </section>
       </div>
-      <NewsLetterSection />
+      <NewsLetterSection/>
       <FollowSection />
     </div>
   );

@@ -29,7 +29,7 @@ const Nav = () => {
   return (
     <div className="bg-black text-white sticky  top-0 w-full shadow z-20 ">
       <AnimatePresence>{globalState.showBanner && <Banner />}</AnimatePresence>
-      <div className="py-4 px-5 lg:px-20 flex flex-wrap justify-center gap-3 xs:justify-between items-center">
+      <div className="py-3 px-5 lg:px-20 flex flex-wrap justify-center gap-3 xs:justify-between items-center">
         <CustomLink
           text="NeonSignCo"
           className="font-semibold text-2xl lg:text-3xl"
@@ -144,11 +144,11 @@ const AccountBtn = ({ containerRef }) => {
 
   return (
     <div className="relative">
-      <button onClick={() => setExpand((bool) => !bool)}>
+      <button onClick={() => setExpand((bool) => !bool)} className="mt-2">
         <FaUserCircle />
       </button>
       {expand && (
-        <div className="absolute top-[58px] p-4 bg-black text-white capitalize text-base rounded border border-gray-800">
+        <div className="absolute top-[57px] -left-1 p-4 bg-black text-white capitalize text-base rounded border border-gray-800">
           <FaCaretUp className="absolute -top-4 left-1 text-2xl text-black " />
           {globalState.auth?.loading ? (
             <Loader />

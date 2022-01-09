@@ -31,7 +31,21 @@ const Controls = () => {
          .getElementById("text")
          .scrollIntoView({ behavior: "smooth" });
      }
-     
+    // check concent
+     if (!state.data.concent) {
+       setState((state) => ({
+         ...state,
+         error: {
+           ...state.error,
+           concent: "Pleae check this box to proceed",
+         },
+       }));
+       // scroll to error section
+       return document
+         .getElementById("concent")
+         .scrollIntoView({ behavior: "smooth" });
+     }
+    
     const customItem = { ...state.data, size: state.data.size.name, count: 1 };
 
     setLoading(true);
@@ -296,6 +310,32 @@ const Controls = () => {
                 }))
               }
             ></textarea>
+          </div>
+          <div className="grid gap-2" id="concent">
+            {state.error.concent && (
+              <p className="text-red-500 text-center">{state.error.concent}</p>
+            )}
+            <div className="flex gap-3 items-center">
+              <input
+                type="checkbox"
+                checked={state.data.concent}
+                id="concent-box"
+                onChange={() =>
+                  setState((state) => ({
+                    ...state,
+                    data: {
+                      ...state.data,
+                      concent: !state.data.concent,
+                    },
+                    error: { ...state.error, concent: "" },
+                  }))
+                }
+              />
+              <label htmlFor="concent-box" className="text-sm">
+                All custom orders subject to approval, any required changes will
+                be sent for approval. This will not delay your order.
+              </label>
+            </div>
           </div>
         </div>
         <div className="flex fixed lg:static bottom-0 inset-x-0 items-center justify-center lg:justify-start  gap-2 py-2 lg:p-4 bg-gray-300 border-t border-gray-300">

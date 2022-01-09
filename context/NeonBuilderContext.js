@@ -28,10 +28,11 @@ const NeonBuilderContext = ({ children }) => {
       price: 0,
       mountType: "WALL",  
       icon: '', 
-      note: ''
+      note: '', 
+      concent: false
     },
     controls: { showNavigation: false, showPreview: false, typing: false }, 
-    error: {text: ''}
+    error: {text: '', concent: ''}
   });
 
   useEffect(() => {

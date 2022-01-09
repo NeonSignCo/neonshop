@@ -16,57 +16,32 @@ const About = () => {
           </h1>
           <div className="grid gap-10 text-lg  mt-20 text-center md:text-left">
             <p>
-              NeonSignCo was co-founded in 2015 by two friends with one vision -
-              to light up people’s lives by creating lasting impressions.
+              NeonSignCo was started with a single goal in mind – create the
+              best quality signs, ones we could be proud of. From simple
+              concepts to extraordinary designs, we wanted to create something
+              everyone would love. We developed an exclusive design that no
+              other company offers at this time; our Social Media Icon Username
+              style was created to benefit everyone. From small businesses, to
+              online content creators, large corporate businesses and
+              individuals, this design was made for you.
             </p>
             <p>
-              From humble beginnings in Geelong, Australia, Ash and Tash came to
-              meet hundreds of miles/kilometers away from where their own
-              individual stories began.
+              As you may notice on our site we offer unique pre-made designs as
+              well. Other sites offer the same basic “Good Vibes” designs. We
+              are committed to being unique and offering designs that no other
+              company is currently producing. We hope these designs are
+              inspiring and loved by all of you. If you have any idea, or see
+              any design anywhere else that you would like please let us know
+              and we can get it for you! Also we guarantee our prices will be
+              better.
             </p>
             <p>
-              Ash originally owned a drone business, while Tash had her roots
-              grounded in photography. Thank the Neon stars, that in a
-              bitter-sweet twist of fate, Ash’s drone business literally crashed
-              and burned. And soon after from the embers, the NeonSignCo
-              partnership was founded. The rest, as they say, is history.
+              We are committed to our customers in every way. We enjoy creating
+              designs and working with you to offer custom pieces you can be as
+              satisfied with as we are proud of. If you have a logo and want to
+              see it in a neon style design please send it to us.
             </p>
-            <p>
-              Now, 6 years on, NeonSignCo has built up a global team of
-              extraordinary individuals - each an expert in their own areas.
-              Some are LED neon artisans and epic customer experience managers,
-              while others are design geniuses...and more! All, however, work
-              magic and are (as we like to say) wizards.{" "}
-            </p>
-            <p>
-              Through your journey with NeonSignCo bringing your vision to life,
-              you’ll get to experience this magic first hand!{" "}
-            </p>
-            <p>
-              Our team works with you to design and create beautifully bright
-              custom LED Neon lights and signage for your events, business and
-              home.
-            </p>
-            <p>
-              Made with love, packaged with care, delivered from our door to
-              yours.
-            </p>
-            <p>
-              Ready to get started?{" "}
-              <CustomLink
-                href="/custom-neon-sign"
-                className="font-semibold hover:underline capitalize"
-                text="click here"
-              />{" "}
-              to design your very own custom neon sign, or get in touch with our
-              team directly{" "}
-              <CustomLink
-                href="/contact"
-                className="font-semibold hover:underline capitalize"
-                text="here"
-              />
-              .
-            </p>
+            <p>Thank you for your support, we appreciate all of you</p>
           </div>
           <img
             src="/img/about-us.png"
