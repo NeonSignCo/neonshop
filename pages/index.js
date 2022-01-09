@@ -25,26 +25,6 @@ export default function Home({products}) {
         <title>NeonSignCo</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {/* <section
-        className="text-white md:hidden py-20 flex items-center justify-center"
-        style={{
-          background:
-            "linear-gradient(rgba(0, 0, 0,0.8), rgba(0, 0, 0,0.8)), url(/img/neon-banner-5.jpg)",
-        }}
-      >
-        <div className="flex flex-col items-start md:flex-row gap-3 md:gap-10 uppercase whitespace-nowrap font-semibold ">
-          <CustomLink
-            href="/shop"
-            text="shop"
-            className="h-12 w-52 flex items-center justify-center bg-black"
-          />
-          <CustomLink
-            href="/custom-neon-sign"
-            text="design your neon"
-            className="h-12 w-52 flex items-center justify-center bg-white text-black filter "
-          />
-        </div>
-      </section> */}
       <section className=" pt-5  relative text-white  bg-black">
         <img
           src="img/neon-banner-mobile.png"

@@ -5,6 +5,7 @@ import {
   FaEnvelope,
   FaFlag,
   FaPhone,
+  FaQuestionCircle,
   FaTextHeight,
   FaUserAlt,
 } from "react-icons/fa";
@@ -41,13 +42,18 @@ const ContactForm = ({ productInfo }) => {
     setLoading(true); 
 
     const formData = new FormData();
-    for (let key in data) {
-      if(key === 'image') return formData.append(key, data[key]);
-    };
+
+    Object.keys(data).forEach(key => {
+      if (key === "image") return formData.append(key, data[key]);
+      if (key === "productInfo") {
+        if (!data.productInfo) return;
+        return formData.append(key, JSON.stringify(data[key]));
+      }
+      return formData.append(key, JSON.stringify(data[key]));
+    })
 
     const res = await Axios.post("mail", formData);
     setLoading(false);
-    console.log(res.data)
     setState(state => ({ ...state, alert: { show: true, text: res.data.message, type: SUCCESS, timeout: 5000 } }));
   }, setState, () => setLoading(false)) 
   
@@ -131,6 +137,44 @@ const ContactForm = ({ productInfo }) => {
             ))}
           </select>
           <FaFlag className="absolute top-4" />
+        </div>
+        <div className="md:col-span-2 relative">
+          <select
+            className="w-full p-3 pl-7 bg-transparent border-b outline-none transition focus:border-b-white"
+            name="enquiryType"
+            value={data.enquiryType}
+            onChange={inputChange}
+            required
+          >
+            <option value="" className="bg-gray-800">
+              Enquiry Type
+            </option>
+            <option value="Wedding/Engagement" className="bg-gray-800">
+              Wedding/Engagement
+            </option>
+            <option value="Business/entrepreneur" className="bg-gray-800">
+              Business/entrepreneur
+            </option>
+            <option value="Birthday" className="bg-gray-800">
+              Birthday
+            </option>
+            <option value="Engagement" className="bg-gray-800">
+              Engagement
+            </option>
+            <option value="Agency/Stylist" className="bg-gray-800">
+              Agency/Stylist
+            </option>
+            <option value="Home Decor" className="bg-gray-800">
+              Home Decor
+            </option>
+            <option value="Kid's Room" className="bg-gray-800">
+              Kid's Room
+            </option>
+            <option value="Other" className="bg-gray-800">
+              Other
+            </option>
+          </select>
+          <FaQuestionCircle  className="absolute top-4" />
         </div>
         <div className="md:col-span-2 relative">
           <input

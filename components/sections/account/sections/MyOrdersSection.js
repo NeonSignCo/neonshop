@@ -251,7 +251,7 @@ const Preview = ({ order, setExpand }) => {
   return (
     <div className="flex flex-wrap gap-2">
       <div className="flex-1 flex flex-col gap-2">
-        <div className="flex gap-1">
+        <div className="flex flex-wrap gap-1">
           {order.customItems?.map((item) => (
             <NeonPreview
               key={item._id}
@@ -260,7 +260,7 @@ const Preview = ({ order, setExpand }) => {
               color={colors.find((color) => color.hex === item.color.hex)}
               icon={item.icon}
               className="h-20 w-20 overflow-hidden bg-black"
-              iconClass="h-10 lg:h-7" 
+              iconClass="h-10 lg:h-7"
               hideWidth
             />
           ))}

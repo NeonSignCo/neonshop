@@ -2,6 +2,7 @@ import isEmail from "../../utils/isEmail";
 import AppError from "../utils/AppError";
 import catchASync from "../utils/catchASync";
 import sendMail from "../utils/sendMail";
+import uploadImage from "../utils/uploadImage";
 
 // @route       POSET api/mail
 // @purpose     Send mail
@@ -19,13 +20,21 @@ export const sendEmail = catchASync(async (req, res) => {
     joinNewsLetter,
     productInfo,
     message,
-  } = req.body;
+  } = req.body; 
 
-  return console.log(req.body, req.file)
-
+  let image; 
+ 
   if (!enquiryType)
     throw new AppError(400, "enquiryType is required");
 
+  if (req.file) {
+      image = await uploadImage({
+       buffer: req.file.buffer,
+       width: 500,
+       folder: "neonsignco/img/client-uploads",
+     });
+  }
+  
   const data = {
     firstName,
     lastName,
@@ -33,29 +42,49 @@ export const sendEmail = catchASync(async (req, res) => {
     phone,
     country,
     enquiryType,
-    size,
+    size, 
+    image,
     heardFrom,
     joinNewsLetter,
     productInfo,
     message,
   };
 
+
   let text = "";
   let html = "";
 
   // generate email text and html
-  for (let key in data) {
-    data[key] = JSON.parse(data[key]);
-    if (key === "productInfo" && productInfo?.name?.length > 0) {
-      text += `Product Name: ${data[key].name} \nProduct Image: ${data[key].image} \nProduct link: ${data[key].link}`;
-      html += `<p style="color:black"><span style="font-weight: bold">Product Name:</span> ${data[key].name}</p>
-               <p style="color:black"><span style="font-weight: bold">Product Image:</span> <img src=${data[key].image} style="width: 300px; object-fit: cover;"/></p>
-               <p style="color:black"><span style="font-weight: bold">Product Link:</span> <a href=${data[key].link}>Link</a></p>`;
-    } else {
-      text += key === "productInfo" ? "" : `${key}: ${data[key]}\n`;
-      html += `<p><span style="font-weight: bold">${key}:</span> ${data[key]}</p>`;
+  Object.keys(data).forEach(key => {
+    // parse the json data
+       try {
+         data[key] = JSON.parse(data[key]);
+    } catch (error) { }
+
+    // for productInfo 
+    if (key === "productInfo") {
+      if (!data.productInfo) return;
+       text += `Product Name: ${data[key].name} \nProduct Image: ${data[key].image} \nProduct link: ${data[key].link}`;
+       html += `<p style="color:black"><span style="font-weight: bold">Product Name:</span> ${data[key].name}</p>
+            <p style="color:black"><span style="font-weight: bold">Product Image:</span> <img src=${data[key].image} style="width: 400px; object-fit: cover;"/></p>
+            <p style="color:black"><span style="font-weight: bold">Product Link:</span> <a href=${data[key].link}>Link</a></p>`;
+      return;
     }
-  }
+
+    // for image 
+    if (key === 'image') {
+      if (!data.image) return; 
+       text += `Logo/Image: ${data[key].secure_url} `;
+      html += `<p style="color:black"><span style="font-weight: bold">Logo/Image:</span> <img src=${data[key].secure_url} style="width: 400px; object-fit: cover;"/></p>`; 
+      return;
+    }
+
+    // for the rest 
+    text += key === "productInfo" ? "" : `${key}: ${data[key]}\n`;
+    html += `<p><span style="font-weight: bold">${key}:</span>${data[key]}</p>`;
+    return;
+
+  })
 
   const mailData = {
     from: `"NeonSignCo" <${process.env.MAIL_SMTP_USERNAME}>`,
@@ -65,11 +94,9 @@ export const sendEmail = catchASync(async (req, res) => {
     html,
   };
 
- 
-  // await sendMail({ from, to, subject, text, html });
+  await sendMail(mailData);
   return res.json({
     status: "success",
     message: "Your message has been received",
-    mailData
   });
 });
