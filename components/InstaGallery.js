@@ -15,7 +15,7 @@ const InstaGallery = ({}) => {
           <img
             src={item.img || `/img/neon-images/page${i + 1}.png`}
             alt={item.alt || `neon image ${i + 1}`}
-            className="object-cover h-60"
+            className="object-cover"
           />
           <div className="absolute inset-0  bg-black transition-all bg-opacity-50 opacity-0 group-hover:opacity-100 flex items-center justify-center">
             <FaInstagram className="text-white text-4xl transition group-hover:scale-125" />
