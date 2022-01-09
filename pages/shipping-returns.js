@@ -85,43 +85,6 @@ const ShippingReturns = () => {
             processing. If you’d like to purchase more items, we recommend
             placing a separate order.
           </p>
-          <h3 className="mt-5 uppercase font-semibold text-xl sm:text-2xl">
-            WHAT PAYMENT METHODS DO YOU ACCEPT?
-          </h3>
-          <p>
-            We currently accept Credit Card, Paypal, Afterpay (USA and AUS only)
-            and Gift Vouchers.
-          </p>
-          <h3 className="mt-5 uppercase font-semibold text-xl sm:text-2xl">
-            I’M HAVING TROUBLES PLACING AN ORDER ONLINE, CAN YOU HELP?
-          </h3>
-          <p>
-            On the rare occasion you may experience difficulties out of our
-            control, we recommend the following tips:
-          </p>
-          <ul className="list-disc list-inside">
-            <li>Clear your cache and any cookies from your browser.</li>
-            <li>
-              Try a different web browser - using Google Chrome or Mozilla
-              Firefox are the easiest to browse and shop on most websites,
-              including ours.
-            </li>
-            <li>
-              If you have an account, log in/log out of your account again.
-            </li>
-            <li>
-              Try using a different device (sometimes using a desktop may help).
-            </li>
-          </ul>
-          <p>
-            If you continue to experience any issues, please don’t hesitate to
-            contact us at <CustomLink
-              className="font-semibold hover:underline"
-              href={`mailto:${process.env.NEXT_PUBLIC_MAIL_ADDRESS}`}
-              text={process.env.NEXT_PUBLIC_MAIL_ADDRESS}
-            />{" "} and we will find an alternative
-            solution to help you place your order online.
-          </p>
         </section>
         <section className="mb-20 grid gap-5">
           <h2 className="uppercase font-semibold text-2xl sm:text-3xl">
