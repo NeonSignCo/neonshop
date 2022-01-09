@@ -25,12 +25,13 @@ export default function Home({products}) {
         <title>NeonSignCo</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <section className="relative text-white py-9 bg-black">
+      <section className="relative text-white md:py-9 bg-black" >
         <div>
+          <div className=" md:hidden h-[400px] filter brightness-[.1]" style={{backgroundImage: "url(/img/neon-banner-5.jpg)"}}></div>
           <img
             src="img/neon-banner.png"
             alt="neonsignco banner"
-            className="h-[300px] object-cover sm:h-auto filter brightness-[.9]"
+            className=" h-[300px] object-cover sm:h-auto filter md:brightness-[.9] hidden md:block "
           />
         </div>
         <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 md:translate-x-0 md:translate-y-0 md:bottom-24 md:left-24 md:top-auto flex flex-col items-start md:flex-row gap-3 md:gap-10 uppercase whitespace-nowrap font-semibold ">
