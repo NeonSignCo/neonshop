@@ -25,18 +25,15 @@ export default function Home({products}) {
         <title>NeonSignCo</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <section
-        className="bg-gray-800 px-5 lg:px-20 py-20 sm:py-32 lg:pt-48 flex flex-col items-center md:items-start gap-10 text-white"
-        style={{
-          background:
-            "linear-gradient(rgba(0, 0, 0,0.5), rgba(0, 0, 0,0.5)), url('/img/neon-banner.jpg')",
-        }}
-      >
-        <h2 className="text-2xl md:text-4xl lg:text-6xl text-center md:text-left">
-          NEON SIGNS TO CELEBRATE, <br /> MOTIVATE & INSPIRE
-        </h2>
-        <p className="text-lg">Imagination is your only limit.</p>
-        <div className="flex flex-col items-start md:flex-row gap-3 md:gap-10 uppercase whitespace-nowrap font-semibold">
+      <section className="relative text-white py-9 bg-black">
+        <div>
+          <img
+            src="img/neon-banner.png"
+            alt="neonsignco banner"
+            className="h-[300px] object-cover sm:h-auto filter brightness-[.9]"
+          />
+        </div>
+        <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 md:translate-x-0 md:translate-y-0 md:bottom-24 md:left-24 md:top-auto flex flex-col items-start md:flex-row gap-3 md:gap-10 uppercase whitespace-nowrap font-semibold ">
           <CustomLink
             href="/shop"
             text="shop"
@@ -45,7 +42,7 @@ export default function Home({products}) {
           <CustomLink
             href="/custom-neon-sign"
             text="design your neon"
-            className="h-12 w-52 flex items-center justify-center bg-white text-black"
+            className="h-12 w-52 flex items-center justify-center bg-white text-black filter "
           />
         </div>
       </section>
@@ -98,7 +95,9 @@ export default function Home({products}) {
             className="h-12 w-52 flex items-center justify-center bg-white uppercase text-black font-semibold mt-10"
           />
         </div>
-        <img src="/img/neon-banner-4.png" alt="" />
+        <div>
+          <img src="/img/neon-banner-4.png" alt="" />
+        </div>
       </section>
       <section className="px-5 lg:px-20 py-20 bg-white">
         <h3 className="text-3xl uppercase font-semibold uppercase text-center mb-10">
@@ -165,118 +164,10 @@ export default function Home({products}) {
           </Item>
         </div>
       </section>
-      {/* <section className="px-5 lg:px-20 py-20 bg-white">
-        <h3 className="text-3xl uppercase font-semibold uppercase text-center mb-10">
-          what our clients say
-        </h3>
-        <ReviewSlider />
-      </section> */}
-      {/* <section
-        className="px-5 lg:px-20 py-20 bg-black text-white"
-        style={{
-          background:
-            "linear-gradient(rgba(0, 0, 0,0.94), rgba(0, 0, 0,0.94)), url('/img/neon-banner-3.jpg')",
-        }}
-      >
-        <h3 className="text-3xl  font-semibold uppercase text-center mb-10">
-          want some inspo?
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-20 md:gap-10">
-          <CustomLink className="grid gap-3 text-center bg-white text-black pb-3">
-            <img
-              src="/img/product-images/product-1.jpg"
-              alt="product"
-              className="w-full object-cover"
-            />
-            <p className="text-xl px-5  font-bold uppercase">
-              Juddchella - An Event By NeonSignCo
-            </p>
-            <p className="px-5">
-              Move over Coachella, The Judd’s are in town. The only person we
-              know that could pull off a housewarming party theme this
-              extravagant is non-other than...
-            </p>
-          </CustomLink>
-          <CustomLink className="grid gap-3 text-center bg-white text-black pb-3">
-            <img
-              src="/img/product-images/product-3.jpg"
-              alt="product"
-              className="w-full object-cover"
-            />
-            <p className="text-xl px-5  font-bold uppercase">
-              Home office ideas to boost your productivity{" "}
-            </p>
-            <p className="px-5">
-              ‘Home Office Ideas’ would have to be one of the most searched for
-              phrases in 2020. Thanks to Covid, our work environments have
-              undergone a...
-            </p>
-          </CustomLink>
-          <CustomLink className="grid gap-3 text-center bg-white text-black pb-3">
-            <img
-              src="/img/product-images/product-4.jpg"
-              alt="product"
-              className="w-full object-cover"
-            />
-            <p className="text-xl px-5  font-bold uppercase">
-              retail design | first impressions count
-            </p>
-            <p className="px-5">
-              Retail Design | First Impressions Count 11 mins read This one is
-              for all you business owners out there. Everyone knows that first
-              impressions count....
-            </p>
-          </CustomLink>
-        </div>
-      </section> */}
-      {/* <section className="px-5 lg:px-20 py-20 bg-white text-center md:text-left">
-        <h3 className="text-3xl uppercase font-semibold uppercase text-center mb-16">
-          our story
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-20 ">
-          <div className="flex flex-col gap-4 justify-center">
-            <p className="font-semibold">
-              Meet Ash & Tash (Co-Founders of NeonSignCo)
-            </p>
-            <p>
-              NeonSignCo was co-founded in 2015 by two friends with one vision -
-              to light up people’s lives by creating lasting impressions.
-            </p>
-            <p>
-              From humble beginnings in Geelong, Australia, Ash and Tash came to
-              meet hundreds of miles/kilometers away from where their own
-              individual stories began.
-            </p>
-            <p>
-              Ash originally owned a drone business, while Tash had her roots
-              grounded in photography. Thank the Neon stars, that in a
-              bitter-sweet twist of fate, Ash’s drone business literally crashed
-              and burned. And soon after from the embers, the NeonSignCo
-              partnership was founded. The rest, as they say, is history.
-              <CustomLink className="font-semibold"> Read more.</CustomLink>
-            </p>
-          </div>
-          <div className="relative">
-            <img src="/img/our-story.jpg" alt="our neon store story" />
-          </div>
-        </div>
-        <div className="flex flex-col sm:flex-row items-center justify-center mt-10 gap-10">
-          <CustomLink
-            href="/shop"
-            text="shop now"
-            className="h-12 w-52 flex items-center justify-center bg-black text-white uppercase font-semibold transition hover:text-gray-200"
-          />
-          <CustomLink
-            text="chat to us"
-            href="/contact"
-            className="h-12 w-52 flex items-center justify-center bg-white text-black border border-black uppercase font-semibold transition hover:bg-black hover:text-white"
-          />
-        </div>
-      </section> */}
       <div className="mt-32">
         <NewsLetterSection />
       </div>
-      <FollowSection/>
+      <FollowSection />
     </div>
   );
 }

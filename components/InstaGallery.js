@@ -13,8 +13,8 @@ const InstaGallery = ({}) => {
           key={i}
         >
           <img
-            src={item.img || `/img/product-images/product-${i + 1}.jpg`}
-            alt={item.alt || `product ${i + 1}`}
+            src={item.img || `/img/neon-images/page${i + 1}.png`}
+            alt={item.alt || `neon image ${i + 1}`}
             className="object-cover h-60"
           />
           <div className="absolute inset-0  bg-black transition-all bg-opacity-50 opacity-0 group-hover:opacity-100 flex items-center justify-center">
