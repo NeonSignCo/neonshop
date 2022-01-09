@@ -106,9 +106,9 @@ export const captureOrder = catchASync(async (req, res) => {
          ? order.shippingAddress.lastName
          : order.userId?.lastName
      }`;
-    const text = `Congrats ${name}, \n Your order has been successfully received by us. \n Your order id is: ${
+    const text = `Congrats ${name}!, \n Your order has been successfully received by us. \n Your order id is: ${
       order._id
-    } \n Check your order status from here: \n ${
+    } \n Check your order status ${order.guestCheckout ? '': 'from your account or'} from here: \n ${
       req.headers.origin
     }/track-order?orderId=${order._id}&email=${order.contactEmail}`;
 
