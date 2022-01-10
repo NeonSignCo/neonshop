@@ -19,64 +19,68 @@ import { useRouter } from "next/router";
 import Axios from "../../utils/Axios";
 import { Loader } from "../LoadingBtn";
 
-const Nav = () => {
+const Nav = ({className}) => {
   const [globalState, setGlobalState] = useGlobalContext();
   const searchRef = useRef();
   const dropDownRef = useRef();
   const optionRef = useRef();
 
   return (
-    <div className="bg-black text-white sticky  top-0 w-full shadow z-20 ">
-      <AnimatePresence>{globalState.showBanner && <Banner />}</AnimatePresence>
-      <div className="py-3 px-5 lg:px-20 flex flex-wrap justify-center gap-3 xs:justify-between items-center">
-        <CustomLink
-          text="NeonSignCo"
-          className="font-semibold text-2xl lg:text-3xl"
-        />
-        <div className="hidden lg:flex items-center gap-7 capitalize text-lg">
-          <CustomLink href="/custom-neon-sign" text="design your neon" />
-          <div ref={dropDownRef}>
-            <DropDown containerRef={dropDownRef} title="shop neons" />
+    <div className={className || "sticky top-0 w-full z-20 "}>
+      <div className="bg-black text-white shadow ">
+        <AnimatePresence>
+          {globalState.showBanner && <Banner />}
+        </AnimatePresence>
+        <div className="py-3 px-5 lg:px-20 flex flex-wrap justify-center gap-3 xs:justify-between items-center">
+          <CustomLink
+            text="NeonSignCo"
+            className="font-semibold text-2xl lg:text-3xl"
+          />
+          <div className="hidden lg:flex items-center gap-7 capitalize text-lg">
+            <CustomLink href="/custom-neon-sign" text="design your neon" />
+            <div ref={dropDownRef}>
+              <DropDown containerRef={dropDownRef} title="shop neons" />
+            </div>
+            <CustomLink href="/about" text="about" />
+            <CustomLink href="/contact" text="contact" />
+            <CustomLink href="/track-order" text="track order" />
           </div>
-          <CustomLink href="/about" text="about" />
-          <CustomLink href="/contact" text="contact" />
-          <CustomLink href="/track-order" text="track order" />
-        </div>
-        <div className="flex items-center gap-4 capitalize text-xl md:text-2xl">
-          <div ref={optionRef}>
-            <AccountBtn containerRef={optionRef} />
+          <div className="flex items-center gap-4 capitalize text-xl md:text-2xl">
+            <div ref={optionRef}>
+              <AccountBtn containerRef={optionRef} />
+            </div>
+            <CartBtn />
+            <div ref={searchRef}>
+              <SearchBar containerRef={searchRef} />
+            </div>
+            <button
+              className="grid lg:hidden gap-1"
+              onClick={() =>
+                setGlobalState((state) => ({
+                  ...state,
+                  showMobileMenu: !state.showMobileMenu,
+                }))
+              }
+            >
+              <div
+                className={`bg-white h-[2px] w-5 transition ${
+                  globalState.showMobileMenu
+                    ? "translate-y-[5.5px] rotate-45"
+                    : "rotate-0"
+                }`}
+              ></div>
+              <div
+                className={`bg-white h-[2px] w-5 transition ${
+                  globalState.showMobileMenu ? "hidden" : "block"
+                }`}
+              ></div>
+              <div
+                className={`bg-white h-[2px] w-5 transition ${
+                  globalState.showMobileMenu ? "rotate-[-45deg]" : "rotate-0"
+                }`}
+              ></div>
+            </button>
           </div>
-          <CartBtn />
-          <div ref={searchRef}>
-            <SearchBar containerRef={searchRef} />
-          </div>
-          <button
-            className="grid lg:hidden gap-1"
-            onClick={() =>
-              setGlobalState((state) => ({
-                ...state,
-                showMobileMenu: !state.showMobileMenu,
-              }))
-            }
-          >
-            <div
-              className={`bg-white h-[2px] w-5 transition ${
-                globalState.showMobileMenu
-                  ? "translate-y-[5.5px] rotate-45"
-                  : "rotate-0"
-              }`}
-            ></div>
-            <div
-              className={`bg-white h-[2px] w-5 transition ${
-                globalState.showMobileMenu ? "hidden" : "block"
-              }`}
-            ></div>
-            <div
-              className={`bg-white h-[2px] w-5 transition ${
-                globalState.showMobileMenu ? "rotate-[-45deg]" : "rotate-0"
-              }`}
-            ></div>
-          </button>
         </div>
       </div>
     </div>

@@ -3,6 +3,7 @@ import Controls from "./Controls/Controls";
 import Visuals from "./Controls/visuals/Visuals";
 import { useEffect } from "react";
 import { useGlobalContext } from "../../context/GlobalContext";
+import Nav from "../nav/Nav";
 
 const CustomNeonBuilder = () => {
   const [globalState, setGlobalState] = useGlobalContext();
@@ -12,9 +13,12 @@ const CustomNeonBuilder = () => {
   }, [])
   return (
     <NeonBuilderContext>
-      <div className="bg-black fixed top-[0px] h-[calc(100vh-58px)] md:h-[calc(100vh-62px)] relative grid lg:grid-cols-3 grid-rows-6">
-        <Visuals />
-        <Controls />
+      <div className="flex flex-col h-screen overflow-hidden">
+        <Nav className="static" />
+        <div className="h-full bg-black  relative grid lg:grid-cols-3 grid-rows-6">
+          <Visuals />
+          <Controls />
+        </div>
       </div>
     </NeonBuilderContext>
   );

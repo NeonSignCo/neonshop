@@ -4,7 +4,6 @@ import { calcPrice, calcWidth, colors, fonts, icons, sizes } from "../../../util
 import Navigation from "./Navigation";
 import { BLACKACRYLIC, CLEARACRYLIC, CUT_TO_SHAPE, GOLDMIRRORACRYLIC, MIRRORACRYLIC, ROUND, SQUARE, useNeonBuilderContext } from "../../../context/NeonBuilderContext";
 import { AnimatePresence } from "framer-motion";
-import Preview from "./Preview";
 import { useGlobalContext } from '../../../context/GlobalContext';
 import catchAsync from '../../../utils/catchASync';
 import Axios from "../../../utils/Axios";
@@ -68,13 +67,10 @@ const Controls = () => {
 
 
   return (
-    <div className=" col-span-3 lg:col-span-1 row-span-4 lg:row-span-6 overflow-hidden lg:p-5">
-      <div className=" flex flex-col bg-gray-200 relative overflow-hidden h-full">
+    <div className="col-span-3 lg:col-span-1 row-span-4 lg:row-span-6 lg:p-5">
+      <div className=" flex flex-col bg-gray-200 relative overflow-hidden h-full md:h-[calc(100%-60px)]">
         <AnimatePresence>
           {state.controls.showNavigation && <Navigation />}
-        </AnimatePresence>
-        <AnimatePresence>
-          {state.controls.addToCart && <Preview />}
         </AnimatePresence>
         <div className="flex flex-col gap-8 p-5 pb-40 lg:pb-5 overflow-auto">
           <div className="grid gap-2" id="text">

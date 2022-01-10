@@ -38,7 +38,7 @@ const Container = ({ children }) => {
               : "min-h-screen"
           }`}
         >
-          {route !== "/checkout" && route !== "/admin" && <Nav />}
+          {route !== "/checkout" && route !== "/admin" && route !== '/custom-neon-sign' && <Nav />}
           <div>
             <div className="max-w-screen-2xl mx-auto">
               {state.error ? (

@@ -31,7 +31,7 @@ const NeonBuilderContext = ({ children }) => {
       note: '', 
       concent: false
     },
-    controls: { showNavigation: false, showPreview: false, typing: false }, 
+    controls: { showNavigation: false, typing: false }, 
     error: {text: '', concent: ''}
   });
 
