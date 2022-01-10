@@ -4,7 +4,7 @@ import CustomLink from "../CustomLink"
 import MobileDropDown from "./MobileDropDown"
 
 const MobileMenu = () => {
-  const [, setState] = useGlobalContext();
+  const [state, setState] = useGlobalContext();
   
   const closeMenu = () =>
     setState((state) => ({ ...state, showMobileMenu: false }));
@@ -14,7 +14,9 @@ const MobileMenu = () => {
         initial={{ x: "100%" }}
         animate={{ x: 0, transition: { duration: 0.2 } }}
         exit={{ x: "100%", transition: { duration: 0.2 } }}
-        className="fixed z-10 top-[57px] w-full bottom-0  bg-gray-900 lg:hidden text-lg uppercase text-white"
+        className={`fixed z-10  w-full bottom-0  bg-gray-900 lg:hidden text-lg uppercase text-white ${
+          state.showBanner ? "top-[90px]" : "top-[58px]"
+        }`}
       >
         <div className="py-5 px-5 flex flex-col gap-3 overflow-auto h-[calc(100vh-60px)]">
           <CustomLink
