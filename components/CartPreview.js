@@ -29,7 +29,7 @@ const CartPreview = () => {
         initial={{ opacity: 0, x: "100%" }}
         animate={{ opacity: 1, x: 0, transition: { duration: 0.3 } }}
         exit={{ opacity: 0, x: "100%", transition: { duration: 0.3 } }}
-        className=" fixed top-0 right-0 z-40 w-full sm:w-auto h-full bg-white "
+        className=" fixed top-0 right-0 h-screen z-40 w-full sm:w-auto h-full bg-white "
       >
         <div className="bg-white w-full sm:w-[370px] flex flex-col justify-between h-full">
           <button
