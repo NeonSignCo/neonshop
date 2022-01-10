@@ -67,7 +67,7 @@ const Controls = () => {
 
 
   return (
-    <div className="lg:max-w-[420px] lg:p-5 h-full overflow-hidden">
+    <div className="lg:max-w-[440px] lg:p-5 h-full overflow-hidden">
       <div className=" flex flex-col bg-gray-200 relative overflow-hidden h-full ">
         <AnimatePresence>
           {state.controls.showNavigation && <Navigation />}
