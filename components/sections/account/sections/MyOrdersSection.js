@@ -88,7 +88,7 @@ const ExpandedContent = ({ order, setExpand }) => {
                 textClass="text-5xl md:text-3xl"
                 className="py-5 w-full md:w-60 bg-black overflow-hidden "
                 iconClass="h-20"
-                hideWidth 
+                hideWidth
               />
 
               <p>
@@ -97,8 +97,17 @@ const ExpandedContent = ({ order, setExpand }) => {
               <p>
                 <span className="font-semibold">Font: </span> {item.font.text}
               </p>
+              <div className="flex items-center gap-1">
+                <div className="font-semibold">Color Name: </div>{" "}
+                <div>{item.color.name}</div> 
+                <div
+                  className="h-3 w-3  rounded-full border border-gray-500"
+                  style={{ backgroundColor: item.color.hex }}
+                ></div>
+              </div>
               <p>
-                <span className="font-semibold">Color: </span> {item.color.name}
+                <span className="font-semibold">Color Code: </span>{" "}
+                {item.color.hex}
               </p>
               <p>
                 <span className="font-semibold">Size: </span> {item.size}

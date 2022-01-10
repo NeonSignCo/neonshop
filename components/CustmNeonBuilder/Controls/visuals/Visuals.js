@@ -50,7 +50,7 @@ const Visuals = () => {
           >
             neon sign builder
           </motion.h2>
-          <p className="text-4xl capitalize text-center z-10">start typing! </p>
+          <p className="text-4xl capitalize text-center">start typing! </p>
         </div>
       )}
     </div>

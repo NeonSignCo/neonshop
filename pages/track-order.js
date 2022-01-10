@@ -138,7 +138,7 @@ const OrderDetails = ({ order }) => {
                 icon={item.icon}
                 font={item.font}
                 className="py-10 bg-black text-5xl overflow-hidden "
-                iconClass="h-20 lg:h-20 " 
+                iconClass="h-20 lg:h-20 "
                 hideWidth
               />
 
@@ -148,8 +148,17 @@ const OrderDetails = ({ order }) => {
               <p>
                 <span className="font-semibold">Font: </span> {item.font.text}
               </p>
+              <div className="flex items-center gap-1">
+                <div className="font-semibold">Color Name: </div>{" "}
+                <div>{item.color.name}</div>
+                <div
+                  className="h-3 w-3  rounded-full border border-gray-500"
+                  style={{ backgroundColor: item.color.hex }}
+                ></div>
+              </div>
               <p>
-                <span className="font-semibold">Color: </span> {item.color.name}
+                <span className="font-semibold">Color Code: </span>{" "}
+                {item.color.hex}
               </p>
               <p>
                 <span className="font-semibold">Size: </span> {item.size}

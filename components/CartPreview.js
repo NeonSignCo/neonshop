@@ -202,11 +202,21 @@ const CartItem = ({ item }) => {
         </CustomLink>
         <div className="flex flex-col justify-between flex-1">
           <h3 className="font-semibold capitalize">{item.name}</h3>
-          <p className="capitalize text-sm">
-            color: <span className="uppercase">{item.selectedColor.name}</span>{" "}
-            | size: <span className="uppercase">{item.selectedSize.info}</span>{" "}
-            | mount: <span className="uppercase">{item.selectedMountType}</span>
-          </p>
+          <div className="capitalize text-sm flex flex-wrap items-center gap-1">
+            <div className="font-semibold">color:</div>{" "}
+            <div className="flex items-center gap-1">
+              <div className="font-semibold">Color: </div>{" "}
+              <div>{item.selectedColor.name}</div>
+              <div
+                className="h-3 w-3  rounded-full border border-gray-500"
+                style={{ backgroundColor: item.selectedColor.hex }}
+              ></div>
+            </div>
+            | <div className="font-semibold">size:</div>{" "}
+            <div className="uppercase">{item.selectedSize.info}</div> |{" "}
+            <div className="font-semibold">mount:</div>{" "}
+            <div className="uppercase">{item.selectedMountType}</div>
+          </div>
           <div className="flex flex-wrap justify-between items-center">
             <div className="flex items-center gap-2">
               <button

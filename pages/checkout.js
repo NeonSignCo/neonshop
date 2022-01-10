@@ -200,7 +200,7 @@ const CartItem = ({ item }) => {
       <div className="relative">
         <div>
           <img
-            src="/img/product-images/product-3.jpg"
+            src={item.product.image.url}
             alt="product"
             className="w-16 h-16 rounded object-cover"
           />
@@ -211,17 +211,20 @@ const CartItem = ({ item }) => {
       </div>
       <div className="flex flex-col gap-1 flex-1">
         <div className="font-semibol capitalize text-xl">{item.name}</div>
-        <p className="capitalize text-sm">
-          <span className="font-semibold">color:</span>{" "}
-          <span className="uppercase">{item.selectedColor.name}</span> |{" "}
-          <span className="font-semibold">size:</span>{" "}
-          <span className="uppercase">{item.selectedSize.info}</span> |{" "}
-          <span className="font-semibold">mount:</span>{" "}
-          <span className="uppercase">{item.selectedMountType}</span>
-        </p>
+        <div className="capitalize text-sm flex flex-wrap items-center gap-2">
+          <div className="font-semibold">color:</div>{" "}
+          <div className="uppercase flex items-center gap-1">
+            <div>{item.selectedColor.name}</div>
+            <div className="h-3 w-3 rounded-full" style={{backgroundColor: item.selectedColor.hex}}></div>
+          </div>{" "}
+          | <div className="font-semibold">size:</div>{" "}
+          <div className="uppercase">{item.selectedSize.info}</div> |{" "}
+          <div className="font-semibold">mount:</div>{" "}
+          <div className="uppercase">{item.selectedMountType}</div>
+        </div>
       </div>
       <div className="flex h-full items-center justify-center">
-        <span className="text-">${item.count* salePrice}</span>
+        <span className="text-">${item.count * salePrice}</span>
       </div>
     </div>
   );

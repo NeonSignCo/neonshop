@@ -39,8 +39,8 @@ const ProductsSlider = ({products}) => {
                   width >= 768
                     ? `${(1 / products.length) * 33.33}%`
                     : width >= 640
-                    ? `${(1 / products.length) * 50}%`
-                    : `${(1 / products.length) * 50}%`,
+                    ? `${(1 / products.length) * 100}%`
+                    : `${(1 / products.length) * 100}%`,
               }}
             >
               <ProductPreview
@@ -76,7 +76,7 @@ const Controls = ({ setreview, review, products, width }) => {
         disabled={
           width >= 768
             ? review >= Math.floor((products.length - 1) / 3)
-            : review >= Math.floor((products.length - 1) / 2)
+            : review >= Math.floor((products.length - 1) / 1)
         }
         onClick={() => setreview(review + 1)}
       >
@@ -98,7 +98,7 @@ const ProductPreview = ({
 }) => {
   return (
     <div className="flex-1 flex flex-col items-center gap-5 text-black relative shadow-2xl border border-gray-200 pb-2">
-      <CustomLink href={link} className="relative h-60">
+      <CustomLink href={link} className="relative h">
         <img src={img} alt={name} className="object-cover h-full" />
       </CustomLink>
       <p className="uppercase">{name}</p>
