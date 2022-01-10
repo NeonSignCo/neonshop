@@ -112,7 +112,7 @@ export const icons = [
   {link: "TT logo.png", name: "tiktok icon"},
   {link: "TW logo.png", name: "twitter icon"},
   {link: "YT logo.png", name: "youtube icon"},
-  {link: "some logo.png", name: "some icon"},
+  {link: "HASH logo.png", name: "hash icon"},
 ];
 
 
