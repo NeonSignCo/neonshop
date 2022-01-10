@@ -67,12 +67,12 @@ const Controls = () => {
 
 
   return (
-    <div className="lg:max-w-[500px] lg:p-5 h-full overflow-hidden">
+    <div className="lg:max-w-[420px] lg:p-5 h-full overflow-hidden">
       <div className=" flex flex-col bg-gray-200 relative overflow-hidden h-full ">
         <AnimatePresence>
           {state.controls.showNavigation && <Navigation />}
         </AnimatePresence>
-        <div className="flex flex-col gap-8 p-5 pb-40 lg:pb-5 overflow-auto">
+        <div className="flex flex-col gap-8 p-5 pb-20 lg:pb-5 overflow-auto">
           <div className="grid gap-2" id="text">
             <label htmlFor="text-box" className="text-center text-lg p-2">
               {state.error.text ? (
