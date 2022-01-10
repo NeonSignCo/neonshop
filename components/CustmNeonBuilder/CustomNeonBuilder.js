@@ -14,7 +14,7 @@ const CustomNeonBuilder = () => {
   return (
     <NeonBuilderContext>
       <div className="flex flex-col h-screen overflow-hidden">
-        <Nav className="static" />
+        <Nav className="h-full static w-full" />
         <div className="h-full bg-black  relative grid lg:grid-cols-3 grid-rows-6">
           <Visuals />
           <Controls />
