@@ -8,7 +8,7 @@ const Visuals = () => {
   
   return (
     <div
-      className="col-span-3 lg:col-span-2 row-span-2 lg:row-span-6 flex text-white  relative overflow-hidden p-4"
+      className="w-full min-h-[200px] lg:h-auto flex text-white  relative overflow-hidden p-4"
     >
       {state.data.text || state.data.icon.name ? (
         <>
