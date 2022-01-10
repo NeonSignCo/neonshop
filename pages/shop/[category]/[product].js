@@ -1,6 +1,6 @@
 import { BsPlus, BsDash } from "react-icons/bs";
 import BreadCrumb from "../../../components/BreadCrumb";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useGlobalContext } from "../../../context/GlobalContext";
 import NewsLetterSection from "../../../components/sections/NewsLetterSection";
 import FollowSection from "../../../components/sections/FollowSection";
@@ -23,7 +23,6 @@ const mountTypes = ['WALL', 'HANGING']
 const ProductPage = ({ product }) => {
   const [globalState, setGlobalState] = useGlobalContext();
   const [showForm, setShowForm] = useState(false);
-  const colorRef = useRef();
   const [state, setState] = useState({
     color: '',
     size: '',
@@ -51,7 +50,7 @@ const ProductPage = ({ product }) => {
           setState((state) => ({
             ...state,
             errors: {
-              color: !state.color.hex ? "Please select a color" : "",
+              color: !state.color ? "Please select a color" : "",
               size: !state.size.info ? "Please select a size" : "",
               mountType: !state.mountType ? "Please select mount type" : "",
               quantity: !state.quantity ? "Please select quantity" : "",
@@ -90,8 +89,8 @@ const ProductPage = ({ product }) => {
         };
         
         let res;
-        
-        if (globalState.cartData.cart?.items  || globalState.cartData.cart?.customItems) {
+   
+        if (globalState.cartData.cart?.items?.length > 0  || globalState.cartData.cart?.customItems?.length > 0) {
           res = await Axios.patch("cart", {
             customItems: globalState.cartData.cart?.customItems,
             items: [...globalState.cartData.cart?.items, data],
@@ -127,7 +126,7 @@ const ProductPage = ({ product }) => {
 
   const currentSize = state.size || product.sizes[0];
   const discountPrice = product.salePercentage > 0 ? currentSize.price - currentSize.price * product.salePercentage / 100 : currentSize.price;
-  
+
   return (
     <div className=" pt-10">
       <Head>
@@ -139,12 +138,12 @@ const ProductPage = ({ product }) => {
       </div>
       <div className="px-5 lg:px-20 flex flex-col md:flex-row items-start gap-7">
         <div
-          className={`relative md:sticky ${
+          className={` md:sticky ${
             globalState.showBanner ? "top-[102px]" : "top-[62px]"
           }`}
         >
           {product.salePercentage > 0 && (
-            <div className="absolute z-10 bg-red-500 py-1 px-2 rounded text-white ">
+            <div className="absolute z-10 bg-red-500 py-1 px-2 text-white ">
               -{product.salePercentage}%
             </div>
           )}
@@ -181,57 +180,24 @@ const ProductPage = ({ product }) => {
                 <span className="text-red-500">{state.errors.color}</span>
               )}
             </h3>
-            <div className="flex flex-wrap gap-5 items-center">
+            <select
+              value={state.color?.hex}
+              className="bg-gray-200 p-2 capitalize"
+              onChange={(e) =>
+                setState((state) => ({
+                  ...state,
+                  color: colors.find((color) => color.hex === e.target.value), 
+                  errors: {...state.errors, color: ''}
+                }))
+              }
+            >
+              <option >Select a color</option>
               {colors.map((color, i) => (
-                <button
-                  key={i}
-                  className={`grid gap-2 p-3 transition justify-items-center ${
-                    state.color.hex === color.hex
-                      ? "bg-black text-white"
-                      : "bg-gray-200 "
-                  }`}
-                  onClick={() =>
-                    setState((options) => ({
-                      ...options,
-                      color,
-                      errors: { ...state.errors, color: "" },
-                    }))
-                  }
-                >
-                  <div
-                    className="h-9 w-9 rounded-full"
-                    style={{ backgroundColor: color.hex }}
-                  ></div>
-                  <p className="capitalize">{color.name}</p>
-                </button>
+                <option key={i} value={color.hex}>
+                  {color.name}
+                </option>
               ))}
-              <button
-                className={`grid gap-2 p-3 transition justify-items-center ${
-                  state.color.name === "custom"
-                    ? "bg-black text-white"
-                    : "bg-gray-200 "
-                }`}
-                onClick={() => colorRef.current.click()}
-              >
-                <input
-                  type="color"
-                  ref={colorRef}
-                  className="h-0 w-0 opacity-0"
-                  onChange={(e) =>
-                    setState((options) => ({
-                      ...options,
-                      color: { name: "custom", hex: e.target.value },
-                      errors: { ...state.errors, color: "" },
-                    }))
-                  }
-                />
-                <div
-                  className="h-9 w-9 rounded-full"
-                  style={{ backgroundColor: state.color.name === 'custom' ? state.color.hex : 'gray ' }}
-                ></div>
-                <p className="capitalize">custom</p>
-              </button>
-            </div>
+            </select>
           </div>
           <div id="size">
             <h3 className="uppercase font-semibold mb-1">

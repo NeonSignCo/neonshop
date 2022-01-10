@@ -101,6 +101,13 @@ export const colors = [
     b: 255,
     hex: "#AE01FF",
   },
+  {
+    name: "multiple color",
+    r: 252,
+    g: 252,
+    b: 252,
+    hex: "#fcfcfc",
+  },
 ];
 
 

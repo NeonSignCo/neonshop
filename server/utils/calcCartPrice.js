@@ -52,16 +52,19 @@ const calcCartPrice = async function (doc) {
 
               // check duplicate item
               const dupIndex = addedItems.findIndex(
-                (i) =>
-                  i.product === item.product &&
-                  i.selectedColor.hex === item.selectedColor.hex &&
-                  i.selectedSize._id === item.selectedSize._id &&
-                  i.selectedMountType === item.selectedMountType
+                (i) => {
+                  return (
+                    String(i.product._id) === String(item.product._id) &&
+                    i.selectedColor.hex === item.selectedColor.hex &&
+                    String(i.selectedSize.sizeId) === String(item.selectedSize.sizeId) &&
+                    i.selectedMountType === item.selectedMountType
+                  );
+                }                  
               );
-
+                
               // update count for duplicate item
               if (dupIndex !== -1)
-                return (addedCustomItems[dupIndex].count += item.count);
+                return (addedItems[dupIndex].count += item.count);
 
               // add to items
               addedItems.push(item);
@@ -84,8 +87,9 @@ const calcCartPrice = async function (doc) {
               i.size === item.size &&
               i.icon.link === item.icon.link &&
               i.icon.name === item.icon.name &&
-              i.backing.type === item.backing.type &&
-              i.backing.color === item.backing.color &&
+              i.backing.backingType === item.backing.backingType &&
+              i.backing.backingColor === item.backing.backingColor && 
+              i.mountType === item.mountType &&
               i.note === item.note
           );
 

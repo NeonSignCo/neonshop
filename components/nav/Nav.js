@@ -26,8 +26,8 @@ const Nav = ({className}) => {
   const optionRef = useRef();
 
   return (
-    <div className={className || "sticky top-0 w-full z-20 "}>
-      <div className="bg-black text-white shadow ">
+    <div className={className || "sticky top-0 w-full z-20"}>
+      <div className="bg-black text-white shadow">
         <AnimatePresence>
           {globalState.showBanner && <Banner />}
         </AnimatePresence>

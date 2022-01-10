@@ -376,16 +376,8 @@ const ExpandedOrder = ({ order, setState }) => {
               <p>
                 <span className="font-semibold">Font: </span> {item.font.text}
               </p>
-              <div className="flex items-center gap-1">
-                <div className="font-semibold">Color Name: </div>{" "}
-                <div>{item.color.name}</div>
-                <div
-                  className="h-3 w-3  rounded-full border border-gray-500"
-                  style={{ backgroundColor: item.color.hex }}
-                ></div>
-              </div>
               <p>
-                <span className="font-semibold">Color Code: </span> {item.color.hex}
+                <span className="font-semibold">Color: </span> {item.color.name}
               </p>
               <p>
                 <span className="font-semibold">Size: </span> {item.size}

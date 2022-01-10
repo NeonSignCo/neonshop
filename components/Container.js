@@ -28,17 +28,11 @@ const Container = ({ children }) => {
     return (
       <>
         <div
-          className={`flex flex-col justify-between  ${
-            state.modal.show
-              ? "w-screen h-screen fixed"
-              : state.showCart
-              ? "w-screen h-screen fixed"
-              : state.showMobileMenu
-              ? "w-screen h-screen fixed"
-              : "min-h-screen"
-          }`}
+          className={`flex flex-col justify-between min-h-screen`}
         >
-          {route !== "/checkout" && route !== "/admin" && route !== '/custom-neon-sign' && <Nav />}
+          {route !== "/checkout" &&
+            route !== "/admin" &&
+            route !== "/custom-neon-sign" && <Nav />}
           <div>
             <div className="max-w-screen-2xl mx-auto">
               {state.error ? (

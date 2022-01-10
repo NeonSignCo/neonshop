@@ -68,7 +68,7 @@ const Controls = () => {
 
   return (
     <div className="col-span-3 lg:col-span-1 row-span-4 lg:row-span-6 lg:p-5 h-full overflow-hidden">
-      <div className=" flex flex-col bg-gray-200 relative overflow-hidden h-full md:h-[calc(100%-60px)]">
+      <div className=" flex flex-col bg-gray-200 relative overflow-hidden h-full ">
         <AnimatePresence>
           {state.controls.showNavigation && <Navigation />}
         </AnimatePresence>
@@ -155,14 +155,16 @@ const Controls = () => {
                     }))
                   }
                 >
-                  <div
-                    className={`h-8 w-8 rounded-full ${
-                      color.name === "white" ? "border border-black" : ""
-                    }`}
-                    style={{
-                      background: `rgb(${color.r}, ${color.g}, ${color.b})`,
-                    }}
-                  ></div>
+                  {color.name !== "multiple color" && (
+                    <div
+                      className={`h-8 w-8 rounded-full ${
+                        color.name === "white" ? "border border-black" : ""
+                      }`}
+                      style={{
+                        background: `rgb(${color.r}, ${color.g}, ${color.b})`,
+                      }}
+                    ></div>
+                  )}
                   <span>{color.name}</span>
                 </button>
               ))}

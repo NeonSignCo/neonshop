@@ -163,14 +163,8 @@ const CartItem = ({ item }) => {
         </CustomLink>
         <div className="capitalize text-sm flex flex-wrap items-center gap-2">
           <div className="font-semibold">color:</div>{" "}
-          <div className="uppercase flex items-center gap-1">
-            <div>{item.selectedColor.name}</div>
-            <div
-              className="h-3 w-3 rounded-full border border-gray-500"
-              style={{ backgroundColor: item.selectedColor.hex }}
-            ></div>
-          </div>{" "}
-          | <div className="font-semibold">size:</div>{" "}
+          <div className="uppercase">{item.selectedColor.name}</div>|{" "}
+          <div className="font-semibold">size:</div>{" "}
           <div className="uppercase">{item.selectedSize.info}</div> |{" "}
           <div className="font-semibold">mount:</div>{" "}
           <div className="uppercase">{item.selectedMountType}</div>

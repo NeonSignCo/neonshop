@@ -207,10 +207,6 @@ const CartItem = ({ item }) => {
             <div className="flex items-center gap-1">
               <div className="font-semibold">Color: </div>{" "}
               <div>{item.selectedColor.name}</div>
-              <div
-                className="h-3 w-3  rounded-full border border-gray-500"
-                style={{ backgroundColor: item.selectedColor.hex }}
-              ></div>
             </div>
             | <div className="font-semibold">size:</div>{" "}
             <div className="uppercase">{item.selectedSize.info}</div> |{" "}
