@@ -14,7 +14,7 @@ const MobileMenu = () => {
         initial={{ x: "100%" }}
         animate={{ x: 0, transition: { duration: 0.2 } }}
         exit={{ x: "100%", transition: { duration: 0.2 } }}
-        className="fixed top-[57px] w-full bottom-0  bg-gray-900 lg:hidden text-lg uppercase text-white"
+        className="fixed z-10 top-[57px] w-full bottom-0  bg-gray-900 lg:hidden text-lg uppercase text-white"
       >
         <div className="py-5 px-5 flex flex-col gap-3 overflow-auto h-[calc(100vh-60px)]">
           <CustomLink

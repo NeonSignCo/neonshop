@@ -143,7 +143,7 @@ const ProductPage = ({ product }) => {
           }`}
         >
           {product.salePercentage > 0 && (
-            <div className="absolute z-10 bg-red-500 py-1 px-2 text-white ">
+            <div className="absolute bg-red-500 py-1 px-2 text-white ">
               -{product.salePercentage}%
             </div>
           )}
@@ -186,12 +186,12 @@ const ProductPage = ({ product }) => {
               onChange={(e) =>
                 setState((state) => ({
                   ...state,
-                  color: colors.find((color) => color.hex === e.target.value), 
-                  errors: {...state.errors, color: ''}
+                  color: colors.find((color) => color.hex === e.target.value),
+                  errors: { ...state.errors, color: "" },
                 }))
               }
             >
-              <option >Select a color</option>
+              <option>Select a color</option>
               {colors.map((color, i) => (
                 <option key={i} value={color.hex}>
                   {color.name}
@@ -309,15 +309,15 @@ const ProductPage = ({ product }) => {
           <div className="">
             <QnA title="shipping">
               {product.shippingDescription ||
-                "All our neons are crafted from scratch just for you. Standardorders will normally take 2-4 weeks to be made and get from usto you from proof approval date. Express orders normally take10-15 days to be delivered to you from proof approval date."}
+                "All of our neon signs are crafted from scratch just for you. If any changes are required for your design, such as custom colors, we will email you regarding the desired changes within 1-4 hours. Standard orders will generally arrive to your door in 10-15 days."}
             </QnA>
             <QnA title="faq">
               <div className="flex flex-col gap-4">
                 <p className="font-semibold ">Are they hard to install?</p>{" "}
                 <p>
-                  Not at all! Sketch and Etch Neon signs come ready to hang,
-                  with pre-drilled holes. If you can hang a picture frame, you
-                  can hang a neon!
+                  Not at all! NeonSignCo signs come ready to hang, with
+                  pre-drilled holes. If you can hang a picture frame, you can
+                  hang a neon sign.
                 </p>{" "}
                 <p className="font-semibold ">How do Neon lights work?</p>
                 <p>
@@ -325,42 +325,34 @@ const ProductPage = ({ product }) => {
                   location, and a remote control and dimmer. All you need to do
                   is plug it in to a power socket, just like a lamp. Then all
                   that's left to do is turn on and enjoy! Plus, you can adjust
-                  your brightness with the remote control. Please note, your
-                  neon will also come with approximately 10ft of translucent
-                  cord which connects to your neon sign, this then connects to
-                  an additional 6ft of black cord and your power pack. Quality
-                  and care We pride ourselves in exceptional quality, and
-                  happily offer an extended 24 month manufacturers warranty
-                  (double the industry standard!). Please note, pre-designed
-                  neons in our shop are intended for indoor use only.
+                  your brightness with the remote control.
                 </p>{" "}
+                <p className="font-semibold">Quality and care.</p>
+                <p>
+                  We pride ourselves in exceptional quality, and happily offer
+                  an extended 24 month manufacturers warranty (double the
+                  industry standard!). Please note, pre-designed neons in our
+                  shop are intended for indoor use only.
+                </p>
                 <p className="font-semibold ">
                   Looking for something more custom?
                 </p>{" "}
-                <p>
-                  All our pre-designed Shop neons can be tailored to suit your
-                  style.
-                </p>{" "}
+                <p>All of our neon signs can be tailored to suit your style.</p>{" "}
                 <p className="font-semibold ">Want a mix of fonts?</p>{" "}
                 <p>If you can imagine it, we can create it.</p>{" "}
                 <p className="font-semibold ">
-                  After a different coloured Acrylic backing board?
+                  Looking for a different color acrylic backing?
                 </p>
                 <p>
-                  Try our{" "}
-                  <CustomLink
-                    href="/custom-neon-sign"
-                    className="font-semibold"
-                    text="Online Neon Builder"
-                  />{" "}
-                  Tool or{" "}
-                  <CustomLink
-                    href="/contact"
-                    className="font-semibold"
-                    text="Contact"
-                  />{" "}
-                  us today to see how we can help.
+                  We offer transparent clear, solid black, high quality mirror,
+                  as well as gold tinted mirror.
                 </p>
+                <p>For any questions please contact us!</p>
+                <CustomLink
+                  href={`mailto:${process.env.NEXT_PUBLIC_MAIL_ADDRESS}`}
+                  text={process.env.NEXT_PUBLIC_MAIL_ADDRESS} 
+                  className="font-semibold hover:underline"
+                />
               </div>
             </QnA>
           </div>
