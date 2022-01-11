@@ -214,6 +214,35 @@ const TableItem = ({ product, state, setState }) => {
 };
 
 const Item = ({ product, setState }) => {
+  const [, setGlobalState] = useGlobalContext();
+  const [adminState, setAdminState] = useAdminContext();
+
+  const [loading, setLoading] = useState(false); 
+  const deleteProduct = () =>
+    catchASync(
+      async () => {
+        const yes = confirm("delete this product ?");
+        if (!yes) return;
+        setLoading(true);
+        await Axios.delete(`products/${product._id}`);
+        setLoading(false);
+        setAdminState((state) => ({
+          ...state,
+          products: adminState.products.filter(
+            (item) => item._id !== product._id
+          ),
+        }));
+        setState((state) => ({
+          ...state,
+          products: adminState.products.filter(
+            (item) => item._id !== product._id
+          ),
+        }));
+      },
+      setGlobalState,
+      setLoading(false)
+    );
+
   return (
     <div className="p-2 bg-white border border-gray-300 shadow flex gap-2">
       <img
@@ -233,14 +262,24 @@ const Item = ({ product, setState }) => {
           <span className="font-semibold capitalize">price:</span>{" "}
           {product.sizes[0].price}
         </p>
-        <button
-          className="h-10 w-10 flex justify-center items-center rounded-full active:bg-gray-200 transition ml-auto  text-purple-700"
-          onClick={() =>
-            setState((state) => ({ ...state, activeProduct: product }))
-          }
-        >
-          <FaPencilAlt />
-        </button>
+        <div className="flex justify-end">
+          <button
+            className="h-10 w-10 flex justify-center items-center rounded-full active:bg-gray-200 transition  text-purple-700"
+            onClick={() =>
+              setState((state) => ({ ...state, activeProduct: product }))
+            }
+          >
+            <FaPencilAlt />
+          </button>
+          <LoadingBtn
+            borderColor="border-red-500"
+            loading={loading}
+            className="h-10 w-10 flex justify-center items-center rounded-full active:bg-gray-200 transition  text-red-500"
+            onClick={deleteProduct}
+          >
+            {!loading && <FaTrash />}
+          </LoadingBtn>
+        </div>
       </div>
     </div>
   );
