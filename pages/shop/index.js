@@ -1,57 +1,64 @@
 import { useEffect, useState } from "react";
-import {
-  FaSearch,
-} from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
 import BreadCrumb from "../../components/BreadCrumb";
 import CustomLink from "../../components/CustomLink";
 import FollowSection from "../../components/sections/FollowSection";
 import NewsLetterSection from "../../components/sections/NewsLetterSection";
 import Category from "../../server/models/category";
-import Product from '../../server/models/product';
+import Product from "../../server/models/product";
 import Axios from "../../utils/Axios";
-import { ERROR, useGlobalContext } from '../../context/GlobalContext';
+import { ERROR, useGlobalContext } from "../../context/GlobalContext";
 import LoadingBtn from "../../components/LoadingBtn";
 import connectDb from "../../server/utils/connectDb";
 import ProductNavigation from "../../components/ProductNavigation";
-import Head from 'next/head';
+import Head from "next/head";
 
-// variables 
-const LTH = 'LTH'; 
-const HTL = 'HTL'; 
-const ATZ = 'ATZ'; 
-const ZTA = 'ZAT'
-const NTO = 'NTO';
-const OTN = 'OTN';
+// variables
+const LTH = "LTH";
+const HTL = "HTL";
+const ATZ = "ATZ";
+const ZTA = "ZAT";
+const NTO = "NTO";
+const OTN = "OTN";
 const productsPerPage = 30;
-
 
 const Shop = ({ categories, products, numOfProducts }) => {
   const [, setGlobalState] = useGlobalContext();
-  const [state, setState] = useState({ 
+  const [state, setState] = useState({
     page: 1,
     productsPerPage,
-    categories, 
+    categories,
     category: "",
-    products, 
-    sort: NTO, 
-    searchText: "", 
-    numOfProducts
+    products,
+    sort: NTO,
+    searchText: "",
+    numOfProducts,
   });
 
   const changeCategory = async (e) => {
     try {
       const res = await Axios.get(
         `products?category=${e.target.value}&&name=${state.searchText}&&limit=${state.productsPerPage}`
-      ); 
-      console.log(res.data)
+      );
+      console.log(res.data);
       // setLoading(false)
-      setState(state => ({ ...state, category: e.target.value, products: res.data.products })) 
-            
+      setState((state) => ({
+        ...state,
+        category: e.target.value,
+        products: res.data.products,
+      }));
     } catch (error) {
-    
-      setGlobalState(state => ({ ...state, alert: { show: true, type: ERROR, text: error.response?.data?.message || error.message || 'Network Error' } }));
+      setGlobalState((state) => ({
+        ...state,
+        alert: {
+          show: true,
+          type: ERROR,
+          text:
+            error.response?.data?.message || error.message || "Network Error",
+        },
+      }));
     }
-  }
+  };
 
   const sortItems = (e) => {
     const val = e.target.value;
@@ -72,7 +79,7 @@ const Shop = ({ categories, products, numOfProducts }) => {
           : b.name.localeCompare(a.name)
       ),
     }));
-  }
+  };
   return (
     <div>
       <Head>
@@ -138,21 +145,23 @@ const Shop = ({ categories, products, numOfProducts }) => {
 
 export default Shop;
 
-const ProductSearch = ({state, setState }) => {
+const ProductSearch = ({ state, setState }) => {
   const [, setGlobalState] = useGlobalContext();
   const [loading, setLoading] = useState(false);
   const [typed, setTyped] = useState(false);
   const search = async () => {
     try {
       if (!typed) return;
-      setLoading(true)
+      setLoading(true);
       const res = await Axios.get(
-        `products?name=${state.searchText}&&page=${1}&&limit=${state.productsPerPage}&&category=${state.category}`
+        `products?name=${state.searchText}&&page=${1}&&limit=${
+          state.productsPerPage
+        }&&category=${state.category}`
       );
       setState((state) => ({ ...state, products: res.data.products, page: 1 }));
-      setLoading(false)
+      setLoading(false);
     } catch (error) {
-      setLoading(false)
+      setLoading(false);
       setGlobalState((state) => ({
         ...state,
         alert: {
@@ -163,14 +172,13 @@ const ProductSearch = ({state, setState }) => {
         },
       }));
     }
-  }
+  };
 
-   useEffect(() => {
-     const debounce = setTimeout(search, 1000);
-     return () => clearTimeout(debounce);
-   }, [state.searchText]);
-  
-  
+  useEffect(() => {
+    const debounce = setTimeout(search, 1000);
+    return () => clearTimeout(debounce);
+  }, [state.searchText]);
+
   return (
     <form className="flex items-center ">
       <input
@@ -180,7 +188,7 @@ const ProductSearch = ({state, setState }) => {
         vaue={state.searchText}
         onChange={(e) => {
           setState((state) => ({ ...state, searchText: e.target.value }));
-          setTyped(true)
+          setTyped(true);
         }}
         required
       />
@@ -192,11 +200,9 @@ const ProductSearch = ({state, setState }) => {
       </LoadingBtn>
     </form>
   );
-}
-
+};
 
 const ProductItem = ({ product }) => {
-
   return (
     <CustomLink
       href={`/shop/${product.category.slug}/${product.slug}`}
@@ -208,7 +214,7 @@ const ProductItem = ({ product }) => {
             -{product.salePercentage}%
           </div>
         )}
-        <img src={product.images[0]?.url} alt={product.name} />
+        <img src={product.images?.[0]?.url} alt={product.name} />
       </div>
       <h3 className="text-lg sm:text-xl font-semibold uppercase">
         {product.name}
@@ -218,14 +224,16 @@ const ProductItem = ({ product }) => {
   );
 };
 
-
-
 export const getStaticProps = async () => {
   try {
-    await connectDb();  
+    await connectDb();
 
-    const categories = await Category.find().lean(); 
-    const products = await Product.find().populate({ path: 'category', model: Category, select: 'slug -_id'}).sort({createdAt: -1}).limit(productsPerPage).lean(); 
+    const categories = await Category.find().lean();
+    const products = await Product.find()
+      .populate({ path: "category", model: Category, select: "slug -_id" })
+      .sort({ createdAt: -1 })
+      .limit(productsPerPage)
+      .lean();
     const numOfProducts = await Product.countDocuments().lean();
 
     return {
@@ -237,12 +245,12 @@ export const getStaticProps = async () => {
       revalidate: 10,
     };
   } catch (error) {
-    console.log(error)
-     return {
-       props: {
-         error: { code: 500, message: "server error" },
-       },
-       revalidate: 10,
-     };
+    console.log(error);
+    return {
+      props: {
+        error: { code: 500, message: "server error" },
+      },
+      revalidate: 10,
+    };
   }
-}
+};

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import {  FaChevronDown, FaChevronRight } from "react-icons/fa";
+import { FaChevronDown, FaChevronRight } from "react-icons/fa";
 import CustomLink from "../components/CustomLink";
 import PaymentSection from "../components/sections/checkout/paymentSection/PaymentSection";
 import { useGlobalContext } from "../context/GlobalContext";
@@ -8,14 +8,17 @@ import Footer from "../components/Footer";
 import getLoggedInUser from "../utils/getLoggedInUser";
 import connectDb from "../server/utils/connectDb";
 import getUpdatedCart from "../server/utils/getUpdatedCart";
-import CheckoutContext, { INFO_SECTION, PAYMENT_SECTION, useCheckoutContext } from "../context/CheckoutContext";
+import CheckoutContext, {
+  INFO_SECTION,
+  PAYMENT_SECTION,
+  useCheckoutContext,
+} from "../context/CheckoutContext";
 import InfoSection from "../components/sections/checkout/InfoSection";
 import { colors } from "../utils/CustomNeonAssets";
 import NeonPreview from "../components/NeonPreview";
-import Head from 'next/head';
+import Head from "next/head";
 
 const Checkout = () => {
-
   return (
     <CheckoutContext>
       <Container />
@@ -130,8 +133,6 @@ const Container = () => {
   );
 };
 
-
-
 const CartPreview = () => {
   const [globalState] = useGlobalContext();
   return (
@@ -200,7 +201,7 @@ const CartItem = ({ item }) => {
       <div className="relative">
         <div>
           <img
-            src={item.product.images[0]?.url}
+            src={item.product.images?.[0]?.url}
             alt="product"
             className="w-16 h-16 rounded object-cover"
           />
@@ -215,7 +216,6 @@ const CartItem = ({ item }) => {
           <div className="font-semibold">color:</div>{" "}
           <div className="uppercase flex items-center gap-1">
             <div>{item.selectedColor.name}</div>
-           
           </div>
           | <div className="font-semibold">size:</div>{" "}
           <div className="uppercase">{item.selectedSize.info}</div> |{" "}
@@ -284,8 +284,6 @@ const CartEmptySection = () => {
   );
 };
 
-
-
 export const getServerSideProps = async ({ req }) => {
   try {
     await connectDb();
@@ -305,7 +303,7 @@ export const getServerSideProps = async ({ req }) => {
       },
     };
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return {
       props: {
         error: { code: 500, message: "server error" },

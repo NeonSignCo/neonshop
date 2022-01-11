@@ -17,8 +17,8 @@ import connectDb from "../server/utils/connectDb";
 import Product from "../server/models/product";
 import Category from "../server/models/category";
 import FollowSection from "../components/sections/FollowSection";
- 
-export default function Home({products}) {
+
+export default function Home({ products }) {
   return (
     <div className="">
       <Head>
@@ -110,7 +110,7 @@ export default function Home({products}) {
           <ProductsSlider
             products={products?.map((product) => ({
               name: product.name,
-              img: product.images[0]?.url,
+              img: product.images?.[0]?.url,
               price: product.sizes[0].price,
               link: `/shop/${product.category.slug}/${product.slug}`,
             }))}
@@ -187,8 +187,6 @@ const Item = ({ title, text, children }) => {
   );
 };
 
-
-
 export const getStaticProps = async () => {
   try {
     await connectDb();
@@ -197,7 +195,7 @@ export const getStaticProps = async () => {
       .populate({ path: "category", model: Category, select: "slug -_id" })
       .sort({ createdAt: -1 })
       .limit(9)
-      .lean()
+      .lean();
 
     return {
       props: {

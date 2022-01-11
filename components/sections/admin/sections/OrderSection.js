@@ -1,269 +1,283 @@
 import { motion } from "framer-motion";
-import { useState } from "react"
-import { FaPencilAlt, FaSearch } from "react-icons/fa"
-import {  useAdminContext } from "../../../../pages/admin";
-import LoadingBtn from '../../../../components/LoadingBtn';
-import Axios from '../../../../utils/Axios';
-import {SUCCESS, useGlobalContext } from '../../../../context/GlobalContext';
-import catchAsync from '../../../../utils/catchASync'
+import { useState } from "react";
+import { FaPencilAlt, FaSearch } from "react-icons/fa";
+import { useAdminContext } from "../../../../pages/admin";
+import LoadingBtn from "../../../../components/LoadingBtn";
+import Axios from "../../../../utils/Axios";
+import { SUCCESS, useGlobalContext } from "../../../../context/GlobalContext";
+import catchAsync from "../../../../utils/catchASync";
 import CustomLink from "../../../CustomLink";
 import catchASync from "../../../../utils/catchASync";
 import { colors } from "../../../../utils/CustomNeonAssets";
 import NeonPreview from "../../../NeonPreview";
 
-// variables 
-const ORDERED = 'ORDERED'; 
-const DELIVERED = 'DELIVERED'; 
-const CANCELLED = 'CANCELLED';
-const PROCESSING = 'PROCESSING'
+// variables
+const ORDERED = "ORDERED";
+const DELIVERED = "DELIVERED";
+const CANCELLED = "CANCELLED";
+const PROCESSING = "PROCESSING";
 const OrderSection = () => {
-    const [adminState, setAdminState] = useAdminContext();
+  const [adminState, setAdminState] = useAdminContext();
   const [, setGlobalState] = useGlobalContext();
-    const [state, setState] = useState({
-      activeSection: ORDERED,
-      selectedOrderIds: [],
-      expandedOrder: '', 
-      loading :false
-    });
+  const [state, setState] = useState({
+    activeSection: ORDERED,
+    selectedOrderIds: [],
+    expandedOrder: "",
+    loading: false,
+  });
 
-     const deleteProducts = () =>
-       catchASync(
-         async () => {
-           const yes = confirm("Delete these orders ?");
-           if (!yes) return;
-           setState((state) => ({ ...state, loading: true }));
-           await Axios.put("orders", {
-                 ids: state.selectedOrderIds,
-               })
-           setAdminState((adminState) => ({
-             ...adminState,
-             orders: adminState.orders.filter(
-               (item) => !state.selectedOrderIds.includes(item._id)
-             ),
-           }));
-           setState((state) => ({
-             ...state,
-             loading: false,
-           }));
-           setGlobalState((state) => ({
-             ...state,
-             alert: {
-               ...state.alert,
-               show: true,
-               type: SUCCESS,
-               text: "orders deleted",
-               timeout: 3000,
-             },
-           }));
-         },
-         setGlobalState,
-         () => setState((state) => ({ ...state, loading: false }))
-       );
-  
-    return (
-      <div className="py-5 md:p-10 w-full">
-        {state.expandedOrder ? (
-          <ExpandedOrder order={state.expandedOrder} setState={setState} />
-        ) : (
-          <div>
-            <SearchBar setState={setState} />
-            <div className="border mt-5">
-              {state.selectedOrderIds.length > 0 && (
-                <div className="p-2 pr-12 bg-white border flex justify-between">
-                  <p>delete these orders?</p>
-                  <LoadingBtn
-                    loading={state.loading}
-                    className="bg-red-500 text-white py-1 px-2"
-                    onClick={deleteProducts}
-                  >
-                    delete
-                  </LoadingBtn>
-                </div>
-              )}
-              <div className=" grid grid-cols-4 items-start text-gray-500 text-xs md:text-base">
-                <button
-                  className={`text-center p-2 uppercase font-semibold transition ${
-                    state.activeSection === ORDERED ? "text-black " : ""
-                  }`}
-                  onClick={() =>
-                    setState((state) => ({ ...state, activeSection: ORDERED }))
-                  }
+  const deleteProducts = () =>
+    catchASync(
+      async () => {
+        const yes = confirm("Delete these orders ?");
+        if (!yes) return;
+        setState((state) => ({ ...state, loading: true }));
+        await Axios.put("orders", {
+          ids: state.selectedOrderIds,
+        });
+        setAdminState((adminState) => ({
+          ...adminState,
+          orders: adminState.orders.filter(
+            (item) => !state.selectedOrderIds.includes(item._id)
+          ),
+        }));
+        setState((state) => ({
+          ...state,
+          loading: false,
+        }));
+        setGlobalState((state) => ({
+          ...state,
+          alert: {
+            ...state.alert,
+            show: true,
+            type: SUCCESS,
+            text: "orders deleted",
+            timeout: 3000,
+          },
+        }));
+      },
+      setGlobalState,
+      () => setState((state) => ({ ...state, loading: false }))
+    );
+
+  return (
+    <div className="py-5 md:p-10 w-full">
+      {state.expandedOrder ? (
+        <ExpandedOrder order={state.expandedOrder} setState={setState} />
+      ) : (
+        <div>
+          <SearchBar setState={setState} />
+          <div className="border mt-5">
+            {state.selectedOrderIds.length > 0 && (
+              <div className="p-2 pr-12 bg-white border flex justify-between">
+                <p>delete these orders?</p>
+                <LoadingBtn
+                  loading={state.loading}
+                  className="bg-red-500 text-white py-1 px-2"
+                  onClick={deleteProducts}
                 >
-                  ordered (
-                  {adminState.orders.filter((i) => i.status === ORDERED)
-                    ?.length || 0}
-                  )
-                </button>
-                <button
-                  className={`text-center p-2 uppercase font-semibold transition ${
-                    adminState.activeSection === PROCESSING ? "text-black " : ""
-                  }`}
-                  onClick={() =>
-                    setState((state) => ({
-                      ...state,
-                      activeSection: PROCESSING,
-                    }))
-                  }
-                >
-                  processing (
-                  {adminState.orders.filter((i) => i.status === PROCESSING)
-                    ?.length || 0}
-                  )
-                </button>
-                <button
-                  className={`text-center p-2 uppercase font-semibold transition ${
-                    adminState.activeSection === DELIVERED ? "text-black " : ""
-                  }`}
-                  onClick={() =>
-                    setState((state) => ({
-                      ...state,
-                      activeSection: DELIVERED,
-                    }))
-                  }
-                >
-                  delivered (
-                  {adminState.orders.filter((i) => i.status === DELIVERED)
-                    ?.length || 0}
-                  )
-                </button>
-                <button
-                  className={`text-center p-2 uppercase font-semibold transition ${
-                    state.activeSection === CANCELLED ? "text-black " : ""
-                  }`}
-                  onClick={() =>
-                    setState((state) => ({
-                      ...state,
-                      activeSection: CANCELLED,
-                    }))
-                  }
-                >
-                  cancelled (
-                  {adminState.orders.filter((i) => i.status === CANCELLED)
-                    ?.length || 0}
-                  )
-                </button>
+                  delete
+                </LoadingBtn>
               </div>
-              <div className="grid grid-cols-4 gap-10">
-                {state.activeSection === ORDERED && (
-                  <motion.div
-                    layoutId="actiev-indicator"
-                    className="h-[2px] bg-purple-500 col-start-1"
-                  ></motion.div>
-                )}
-                {state.activeSection === PROCESSING && (
-                  <motion.div
-                    layoutId="actiev-indicator"
-                    className="h-[2px] bg-purple-500 col-start-2"
-                  ></motion.div>
-                )}
-                {state.activeSection === DELIVERED && (
-                  <motion.div
-                    layoutId="actiev-indicator"
-                    className="h-[2px] bg-purple-500 col-start-3"
-                  ></motion.div>
-                )}
-                {state.activeSection === CANCELLED && (
-                  <motion.div
-                    layoutId="actiev-indicator"
-                    className="h-[2px] bg-purple-500 col-start-4"
-                  ></motion.div>
-                )}
-              </div>
+            )}
+            <div className=" grid grid-cols-4 items-start text-gray-500 text-xs md:text-base">
+              <button
+                className={`text-center p-2 uppercase font-semibold transition ${
+                  state.activeSection === ORDERED ? "text-black " : ""
+                }`}
+                onClick={() =>
+                  setState((state) => ({ ...state, activeSection: ORDERED }))
+                }
+              >
+                ordered (
+                {adminState.orders.filter((i) => i.status === ORDERED)
+                  ?.length || 0}
+                )
+              </button>
+              <button
+                className={`text-center p-2 uppercase font-semibold transition ${
+                  adminState.activeSection === PROCESSING ? "text-black " : ""
+                }`}
+                onClick={() =>
+                  setState((state) => ({
+                    ...state,
+                    activeSection: PROCESSING,
+                  }))
+                }
+              >
+                processing (
+                {adminState.orders.filter((i) => i.status === PROCESSING)
+                  ?.length || 0}
+                )
+              </button>
+              <button
+                className={`text-center p-2 uppercase font-semibold transition ${
+                  adminState.activeSection === DELIVERED ? "text-black " : ""
+                }`}
+                onClick={() =>
+                  setState((state) => ({
+                    ...state,
+                    activeSection: DELIVERED,
+                  }))
+                }
+              >
+                delivered (
+                {adminState.orders.filter((i) => i.status === DELIVERED)
+                  ?.length || 0}
+                )
+              </button>
+              <button
+                className={`text-center p-2 uppercase font-semibold transition ${
+                  state.activeSection === CANCELLED ? "text-black " : ""
+                }`}
+                onClick={() =>
+                  setState((state) => ({
+                    ...state,
+                    activeSection: CANCELLED,
+                  }))
+                }
+              >
+                cancelled (
+                {adminState.orders.filter((i) => i.status === CANCELLED)
+                  ?.length || 0}
+                )
+              </button>
             </div>
-            <div className="hidden md:block">
-              <table className="w-full bg-white">
-                <thead className="h-12 border-b border-gray-200">
-                  <tr className="border border-gray-200">
-                    <th className="text-left pl-2">
-                      <input
-                        type="checkbox"
-                        checked={adminState.orders?.length > 0 && adminState.orders?.filter(
+            <div className="grid grid-cols-4 gap-10">
+              {state.activeSection === ORDERED && (
+                <motion.div
+                  layoutId="actiev-indicator"
+                  className="h-[2px] bg-purple-500 col-start-1"
+                ></motion.div>
+              )}
+              {state.activeSection === PROCESSING && (
+                <motion.div
+                  layoutId="actiev-indicator"
+                  className="h-[2px] bg-purple-500 col-start-2"
+                ></motion.div>
+              )}
+              {state.activeSection === DELIVERED && (
+                <motion.div
+                  layoutId="actiev-indicator"
+                  className="h-[2px] bg-purple-500 col-start-3"
+                ></motion.div>
+              )}
+              {state.activeSection === CANCELLED && (
+                <motion.div
+                  layoutId="actiev-indicator"
+                  className="h-[2px] bg-purple-500 col-start-4"
+                ></motion.div>
+              )}
+            </div>
+          </div>
+          <div className="hidden md:block">
+            <table className="w-full bg-white">
+              <thead className="h-12 border-b border-gray-200">
+                <tr className="border border-gray-200">
+                  <th className="text-left pl-2">
+                    <input
+                      type="checkbox"
+                      checked={
+                        adminState.orders?.length > 0 &&
+                        adminState.orders
+                          ?.filter(
                             (order) => order.status === state.activeSection
                           )
                           ?.every((order) =>
                             state.selectedOrderIds.includes(order._id)
-                          )}
-                        onChange={(e) =>
-                          setState((state) => ({
-                            ...state,
-                            selectedOrderIds: !e.target.checked
-                              ? []
-                              : adminState.orders
-                                  .filter(
-                                    (order) =>
-                                      order.status === state.activeSection
-                                  )
-                                  ?.map((order) => order._id),
-                          }))
-                        }
-                      />
-                    </th>
-                    <th className="text-left">Date</th>
-                    <th className="text-left">Reference</th>
-                    <th className="text-left">Customer</th>
-                    <th className="text-left">Address</th>
-                    <th className="text-left">Nb items</th>
-                    <th className="text-left">Total</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {adminState.orders
-                    ?.filter((order) => order.status === state.activeSection)
-                    ?.map((order) => (
-                      <TableItem
-                        key={order._id}
-                        order={order}
-                        state={state}
-                        setState={setState}
-                      />
-                    ))}
-                </tbody>
-              </table>
-            </div>
-            <div className="md:hidden grid gap-3 text-black mt-5">
-              {adminState.orders
-                ?.filter((order) => order.status === state.activeSection)
-                ?.map((order) => (
-                  <Item
-                    key={order._id}
-                    order={order}
-                    state={state}
-                    setState={setState}
-                  />
-                ))}
-            </div>
+                          )
+                      }
+                      onChange={(e) =>
+                        setState((state) => ({
+                          ...state,
+                          selectedOrderIds: !e.target.checked
+                            ? []
+                            : adminState.orders
+                                .filter(
+                                  (order) =>
+                                    order.status === state.activeSection
+                                )
+                                ?.map((order) => order._id),
+                        }))
+                      }
+                    />
+                  </th>
+                  <th className="text-left">Date</th>
+                  <th className="text-left">Reference</th>
+                  <th className="text-left">Customer</th>
+                  <th className="text-left">Address</th>
+                  <th className="text-left">Nb items</th>
+                  <th className="text-left">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {adminState.orders
+                  ?.filter((order) => order.status === state.activeSection)
+                  ?.map((order) => (
+                    <TableItem
+                      key={order._id}
+                      order={order}
+                      state={state}
+                      setState={setState}
+                    />
+                  ))}
+              </tbody>
+            </table>
           </div>
-        )}
-      </div>
-    );
-}
+          <div className="md:hidden grid gap-3 text-black mt-5">
+            {adminState.orders
+              ?.filter((order) => order.status === state.activeSection)
+              ?.map((order) => (
+                <Item
+                  key={order._id}
+                  order={order}
+                  state={state}
+                  setState={setState}
+                />
+              ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
-export default OrderSection
+export default OrderSection;
 
 const ExpandedOrder = ({ order, setState }) => {
   const [adminState, setAdminState] = useAdminContext();
   const [status, setStatus] = useState(order.status);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const date = new Date(order.createdAt).toLocaleDateString();
   const [, setGlobalState] = useGlobalContext();
-  const changeStatus = (e) => catchAsync(async () => {
-    setLoading(true)
-    const res = await Axios.patch(`orders/${order._id}`, { status });
-    setLoading(false);
-    setAdminState((state) => ({
-      ...state,
-      orders: adminState.orders.map((item) =>
-        item._id === order._id ? res.data.order : item
-      ),
-    }));
-    setLoading(false)
-    setState((state) => ({
-      ...state,
-      expandedOrder: '',
-    }));
-    setGlobalState(state => ({ ...state, alert: { ...state.alert, show: true, type: SUCCESS, text: res.data.message, timeout: 3000 } }))
-    setAdminState
-  }, setGlobalState)
+  const changeStatus = (e) =>
+    catchAsync(async () => {
+      setLoading(true);
+      const res = await Axios.patch(`orders/${order._id}`, { status });
+      setLoading(false);
+      setAdminState((state) => ({
+        ...state,
+        orders: adminState.orders.map((item) =>
+          item._id === order._id ? res.data.order : item
+        ),
+      }));
+      setLoading(false);
+      setState((state) => ({
+        ...state,
+        expandedOrder: "",
+      }));
+      setGlobalState((state) => ({
+        ...state,
+        alert: {
+          ...state.alert,
+          show: true,
+          type: SUCCESS,
+          text: res.data.message,
+          timeout: 3000,
+        },
+      }));
+      setAdminState;
+    }, setGlobalState);
 
   return (
     <div className="flex flex-col gap-3 bg-white p-2">
@@ -439,7 +453,7 @@ const ExpandedOrder = ({ order, setState }) => {
                         href={`shop/${item.product.category.slug}/${item.product.slug}`}
                       >
                         <img
-                          src={item.product.images[0]?.url}
+                          src={item.product.images?.[0]?.url}
                           alt={item.product.name}
                           className="h-16"
                         />
@@ -466,7 +480,7 @@ const ExpandedOrder = ({ order, setState }) => {
                   href={`shop/${item.product.category.slug}/${item.product.slug}`}
                 >
                   <img
-                    src={item.product.images[0]?.url}
+                    src={item.product.images?.[0]?.url}
                     alt={item.product.name}
                     className="h"
                   />
@@ -531,9 +545,7 @@ const ExpandedOrder = ({ order, setState }) => {
   );
 };
 
-
-
-const TableItem = ({order, state, setState}) => {
+const TableItem = ({ order, state, setState }) => {
   const checked = state.selectedOrderIds.includes(order._id);
   const toggleCheck = () =>
     setState((state) => ({
@@ -543,17 +555,16 @@ const TableItem = ({order, state, setState}) => {
         : [...state.selectedOrderIds, order._id],
     }));
 
-    return (
-      <tr className="border border-gray-300">
-        <td className="pl-2 p-2">
-          <input type="checkbox" checked={checked} onChange={toggleCheck} />
-        </td>
-        <td className="uppercase">
-          {new Date(order.createdAt).toDateString()}
-        </td>
-        <td>{order._id}</td>
-        <td>
-          {order.userId ? <div className="flex items-center gap-2">
+  return (
+    <tr className="border border-gray-300">
+      <td className="pl-2 p-2">
+        <input type="checkbox" checked={checked} onChange={toggleCheck} />
+      </td>
+      <td className="uppercase">{new Date(order.createdAt).toDateString()}</td>
+      <td>{order._id}</td>
+      <td>
+        {order.userId ? (
+          <div className="flex items-center gap-2">
             {order.userId?.image && (
               <img
                 src={order.userId?.image?.url}
@@ -562,33 +573,33 @@ const TableItem = ({order, state, setState}) => {
               />
             )}
             <p className="text-purple-700">{order.userId?.firstName}</p>
-          </div>: 'Guest'}
-        </td>
-        <td>
-          {order.shippingAddress.addressLine1},{" "}
-          {order.shippingAddress.stateOrProvince} {order.shippingAddress.zip},{" "}
-          {order.shippingAddress.country}
-        </td>
-        <td>{order.items.length + order.customItems.length}</td>
-        <td className="font-semibold">${order.total}</td>
-        <td>
-          <button
-            className=" rounded-full h-7 w-7 mx-2 flex items-center justify-center transition active:bg-gray-200 text-purple-600"
-            onClick={() =>
-              setState((state) => ({ ...state, expandedOrder: order }))
-            }
-          >
-            <FaPencilAlt />
-          </button>
-        </td>
-      </tr>
-    );
-}
+          </div>
+        ) : (
+          "Guest"
+        )}
+      </td>
+      <td>
+        {order.shippingAddress.addressLine1},{" "}
+        {order.shippingAddress.stateOrProvince} {order.shippingAddress.zip},{" "}
+        {order.shippingAddress.country}
+      </td>
+      <td>{order.items.length + order.customItems.length}</td>
+      <td className="font-semibold">${order.total}</td>
+      <td>
+        <button
+          className=" rounded-full h-7 w-7 mx-2 flex items-center justify-center transition active:bg-gray-200 text-purple-600"
+          onClick={() =>
+            setState((state) => ({ ...state, expandedOrder: order }))
+          }
+        >
+          <FaPencilAlt />
+        </button>
+      </td>
+    </tr>
+  );
+};
 
-
-const Item = ({order, state, setState}) => {
-  
-
+const Item = ({ order, state, setState }) => {
   return (
     <div className="p-2 bg-white border">
       <div className="mt-2 mb-5 flex items-center justify-between ">
@@ -617,7 +628,9 @@ const Item = ({order, state, setState}) => {
             )}
             <p>{order.userId?.firstName}</p>
           </div>
-        ): 'Guest'}
+        ) : (
+          "Guest"
+        )}
       </div>
       <p>
         <span className="text-lg">Date:</span>{" "}
@@ -632,43 +645,61 @@ const Item = ({order, state, setState}) => {
       </p>
     </div>
   );
-}
-
+};
 
 const SearchBar = () => {
   const [, setGlobalState] = useGlobalContext();
   const [, setState] = useAdminContext();
-  const CUSTOMER_ID = 'CUSTOMER_ID'; 
-  const ORDER_ID = 'ORDER_ID'; 
-  const CUSTOMER_NAME = 'CUSTOMER_NAME';
+  const CUSTOMER_ID = "CUSTOMER_ID";
+  const ORDER_ID = "ORDER_ID";
+  const CUSTOMER_NAME = "CUSTOMER_NAME";
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState({
     searchBy: ORDER_ID,
-    searchText: '',
-    passedSince:"",
-    passedBefore: "", 
+    searchText: "",
+    passedSince: "",
+    passedBefore: "",
   });
 
-  const search = () => catchAsync(async () => {
-    setLoading(true);
-    
-    const searchBy = filter.searchText ? filter.searchBy === ORDER_ID ? 'id=' : filter.searchBy === CUSTOMER_ID ? 'customer_id=' : filter.searchBy === CUSTOMER_NAME ? 'customer_name=' : "": ''
-    
-    const text = filter.searchText ? filter.searchText : '';
+  const search = () =>
+    catchAsync(
+      async () => {
+        setLoading(true);
 
-    const timeRange =
-      `${filter.passedSince ? `&from=${new Date(filter.passedSince).getTime()}` : ""}` +
-      `${filter.passedBefore ? `&till=${new Date(filter.passedBefore).getTime()}` : ""}`;
-    
-    const queryString = `orders?${searchBy}${text}${timeRange}` 
+        const searchBy = filter.searchText
+          ? filter.searchBy === ORDER_ID
+            ? "id="
+            : filter.searchBy === CUSTOMER_ID
+            ? "customer_id="
+            : filter.searchBy === CUSTOMER_NAME
+            ? "customer_name="
+            : ""
+          : "";
 
+        const text = filter.searchText ? filter.searchText : "";
 
-    const res = await Axios.get(queryString);
+        const timeRange =
+          `${
+            filter.passedSince
+              ? `&from=${new Date(filter.passedSince).getTime()}`
+              : ""
+          }` +
+          `${
+            filter.passedBefore
+              ? `&till=${new Date(filter.passedBefore).getTime()}`
+              : ""
+          }`;
 
-    setLoading(false);
-    setState(state => ({ ...state, orders: res.data.orders || [] }));
-    
-  }, setGlobalState, () => setLoading(false));
+        const queryString = `orders?${searchBy}${text}${timeRange}`;
+
+        const res = await Axios.get(queryString);
+
+        setLoading(false);
+        setState((state) => ({ ...state, orders: res.data.orders || [] }));
+      },
+      setGlobalState,
+      () => setLoading(false)
+    );
 
   return (
     <div className="grid gap-3">

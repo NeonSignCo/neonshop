@@ -10,85 +10,87 @@ import catchASync from "../utils/catchASync";
 import { colors } from "../utils/CustomNeonAssets";
 
 const TrackOrder = () => {
-    const Router = useRouter();
-    const [, setGlobalState] = useGlobalContext();
-    const [loading, setLoading] = useState(false);
-    const [order, setOrder] = useState(false);
-    const [data, setData] = useState({
-        orderId: '', 
-        email:''
-    })
+  const Router = useRouter();
+  const [, setGlobalState] = useGlobalContext();
+  const [loading, setLoading] = useState(false);
+  const [order, setOrder] = useState(false);
+  const [data, setData] = useState({
+    orderId: "",
+    email: "",
+  });
 
-
-    const findOrder = ({e, orderData}) => catchASync(async () => {
-       if(e)  e.preventDefault();
-        setLoading(true); 
-        const res = await Axios.post('orders/track-order', orderData || data); 
+  const findOrder = ({ e, orderData }) =>
+    catchASync(
+      async () => {
+        if (e) e.preventDefault();
+        setLoading(true);
+        const res = await Axios.post("orders/track-order", orderData || data);
         setOrder(res.data.order);
-        setLoading(false)
-    }, setGlobalState, () => setLoading(false))
-
-
-    useEffect(async () => {
-      const orderId = Router.query.orderId;
-      const email = Router.query.email;
-      if (!orderId || !email) return;
-      const orderData = { orderId, email };
-      findOrder({ orderData });
-    }, [Router.query.orderId, Router.query.email]);
-
-    return (
-      <div className="px-5 lg:px-20 py-20  bg-gray-200">
-        <Head>
-          <title>Track Order | NeonSignCo</title>
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-        <div className="flex flex-col items-center gap-3 md:max-w-[800px] mx-auto">
-          <h1 className="text-3xl md:text-5xl text-center mb-10 font-semibold">
-            Track your order
-          </h1>
-          <form
-            onSubmit={(e) => findOrder({ e })}
-            className="grid sm:grid-cols-3 gap-2 text-lg mb-5 w-full"
-          >
-            <input
-              type="text"
-              value={data.orderId}
-              placeholder="Order Id"
-              className="p-2 bg-white border border-gray-300"
-              title="Your order Id"
-              onChange={(e) =>
-                setData((data) => ({ ...data, orderId: e.target.value }))
-              }
-              required
-            />
-            <input
-              type="email"
-              value={data.email}
-              placeholder="Email"
-              className="p-2 bg-white border border-gray-300"
-              title="Email address that was used to order"
-              onChange={(e) =>
-                setData((data) => ({ ...data, email: e.target.value }))
-              }
-              required
-            />
-            <LoadingBtn
-              loading={loading}
-              type="submit"
-              className="py-2 px-4 bg-black text-white"
-            >
-              Track Order
-            </LoadingBtn>
-          </form>
-          {order && <OrderDetails order={order} />}
-        </div>
-      </div>
+        setLoading(false);
+      },
+      setGlobalState,
+      () => setLoading(false)
     );
-}
 
-export default TrackOrder
+  useEffect(async () => {
+    const orderId = Router.query.orderId;
+    const email = Router.query.email;
+    if (!orderId || !email) return;
+    const orderData = { orderId, email };
+    findOrder({ orderData });
+  }, [Router.query.orderId, Router.query.email]);
 
+  return (
+    <div className="px-5 lg:px-20 py-20  bg-gray-200">
+      <Head>
+        <title>Track Order | NeonSignCo</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <div className="flex flex-col items-center gap-3 md:max-w-[800px] mx-auto">
+        <h1 className="text-3xl md:text-5xl text-center mb-10 font-semibold">
+          Track your order
+        </h1>
+        <form
+          onSubmit={(e) => findOrder({ e })}
+          className="grid sm:grid-cols-3 gap-2 text-lg mb-5 w-full"
+        >
+          <input
+            type="text"
+            value={data.orderId}
+            placeholder="Order Id"
+            className="p-2 bg-white border border-gray-300"
+            title="Your order Id"
+            onChange={(e) =>
+              setData((data) => ({ ...data, orderId: e.target.value }))
+            }
+            required
+          />
+          <input
+            type="email"
+            value={data.email}
+            placeholder="Email"
+            className="p-2 bg-white border border-gray-300"
+            title="Email address that was used to order"
+            onChange={(e) =>
+              setData((data) => ({ ...data, email: e.target.value }))
+            }
+            required
+          />
+          <LoadingBtn
+            loading={loading}
+            type="submit"
+            className="py-2 px-4 bg-black text-white"
+          >
+            Track Order
+          </LoadingBtn>
+        </form>
+        {order && <OrderDetails order={order} />}
+      </div>
+    </div>
+  );
+};
+
+export default TrackOrder;
 
 const OrderDetails = ({ order }) => {
   const date = new Date(order.createdAt).toLocaleDateString();
@@ -239,7 +241,7 @@ const TableItem = ({ item }) => {
           href={`shop/${item.product.category.slug}/${item.product.slug}`}
         >
           <img
-            src={item.product.images[0]?.url}
+            src={item.product.images?.[0]?.url}
             alt={item.product.name}
             className="h-16"
           />
@@ -262,7 +264,7 @@ const Item = ({ item }) => {
         href={`shop/${item.product.category.slug}/${item.product.slug}`}
       >
         <img
-          src={item.product.images[0]?.url}
+          src={item.product.images?.[0]?.url}
           alt={item.product.name}
           className=""
         />

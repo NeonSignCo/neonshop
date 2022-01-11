@@ -217,7 +217,7 @@ const Item = ({ item }) => {
         href={`shop/${item.product.category.slug}/${item.product.slug}`}
       >
         <img
-          src={item.product.images[0]?.url}
+          src={item.product.images?.[0]?.url}
           alt={item.product.name}
           className=""
         />
@@ -267,7 +267,7 @@ const Preview = ({ order, setExpand }) => {
           {order.items?.map((item, i) => (
             <img
               key={i}
-              src={item.product.images[0]?.url}
+              src={item.product.images?.[0]?.url}
               alt="product name"
               className="h-20 w-20 object-cover"
             />

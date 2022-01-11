@@ -14,18 +14,18 @@ import LoadingBtn, { Loader } from "../../../components/LoadingBtn";
 import { useRouter } from "next/router";
 import catchASync from "../../../utils/catchASync";
 import Axios from "../../../utils/Axios";
-import Head from 'next/head';
+import Head from "next/head";
 import { colors } from "../../../utils/CustomNeonAssets";
-import ImageSlider from '../../../components/sliders/imageSlider';
+import ImageSlider from "../../../components/sliders/imageSlider";
 
-const mountTypes = ['WALL', 'HANGING']
+const mountTypes = ["WALL", "HANGING"];
 
 const ProductPage = ({ product }) => {
   const [globalState, setGlobalState] = useGlobalContext();
   const [showForm, setShowForm] = useState(false);
   const [state, setState] = useState({
-    color: '',
-    size: '',
+    color: "",
+    size: "",
     quantity: 1,
     mountType: "",
     errors: {
@@ -35,7 +35,6 @@ const ProductPage = ({ product }) => {
       quantity: "",
     },
   });
-  
 
   const addToCart = () =>
     catchASync(
@@ -79,24 +78,30 @@ const ProductPage = ({ product }) => {
           },
         }));
 
-
-         const data = {
-           product,
-           selectedColor: state.color,
-           selectedMountType: state.mountType,
-           selectedSize: {info: state.size.info, price: state.size.price, sizeId: state.size._id},
-           count: state.quantity,
+        const data = {
+          product,
+          selectedColor: state.color,
+          selectedMountType: state.mountType,
+          selectedSize: {
+            info: state.size.info,
+            price: state.size.price,
+            sizeId: state.size._id,
+          },
+          count: state.quantity,
         };
-        
+
         let res;
-   
-        if (globalState.cartData.cart?.items?.length > 0  || globalState.cartData.cart?.customItems?.length > 0) {
+
+        if (
+          globalState.cartData.cart?.items?.length > 0 ||
+          globalState.cartData.cart?.customItems?.length > 0
+        ) {
           res = await Axios.patch("cart", {
             customItems: globalState.cartData.cart?.customItems,
             items: [...globalState.cartData.cart?.items, data],
           });
         } else {
-          res = await Axios.post('cart', { items: [data] });
+          res = await Axios.post("cart", { items: [data] });
         }
 
         setGlobalState((state) => ({
@@ -117,15 +122,18 @@ const ProductPage = ({ product }) => {
         }))
     );
 
-   if (useRouter().isFallback)
-     return (
-       <div className="h-screen grid place-content-center">
-         <Loader borderColor="border-black" />
-       </div>
-     );
+  if (useRouter().isFallback)
+    return (
+      <div className="h-screen grid place-content-center">
+        <Loader borderColor="border-black" />
+      </div>
+    );
 
   const currentSize = state.size || product.sizes[0];
-  const discountPrice = product.salePercentage > 0 ? currentSize.price - currentSize.price * product.salePercentage / 100 : currentSize.price;
+  const discountPrice =
+    product.salePercentage > 0
+      ? currentSize.price - (currentSize.price * product.salePercentage) / 100
+      : currentSize.price;
 
   return (
     <div className=" pt-10">
@@ -148,10 +156,15 @@ const ProductPage = ({ product }) => {
             </div>
           )}
           {product.images?.length > 1 ? (
-            <ImageSlider images={product.images.map(image => ({url: image.url, alt: product.name}))}/>
+            <ImageSlider
+              images={product.images.map((image) => ({
+                url: image.url,
+                alt: product.name,
+              }))}
+            />
           ) : (
             <img
-              src={product.images[0]?.url}
+              src={product.images?.[0]?.url}
               alt={product.name}
               className="w-full object-cover"
             />
@@ -394,7 +407,7 @@ const ProductPage = ({ product }) => {
                 productInfo={{
                   name: "produc 1",
                   link: window.location.href,
-                  image: product.images[0]?.url,
+                  image: product.images?.[0]?.url,
                 }}
               />
             </div>
@@ -445,13 +458,17 @@ const QnA = ({ title, children }) => {
 export const getStaticProps = async ({ params }) => {
   try {
     await connectDb();
-    const category = await Category.findOne({slug: params.category}).lean(); 
+    const category = await Category.findOne({ slug: params.category }).lean();
 
-    if (!category) return {
-      notFound: true, 
-      revalidate: 10
-    }
-    const product = await Product.findOne({ slug: params.product, category: category._id }).lean();
+    if (!category)
+      return {
+        notFound: true,
+        revalidate: 10,
+      };
+    const product = await Product.findOne({
+      slug: params.product,
+      category: category._id,
+    }).lean();
 
     if (!product)
       return {
@@ -474,20 +491,22 @@ export const getStaticProps = async ({ params }) => {
   }
 };
 
-
-
 export const getStaticPaths = async () => {
-  try { 
-   
-    const paths = []; 
-    await connectDb(); 
-    const products = await Product.find().populate({ path: 'category', model: Category , select: 'slug -_id'}).select('slug -_id').lean();
-     
+  try {
+    const paths = [];
+    await connectDb();
+    const products = await Product.find()
+      .populate({ path: "category", model: Category, select: "slug -_id" })
+      .select("slug -_id")
+      .lean();
+
     products.forEach((item) =>
-      paths.push({ params: { product: item.slug, category: item.category.slug } })
+      paths.push({
+        params: { product: item.slug, category: item.category.slug },
+      })
     );
 
-    return {  
+    return {
       paths,
       fallback: true,
     };
