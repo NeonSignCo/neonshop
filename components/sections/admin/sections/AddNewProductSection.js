@@ -178,7 +178,7 @@ const AddNewProductSection = ({product, className, edit= false, setOrdersSection
 
   const deleteImage = (_id) => {
     const deleteImages = [...state.deleteImages];
-    const imgToDelete = product.images.find(i => i._id === _id);
+    const imgToDelete = product?.images?.find(i => i._id === _id);
     if (imgToDelete) deleteImages.push(imgToDelete);
     setState((state) => ({
       ...state,
