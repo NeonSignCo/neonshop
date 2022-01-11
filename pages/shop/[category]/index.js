@@ -152,7 +152,7 @@ const ProductItem = ({ product }) => {
           <div>| 10 Reviews</div>
         </div>
       )}
-      <p className="">{product.sizes[0].price}</p>
+      <p className="">${product.sizes[0].price}</p>
     </CustomLink>
   );
 };
