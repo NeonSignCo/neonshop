@@ -241,7 +241,7 @@ const AddNewProductSection = ({product, className, edit= false, setOrdersSection
               ))}
               <label
                 htmlFor="images"
-                className="bg-gray-800 text-white p-2 capitalize"
+                className="bg-gray-800 text-white p-2 capitalize cursor-pointer"
               >
                 Add
               </label>
