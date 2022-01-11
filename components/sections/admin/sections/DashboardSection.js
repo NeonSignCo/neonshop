@@ -36,7 +36,7 @@ const Item = ({ text,value, children, showIcon, section }) => {
     <button
       className="flex justify-between text-white bg-gray-800 rounded overflow-hidden border"
       onClick={() => setState(state => ({ ...state, activeSection: section }))}  
-      title="title"
+      title={text}
     > 
         <div className="p-5 bg-gray-600 text-gray-50 flex items-center justify-center text-2xl md:text-3xl h-full">
           {children}

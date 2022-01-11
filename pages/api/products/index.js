@@ -26,7 +26,7 @@ const handler = nc(ncConfig)
     multer({
       storage: multer.memoryStorage(),
       limits: { fileSize: 10 * 1024 * 1024 },
-    }).single("image"),
+    }).array("image", 10),
     uploadProduct
   )
   .delete(authenticate, restrictTo("ADMIN"), deleteAllProducts);

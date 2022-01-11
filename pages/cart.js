@@ -152,7 +152,7 @@ const CartItem = ({ item }) => {
     <div className="flex flex-col md:flex-row gap-2 bg-white p-2">
       <CustomLink href={link}>
         <img
-          src={item.product.image.url}
+          src={item.product.images[0]?.url}
           alt="product"
           className="w-full md:w-60 object-cover"
         />

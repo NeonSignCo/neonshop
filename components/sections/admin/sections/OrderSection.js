@@ -286,7 +286,7 @@ const ExpandedOrder = ({ order, setState }) => {
           <div className="flex items-center gap-2">
             <span className="font-semibold"> Photo:</span>{" "}
             <img
-              src={order.userId.image.url}
+              src={order.userId.images[0]?.url}
               alt={order.userId.firstName}
               className="h-16 w-16 rounded-full object-cover"
             />
@@ -439,7 +439,7 @@ const ExpandedOrder = ({ order, setState }) => {
                         href={`shop/${item.product.category.slug}/${item.product.slug}`}
                       >
                         <img
-                          src={item.product.image.url}
+                          src={item.product.images[0]?.url}
                           alt={item.product.name}
                           className="h-16"
                         />
@@ -466,7 +466,7 @@ const ExpandedOrder = ({ order, setState }) => {
                   href={`shop/${item.product.category.slug}/${item.product.slug}`}
                 >
                   <img
-                    src={item.product.image.url}
+                    src={item.product.images[0]?.url}
                     alt={item.product.name}
                     className="h"
                   />

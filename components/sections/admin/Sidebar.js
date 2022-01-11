@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { FaArrowLeft, FaBoxOpen, FaComments, FaDollarSign, FaEdit, FaFolderOpen, FaUsers } from "react-icons/fa"
+import { FaArrowLeft, FaBoxOpen, FaDollarSign, FaEdit, FaFolderOpen } from "react-icons/fa"
 import { ADD_NEW_PRODUCT, CATEGORIES, CUSTOMERS, DASHBOARD, ORDERS, PRODUCTS, REVIEWS, useAdminContext } from "../../../pages/admin";
 
 const Sidebar = () => { 
@@ -113,7 +113,7 @@ const Mobile = () => {
         className="h-full fixed top-0 flex flex-col text-lg bg-gray-800 overflow-hidden z-10"
       >
         <button
-          className="ml-auto mt-2 mr-2 h-10 w-10 transition bg-gray-700 hover:bg-gray-600 rounded-full flex items-center justify-center"
+          className="ml-auto mt-2 mr-2 mb-2 h-10 w-10 transition bg-gray-700 hover:bg-gray-600 rounded-full flex items-center justify-center"
           onClick={() =>
             setState((state) => ({
               ...state,

@@ -200,7 +200,7 @@ const CartItem = ({ item }) => {
       <div className="relative">
         <div>
           <img
-            src={item.product.image.url}
+            src={item.product.images[0]?.url}
             alt="product"
             className="w-16 h-16 rounded object-cover"
           />

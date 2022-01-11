@@ -181,7 +181,7 @@ const TableItem = ({ product, state, setState }) => {
       </td>
       <td>
         <img
-          src={product.image.url}
+          src={product.images?.[0]?.url}
           alt={product.name}
           className="h-20 w-32 w-full object-cover"
         />
@@ -217,7 +217,7 @@ const Item = ({ product, setState }) => {
   return (
     <div className="p-2 bg-white border border-gray-300 shadow flex gap-2">
       <img
-        src={product.image.url}
+        src={product.images?.[0]?.url}
         alt={product.name}
         className="object-cover w-32"
       />

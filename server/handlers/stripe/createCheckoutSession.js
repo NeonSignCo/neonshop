@@ -61,7 +61,7 @@ export const createCheckoutSession = catchASync(async (req, res) => {
         product_data: {
           name: item.product.name,
           description: item.product.description,
-          images: [item.product.image.url],
+          images: [item.product.images[0]?.url],
         },
         unit_amount: item.selectedSize.price * 100,
       },

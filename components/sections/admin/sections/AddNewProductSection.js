@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FaPencilAlt, FaTrash } from 'react-icons/fa';
+import { FaPencilAlt, FaTimes, FaTrash } from 'react-icons/fa';
 import { useAdminContext } from '../../../../pages/admin'
 import Axios from '../../../../utils/Axios';
 import LoadingBtn from '../../../LoadingBtn';
@@ -12,8 +12,9 @@ const AddNewProductSection = ({product, className, edit= false, setOrdersSection
   const [loading, setLoading] = useState(false);
     const [state, setState] = useState({
       name: product?.name || "",
-      image: "",
-      previewImage: product?.image?.url || '',
+      deleteImages: [],
+      images: [],
+      previewImages: product?.images || [],
       description: product?.description || "",
       category: product?.category || "", 
       sizes: product?.sizes || [],
@@ -51,12 +52,14 @@ const AddNewProductSection = ({product, className, edit= false, setOrdersSection
             description: state.description,
             category: state.category,
             sizes: JSON.stringify(sizes),
-            image: state.image, 
-            salePercentage: state.salePercentage
-
+            salePercentage: state.salePercentage, 
+            deleteImages: JSON.stringify(state.deleteImages)
           };
           const formData = new FormData();
+
+          // add fields and files to formData
           for (let key in data) formData.append(key, data[key]);
+          state.images.forEach(image => formData.append('image', image.file));
 
           let res;
           if (edit) {
@@ -79,24 +82,23 @@ const AddNewProductSection = ({product, className, edit= false, setOrdersSection
             }));
           
           setGlobalState(state => ({ ...state, alert: { ...state.alert, show: true, text: res.data.message, type: SUCCESS, timeout: 3000 } })); 
-         
-          // clear form
+          
           setState((state) => ({
             ...state,
-            name: '', 
-            image: '', 
-            previewImage: "", 
-            description: '', 
-            category: '',
+            name: "",
+            deleteImages: [],
+            images: [],
+            previewImages: [],
+            description: "",
+            category: "",
             sizes: [],
-            
-            
           }));
-         
+
           // for edit mode
           if (edit) {
-            setOrdersSection(state => ({...state, activeProduct: ''}))
-          };
+            setOrdersSection(state => ({ ...state, activeProduct: '' })) 
+          } 
+          
         } catch (error) {  
           setLoading(false);
             setGlobalState((state) => ({
@@ -144,7 +146,47 @@ const AddNewProductSection = ({product, className, edit= false, setOrdersSection
     document.getElementById("size-info").focus();
   }
 
+  const addImages = (e) => {
+    // allow maximum 10 images 
+    if (Object.keys(e.target.files).length + state.previewImages.length > 10)
+      return setGlobalState((state) => ({
+        ...state,
+        alert: {
+          show: true,
+          text: "maximum 10 images are allowed",
+          type: ERROR,
+          timeout: 5000,
+        },
+      }));
 
+    let images = []
+    for (let file of e.target.files) {
+      const image = {
+        _id: uid(),
+        url: URL.createObjectURL(file),
+        file,
+      };
+      images.push(image);
+    }
+
+    setState((state) => ({
+      ...state,
+      images: [...state.images, ...images],
+      previewImages: [...state.previewImages, ...images],
+    }));
+  }
+
+  const deleteImage = (_id) => {
+    const deleteImages = [...state.deleteImages];
+    const imgToDelete = product.images.find(i => i._id === _id);
+    if (imgToDelete) deleteImages.push(imgToDelete);
+    setState((state) => ({
+      ...state,
+      deleteImages,
+      images: state.images.filter(i => i._id !== _id),
+      previewImages: state.previewImages.filter((i) => i._id !== _id),
+    }));
+  }
 
     return (
       <div className={`py-5 pr-2 md:p-10 w-full ${className}`}>
@@ -182,54 +224,38 @@ const AddNewProductSection = ({product, className, edit= false, setOrdersSection
               required
             ></textarea>
           </div>
-          {edit && product?.image?.url ? (
-            <div className="grid gap-2">
-              <p className="capitalize font-semibold">image</p>
-              <div className="flex gap-2 items-end">
-                <img
-                  src={state.previewImage}
-                  alt={product?.name}
-                  className="h-20"
-                />
-                <label
-                  htmlFor="image"
-                  className="bg-gray-800 text-white p-2 capitalize"
-                >
-                  change
-                </label>
-                <input
-                  type="file"
-                  id="image"
-                  name="image"
-                  accept="image/*"
-                  className="h-0 w-0"
-                  onChange={(e) =>
-                    setState((state) => ({
-                      ...state,
-                      image: e.target.files[0],
-                      previewImage: URL.createObjectURL(e.target.files[0]),
-                    }))
-                  }
-                />
-              </div>
-            </div>
-          ) : (
-            <div className="grid gap-2">
-              <label htmlFor="image" className="capitalize font-semibold">
-                image
+          <div className="grid gap-2">
+            <p className="capitalize font-semibold">images (max 10)</p>
+            <div className="flex flex-wrap gap-2 items-end">
+              {state.previewImages?.map((image) => (
+                <div key={image._id} className="relative">
+                  <button
+                    type="button"
+                    className="absolute right-0 bg-red-500 text-white"
+                    onClick={() => deleteImage(image._id)}
+                  >
+                    <FaTimes />
+                  </button>
+                  <img src={image.url} alt={product?.name} className="h-20" />
+                </div>
+              ))}
+              <label
+                htmlFor="images"
+                className="bg-gray-800 text-white p-2 capitalize"
+              >
+                Add
               </label>
               <input
                 type="file"
-                id="image"
-                name="image"
+                multiple
+                id="images"
+                name="images"
                 accept="image/*"
-                onChange={(e) =>
-                  setState((state) => ({ ...state, image: e.target.files[0] }))
-                }
-                required
+                className="h-0 w-0"
+                onChange={(e) => addImages(e)}
               />
             </div>
-          )}
+          </div>
           <div className="grid gap-2">
             <label htmlFor="category" className="capitalize font-semibold">
               category
@@ -254,8 +280,11 @@ const AddNewProductSection = ({product, className, edit= false, setOrdersSection
             </select>
           </div>
           <div className="grid gap-2">
-            <label htmlFor="salePercentage" className="capitalize font-semibold">
-              sale percentage (optional) 
+            <label
+              htmlFor="salePercentage"
+              className="capitalize font-semibold"
+            >
+              sale percentage (optional)
             </label>
             <input
               type="number"
@@ -361,9 +390,11 @@ const AddNewProductSection = ({product, className, edit= false, setOrdersSection
             </LoadingBtn>
             {edit && (
               <button
-                type='button'
+                type="button"
                 className="py-2 px-5 border border-gray-800 transition hover:bg-gray-800 hover:text-white max-w-max capitalize"
-                onClick={() => setOrdersSection(state => ({...state, activeProduct: ''}))}
+                onClick={() =>
+                  setOrdersSection((state) => ({ ...state, activeProduct: "" }))
+                }
               >
                 cancel
               </button>

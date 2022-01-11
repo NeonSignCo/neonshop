@@ -16,7 +16,7 @@ import catchASync from "../../../utils/catchASync";
 import Axios from "../../../utils/Axios";
 import Head from 'next/head';
 import { colors } from "../../../utils/CustomNeonAssets";
-
+import ImageSlider from '../../../components/sliders/imageSlider';
 
 const mountTypes = ['WALL', 'HANGING']
 
@@ -138,20 +138,24 @@ const ProductPage = ({ product }) => {
       </div>
       <div className="px-5 lg:px-20 flex flex-col md:flex-row items-start gap-7">
         <div
-          className={` md:sticky ${
+          className={`w-full md:max-w-[400px] md:sticky ${
             globalState.showBanner ? "top-[102px]" : "top-[62px]"
           }`}
         >
           {product.salePercentage > 0 && (
-            <div className="absolute bg-red-500 py-1 px-2 text-white ">
+            <div className="absolute bg-red-500 py-1 px-2 text-white z-10">
               -{product.salePercentage}%
             </div>
           )}
-          <img
-            src={product.image.url}
-            alt={product.name}
-            className="w-full object-cover"
-          />
+          {product.images?.length > 1 ? (
+            <ImageSlider images={product.images.map(image => ({url: image.url, alt: product.name}))}/>
+          ) : (
+            <img
+              src={product.images[0]?.url}
+              alt={product.name}
+              className="w-full object-cover"
+            />
+          )}
         </div>
         <div className="grid gap-5  w-full">
           <h1 className="text-3xl font-semibold uppercase">{product.name}</h1>
@@ -350,7 +354,7 @@ const ProductPage = ({ product }) => {
                 <p>For any questions please contact us!</p>
                 <CustomLink
                   href={`mailto:${process.env.NEXT_PUBLIC_MAIL_ADDRESS}`}
-                  text={process.env.NEXT_PUBLIC_MAIL_ADDRESS} 
+                  text={process.env.NEXT_PUBLIC_MAIL_ADDRESS}
                   className="font-semibold hover:underline"
                 />
               </div>
@@ -390,7 +394,7 @@ const ProductPage = ({ product }) => {
                 productInfo={{
                   name: "produc 1",
                   link: window.location.href,
-                  image: product.image.url,
+                  image: product.images[0]?.url,
                 }}
               />
             </div>

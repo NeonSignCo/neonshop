@@ -6,6 +6,14 @@ import uploadImage from "../utils/uploadImage";
 import cloudinary from 'cloudinary';
 import slugify from "../../utils/slugify";
 import Category from "../models/category";
+ 
+// cloudinary config
+cloudinary.config({
+   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+   api_key: process.env.CLOUDINARY_API_KEY,
+   api_secret: process.env.CLOUDINARY_API_SECRET,
+ });
+
 
 // @route       GET /api/products
 // @purpose     Get all products
@@ -68,7 +76,6 @@ export const getAllProducts = catchASync(async (req, res) => {
 // @access      Admin
 export const uploadProduct = catchASync(async (req, res) => {
   const { name, sizes, description, category, salePercentage = 0 } = req.body;
-  if (!req.file) throw new AppError(400, "image is required");
   if (!name) throw new AppError(400, "name is required");
   if (!sizes) throw new AppError(400, "sizes is required");
   if (!description) throw new AppError(400, " description is required");
@@ -79,19 +86,26 @@ export const uploadProduct = catchASync(async (req, res) => {
   
   // create slug 
   const slug = slugify(name);
-
   // create product
   const product = await Product.create({ name, slug, sizes: JSON.parse(sizes), description, category, salePercentage });
 
-  // save image to cloudinary
-  const img = await uploadImage({
-    buffer: req.file.buffer,
-    width: 500,
-    folder: "neonsignco/img/products",
-  });
-
-  // update product image
-  product.image = {version: img.version, public_id: img.public_id, url: img.secure_url }
+  // save images to cloudinary
+  if (req.files && req.files.length > 0) {
+    await Promise.all(
+      req.files.map(async (file) => {
+        const img = await uploadImage({
+          buffer: file.buffer,
+          width: 500,
+          folder: "neonsignco/img/products",
+        });
+        product.images.push({
+          version: img.version,
+          public_id: img.public_id,
+          url: img.secure_url,
+        });
+      })
+    );
+ }
 
   await product.save(); 
 
@@ -109,51 +123,75 @@ export const uploadProduct = catchASync(async (req, res) => {
 // @access      Admin
 export const updateProduct = catchASync(async (req, res) => {
   const { name, description, category, salePercentage = 0 } = req.body;
-  let image;
   let sizes = req.body.sizes;
+  let deleteImages = req.body.deleteImages;
   let slug;
   const id = req.query?.id;
 
-  if (!mongoose.Types.ObjectId.isValid(id)) throw new AppError(400, 'not a valid id');
+  if (!mongoose.Types.ObjectId.isValid(id))
+    throw new AppError(400, "not a valid id");
 
-  // check if product exists 
+  // check if product exists
   const product = await Product.findById(id);
-  if (!product) throw new AppError(404, 'product not found');
+  if (!product) throw new AppError(404, "product not found");
+   
+  let images = product.images;
+  
+  // images to delete
+  if (deleteImages) {
+    deleteImages = JSON.parse(deleteImages);
+    await Promise.all(
+      deleteImages.map(async (image) => {
+        await cloudinary.v2.uploader.destroy(image.public_id);
+        images = images.filter(
+          (i) => String(i._id) !== String(image._id)
+        );
+      })
+    );
+  }
 
-
-  // update image if provided 
-  if (req.file) {
-    // delete previous image if exists
-    if (product.image?.public_id) {
-      cloudinary.config({
-        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-        api_key: process.env.CLOUDINARY_API_KEY,
-        api_secret: process.env.CLOUDINARY_API_SECRET,
-      });
-      await cloudinary.v2.uploader.destroy(product.image.public_id);
-    }
-    const img = await uploadImage({
-      buffer: req.file.buffer,
-      width: 500,
-      folder: "neonsignco/img/products",
-    });
-    image = {
-      version: img.version,
-      public_id: img.public_id,
-      url: img.secure_url,
-    };
+  // add new images if provided
+  if (req.files && req.files.length > 0) {
+    await Promise.all(
+      req.files.map(async (file) => {
+        const img = await uploadImage({
+          buffer: file.buffer,
+          width: 500,
+          folder: "neonsignco/img/products",
+        });
+        images.push({
+          version: img.version,
+          public_id: img.public_id,
+          url: img.secure_url,
+        });
+      })
+    );
   }
 
   if (sizes) {
-    sizes = JSON.parse(sizes); 
-  };
+    sizes = JSON.parse(sizes);
+  }
 
-  // update slug if name is provided 
+  // update slug if name is provided
   if (name) {
     slug = slugify(name);
   }
 
-  const updatedProduct = await Product.findByIdAndUpdate(id, { $set: { name, slug, description, sizes, category, image, salePercentage } }, {new: true, runValidators: true});
+  const updatedProduct = await Product.findByIdAndUpdate(
+    id,
+    {
+      $set: {
+        name,
+        slug,
+        description,
+        sizes,
+        category,
+        images,
+        salePercentage,
+      },
+    },
+    { new: true, runValidators: true }
+  );
 
   return res.json({
     status: "success",
@@ -174,14 +212,11 @@ export const deleteProduct = catchASync(async (req, res) => {
   const product = await Product.findById(id);
   if (!product) throw new AppError(404, 'product not found');
   
-  // delete product image is exist
-  if (product.image?.public_id) {
-    cloudinary.config({
-      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-      api_key: process.env.CLOUDINARY_API_KEY,
-      api_secret: process.env.CLOUDINARY_API_SECRET,
-    });
-      await cloudinary.v2.uploader.destroy(product.image.public_id);
+  // delete product images if any
+  if (product.images?.length > 0) {
+    await Promise.all(product.images.map(async image => {
+        await cloudinary.v2.uploader.destroy(image.public_id);
+      }))
     }
 
   await product.delete()
@@ -198,18 +233,11 @@ export const deleteProduct = catchASync(async (req, res) => {
 // @purpose     Delete all products
 // @access      Admin
 export const deleteAllProducts = catchASync(async (req, res) => {
-
-   cloudinary.config({
-     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-     api_key: process.env.CLOUDINARY_API_KEY,
-     api_secret: process.env.CLOUDINARY_API_SECRET,
-   });  
-
-
+  
   //  delete all products
   await Product.deleteMany();
 
-  //  delete all photos folder 
+  //  delete product photos folder 
   try {
    await cloudinary.api.delete_resources_by_prefix("neonsignco/img/products");
   } catch (error) { 
@@ -227,15 +255,10 @@ export const deleteAllProducts = catchASync(async (req, res) => {
 // @purpose     Delete specific products
 // @access      Admin
 export const deleteSpecificProducts = catchASync(async (req, res) => {
-  cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-  });
-
+ 
   if (!req.body.ids) throw new AppError(400, 'ids is required');
 
-  const products = await Product.find({ _id: { $in: req.body.ids } }).select('_id image');
+  const products = await Product.find({ _id: { $in: req.body.ids } }).select('_id images');
   const productIds = products.map(product => product._id);
   //  delete specific products
   await Product.deleteMany({_id: {$in: productIds}});
@@ -243,12 +266,16 @@ export const deleteSpecificProducts = catchASync(async (req, res) => {
   // delete images
   try {
     products.forEach( async product => {
-      await cloudinary.v2.uploader.destroy(product.image.public_id);
+      if (product.images?.length > 0) {
+        await Promise.all(product.images.map(async image => {
+          await cloudinary.v2.uploader.destroy(image.public_id);
+        }))
+      }
     })
   } catch (error) {}
 
   return res.json({
     status: "success",
-    message: "product deleted",
+    message: "products deleted",
   });
 });

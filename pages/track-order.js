@@ -239,7 +239,7 @@ const TableItem = ({ item }) => {
           href={`shop/${item.product.category.slug}/${item.product.slug}`}
         >
           <img
-            src={item.product.image.url}
+            src={item.product.images[0]?.url}
             alt={item.product.name}
             className="h-16"
           />
@@ -262,7 +262,7 @@ const Item = ({ item }) => {
         href={`shop/${item.product.category.slug}/${item.product.slug}`}
       >
         <img
-          src={item.product.image.url}
+          src={item.product.images[0]?.url}
           alt={item.product.name}
           className=""
         />

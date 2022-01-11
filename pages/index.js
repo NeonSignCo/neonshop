@@ -110,7 +110,7 @@ export default function Home({products}) {
           <ProductsSlider
             products={products?.map((product) => ({
               name: product.name,
-              img: product.image.url,
+              img: product.images[0]?.url,
               price: product.sizes[0].price,
               link: `/shop/${product.category.slug}/${product.slug}`,
             }))}

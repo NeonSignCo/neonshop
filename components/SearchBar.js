@@ -103,7 +103,7 @@ const SearchBar = ({ containerRef }) => {
                         onClick={() => setExpand(false)}
                       >
                         <img
-                          src={item.image.url}
+                          src={item.images[0]?.url}
                           alt={item.name}
                           className="h-10"
                         />

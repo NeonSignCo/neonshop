@@ -208,7 +208,7 @@ const ProductItem = ({ product }) => {
             -{product.salePercentage}%
           </div>
         )}
-        <img src={product.image.url} alt={product.name} />
+        <img src={product.images[0]?.url} alt={product.name} />
       </div>
       <h3 className="text-lg sm:text-xl font-semibold uppercase">
         {product.name}
