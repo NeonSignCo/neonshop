@@ -43,7 +43,7 @@ export default ImageSlider;
 
 const Controls = ({ setreview, review, images }) => {
   return (
-    <div className="absolute z-10 top-1/2 -translate-y-1/2 inset-x-0 transform translate-y-10 flex justify-between text-3xl text-white">
+    <div className="absolute z-10 top-1/2 -translate-y-1/2  inset-x-0 transform  flex justify-between text-3xl text-white">
       <button
         className="transform focus:outline-none  transition py-5 disabled:text-gray-500 "
         disabled={review === 0}

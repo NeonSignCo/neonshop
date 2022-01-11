@@ -108,12 +108,7 @@ export default function Home({ products }) {
         </h3>
         {products?.length > 0 && (
           <ProductsSlider
-            products={products?.map((product) => ({
-              name: product.name,
-              img: product.images?.[0]?.url,
-              price: product.sizes[0].price,
-              link: `/shop/${product.category.slug}/${product.slug}`,
-            }))}
+            products={products}
           />
         )}
       </section>

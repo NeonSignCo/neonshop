@@ -210,7 +210,7 @@ const ProductItem = ({ product }) => {
     >
       <div className="relative">
         {product.salePercentage > 0 && (
-          <div className="absolute bg-red-500 py-1 px-2 rounded text-white text-sm">
+          <div className="absolute bg-red-500 py-1 px-2 text-white text-sm">
             -{product.salePercentage}%
           </div>
         )}

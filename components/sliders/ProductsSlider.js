@@ -44,12 +44,7 @@ const ProductsSlider = ({products}) => {
               }}
             >
               <ProductPreview
-                name={product.name}
-                img={product.img}
-                text={product.text}
-                price={product.price}
-                hot={product.hot}
-                link={product.link}
+                product={product}
               />
             </div>
           ))}
@@ -88,33 +83,51 @@ const Controls = ({ setreview, review, products, width }) => {
 
 
 
-const ProductPreview = ({
-  name = "yeet neon sign",
-  img = "/img/product-1.jpg",
-  price = 500,
-  text = "buy now",
-  link = "/",
-  hot = false,
-}) => {
+const ProductPreview = ({product}) => {
+
+  const discountPrice =
+    product.salePercentage > 0
+      ? product.sizes[0].price - (product.sizes[0].price * product.salePercentage) / 100
+      : product.sizes[0].price;
   return (
     <div className="flex-1 flex flex-col items-center gap-5 text-black relative shadow-2xl border border-gray-200 pb-2">
-      <CustomLink href={link} className="relative h">
-        <img src={img} alt={name} className="object-cover h-full" />
-      </CustomLink>
-      <p className="uppercase">{name}</p>
-      <p className="flex items-center tracking-[3px]">
-        <FaDollarSign /> {Number(price).toFixed(2)}
-      </p>
       <CustomLink
-        href={link}
-        text={text}
-        className="px-5 py-2 sm:px-10 sm:py-4 md:px-16 flex items-center justify-center bg-black text-white"
-      />
-      {hot && (
-        <div className="absolute bg-gray-800 py-[2px] px-3 text-white -top-3 -right-2 uppercase">
-          hot
+        href={`/shop/${product.category.slug}/${product.slug}`}
+        className="relative"
+      >
+        {product.salePercentage > 0 && (
+          <div className="absolute bg-red-500 py-1 px-2 text-white z-10">
+            -{product.salePercentage}%
+          </div>
+        )}
+        <img
+          src={product.images?.[0]?.url}
+          alt={product.name}
+          className="object-cover h-full"
+        />
+      </CustomLink>
+      <p className="uppercase">{product.name}</p>
+      {product.salePercentage > 0 ? (
+        <div className="flex items-center font-semibold text-2xl text-gray-600">
+          <p>$</p>
+          <p>{discountPrice}</p>
+          <p className="relative">
+            <span className="absolute left-1 -top-5 text-[17px] line-through  text-red-500">
+              ${product.sizes[0].price}
+            </span>
+          </p>
         </div>
+      ) : (
+        <p className="flex items-center font-semibold text-2xl text-gray-600">
+          <span>$</span>
+          <span>{product.sizes[0].price}</span>
+        </p>
       )}
+      <CustomLink
+        href={`/shop/${product.category.slug}/${product.slug}`}
+        text="buy now"
+        className="px-5 py-2 sm:px-10 sm:py-3 md:px-16 flex items-center justify-center bg-black text-white uppercase"
+      />
     </div>
   );
 };
