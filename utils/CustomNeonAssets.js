@@ -133,7 +133,7 @@ export const sizes = [
     icon: {
       width: 12,
       height: 12,
-      price: 50,
+      price: 80,
     },
   },
   {
@@ -145,7 +145,7 @@ export const sizes = [
     icon: {
       width: 18,
       height: 18,
-      price: 75,
+      price: 120,
     },
   },
 ];
