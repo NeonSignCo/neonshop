@@ -1,12 +1,12 @@
 import { FaChevronLeft } from "react-icons/fa";
 import isEmail from "../../../utils/isEmail";
 import CustomLink from "../../CustomLink";
-import { PAYMENT_SECTION, useCheckoutContext } from '../../../context/CheckoutContext';
+import { useCheckoutContext } from '../../../context/CheckoutContext';
 import ShippingAddressForm from "../../forms/CheckoutShippingAddressForm";
 import { useEffect } from "react";
 
 
-const InfoSection = () => {
+const InfoSection = ({goToPaymentSection}) => {
   const [state, setState] = useCheckoutContext();
  
 
@@ -16,38 +16,6 @@ const InfoSection = () => {
     setState(state => ({ ...state, activeElement: '' }));
     target.focus();
   }, [state.activeElement])
-
-    const goToNextSection = (e) => {
-      e.preventDefault();
-      setState((state) => {
-        // check if any requried field is empty
-        const errors = { ...state.shipping.errors };
-        const newErrors = [];
-        const emailError = !state.email;
-        Object.keys(state.shipping.errors).forEach((key) => {
-          if (!state.shipping[key]) newErrors.push(key);
-        });
-
-        if (emailError || newErrors.length > 0) {
-          newErrors.forEach((item) => (errors[item] = `${item} is required`));
-          const scrollTarget = document.getElementById(
-            emailError ? "email" : newErrors[0]
-          );
-          window.scrollTo(0, scrollTarget.offsetTop - 40);
-          return {
-            ...state,
-            errors: {
-              ...state.errors,
-              email: emailError ? "email is required" : "",
-            },
-            shipping: { ...state.shipping, errors },
-          };
-        }
-
-        window.scrollTo(0, 0)
-        return { ...state, activeSection: PAYMENT_SECTION };
-      });
-    };
 
     return (
       <div className="flex flex-col gap-10">
@@ -116,13 +84,7 @@ const InfoSection = () => {
           </CustomLink>
           <button
             className="py-2 px-4 bg-black text-white uppercase tracking-widest"
-            onClick={goToNextSection} 
-            disabled={
-                    !state.email ||
-                    !Object.values(state.shipping.errors).every(
-                      (val) => val === ""
-                    )
-                  }
+            onClick={goToPaymentSection} 
           >
             continue to payment
           </button>

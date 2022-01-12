@@ -32,7 +32,38 @@ const Container = () => {
   const [state, setState] = useCheckoutContext();
   const [globalState] = useGlobalContext();
   const [showMobileSummary, setshowMobileSummary] = useState(false);
+  
+  const goToPaymentSection = (e) => {
+    if(e) e.preventDefault();
+    setState((state) => {
+      // check if any requried field is empty
+      const errors = { ...state.shipping.errors };
+      const newErrors = [];
+      const emailError = !state.email;
+      Object.keys(state.shipping.errors).forEach((key) => {
+        if (!state.shipping[key]) newErrors.push(key);
+      });
 
+      if (emailError || newErrors.length > 0) {
+        newErrors.forEach((item) => (errors[item] = `${item} is required`));
+        const scrollTarget = document.getElementById(
+          emailError ? "email" : newErrors[0]
+        );
+        window.scrollTo(0, scrollTarget.offsetTop - 40);
+        return {
+          ...state,
+          errors: {
+            ...state.errors,
+            email: emailError ? "email is required" : "",
+          },
+          shipping: { ...state.shipping, errors },
+        };
+      }
+
+      window.scrollTo(0, 0);
+      return { ...state, activeSection: PAYMENT_SECTION };
+    });
+  };
   return (
     <div className="">
       <Head>
@@ -74,18 +105,9 @@ const Container = () => {
                       ? "font-semibold"
                       : ""
                   }`}
-                  onClick={() =>
-                    setState((state) => ({
-                      ...state,
-                      activeSection: PAYMENT_SECTION,
-                    }))
+                  onClick={goToPaymentSection
                   }
-                  disabled={
-                    !state.email ||
-                    !Object.values(state.shipping.errors).every(
-                      (val) => val === ""
-                    )
-                  }
+                  
                 >
                   Payment
                 </button>
@@ -105,7 +127,7 @@ const Container = () => {
               </button>
               {showMobileSummary && <CartPreview />}
               {state.activeSection === INFO_SECTION ? (
-                <InfoSection />
+                <InfoSection goToPaymentSection={goToPaymentSection}/>
               ) : (
                 <PaymentSection />
               )}
